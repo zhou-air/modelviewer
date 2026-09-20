@@ -1,0 +1,18 @@
+{
+  "phase": "Phase 7A",
+  "url": "http://127.0.0.1:8765/viewer/index.html",
+  "chrome": "C:\\Users\\34084\\AppData\\Local\\ms-playwright\\chromium-1208\\chrome-win64\\chrome.exe",
+  "headless": true,
+  "startedAt": "2026-09-19T05:12:26.605Z",
+  "viewport": {
+    "width": 1600,
+    "height": 900
+  },
+  "scenarios": [],
+  "core": null,
+  "console": [],
+  "pageErrors": [],
+  "ok": false,
+  "fatal": "page.waitForFunction: Timeout 240000ms exceeded.\n    at C:\\Users\\34084\\Desktop\\modelviewer - 副本\\scratch\\phase7a-verify.js:379:16",
+  "finishedAt": "2026-09-19T05:16:32.946Z"
+}

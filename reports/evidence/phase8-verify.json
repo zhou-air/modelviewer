@@ -1,0 +1,511 @@
+{
+  "url": "http://127.0.0.1:8765/viewer/index.html",
+  "ok": true,
+  "steps": [
+    {
+      "step": "DELETE 接口：清理上次测试版本（移入 data/trash/）",
+      "ok": true,
+      "detail": [
+        {
+          "id": "2026-09-19",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "step": "启动后显示 Model Selector（不再硬编码 QICHUANG）",
+      "ok": true,
+      "detail": {
+        "totals": {
+          "projects": 2,
+          "models": 3,
+          "versions": 7
+        },
+        "treeRows": 2
+      }
+    },
+    {
+      "step": "Project Manager 列出 Project → Model → Version",
+      "ok": true,
+      "detail": [
+        "丙酸项目(main-site)",
+        "启创项目(main-site,tank-area)"
+      ]
+    },
+    {
+      "step": "页面加载期内无真正的 console error / pageerror",
+      "ok": true,
+      "detail": {
+        "console": [],
+        "pageErrors": []
+      }
+    },
+    {
+      "step": "点击 Project 行展开 Model 列表",
+      "ok": true,
+      "detail": {
+        "modelRows": [
+          "main-site",
+          "tank-area"
+        ]
+      }
+    },
+    {
+      "step": "点击 Model 行展开 Version 列表，含状态点与体积",
+      "ok": true,
+      "detail": [
+        {
+          "vid": "2026-10-02",
+          "cls": "pm-row lv3 st-failed sel",
+          "text": "2026-10-02 失败 · 解析 TXT → 元数据 ⋯"
+        },
+        {
+          "vid": "2026-10-01",
+          "cls": "pm-row lv3 st-failed",
+          "text": "2026-10-01 失败 · 转换 RVM → GLB"
+        },
+        {
+          "vid": "2026-09-19",
+          "cls": "pm-row lv3 st-ready",
+          "text": "2026-09-19 RVM 4.3 MB · GLB 17.5 MB Open"
+        },
+        {
+          "vid": "2026-09-18",
+          "cls": "pm-row lv3 st-ready",
+          "text": "2026-09-18 RVM 4.3 MB · GLB 17.5 MB Open"
+        },
+        {
+          "vid": "2026-08-26",
+          "cls": "pm-row lv3 st-ready",
+          "text": "2026-08-26 RVM 4.3 MB · GLB 17.5 MB Open"
+        }
+      ]
+    },
+    {
+      "step": "失败/导入中的版本在列表里有区分（状态点 class）",
+      "ok": true,
+      "detail": [
+        "pm-row lv3 st-failed sel",
+        "pm-row lv3 st-failed",
+        "pm-row lv3 st-ready",
+        "pm-row lv3 st-ready",
+        "pm-row lv3 st-ready"
+      ]
+    },
+    {
+      "step": "Open Model：Viewer 加载完成并隐藏启动层",
+      "ok": true,
+      "detail": {
+        "launcherVisible": false
+      }
+    },
+    {
+      "step": "顶部标题 = 启创项目 / Main Site / 2026-08-26",
+      "ok": true,
+      "detail": {
+        "project": "启创项目",
+        "model": "Main Site",
+        "version": "2026-08-26",
+        "tab": "启创项目 / Main Site / 2026-08-26 — PDMS Viewer"
+      }
+    },
+    {
+      "step": "加载的是该版本目录下的产物（不再是 data/processed）",
+      "ok": true,
+      "detail": "/data/projects/qichuang/models/main-site/versions/2026-08-26/processed/model.glb"
+    },
+    {
+      "step": "命名节点 7,423 / TXT 对象 8,955（与迁移前一致）",
+      "ok": true,
+      "detail": {
+        "namedNodes": 7423,
+        "objects": 8955
+      }
+    },
+    {
+      "step": "页面到首帧 < 3 s",
+      "ok": true,
+      "detail": {
+        "mappingMs": 31,
+        "metadataMs": 72,
+        "rvmIndexMs": 89,
+        "jsonAllMs": 90,
+        "indexBuildMs": 13,
+        "readyMs": 517,
+        "modelLoadMs": 464,
+        "firstFrameMs": 916
+      }
+    },
+    {
+      "step": "真实鼠标点击 3D 对象 → 选中 + 属性面板 + 树联动",
+      "ok": true,
+      "detail": {
+        "picked": {
+          "candidate": "FLANGE 1 of BRANCH /WG-10401-400-L1G/B2",
+          "hit": "FLOOR 6 of FRMWORK /W-SHOP-1-FLOOR"
+        },
+        "propInfo": "FLOOR · 1 个子节点",
+        "propText": "概览类型FLOORcanonicalFLOOR 6 of FRMWORK /W-SHOP-1-FLOOR原始名称（匿名对象）层级深度4父节点/W-SHOP-1-FLOOR子节点数1原文行47333 – 47369几何对应GLB 节点序号4010RVM 字节偏移1624484TXT 行锚定 idtxt:L47333匹配通",
+        "treeSelected": "txt:L47333"
+      }
+    },
+    {
+      "step": "Hide Selected：可见对象 -1",
+      "ok": true,
+      "detail": {
+        "before": 7420,
+        "after": 7419
+      }
+    },
+    {
+      "step": "Isolate Selected：只剩自身 + 祖先链",
+      "ok": true,
+      "detail": {
+        "isolated": 5
+      }
+    },
+    {
+      "step": "Show All：恢复全部可见",
+      "ok": true,
+      "detail": {
+        "restored": 7420,
+        "original": 7420
+      }
+    },
+    {
+      "step": "点模型树行 → 属性面板出现内容（含 PDMS 属性）",
+      "ok": true,
+      "detail": {
+        "info": "SITE · 15 个子节点"
+      }
+    },
+    {
+      "step": "Model Selector（Project→Model→Version + Open）切到另一 Version",
+      "ok": true,
+      "detail": {
+        "title": {
+          "project": "启创项目",
+          "model": "Main Site",
+          "version": "2026-09-18",
+          "tab": "启创项目 / Main Site / 2026-09-18 — PDMS Viewer"
+        },
+        "glb": "/data/projects/qichuang/models/main-site/versions/2026-09-18/processed/model.glb"
+      }
+    },
+    {
+      "step": "切换后状态复位：Selection=none / 隐藏=0 / 描边对象=0 / 属性空 / 按钮禁用",
+      "ok": true,
+      "detail": {
+        "selected": null,
+        "hidden": 0,
+        "buttons": {
+          "hide": true,
+          "isolate": true,
+          "showAll": true
+        }
+      }
+    },
+    {
+      "step": "模型树按新版本的 metadata 重建（不是缓存旧版本的树）",
+      "ok": true,
+      "detail": {
+        "rows": 16,
+        "first": [
+          "▾/ENCOSC23059-QICHUANG-SITESITE",
+          "▸/QICHUANG-MAIN-PIPEZONE"
+        ]
+      }
+    },
+    {
+      "step": "相机复位到 Fit Model（视点回到模型中心附近）",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "切换到另一个 Project 的版本",
+      "ok": true,
+      "detail": {
+        "title": {
+          "project": "丙酸项目",
+          "model": "Main Site",
+          "version": "2026-09-03",
+          "tab": "丙酸项目 / Main Site / 2026-09-03 — PDMS Viewer"
+        },
+        "objects": 8955,
+        "geometries": 5797
+      }
+    },
+    {
+      "step": "连续切换模型 10 次：BufferGeometry / 纹理 / 场景节点数恒定（无显存泄漏）",
+      "ok": true,
+      "detail": {
+        "first": {
+          "v": "qichuang/2026-08-26",
+          "usedMB": 69.5,
+          "peakMB": 72,
+          "geoms": 5797,
+          "textures": 2,
+          "named": 7423,
+          "scene": 5
+        },
+        "last": {
+          "v": "qichuang/2026-08-26",
+          "usedMB": 70.7,
+          "peakMB": 103.8,
+          "geoms": 5797,
+          "textures": 2,
+          "named": 7423,
+          "scene": 5
+        },
+        "allGeoms": [
+          5797,
+          5797,
+          5797,
+          5797,
+          5797,
+          5797,
+          5797,
+          5797,
+          5797,
+          5797
+        ]
+      }
+    },
+    {
+      "step": "连续切换模型 10 次：JS 堆稳态不上升（后 5 次最小值 vs 前 5 次最小值 < 15 MB）",
+      "ok": true,
+      "detail": {
+        "minFirst5": 69.5,
+        "minLast5": 68.3,
+        "delta": -1.2,
+        "steadyTrend": [
+          69.5,
+          69.7,
+          69.8,
+          69.9,
+          70.1,
+          70.3,
+          68.3,
+          70.3,
+          70.7,
+          70.7
+        ],
+        "peakTrend": [
+          72,
+          70.2,
+          104.7,
+          103.1,
+          101.3,
+          102.5,
+          104,
+          101.5,
+          105.2,
+          103.8
+        ]
+      }
+    },
+    {
+      "step": "连续切换后仍可正常选中（无残留状态）",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "Import 弹窗：可只选已有 Project/Model，并选择本机 RVM/TXT",
+      "ok": true,
+      "detail": {
+        "fileName": "QICHUANG-SITE-RVM-2026-08-26.rvm  4.3 MB"
+      }
+    },
+    {
+      "step": "导入 UI：阶段进度（复制→转换→元数据→映射→校验→完成）全部完成",
+      "ok": true,
+      "detail": {
+        "seconds": 11.2,
+        "stages": [
+          "复制源文件:done",
+          "转换 RVM → GLB:done",
+          "解析 TXT → 元数据:done",
+          "对象映射:done",
+          "独立校验:done",
+          "完成:done"
+        ],
+        "hint": "导入完成：qichuang / main-site / 2026-09-19　→ 可以直接打开"
+      }
+    },
+    {
+      "step": "导入完成即可直接打开，数据与源一致（8,955 / 7,423）",
+      "ok": true,
+      "detail": {
+        "title": {
+          "project": "启创项目",
+          "model": "Main Site",
+          "version": "2026-09-19",
+          "tab": "启创项目 / Main Site / 2026-09-19 — PDMS Viewer"
+        },
+        "glb": "/data/projects/qichuang/models/main-site/versions/2026-09-19/processed/model.glb"
+      }
+    },
+    {
+      "step": "重复 Version：界面明确提示\"已存在\"，不静默覆盖",
+      "ok": true,
+      "detail": {
+        "message": "导入未能开始版本 '2026-09-19'（目录 2026-09-19）已存在且已完成导入，不会覆盖。请换一个版本名，或先删除该版本。"
+      }
+    },
+    {
+      "step": "错误 TXT：显示失败阶段 + 错误信息 + 提供重试",
+      "ok": true,
+      "detail": {
+        "text": "Import Failed Stage：解析 TXT → 元数据 Error：TXT → metadata 解析失败 Traceback (most recent call last): File \"C:\\Users\\34084\\Desktop\\modelviewer - 副本\\converter\\txt_parser.py\", line 535, in <module> raise ",
+        "stages": [
+          "复制源文件:ok",
+          "转换 RVM → GLB:ok",
+          "解析 TXT → 元数据:bad",
+          "对象映射:",
+          "独立校验:",
+          "完成:"
+        ]
+      }
+    },
+    {
+      "step": "失败版本注册为 failed（不是 ready），且未生成 assets",
+      "ok": true,
+      "detail": {
+        "status": "failed",
+        "error": "metadata",
+        "hasAssets": false,
+        "count": 6
+      }
+    },
+    {
+      "step": "重试：复用已保存的源文件重跑整条链路",
+      "ok": true,
+      "detail": {
+        "text": "Import Failed Stage：解析 TXT → 元数据 Error：TXT → metadata 解析失败 Traceback (most recent call last): File \"C:\\Users\\34084\\Des"
+      }
+    },
+    {
+      "step": "失败导入不影响已有版本（2026-08-26 照常打开）",
+      "ok": true,
+      "detail": {
+        "title": {
+          "project": "启创项目",
+          "model": "Main Site",
+          "version": "2026-08-26",
+          "tab": "启创项目 / Main Site / 2026-08-26 — PDMS Viewer"
+        },
+        "objects": 8955,
+        "naming": 7423
+      }
+    },
+    {
+      "step": "全程无预期外的 console error / 无 pageerror",
+      "ok": true,
+      "detail": {
+        "console": [],
+        "pageErrors": [],
+        "expectedHttpErrors": [
+          "Failed to load resource: the server responded with a status of 409 (Conflict)"
+        ]
+      }
+    }
+  ],
+  "console": [],
+  "expectedHttpErrors": [
+    "Failed to load resource: the server responded with a status of 409 (Conflict)"
+  ],
+  "pageErrors": [],
+  "switchSeq": [
+    {
+      "v": "qichuang/2026-08-26",
+      "usedMB": 69.5,
+      "peakMB": 72,
+      "geoms": 5797,
+      "textures": 2,
+      "named": 7423,
+      "scene": 5
+    },
+    {
+      "v": "qichuang/2026-09-18",
+      "usedMB": 69.7,
+      "peakMB": 70.2,
+      "geoms": 5797,
+      "textures": 2,
+      "named": 7423,
+      "scene": 5
+    },
+    {
+      "v": "propionic-acid/2026-09-03",
+      "usedMB": 69.8,
+      "peakMB": 104.7,
+      "geoms": 5797,
+      "textures": 2,
+      "named": 7423,
+      "scene": 5
+    },
+    {
+      "v": "qichuang/2026-08-26",
+      "usedMB": 69.9,
+      "peakMB": 103.1,
+      "geoms": 5797,
+      "textures": 2,
+      "named": 7423,
+      "scene": 5
+    },
+    {
+      "v": "qichuang/2026-09-18",
+      "usedMB": 70.1,
+      "peakMB": 101.3,
+      "geoms": 5797,
+      "textures": 2,
+      "named": 7423,
+      "scene": 5
+    },
+    {
+      "v": "propionic-acid/2026-09-03",
+      "usedMB": 70.3,
+      "peakMB": 102.5,
+      "geoms": 5797,
+      "textures": 2,
+      "named": 7423,
+      "scene": 5
+    },
+    {
+      "v": "qichuang/2026-08-26",
+      "usedMB": 68.3,
+      "peakMB": 104,
+      "geoms": 5797,
+      "textures": 2,
+      "named": 7423,
+      "scene": 5
+    },
+    {
+      "v": "qichuang/2026-09-18",
+      "usedMB": 70.3,
+      "peakMB": 101.5,
+      "geoms": 5797,
+      "textures": 2,
+      "named": 7423,
+      "scene": 5
+    },
+    {
+      "v": "propionic-acid/2026-09-03",
+      "usedMB": 70.7,
+      "peakMB": 105.2,
+      "geoms": 5797,
+      "textures": 2,
+      "named": 7423,
+      "scene": 5
+    },
+    {
+      "v": "qichuang/2026-08-26",
+      "usedMB": 70.7,
+      "peakMB": 103.8,
+      "geoms": 5797,
+      "textures": 2,
+      "named": 7423,
+      "scene": 5
+    }
+  ],
+  "importSeconds": 11.2
+}

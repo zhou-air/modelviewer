@@ -1,0 +1,133 @@
+{
+  "pass": true,
+  "checks": [
+    {
+      "name": "schema",
+      "got": "pdms-object-mapping/1",
+      "want": "pdms-object-mapping/1",
+      "ok": true
+    },
+    {
+      "name": "matched + unmatchedTxt == TXT 对象数",
+      "got": 8955,
+      "want": 8955,
+      "ok": true
+    },
+    {
+      "name": "matched + unmatchedGlbNamed == GLB 命名节点数",
+      "got": 7423,
+      "want": 7423,
+      "ok": true
+    },
+    {
+      "name": "stats.matched 与 pairs 一致",
+      "got": 7420,
+      "want": 7420,
+      "ok": true
+    },
+    {
+      "name": "stats.unmatchedTxt 与清单一致",
+      "got": 1535,
+      "want": 1535,
+      "ok": true
+    },
+    {
+      "name": "stats.glbNamedNodes 与 GLB 一致",
+      "got": 7423,
+      "want": 7423,
+      "ok": true
+    },
+    {
+      "name": "stats.txtObjects 与 metadata 一致",
+      "got": 8955,
+      "want": 8955,
+      "ok": true
+    },
+    {
+      "name": "stats.rvmGroups 与 RVM 索引一致",
+      "got": 7420,
+      "want": 7420,
+      "ok": true
+    },
+    {
+      "name": "pairs 键数 == 边数",
+      "got": 7420,
+      "want": 7420,
+      "ok": true
+    },
+    {
+      "name": "glbNodeIndex 无重复",
+      "got": 0,
+      "want": 0,
+      "ok": true
+    },
+    {
+      "name": "rvmOffset 无重复",
+      "got": 0,
+      "want": 0,
+      "ok": true
+    },
+    {
+      "name": "txtId 无重复",
+      "got": 0,
+      "want": 0,
+      "ok": true
+    },
+    {
+      "name": "键 == TXT 侧 canonical",
+      "got": 0,
+      "want": 0,
+      "ok": true
+    },
+    {
+      "name": "键 == GLB 节点名且序号一致",
+      "got": 0,
+      "want": 0,
+      "ok": true
+    },
+    {
+      "name": "键 == RVM 组名",
+      "got": 0,
+      "want": 0,
+      "ok": true
+    },
+    {
+      "name": "每边都有 rvmOffset",
+      "got": 0,
+      "want": 0,
+      "ok": true
+    },
+    {
+      "name": "按 rvmOffset 回读 RVM 二进制，名称与键一致",
+      "got": 0,
+      "want": 0,
+      "ok": true
+    },
+    {
+      "name": "RVM 索引自身无重名",
+      "got": 0,
+      "want": 0,
+      "ok": true
+    },
+    {
+      "name": "canonical 无重名",
+      "got": 0,
+      "want": 0,
+      "ok": true
+    },
+    {
+      "name": "未匹配 TXT 项都有 reason",
+      "got": 0,
+      "want": 0,
+      "ok": true
+    },
+    {
+      "name": "未匹配 GLB 项都有 reason",
+      "got": 0,
+      "want": 0,
+      "ok": true
+    }
+  ],
+  "readbackChecked": 7420,
+  "readbackMismatchSamples": []
+}

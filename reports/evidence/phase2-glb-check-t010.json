@@ -1,0 +1,73 @@
+{
+  "file": "model.glb",
+  "bytes": 13331000,
+  "glb_version": 2,
+  "generator": "rvmparser",
+  "asset_extra": {
+    "rvmparser-origin": [
+      -20.039997100830078,
+      64.97950744628906,
+      9.803499221801758
+    ]
+  },
+  "bin_chunk_bytes": 7794804,
+  "counts": {
+    "nodes": 7931,
+    "roots": 1,
+    "meshes": 5796,
+    "primitives": 5796,
+    "materials": 1,
+    "accessors": 16849,
+    "nodes_with_mesh": 5796,
+    "nodes_with_extras": 0
+  },
+  "geometry": {
+    "triangles": 181259,
+    "lines": 867,
+    "points": 0,
+    "vertices": 234982,
+    "primitive_modes": {
+      "4": 5507,
+      "1": 289
+    }
+  },
+  "hierarchy": {
+    "max_depth": 10,
+    "depth_histogram": {
+      "0": 1,
+      "1": 1,
+      "2": 1,
+      "3": 1,
+      "4": 15,
+      "5": 292,
+      "6": 1443,
+      "7": 5321,
+      "8": 509,
+      "9": 328,
+      "10": 19
+    }
+  },
+  "names": {
+    "named_nodes": 7423,
+    "slash_names": 1157,
+    "synthetic_names": 6264,
+    "samples_root": [
+      "rvmparser-rotate-z-to-y"
+    ],
+    "samples_deep": [
+      "ELBOW 2 of BRANCH /WG-10401-400-L1G/B2",
+      "ELBOW 1 of BRANCH /WG-10401-400-L1G/B2",
+      "FLANGE 1 of BRANCH /WG-10401-400-L1G/B2",
+      "GASKET 1 of BRANCH /WG-10401-400-L1G/B2",
+      null
+    ],
+    "first_synthetic": "GASKET 1 of BRANCH /WG-10401-400-L1G/B2"
+  },
+  "material_names": [
+    "Black"
+  ],
+  "extensions_used": [],
+  "scene_nodes": [
+    7930
+  ]
+}

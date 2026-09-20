@@ -1,0 +1,88 @@
+{
+  "at": "2026-09-18T23:37:33+08:00",
+  "target": "data/projects/qichuang/models/main-site/versions/2026-08-26",
+  "files": [
+    {
+      "to": "source/model.rvm",
+      "bytes": 4505600,
+      "sha256": "44bfb8fae9d48c042cc2138ec94ae370bd7374f0bd24a17335ff1447866f59dd"
+    },
+    {
+      "to": "source/model.txt",
+      "bytes": 1344437,
+      "sha256": "180b864ca85ef3f5da8e2ca6dd17137c8d37fd28c12f2995ed149c3136e785e8"
+    },
+    {
+      "to": "processed/model.glb",
+      "bytes": 18385928,
+      "sha256": "1191a8df4b6f0309dfff4aa28a3a70d38f76c0e878f536f095c987284cb39c1b"
+    },
+    {
+      "to": "processed/metadata.json",
+      "bytes": 5541010,
+      "sha256": "bab8f10e0d82546eb2d6aff46176f5760b5abb6e21797980067a9df53dbc9d38"
+    },
+    {
+      "to": "processed/metadata.metamodel.json",
+      "bytes": 5501767,
+      "sha256": "2ac5fe11cc51963dd006f854d9c665e77c8c73c6fcfe5a122d1e654e7550f50a"
+    },
+    {
+      "to": "processed/rvm-node-index.json",
+      "bytes": 3901591,
+      "sha256": "1c5d7b3282ed2d62c48b93f15eb4cfeb7de7f2df0a72ce85bf8a0ea5ead728e5"
+    },
+    {
+      "to": "processed/mapping.json",
+      "bytes": 1406286,
+      "sha256": "6c99971062e7ce279c1c6b78be36c4a75784443fd86818bc0f211fd446312a26"
+    }
+  ],
+  "validation": {
+    "schema": "pdms-import-validation/1",
+    "at": "2026-09-18T23:37:33+08:00",
+    "migrated": true,
+    "pass": true,
+    "checks": [
+      {
+        "name": "GLB 结构（UTF-8 JSON / 节点数 / 三角形数）",
+        "ok": true,
+        "detail": {
+          "nodes": 7931,
+          "triangles": 335824
+        }
+      },
+      {
+        "name": "metadata 独立校验（33 项）",
+        "ok": true,
+        "detail": {
+          "failed": []
+        }
+      },
+      {
+        "name": "mapping 独立校验（21 项）",
+        "ok": true,
+        "detail": {
+          "failed": [],
+          "readbackChecked": 7420
+        }
+      }
+    ]
+  },
+  "stats": {
+    "rvmBytes": 4505600,
+    "txtBytes": 1344437,
+    "glbBytes": 18385928,
+    "objectCount": 8955,
+    "namedNodes": 7423,
+    "rvmGroups": 7420,
+    "mappedObjects": 7420,
+    "mappingRate": 1.0,
+    "triangles": 335824,
+    "meshes": 5796,
+    "lines": 867,
+    "durationMs": 0,
+    "converterVersion": "pdms-import-pipeline/1 · rvmparser/2f7025971a95 · tolerance 0.02 m · migrated (no re-conversion)"
+  },
+  "legacy": "data/_legacy_demo_2026-08-26"
+}

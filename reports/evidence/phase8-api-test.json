@@ -1,0 +1,327 @@
+{
+  "base": "http://127.0.0.1:8765",
+  "steps": [
+    {
+      "step": "后端存活",
+      "ok": true,
+      "detail": {
+        "pipeline": "pdms-import-pipeline/1",
+        "root": "C:\\Users\\34084\\Desktop\\modelviewer - 副本",
+        "projects": 2,
+        "port": 8765
+      }
+    },
+    {
+      "step": "重置：删除本次将重建的版本（DELETE 接口，移入 trash）",
+      "ok": true,
+      "detail": [
+        {
+          "path": "qichuang/main-site/2026-09-18",
+          "http": 200
+        },
+        {
+          "path": "qichuang/main-site/2026-10-01",
+          "http": 404
+        },
+        {
+          "path": "qichuang/main-site/2026-10-02",
+          "http": 404
+        },
+        {
+          "path": "propionic-acid/main-site/2026-09-03",
+          "http": 200
+        }
+      ]
+    },
+    {
+      "step": "原 QICHUANG 版本仍为 ready",
+      "ok": true,
+      "detail": {
+        "status": "ready",
+        "objectCount": 8955,
+        "mappingRate": 1.0,
+        "glbBytes": 18385928
+      }
+    },
+    {
+      "step": "原版本五份产物 URL 齐全",
+      "ok": true,
+      "detail": [
+        "glb",
+        "mapping",
+        "metadata",
+        "metamodel",
+        "rvmIndex"
+      ]
+    },
+    {
+      "step": "原版本产物在本机真实存在",
+      "ok": true,
+      "detail": "data\\projects\\qichuang\\models\\main-site\\versions\\2026-08-26"
+    },
+    {
+      "step": "① 导入新版本 2026-09-18（Ready）",
+      "ok": true,
+      "detail": {
+        "status": "ready",
+        "stage": "ready",
+        "seconds": 7.4,
+        "stages": [
+          "copying",
+          "geometry",
+          "metadata",
+          "mapping",
+          "validating",
+          "ready"
+        ],
+        "error": null
+      }
+    },
+    {
+      "step": "新版本 stats 与 demo 同源一致",
+      "ok": true,
+      "detail": {
+        "objectCount": 8955,
+        "mappedObjects": 7420,
+        "mappingRate": 1.0,
+        "glbBytes": 18385960
+      }
+    },
+    {
+      "step": "新版本两条版本并存、最新在上",
+      "ok": true,
+      "detail": [
+        "2026-09-19",
+        "2026-09-18",
+        "2026-08-26"
+      ]
+    },
+    {
+      "step": "conversion.log 已生成且含各阶段命令",
+      "ok": true,
+      "detail": "data\\projects\\qichuang\\models\\main-site\\versions\\2026-09-18\\reports\\conversion.log"
+    },
+    {
+      "step": "validation.json 三条闸门全通过",
+      "ok": true,
+      "detail": [
+        "GLB 结构（UTF-8 JSON / 节点数 / 三角形数）",
+        "metadata 独立校验（33 项）",
+        "mapping 独立校验（21 项）"
+      ]
+    },
+    {
+      "step": "重复版本被拒绝（409 version_exists，不覆盖）",
+      "ok": true,
+      "detail": {
+        "http": 409,
+        "error": {
+          "code": "version_exists",
+          "message": "版本 '2026-09-18'（目录 2026-09-18）已存在且已完成导入，不会覆盖。请换一个版本名，或先删除该版本。"
+        }
+      }
+    },
+    {
+      "step": "被拒绝后原版本 manifest 未被改动",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "③ 创建第二个 Model（Tank Area；已存在时返回 409 而不是覆盖）",
+      "ok": true,
+      "detail": {
+        "http": 409,
+        "result": {
+          "code": "model_exists",
+          "message": "Model ID 'tank-area' 已存在"
+        }
+      }
+    },
+    {
+      "step": "新 Model 出现在项目列表且版本为空",
+      "ok": false,
+      "detail": {
+        "id": "tank-area",
+        "name": "Tank Area"
+      }
+    },
+    {
+      "step": "④ 创建第二个 Project（丙酸项目；已存在时返回 409 而不是覆盖）",
+      "ok": true,
+      "detail": {
+        "http": 409,
+        "result": {
+          "code": "project_exists",
+          "message": "Project ID 'propionic-acid' 已存在"
+        }
+      }
+    },
+    {
+      "step": "导入到新 Project（自动建 Model）",
+      "ok": true,
+      "detail": {
+        "status": "ready",
+        "error": null,
+        "seconds": 7.1
+      }
+    },
+    {
+      "step": "新 Project 的版本为 ready",
+      "ok": true,
+      "detail": {
+        "objectCount": 8955,
+        "mappingRate": 1.0
+      }
+    },
+    {
+      "step": "展示名与 ID 分离（ID 为 ASCII slug）",
+      "ok": true,
+      "detail": {
+        "id": "propionic-acid",
+        "name": "丙酸项目"
+      }
+    },
+    {
+      "step": "⑧ 错误 RVM → failed 且停在 geometry 阶段",
+      "ok": true,
+      "detail": {
+        "status": "failed",
+        "stage": "geometry",
+        "error": "RVM → GLB 转换失败"
+      }
+    },
+    {
+      "step": "失败版本的源文件被保留（可排错/可重试）",
+      "ok": true,
+      "detail": "data\\projects\\qichuang\\models\\main-site\\versions\\2026-10-01"
+    },
+    {
+      "step": "失败版本未被注册为 ready",
+      "ok": true,
+      "detail": "failed"
+    },
+    {
+      "step": "⑨ 错误 TXT → failed（geometry 之后）",
+      "ok": true,
+      "detail": {
+        "stage": "metadata",
+        "error": "TXT 解析出 0 个对象 —— 该文件不是 PDMS Data Listing，或用错了文件"
+      }
+    },
+    {
+      "step": "⑩ 缺 TXT → 启动即被拒（source_missing）",
+      "ok": true,
+      "detail": {
+        "http": 400,
+        "error": {
+          "code": "source_missing",
+          "message": "还缺源文件：TXT"
+        }
+      }
+    },
+    {
+      "step": "缺 TXT 的任务没有落盘目录",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "拒绝非法 Project ID '../evil'",
+      "ok": true,
+      "detail": {
+        "http": 400,
+        "code": "project_id_invalid"
+      }
+    },
+    {
+      "step": "拒绝非法 Project ID 'a/b'",
+      "ok": true,
+      "detail": {
+        "http": 400,
+        "code": "project_id_invalid"
+      }
+    },
+    {
+      "step": "拒绝非法 Project ID 'C:\\\\Windows'",
+      "ok": true,
+      "detail": {
+        "http": 400,
+        "code": "project_id_invalid"
+      }
+    },
+    {
+      "step": "拒绝非法 Project ID '中文ID'",
+      "ok": true,
+      "detail": {
+        "http": 400,
+        "code": "project_id_not_ascii"
+      }
+    },
+    {
+      "step": "拒绝非法 Project ID 'con'",
+      "ok": true,
+      "detail": {
+        "http": 400,
+        "code": "project_id_reserved"
+      }
+    },
+    {
+      "step": "拒绝非法 Project ID '..'",
+      "ok": true,
+      "detail": {
+        "http": 400,
+        "code": "project_id_invalid"
+      }
+    },
+    {
+      "step": "拒绝非法 Project ID 'UP'",
+      "ok": true,
+      "detail": {
+        "http": 400,
+        "code": "project_id_invalid"
+      }
+    },
+    {
+      "step": "版本路径注入被拒",
+      "ok": true,
+      "detail": {
+        "http": 400
+      }
+    },
+    {
+      "step": "静态服务路径逃逸被拒",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "项目列表结构完整（projects/models/versions/totals）",
+      "ok": true,
+      "detail": {
+        "projects": 2,
+        "models": 3,
+        "versions": 7
+      }
+    },
+    {
+      "step": "⑫ 直接扫盘（重启后的事实来源）与 API 结果一致",
+      "ok": true,
+      "detail": {
+        "disk": [
+          [
+            "propionic-acid",
+            1
+          ],
+          [
+            "qichuang",
+            6
+          ]
+        ]
+      }
+    }
+  ],
+  "ok": false,
+  "projects": {
+    "projects": 2,
+    "models": 3,
+    "versions": 7
+  }
+}

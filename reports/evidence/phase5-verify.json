@@ -1,0 +1,395 @@
+{
+  "url": "http://127.0.0.1:8765/viewer/index.html",
+  "ok": true,
+  "console": [
+    "[warning] [.WebGL-0x494402fc4e00] GL_INVALID_FRAMEBUFFER_OPERATION: glClear: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x494402fc4e00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x494402fc4e00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x494402fc4e00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x494402fc4e00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x494402fc4e00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x494402fc4e00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x494402fc4e00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x494402fc4e00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x494402fc4e00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x494402fc4e00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x494402fc4e00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x494402fc4e00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x494402fc4e00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x494402fc4e00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x494402fc4e00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x494402fc4e00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x494402fc4e00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x494402fc4e00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x494402fc4e00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x494402fc4e00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x494402fc4e00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x494402fc4e00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x494402fc4e00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x494402fc4e00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x494402fc4e00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x494402fc4e00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x494402fc4e00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x494402fc4e00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x494402fc4e00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size."
+  ],
+  "pageErrors": [],
+  "steps": [
+    {
+      "step": "初始状态",
+      "tree": {
+        "selectedId": null,
+        "selectedRowText": null,
+        "rowsRendered": 16,
+        "expanded": 1
+      },
+      "buttons": {
+        "hide": true,
+        "isolate": true,
+        "showAll": true
+      }
+    },
+    {
+      "step": "候选项",
+      "count": 40,
+      "first": [
+        {
+          "canonical": "FLANGE 1 of BRANCH /WG-10401-400-L1G/B2",
+          "type": "FLANGE",
+          "x": 836,
+          "y": 613
+        },
+        {
+          "canonical": "ELBOW 1 of BRANCH /WG-10401-400-L1G/B2",
+          "type": "ELBOW",
+          "x": 836,
+          "y": 610
+        },
+        {
+          "canonical": "ELBOW 2 of BRANCH /WG-10401-400-L1G/B2",
+          "type": "ELBOW",
+          "x": 807,
+          "y": 591
+        }
+      ]
+    },
+    {
+      "step": "点击拾取",
+      "clickedAt": [
+        836,
+        613
+      ],
+      "selected": "FLOOR 6 of FRMWORK /W-SHOP-1-FLOOR"
+    },
+    {
+      "step": "选中后状态",
+      "propInfo": "FLOOR · 1 个子节点",
+      "treeSelected": "txt:L47333",
+      "treeRow": "▸FLOOR 6FLOOR",
+      "badge": "FLOOR 6 of FRMWORK /W-SHOP-1-FLOOR",
+      "buttons": {
+        "hide": false,
+        "isolate": false,
+        "showAll": true
+      }
+    },
+    {
+      "step": "缩放到选中对象",
+      "selected": "FLOOR 6 of FRMWORK /W-SHOP-1-FLOOR",
+      "stats": {
+        "fps": 29,
+        "drawCalls": 4097,
+        "triangles": 258155,
+        "frameDrawCallsAllPasses": 8202,
+        "outlineEnabled": true,
+        "interacting": false,
+        "visible": 7420,
+        "hidden": 0
+      }
+    },
+    {
+      "step": "性能(空闲·描边开)",
+      "stats": {
+        "fps": 30,
+        "drawCalls": 4097,
+        "triangles": 258155,
+        "frameDrawCallsAllPasses": 8202,
+        "outlineEnabled": true,
+        "interacting": false,
+        "visible": 7420,
+        "hidden": 0
+      },
+      "fpsMeasured": 30
+    },
+    {
+      "step": "性能(拖动中)",
+      "drag": {
+        "frames": 258,
+        "ms": 4214,
+        "fps": 61
+      },
+      "midDragStats": {
+        "fps": 62,
+        "drawCalls": 3621,
+        "triangles": 211897,
+        "frameDrawCallsAllPasses": 3622,
+        "outlineEnabled": false,
+        "interacting": true,
+        "visible": 7420,
+        "hidden": 0
+      }
+    },
+    {
+      "step": "拖动结束后恢复",
+      "stats": {
+        "fps": 64,
+        "drawCalls": 3489,
+        "triangles": 214731,
+        "frameDrawCallsAllPasses": 3490,
+        "outlineEnabled": false,
+        "interacting": true,
+        "visible": 7420,
+        "hidden": 0
+      }
+    },
+    {
+      "step": "树→3D 联动",
+      "selected": "/ENCOSC23059-QICHUANG-SITE",
+      "propInfo": "SITE · 15 个子节点",
+      "tree": {
+        "selectedId": "txt:L8",
+        "selectedRowText": "▾/ENCOSC23059-QICHUANG-SITESITE",
+        "rowsRendered": 61,
+        "expanded": 4
+      }
+    },
+    {
+      "step": "无几何节点",
+      "propInfo": "DATUM · 0 个子节点 · RVM 未导出几何",
+      "propHead": [
+        "概览",
+        "类型\tDATUM",
+        "canonical\t/QICHUANG-W-SHOP-1-G/DATUM",
+        "原始名称\t/QICHUANG-W-SHOP-1-G/DATUM",
+        "层级深度\t2",
+        "父节点\t/QICHUANG-WORKSHOP-01",
+        "子节点数\t0",
+        "原文行\t49203 – 49206"
+      ],
+      "selected3d": null
+    },
+    {
+      "step": "显隐",
+      "初始可见": 7420,
+      "隐藏后": 7419,
+      "显示全部后": 7420,
+      "隔离后": 5,
+      "恢复后": 7420,
+      "隐藏按钮态": {
+        "hide": false,
+        "isolate": false,
+        "showAll": false
+      },
+      "隔离后按钮态": {
+        "hide": false,
+        "isolate": false,
+        "showAll": false
+      }
+    }
+  ],
+  "loadMs": 719,
+  "modelInfo": {
+    "meshes": 5507,
+    "lines": 289,
+    "namedNodes": 7423
+  },
+  "dataStats": {
+    "objects": 8955,
+    "matched": null
+  },
+  "treeInitial": {
+    "selectedId": null,
+    "selectedRowText": null,
+    "rowsRendered": 16,
+    "expanded": 1
+  },
+  "buttonsInitial": {
+    "hide": true,
+    "isolate": true,
+    "showAll": true
+  },
+  "pick": {
+    "clicked": {
+      "canonical": "FLANGE 1 of BRANCH /WG-10401-400-L1G/B2",
+      "type": "FLANGE",
+      "x": 836,
+      "y": 613
+    },
+    "selected": "FLOOR 6 of FRMWORK /W-SHOP-1-FLOOR"
+  },
+  "afterPick": {
+    "prop": {
+      "info": "FLOOR · 1 个子节点",
+      "text": "概览\n类型\tFLOOR\ncanonical\tFLOOR 6 of FRMWORK /W-SHOP-1-FLOOR\n原始名称\t（匿名对象）\n层级深度\t4\n父节点\t/W-SHOP-1-FLOOR\n子节点数\t1\n原文行\t47333 – 47369\n几何对应\nGLB 节点序号\t4010\nRVM 字节偏移\t1624484\nTXT 行锚定 id\ttxt:L47333\n匹配通道\tname\n几何块数\t1\n几何构成\t面片组×1\n世界包围盒 (m)\tE 0.00…61.00 · N 12.00…24.00 · U 10.74…11.20\nPDMS 属性（6）\nPOS\tE 0mm N 12000mm U 11200mm\nORI\tY is N 1.89007 D and Z is N 88.1099 U\nBUIL\tfalse\nSHOP\tfalse\nGRADE\t0\nFIRE\t0"
+    },
+    "tree": {
+      "selectedId": "txt:L47333",
+      "selectedRowText": "▸FLOOR 6FLOOR",
+      "rowsRendered": 61,
+      "expanded": 4
+    },
+    "buttons": {
+      "hide": false,
+      "isolate": false,
+      "showAll": true
+    },
+    "badge": "FLOOR 6 of FRMWORK /W-SHOP-1-FLOOR",
+    "outlineCount": null
+  },
+  "closeup": {
+    "selected": "FLOOR 6 of FRMWORK /W-SHOP-1-FLOOR",
+    "stats": {
+      "fps": 29,
+      "drawCalls": 4097,
+      "triangles": 258155,
+      "frameDrawCallsAllPasses": 8202,
+      "outlineEnabled": true,
+      "interacting": false,
+      "visible": 7420,
+      "hidden": 0
+    }
+  },
+  "perfIdle": {
+    "fps": 30,
+    "drawCalls": 4097,
+    "triangles": 258155,
+    "frameDrawCallsAllPasses": 8202,
+    "outlineEnabled": true,
+    "interacting": false,
+    "visible": 7420,
+    "hidden": 0
+  },
+  "perfIdleFps": 30,
+  "perfDrag": {
+    "frames": 258,
+    "ms": 4214,
+    "fps": 61
+  },
+  "midDragStats": {
+    "fps": 62,
+    "drawCalls": 3621,
+    "triangles": 211897,
+    "frameDrawCallsAllPasses": 3622,
+    "outlineEnabled": false,
+    "interacting": true,
+    "visible": 7420,
+    "hidden": 0
+  },
+  "afterDragStats": {
+    "fps": 64,
+    "drawCalls": 3489,
+    "triangles": 214731,
+    "frameDrawCallsAllPasses": 3490,
+    "outlineEnabled": false,
+    "interacting": true,
+    "visible": 7420,
+    "hidden": 0
+  },
+  "afterTreeClick": {
+    "selected": "/ENCOSC23059-QICHUANG-SITE",
+    "propInfo": "SITE · 15 个子节点",
+    "tree": {
+      "selectedId": "txt:L8",
+      "selectedRowText": "▾/ENCOSC23059-QICHUANG-SITESITE",
+      "rowsRendered": 61,
+      "expanded": 4
+    }
+  },
+  "nogeoNode": {
+    "propInfo": "DATUM · 0 个子节点 · RVM 未导出几何",
+    "propHead": [
+      "概览",
+      "类型\tDATUM",
+      "canonical\t/QICHUANG-W-SHOP-1-G/DATUM",
+      "原始名称\t/QICHUANG-W-SHOP-1-G/DATUM",
+      "层级深度\t2",
+      "父节点\t/QICHUANG-WORKSHOP-01",
+      "子节点数\t0",
+      "原文行\t49203 – 49206"
+    ],
+    "selected3d": null
+  },
+  "visibility": {
+    "before": {
+      "fps": 64,
+      "drawCalls": 3486,
+      "triangles": 214527,
+      "frameDrawCallsAllPasses": 3487,
+      "outlineEnabled": true,
+      "interacting": false,
+      "visible": 7420,
+      "hidden": 0
+    },
+    "afterHide": {
+      "stats": {
+        "fps": 63,
+        "drawCalls": 3486,
+        "triangles": 214527,
+        "frameDrawCallsAllPasses": 3487,
+        "outlineEnabled": true,
+        "interacting": false,
+        "visible": 7419,
+        "hidden": 1
+      },
+      "buttons": {
+        "hide": false,
+        "isolate": false,
+        "showAll": false
+      }
+    },
+    "afterShowAll": {
+      "stats": {
+        "fps": 63,
+        "drawCalls": 3486,
+        "triangles": 214527,
+        "frameDrawCallsAllPasses": 3487,
+        "outlineEnabled": true,
+        "interacting": false,
+        "visible": 7420,
+        "hidden": 0
+      },
+      "buttons": {
+        "hide": false,
+        "isolate": false,
+        "showAll": true
+      }
+    },
+    "afterIsolate": {
+      "stats": {
+        "fps": 172,
+        "drawCalls": 1,
+        "triangles": 247,
+        "frameDrawCallsAllPasses": 2,
+        "outlineEnabled": true,
+        "interacting": false,
+        "visible": 5,
+        "hidden": 7415
+      },
+      "buttons": {
+        "hide": false,
+        "isolate": false,
+        "showAll": false
+      }
+    },
+    "afterRestore": {
+      "fps": 66,
+      "drawCalls": 3486,
+      "triangles": 214527,
+      "frameDrawCallsAllPasses": 3487,
+      "outlineEnabled": true,
+      "interacting": false,
+      "visible": 7420,
+      "hidden": 0
+    }
+  }
+}

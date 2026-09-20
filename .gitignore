@@ -1,0 +1,19 @@
+# 本地访问权限配置（含删除密码）
+config/access.env
+
+# 运行时数据与临时产物
+data/
+scratch/
+__pycache__/
+*.pyc
+*.log
+
+# 本地隧道工具和构建/运行目录
+tools/bin/
+tools/cloudflared.exe
+bin/
+obj/
+dist/
+
+# 本地编辑器/工作区状态
+.workbuddy/

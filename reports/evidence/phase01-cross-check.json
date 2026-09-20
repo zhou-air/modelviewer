@@ -1,0 +1,206 @@
+{
+  "txt": {
+    "bytes": 1344437,
+    "bom": true,
+    "crlf": 92871,
+    "physical_lines": 92871,
+    "line_classes": {
+      "comment/directive": 8,
+      "blank": 10027,
+      "attribute": 63856,
+      "NEW": 8955,
+      "END": 8955,
+      "OLD": 1068,
+      "其他/命令": 2
+    },
+    "preamble": [
+      "$S-  -- Synonym translation OFF",
+      "-- ----------------------------------------------------------------",
+      "-- Data Listing    Date : 26 Aug 2026 16:32"
+    ],
+    "nodes": 8955,
+    "roots": 1,
+    "max_depth": 7,
+    "named": 1159,
+    "anonymous": 7796,
+    "attributes": 63856,
+    "attribute_key_kinds": 114,
+    "old_section_start_line": 89067,
+    "old_selectors": 1068,
+    "old_selector_ordinal_check": {
+      "选择器格式非 TYPE n of PARENT path": 847,
+      "按序号推得的名字与选择器完全一致": 221
+    },
+    "old_selector_examples": [
+      {
+        "selector": "TEE 1 of BRANCH /WG-10401-400-L1G/B2",
+        "derived": "TEE 1 of BRANCH /WG-10401-400-L1G/B2",
+        "node_line": 187,
+        "old_selector_line": 89071
+      },
+      {
+        "selector": "TEE 2 of BRANCH /WG-10401-400-L1G/B2",
+        "derived": "TEE 2 of BRANCH /WG-10401-400-L1G/B2",
+        "node_line": 199,
+        "old_selector_line": 89074
+      },
+      {
+        "selector": "TEE 3 of BRANCH /WG-10401-400-L1G/B2",
+        "derived": "TEE 3 of BRANCH /WG-10401-400-L1G/B2",
+        "node_line": 211,
+        "old_selector_line": 89077
+      },
+      {
+        "selector": "TEE 4 of BRANCH /WG-10401-400-L1G/B2",
+        "derived": "TEE 4 of BRANCH /WG-10401-400-L1G/B2",
+        "node_line": 248,
+        "old_selector_line": 89080
+      },
+      {
+        "selector": "TEE 1 of BRANCH /WG-10401-400-L1G/B1",
+        "derived": "TEE 1 of BRANCH /WG-10401-400-L1G/B1",
+        "node_line": 313,
+        "old_selector_line": 89086
+      }
+    ],
+    "nodes_left_on_stack_at_eof": 0
+  },
+  "rvm": {
+    "nodes_with_name": 7421,
+    "names_starting_with_slash": 1157,
+    "synthetic_component_names": 6264,
+    "synthetic_top_types": [
+      [
+        "DISH",
+        1040
+      ],
+      [
+        "CYLINDER",
+        818
+      ],
+      [
+        "BOX",
+        639
+      ],
+      [
+        "SCTN",
+        630
+      ],
+      [
+        "GASKET",
+        550
+      ],
+      [
+        "FLANGE",
+        473
+      ],
+      [
+        "ELBOW",
+        410
+      ],
+      [
+        "SUBSTRUCTURE",
+        329
+      ],
+      [
+        "SNODE",
+        289
+      ],
+      [
+        "SJOINT",
+        182
+      ],
+      [
+        "VALVE",
+        181
+      ],
+      [
+        "TEE",
+        109
+      ],
+      [
+        "CTORUS",
+        95
+      ],
+      [
+        "CONE",
+        86
+      ],
+      [
+        "PYRAMID",
+        74
+      ]
+    ]
+  },
+  "cross": {
+    "txt_slash_names": 1159,
+    "rvm_slash_names": 1157,
+    "intersection": 1156,
+    "txt_only": 3,
+    "rvm_only": 1,
+    "txt_only_examples": [
+      "/QICHUANG-W-SHOP-1-G/DATUM",
+      "/QICHUANG-WP-04-NETWORK/DATUM",
+      "/WORKSHOP-03-GRID-1/DATUM"
+    ],
+    "rvm_only_examples": [
+      "/MDBs"
+    ],
+    "component_type_table": [
+      {
+        "type": "GASKET",
+        "rvm_named_of_branch": 550,
+        "txt_under_branch": 550,
+        "txt_total": 550
+      },
+      {
+        "type": "FLANGE",
+        "rvm_named_of_branch": 473,
+        "txt_under_branch": 473,
+        "txt_total": 473
+      },
+      {
+        "type": "ELBOW",
+        "rvm_named_of_branch": 410,
+        "txt_under_branch": 410,
+        "txt_total": 410
+      },
+      {
+        "type": "VALVE",
+        "rvm_named_of_branch": 181,
+        "txt_under_branch": 181,
+        "txt_total": 181
+      },
+      {
+        "type": "TEE",
+        "rvm_named_of_branch": 109,
+        "txt_under_branch": 109,
+        "txt_total": 109
+      },
+      {
+        "type": "OLET",
+        "rvm_named_of_branch": 66,
+        "txt_under_branch": 66,
+        "txt_total": 66
+      },
+      {
+        "type": "REDUCER",
+        "rvm_named_of_branch": 33,
+        "txt_under_branch": 33,
+        "txt_total": 33
+      },
+      {
+        "type": "INSTRUMENT",
+        "rvm_named_of_branch": 2,
+        "txt_under_branch": 49,
+        "txt_total": 49
+      },
+      {
+        "type": "FITTING",
+        "rvm_named_of_branch": 63,
+        "txt_under_branch": 0,
+        "txt_total": 63
+      }
+    ]
+  }
+}

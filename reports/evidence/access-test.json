@@ -1,0 +1,148 @@
+{
+  "steps": [
+    {
+      "step": "每日码：可生成且格式 XXXX-XXXX",
+      "ok": true,
+      "detail": "M8D9-43JB"
+    },
+    {
+      "step": "Case 8 前置：昨日码不再被信任（文件日期过期即重新生成）",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "Case 8：旧码不能建立新 Session，今日码可用",
+      "ok": true,
+      "detail": "9XST-33D7"
+    },
+    {
+      "step": "防伪造：TRUST_LOOPBACK=1 时无 TRUSTED_PROXIES 则忽略 X-Forwarded-For",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "隧道隔离：TRUST_LOOPBACK=0 时 127.0.0.1 不再内网（cloudflared 场景）",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "后端启动（127.0.0.1:55191）",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "Case 1 localhost → INTERNAL_NETWORK",
+      "ok": true,
+      "detail": "INTERNAL_NETWORK"
+    },
+    {
+      "step": "Case 2 内网：全部项目 + 今日内部码",
+      "ok": true,
+      "detail": {
+        "projects": 1,
+        "code": "9XST-33D7"
+      }
+    },
+    {
+      "step": "Case 3 外网无 Session：项目列表 401 + 状态 ANONYMOUS",
+      "ok": true,
+      "detail": {
+        "projects_http": 401,
+        "role": "ANONYMOUS"
+      }
+    },
+    {
+      "step": "Case 4 内部码 → INTERNAL_REMOTE 全项目只读",
+      "ok": true,
+      "detail": {
+        "projects": 1,
+        "create": 403,
+        "delete": 403
+      }
+    },
+    {
+      "step": "Case 4 附加：INTERNAL_REMOTE 读不到今日内部码",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "Case 5 项目码 → CLIENT_PROJECT 单项目可见",
+      "ok": true,
+      "detail": {
+        "role": "CLIENT_PROJECT",
+        "visible": [
+          "access-test-20260919"
+        ]
+      }
+    },
+    {
+      "step": "Case 5 附加：项目列表响应不含 externalAccess 字段",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "Case 6 客户访问他项目 API → 403",
+      "ok": true,
+      "detail": {
+        "project": 403,
+        "version": 403
+      }
+    },
+    {
+      "step": "Case 7 客户猜他项目模型文件 → 403，自己项目 → 200",
+      "ok": true,
+      "detail": {
+        "other": 403,
+        "own": 200
+      }
+    },
+    {
+      "step": "Case 9 每日码滚动后，既有 Session 继续有效",
+      "ok": true,
+      "detail": {
+        "projects_http": 200
+      }
+    },
+    {
+      "step": "Case 10 内网删除密码错误 → 403",
+      "ok": true,
+      "detail": 403
+    },
+    {
+      "step": "Case 11 内网密码正确 → 删除成功且从列表消失",
+      "ok": true,
+      "detail": {
+        "trashedTo": "/data/trash/20260919-141435-project-access-test-20260919",
+        "gone": true
+      }
+    },
+    {
+      "step": "Case 12 客户全部管理 API → 拒绝",
+      "ok": true,
+      "detail": {
+        "create_project": 403,
+        "import_job": 403,
+        "patch_project": 403,
+        "delete": 403,
+        "suggest_id": 403,
+        "internal_code": 403,
+        "access_code_read": 403
+      }
+    },
+    {
+      "step": "加固：删除密码文件与 trash 目录不通过 HTTP 暴露",
+      "ok": true,
+      "detail": {
+        "config": 403,
+        "trash": 403
+      }
+    },
+    {
+      "step": "统一口径：无效码返回 401 且不泄露存在性",
+      "ok": true,
+      "detail": "访问码无效或已失效"
+    }
+  ],
+  "ok": true,
+  "base": "http://127.0.0.1:55191"
+}

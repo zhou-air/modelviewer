@@ -1,0 +1,40 @@
+{
+  "os": {
+    "Caption": "Microsoft Windows 11 家庭版 中文版",
+    "Version": "10.0.26200",
+    "TotalVisibleMemorySize": 16502824
+  },
+  "cpu": {
+    "Name": "12th Gen Intel(R) Core(TM) i5-12450H",
+    "NumberOfCores": 8,
+    "NumberOfLogicalProcessors": 12
+  },
+  "gpu": [
+    {
+      "Name": "Parsec Virtual Display Adapter",
+      "DriverVersion": "0.45.0.0",
+      "AdapterRAM": null
+    },
+    {
+      "Name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+      "DriverVersion": "32.0.15.8097",
+      "AdapterRAM": 4293918720
+    }
+  ],
+  "sources": [
+    {
+      "Name": "QICHUANG-SITE-2026-08-26.txt",
+      "Length": 1344437
+    },
+    {
+      "Name": "QICHUANG-SITE-RVM-2026-08-26.rvm",
+      "Length": 4505600
+    }
+  ],
+  "node": "v24.19.0",
+  "python": "Python 3.12.10",
+  "dotnet": [
+    "6.0.428 [C:\\Program Files\\dotnet\\sdk]",
+    "10.0.302 [C:\\Program Files\\dotnet\\sdk]"
+  ]
+}

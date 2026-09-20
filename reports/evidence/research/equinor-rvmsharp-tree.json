@@ -1,0 +1,4730 @@
+{
+  "sha": "8d00cafd45af628c078907de56d7e4a850631c95",
+  "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/8d00cafd45af628c078907de56d7e4a850631c95",
+  "tree": [
+    {
+      "path": ".config",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "3ed25b9b4a2506b148c2adf3f6ec56e6838d18a1",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/3ed25b9b4a2506b148c2adf3f6ec56e6838d18a1"
+    },
+    {
+      "path": ".config/dotnet-tools.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "97f37dcc4dff2c9458cc8fe471e51586df1312a0",
+      "size": 181,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/97f37dcc4dff2c9458cc8fe471e51586df1312a0"
+    },
+    {
+      "path": ".csharpierrc.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b3b528eac2fdba9ffa81cd282249e56d96af0032",
+      "size": 154,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/b3b528eac2fdba9ffa81cd282249e56d96af0032"
+    },
+    {
+      "path": ".dockerignore",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cd967fc3a29985bd1e9bcc194d6d804d35689a5c",
+      "size": 314,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/cd967fc3a29985bd1e9bcc194d6d804d35689a5c"
+    },
+    {
+      "path": ".editorconfig",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "993bb663c3f67169a2fa6eb844ba6d8f2fc41425",
+      "size": 9313,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/993bb663c3f67169a2fa6eb844ba6d8f2fc41425"
+    },
+    {
+      "path": ".gitattributes",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "35d067c21c89b853a7140782508a898d00ef3443",
+      "size": 345,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/35d067c21c89b853a7140782508a898d00ef3443"
+    },
+    {
+      "path": ".github",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "49cef3589ccbfccac720098aa72a832361a63318",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/49cef3589ccbfccac720098aa72a832361a63318"
+    },
+    {
+      "path": ".github/workflows",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "77cd4fc380034271f2c081b6a78a2fdc28c0b07c",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/77cd4fc380034271f2c081b6a78a2fdc28c0b07c"
+    },
+    {
+      "path": ".github/workflows/secret-scanning.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b2a0db77a6ccdfd80f812474a864dbe157abbc0b",
+      "size": 463,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/b2a0db77a6ccdfd80f812474a864dbe157abbc0b"
+    },
+    {
+      "path": ".github/workflows/validate.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "51209a0bb11758a3bb07984541821245c7d8608f",
+      "size": 1277,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/51209a0bb11758a3bb07984541821245c7d8608f"
+    },
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "86d9d390452c73c33a2e4acdbae1d193497f0a66",
+      "size": 387,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/86d9d390452c73c33a2e4acdbae1d193497f0a66"
+    },
+    {
+      "path": ".gitmodules",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "size": 0,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f26d563680605750842ebfa4fdd0fa90818c5f0f",
+      "size": 417,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/f26d563680605750842ebfa4fdd0fa90818c5f0f"
+    },
+    {
+      "path": "CadRevealComposer.Exe",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "965e1a5bac3c13266dce9208a78d304d461aad02",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/965e1a5bac3c13266dce9208a78d304d461aad02"
+    },
+    {
+      "path": "CadRevealComposer.Exe/CadRevealComposer.Exe.csproj",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8b4d2c65a76336bf095327034d562627efbffbde",
+      "size": 838,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/8b4d2c65a76336bf095327034d562627efbffbde"
+    },
+    {
+      "path": "CadRevealComposer.Exe/CommandLineOptions.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "aaee79b542a29c92a6a250d97c15b938355578bf",
+      "size": 5545,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/aaee79b542a29c92a6a250d97c15b938355578bf"
+    },
+    {
+      "path": "CadRevealComposer.Exe/Program.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2f1101b9b889d31f5c75c10953fba68b6eefb9a1",
+      "size": 3478,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/2f1101b9b889d31f5c75c10953fba68b6eefb9a1"
+    },
+    {
+      "path": "CadRevealComposer.Exe/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e207e4d6f63b077f1f5bf2bd28baf25c58ea3136",
+      "size": 3623,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/e207e4d6f63b077f1f5bf2bd28baf25c58ea3136"
+    },
+    {
+      "path": "CadRevealComposer.Exe/Utils",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "e36052a4a067650eb23ba6928a1a8400c47acf38",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/e36052a4a067650eb23ba6928a1a8400c47acf38"
+    },
+    {
+      "path": "CadRevealComposer.Exe/Utils/RegexUtils.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "31f027fe0020a6089abe5d7a24c4b10dd66217de",
+      "size": 574,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/31f027fe0020a6089abe5d7a24c4b10dd66217de"
+    },
+    {
+      "path": "CadRevealComposer.Tests",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "d237e28fe6b015ea7b234eda78a97f07574a45b6",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/d237e28fe6b015ea7b234eda78a97f07574a45b6"
+    },
+    {
+      "path": "CadRevealComposer.Tests/AlgebraExtensions",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "7f025ab154a4f04a00a714a01bd96e086a89e2a9",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/7f025ab154a4f04a00a714a01bd96e086a89e2a9"
+    },
+    {
+      "path": "CadRevealComposer.Tests/AlgebraExtensions/RayTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f3ed4def8d0c24d032726200409da6d37997232e",
+      "size": 2919,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/f3ed4def8d0c24d032726200409da6d37997232e"
+    },
+    {
+      "path": "CadRevealComposer.Tests/BoundingBoxTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3a371ec3b3b8d78c6167ce152dd850eabfd25ab8",
+      "size": 2452,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/3a371ec3b3b8d78c6167ce152dd850eabfd25ab8"
+    },
+    {
+      "path": "CadRevealComposer.Tests/BoxCadRevealPrimitiveTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "67eb3e6138c40988f9633257fc7d183fa6f4d750",
+      "size": 1535,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/67eb3e6138c40988f9633257fc7d183fa6f4d750"
+    },
+    {
+      "path": "CadRevealComposer.Tests/CadRevealComposer.Tests.csproj",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a5e6c452eb2b7fee6cff60347fd8b7e3dcd7db16",
+      "size": 1379,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/a5e6c452eb2b7fee6cff60347fd8b7e3dcd7db16"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Devtools",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "76da3ff278976862d1ecde155768374adb20e31a",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/76da3ff278976862d1ecde155768374adb20e31a"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Devtools/Protobuf",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "ecd87abba0917e4795476f055b710087618c607b",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/ecd87abba0917e4795476f055b710087618c607b"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Devtools/Protobuf/ProtobufStateSerializerTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e4aab9b05f13f90cd2dfbec457ecc57840255418",
+      "size": 2661,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/e4aab9b05f13f90cd2dfbec457ecc57840255418"
+    },
+    {
+      "path": "CadRevealComposer.Tests/IdGenerators",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "61ca51b267a63ac50e8c1692c60c8bd3d24454ac",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/61ca51b267a63ac50e8c1692c60c8bd3d24454ac"
+    },
+    {
+      "path": "CadRevealComposer.Tests/IdGenerators/TreeIndexGeneratorTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8df851547318bde135f488f4dc195374ba828861",
+      "size": 794,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/8df851547318bde135f488f4dc195374ba828861"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Operations",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "057cf4aee0c85eb22e320b17074d5807d2cd2b70",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/057cf4aee0c85eb22e320b17074d5807d2cd2b70"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Operations/CameraPositioningTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "82c4f22b612426b3333b797b05ee1b9bf4fe35e6",
+      "size": 1485,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/82c4f22b612426b3333b797b05ee1b9bf4fe35e6"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Operations/DrawCallEstimatorTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5a24f254a455efeb67eaa7725e9f47506dac7f06",
+      "size": 3381,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/5a24f254a455efeb67eaa7725e9f47506dac7f06"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Operations/ExteriorSplitterTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b204fd5b5960db2ebc6847daddb355b25289c402",
+      "size": 1191,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/b204fd5b5960db2ebc6847daddb355b25289c402"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Operations/NodeNameFilteringTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cb5d0672f8f6566fd82f17a5278d88f03d4e7707",
+      "size": 1124,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/cb5d0672f8f6566fd82f17a5278d88f03d4e7707"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Operations/SectorSplitterBudgetInfoTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "de6abde09d3cb01b98668dabc06b55d7ea0082a8",
+      "size": 2940,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/de6abde09d3cb01b98668dabc06b55d7ea0082a8"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Operations/Splitting",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "2ca04b6e2e2965dbdd79b7564b50758a92a77c6e",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/2ca04b6e2e2965dbdd79b7564b50758a92a77c6e"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Operations/Splitting/PrioritySectorSplitterTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3e5647c79519ffa1fd56719df716bb1ee67b4c82",
+      "size": 2887,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/3e5647c79519ffa1fd56719df716bb1ee67b4c82"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Operations/Splitting/PrioritySplittingUtilsTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3b7bb9d89a61b8e26bbd6744ea54263d86f9df23",
+      "size": 4532,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/3b7bb9d89a61b8e26bbd6744ea54263d86f9df23"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Operations/Splitting/SplittingUtilsTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cc6e8446738a8b9888d16f59a7589246783faa58",
+      "size": 2017,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/cc6e8446738a8b9888d16f59a7589246783faa58"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Operations/Tessellating",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "aeeb9416be881d1e132b6003fc8773d43ab9bb75",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/aeeb9416be881d1e132b6003fc8773d43ab9bb75"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Operations/Tessellating/BoxTessellatorTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "de376d5b09fcae07568d8efd95bda6df54639d94",
+      "size": 1847,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/de376d5b09fcae07568d8efd95bda6df54639d94"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Operations/Tessellating/CircleTessellatorTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2264a05cc26a63e828ffade6bc31e66acfdbc688",
+      "size": 1896,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/2264a05cc26a63e828ffade6bc31e66acfdbc688"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Operations/Tessellating/ConeTessellatorTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "566d7cd1bf8de6d5bab171509fd21f158fda331f",
+      "size": 3646,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/566d7cd1bf8de6d5bab171509fd21f158fda331f"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Operations/Tessellating/EccentricConeTessellatorTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "44a54d80ca05dade2babf3a4e3a7ee0aba21894d",
+      "size": 2712,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/44a54d80ca05dade2babf3a4e3a7ee0aba21894d"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Operations/Tessellating/GeneralRingTessellatorTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "31a3cf4f3524eaf8fd35b09ac49f23008ddf06cf",
+      "size": 4491,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/31a3cf4f3524eaf8fd35b09ac49f23008ddf06cf"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Operations/Tessellating/TessellationUtilsTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "361e3f9f6aa685c2ffd226dc26903a66f000601f",
+      "size": 3106,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/361e3f9f6aa685c2ffd226dc26903a66f000601f"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Operations/Tessellating/TessellatorTestUtils.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "07aa52b0406683883cc27f138626af61318ab432",
+      "size": 827,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/07aa52b0406683883cc27f138626af61318ab432"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Operations/Tessellating/TorusSegmentTessellatorTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b7ddd42bbfd12e74593d9a3479e0dbd822c97451",
+      "size": 3972,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/b7ddd42bbfd12e74593d9a3479e0dbd822c97451"
+    },
+    {
+      "path": "CadRevealComposer.Tests/ProgramTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "eef4d6ac145faeea1b7dc28e31a4460c1449197d",
+      "size": 1234,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/eef4d6ac145faeea1b7dc28e31a4460c1449197d"
+    },
+    {
+      "path": "CadRevealComposer.Tests/SequentialIdGeneratorTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b7c106ead7d36bfe838f9c537e4819f4a2cae3fd",
+      "size": 1262,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/b7c106ead7d36bfe838f9c537e4819f4a2cae3fd"
+    },
+    {
+      "path": "CadRevealComposer.Tests/TestSamples",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "18de5de8f911d18e2e50486e7b35921904595260",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/18de5de8f911d18e2e50486e7b35921904595260"
+    },
+    {
+      "path": "CadRevealComposer.Tests/TestSamples/0.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1de3295c8d5ef1a6dbef0920d7f486e5a0d693ff",
+      "size": 5482,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/1de3295c8d5ef1a6dbef0920d7f486e5a0d693ff"
+    },
+    {
+      "path": "CadRevealComposer.Tests/TestSamples/2.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "416c7fecb9043cba2bbfd45783cec9dd11e48c10",
+      "size": 5508,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/416c7fecb9043cba2bbfd45783cec9dd11e48c10"
+    },
+    {
+      "path": "CadRevealComposer.Tests/TestSamples/43907.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "19a4cfe127f45d22585de81adaf0d22041622bf9",
+      "size": 141138,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/19a4cfe127f45d22585de81adaf0d22041622bf9"
+    },
+    {
+      "path": "CadRevealComposer.Tests/TestSamples/43908.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "574cfa1a2f813d6c034cedb3667a8769f5be92a2",
+      "size": 141138,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/574cfa1a2f813d6c034cedb3667a8769f5be92a2"
+    },
+    {
+      "path": "CadRevealComposer.Tests/TestSamples/5.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b7ed85315a5e4a1ce826763c4230f01b6133c1d1",
+      "size": 5084,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/b7ed85315a5e4a1ce826763c4230f01b6133c1d1"
+    },
+    {
+      "path": "CadRevealComposer.Tests/TestSamples/6.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4448029884273d3893c16ec89b3b56487fca27aa",
+      "size": 5084,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/4448029884273d3893c16ec89b3b56487fca27aa"
+    },
+    {
+      "path": "CadRevealComposer.Tests/TestSamples/QuaternionDecomposition.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b4507637302475d7378a4debaeac53f2fcd8265d",
+      "size": 407,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/b4507637302475d7378a4debaeac53f2fcd8265d"
+    },
+    {
+      "path": "CadRevealComposer.Tests/TestSamples/m1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0b30dfc9fe680a3952663f1ed8f4a293056e00a5",
+      "size": 30826,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/0b30dfc9fe680a3952663f1ed8f4a293056e00a5"
+    },
+    {
+      "path": "CadRevealComposer.Tests/TestSamples/m2.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "af5949c8d424c847b540e7cac223b6ab3d1a06c5",
+      "size": 30288,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/af5949c8d424c847b540e7cac223b6ab3d1a06c5"
+    },
+    {
+      "path": "CadRevealComposer.Tests/TestSamples/simple_group.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2640f5516f6094e1ab0f0e53baae49ee05ef0ae1",
+      "size": 1677,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/2640f5516f6094e1ab0f0e53baae49ee05ef0ae1"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Usings.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "324456763afb873e116da92178ad9018cb9e7e50",
+      "size": 30,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/324456763afb873e116da92178ad9018cb9e7e50"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Utils",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "1c6fa7b5383541eafc2be83200b50b2c353deb59",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/1c6fa7b5383541eafc2be83200b50b2c353deb59"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Utils/AlgebraUtilsDecomposeQuaternionTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b4a7e27d1a6d8fdaf876afe6d4894b9cc32c3f82",
+      "size": 2241,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/b4a7e27d1a6d8fdaf876afe6d4894b9cc32c3f82"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Utils/AlgebraUtilsTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "85762caed1df4d9b168c257c069d7a431734133e",
+      "size": 535,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/85762caed1df4d9b168c257c069d7a431734133e"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Utils/AlgebraUtilsToEulersTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "45af2a74ad34cd5c775aad40dad558b7b83e896e",
+      "size": 4253,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/45af2a74ad34cd5c775aad40dad558b7b83e896e"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Utils/DictionaryExtensionsTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a9de562df7a083d6ea42bd64a16b8365e2abf50c",
+      "size": 776,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/a9de562df7a083d6ea42bd64a16b8365e2abf50c"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Utils/FloatExtensionsTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "129381181322e41e0a535d751314a4c96d0ec676",
+      "size": 1944,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/129381181322e41e0a535d751314a4c96d0ec676"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Utils/GeometryDistributionNodeStatsDiffTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "faf536bac0df2dbc448c340057dbfbfd11318d77",
+      "size": 22067,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/faf536bac0df2dbc448c340057dbfbfd11318d77"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Utils/GeometryDistributionNodeStatsTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "792d1ac4bc42a0f565f6770af67a9f290ac91cee",
+      "size": 17856,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/792d1ac4bc42a0f565f6770af67a9f290ac91cee"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Utils/GeometryDistributionStatsTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2eb0b9fe9759a5e4e45d3ec01489678c51d052ca",
+      "size": 3151,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/2eb0b9fe9759a5e4e45d3ec01489678c51d052ca"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Utils/HierarchyComposerConverterTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0144b4ec14ccdd979f42cd332caa87536d67a548",
+      "size": 2165,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/0144b4ec14ccdd979f42cd332caa87536d67a548"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Utils/LinqExtensionsTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f07210009b524d26eceb6d398d54f4caffb248b9",
+      "size": 2353,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/f07210009b524d26eceb6d398d54f4caffb248b9"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Utils/MeshTools",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "a35e1a11dd5e3bbd61a6edf1348c744ca0e00074",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/a35e1a11dd5e3bbd61a6edf1348c744ca0e00074"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Utils/MeshTools/LoosePiecesMeshToolsTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9c43e81e07421f55679456499a0bd08110e43b1b",
+      "size": 3760,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/9c43e81e07421f55679456499a0bd08110e43b1b"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Utils/MeshTools/MeshToolsTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6b25d2c2d0c30e53016d8753bbf853e119ac4248",
+      "size": 1290,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/6b25d2c2d0c30e53016d8753bbf853e119ac4248"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Utils/MeshTools/VertexCacheOptimizerTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a388388c422a4731800beb622c45b467d1411af6",
+      "size": 2196,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/a388388c422a4731800beb622c45b467d1411af6"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Utils/SimplifyTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f73c46bc255905dde35860aa8c1cb10c7eb37514",
+      "size": 4135,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/f73c46bc255905dde35860aa8c1cb10c7eb37514"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Utils/TestSampleLoader.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e3376579aea089550098eac171ab908d81a92b00",
+      "size": 1156,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/e3376579aea089550098eac171ab908d81a92b00"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Utils/VectorExtensionsTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c2f73a74a69897eb0bb6c32e29d1b1be4a07b157",
+      "size": 2852,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/c2f73a74a69897eb0bb6c32e29d1b1be4a07b157"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Writers",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "57f55b6b9ccb8e904be095d25df470c05549e149",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/57f55b6b9ccb8e904be095d25df470c05549e149"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Writers/GltfWriterUtils",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "ff9aad262760d2b7831a431740780ac945192f68",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/ff9aad262760d2b7831a431740780ac945192f68"
+    },
+    {
+      "path": "CadRevealComposer.Tests/Writers/GltfWriterUtils/BufferViewAutoOffsetTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c647712dc94e007d9eade9619cf0d68a34682b5b",
+      "size": 1088,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/c647712dc94e007d9eade9619cf0d68a34682b5b"
+    },
+    {
+      "path": "CadRevealComposer",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "3c6fe0b5376f379c73e75474064b8bc51c7d7ae5",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/3c6fe0b5376f379c73e75474064b8bc51c7d7ae5"
+    },
+    {
+      "path": "CadRevealComposer/AlgebraExtensions",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "de9948c19690149f3479f8b234bae14aceb908a0",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/de9948c19690149f3479f8b234bae14aceb908a0"
+    },
+    {
+      "path": "CadRevealComposer/AlgebraExtensions/Ray.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d7329443293527ddf52f7f3ff9b40127d49f76c0",
+      "size": 3609,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/d7329443293527ddf52f7f3ff9b40127d49f76c0"
+    },
+    {
+      "path": "CadRevealComposer/AlgebraExtensions/Triangle.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "993bc910290354dabf1e51c0875db17db38a66c3",
+      "size": 268,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/993bc910290354dabf1e51c0875db17db38a66c3"
+    },
+    {
+      "path": "CadRevealComposer/AlgebraExtensions/Vector3i.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8a4041696a51801218943904d3fd44de52a2b3de",
+      "size": 619,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/8a4041696a51801218943904d3fd44de52a2b3de"
+    },
+    {
+      "path": "CadRevealComposer/CadRevealComposer.csproj",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "759e44ca34e98b5ee5835d05a4bd81246610ce5b",
+      "size": 735,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/759e44ca34e98b5ee5835d05a4bd81246610ce5b"
+    },
+    {
+      "path": "CadRevealComposer/CadRevealComposerRunner.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a06f12d5abc913937558b471568975be70bb4e97",
+      "size": 11391,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/a06f12d5abc913937558b471568975be70bb4e97"
+    },
+    {
+      "path": "CadRevealComposer/CadRevealNode.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "75c045132e619379eded0bba7e3bf502f348d53b",
+      "size": 3730,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/75c045132e619379eded0bba7e3bf502f348d53b"
+    },
+    {
+      "path": "CadRevealComposer/Configuration",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "4652f83806af7422bcb283ec26a8b1cdb2feb068",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/4652f83806af7422bcb283ec26a8b1cdb2feb068"
+    },
+    {
+      "path": "CadRevealComposer/Configuration/ComposerParameters.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ba04460f7f2fd9de281ac8a41a6f2923fb588793",
+      "size": 361,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/ba04460f7f2fd9de281ac8a41a6f2923fb588793"
+    },
+    {
+      "path": "CadRevealComposer/Configuration/ModelParameters.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d8e0ae4104a160a5ea21a53a9d2113c9038afa50",
+      "size": 868,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/d8e0ae4104a160a5ea21a53a9d2113c9038afa50"
+    },
+    {
+      "path": "CadRevealComposer/Devtools",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "095cdfee19d60d0c9aefb4684152c363d65f7091",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/095cdfee19d60d0c9aefb4684152c363d65f7091"
+    },
+    {
+      "path": "CadRevealComposer/Devtools/DevPrimitiveCacheFolder.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "031f0ec440f5eec0a08c53a07f9f73065e7d2257",
+      "size": 3450,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/031f0ec440f5eec0a08c53a07f9f73065e7d2257"
+    },
+    {
+      "path": "CadRevealComposer/Devtools/Protobuf",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "07b5e46a99411968cba038c142827fd6235bae6c",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/07b5e46a99411968cba038c142827fd6235bae6c"
+    },
+    {
+      "path": "CadRevealComposer/Devtools/Protobuf/ProtobufStateSerializer.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6ffff8972e6d95772ef2c4c2f18de527e35f9328",
+      "size": 5249,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/6ffff8972e6d95772ef2c4c2f18de527e35f9328"
+    },
+    {
+      "path": "CadRevealComposer/IdProviders",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "e7ef2547e64e2ef22dff1587c6c2815a42ef5cec",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/e7ef2547e64e2ef22dff1587c6c2815a42ef5cec"
+    },
+    {
+      "path": "CadRevealComposer/IdProviders/InstanceIdGenerator.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "15f77d724ea25ee39fc070f9beb5e74aecfc9cce",
+      "size": 489,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/15f77d724ea25ee39fc070f9beb5e74aecfc9cce"
+    },
+    {
+      "path": "CadRevealComposer/IdProviders/SequentialIdGenerator.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "648fb468ee9ef6c30e4c6b5a9c6becaf5b486b98",
+      "size": 1522,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/648fb468ee9ef6c30e4c6b5a9c6becaf5b486b98"
+    },
+    {
+      "path": "CadRevealComposer/IdProviders/TreeIndexGenerator.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bb19e1adc434788aa22fe118c83fb84a2e05d73a",
+      "size": 652,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/bb19e1adc434788aa22fe118c83fb84a2e05d73a"
+    },
+    {
+      "path": "CadRevealComposer/ModelFormatProvider",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "8b60db10112636e87673105382358a6e7e5f7755",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/8b60db10112636e87673105382358a6e7e5f7755"
+    },
+    {
+      "path": "CadRevealComposer/ModelFormatProvider/IModelFormatProvider.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f149c42e4effaf0719b88208a3eff3094f4f45b3",
+      "size": 697,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/f149c42e4effaf0719b88208a3eff3094f4f45b3"
+    },
+    {
+      "path": "CadRevealComposer/ModelMetadata.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "637d807d69ee6ff4957758df07ada16a8e74662d",
+      "size": 1354,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/637d807d69ee6ff4957758df07ada16a8e74662d"
+    },
+    {
+      "path": "CadRevealComposer/Operations",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "f5bfe65251d02296a5928b3079c4b104badab171",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/f5bfe65251d02296a5928b3079c4b104badab171"
+    },
+    {
+      "path": "CadRevealComposer/Operations/CameraPositioning.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2a299b0f3293072cca69277da92b649a5de40a09",
+      "size": 5416,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/2a299b0f3293072cca69277da92b649a5de40a09"
+    },
+    {
+      "path": "CadRevealComposer/Operations/DrawCallEstimator.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "658bd739ab0cc47fb6e1bd86d68a006262302fc5",
+      "size": 5291,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/658bd739ab0cc47fb6e1bd86d68a006262302fc5"
+    },
+    {
+      "path": "CadRevealComposer/Operations/ExteriorSplitter.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c06570556977ce76f496cfea42a85a357d4e82e6",
+      "size": 10112,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/c06570556977ce76f496cfea42a85a357d4e82e6"
+    },
+    {
+      "path": "CadRevealComposer/Operations/HierarchyComposerConverter.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "127357aa3fce49451cb7b8b0cc9155eeb249cf80",
+      "size": 4761,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/127357aa3fce49451cb7b8b0cc9155eeb249cf80"
+    },
+    {
+      "path": "CadRevealComposer/Operations/IntervalKDTree.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5d91896446ed612139da9703e280e24b81adc305",
+      "size": 5916,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/5d91896446ed612139da9703e280e24b81adc305"
+    },
+    {
+      "path": "CadRevealComposer/Operations/NodeNameFiltering.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8d48502271dfc3c7f2123e8a849fe5da82be371c",
+      "size": 1878,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/8d48502271dfc3c7f2123e8a849fe5da82be371c"
+    },
+    {
+      "path": "CadRevealComposer/Operations/SectorSplitting",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "3ad09432720207cc0e935d69b977bb7e2937ee2d",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/3ad09432720207cc0e935d69b977bb7e2937ee2d"
+    },
+    {
+      "path": "CadRevealComposer/Operations/SectorSplitting/ISectorSplitter.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dba6b411884eaa84db11bacdba5753b139ac89a2",
+      "size": 317,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/dba6b411884eaa84db11bacdba5753b139ac89a2"
+    },
+    {
+      "path": "CadRevealComposer/Operations/SectorSplitting/InternalSector.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ba4972693686ec0d48a77da09ca751e27ce03331",
+      "size": 407,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/ba4972693686ec0d48a77da09ca751e27ce03331"
+    },
+    {
+      "path": "CadRevealComposer/Operations/SectorSplitting/Node.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7758a5b14e1086f4984e320fb024b4fa0c8f63e9",
+      "size": 487,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/7758a5b14e1086f4984e320fb024b4fa0c8f63e9"
+    },
+    {
+      "path": "CadRevealComposer/Operations/SectorSplitting/PrioritySectorSplitter.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8d1260345599a682f122e8d19905f62acdd0edfc",
+      "size": 3769,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/8d1260345599a682f122e8d19905f62acdd0edfc"
+    },
+    {
+      "path": "CadRevealComposer/Operations/SectorSplitting/PrioritySplittingUtils.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ab5849ed1a9f86be9e241f74355ed21c9f8acd79",
+      "size": 3493,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/ab5849ed1a9f86be9e241f74355ed21c9f8acd79"
+    },
+    {
+      "path": "CadRevealComposer/Operations/SectorSplitting/SectorSplitterOctree.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ee3b1a4538c0ce5d33437c6b63ae96d5bc033d29",
+      "size": 17307,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/ee3b1a4538c0ce5d33437c6b63ae96d5bc033d29"
+    },
+    {
+      "path": "CadRevealComposer/Operations/SectorSplitting/SectorSplitterSingle.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "442cf08f07365dae536c2ea408ab299dc8855412",
+      "size": 1475,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/442cf08f07365dae536c2ea408ab299dc8855412"
+    },
+    {
+      "path": "CadRevealComposer/Operations/SectorSplitting/SplitMetadata.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "46335a794f4b2f95ef78c35bd3940673d6785259",
+      "size": 3085,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/46335a794f4b2f95ef78c35bd3940673d6785259"
+    },
+    {
+      "path": "CadRevealComposer/Operations/SectorSplitting/SplittingUtils.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e2528af9b1311a9e4ea9635f2b321b9995278d9c",
+      "size": 12501,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/e2528af9b1311a9e4ea9635f2b321b9995278d9c"
+    },
+    {
+      "path": "CadRevealComposer/Operations/SectorSplitting/TooFewInstancesHandler.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "01628a1e07a7ea64deda0d227dc35d8d71e2fcfe",
+      "size": 3059,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/01628a1e07a7ea64deda0d227dc35d8d71e2fcfe"
+    },
+    {
+      "path": "CadRevealComposer/Operations/SectorSplitting/TooFewPrimitivesHandler.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dc453aad9a424509cb555ca86e8ce9c710fbdc6f",
+      "size": 2177,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/dc453aad9a424509cb555ca86e8ce9c710fbdc6f"
+    },
+    {
+      "path": "CadRevealComposer/Operations/Tessellating",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "ac072b04730736147d3d9fd04d71d849bcedf165",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/ac072b04730736147d3d9fd04d71d849bcedf165"
+    },
+    {
+      "path": "CadRevealComposer/Operations/Tessellating/APrimitiveTessellator.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c2686a0c6cc258d763af4c6d30919de6a3b74521",
+      "size": 1341,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/c2686a0c6cc258d763af4c6d30919de6a3b74521"
+    },
+    {
+      "path": "CadRevealComposer/Operations/Tessellating/BoxTessellator.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2f4e7b6852c9ac13108a6637e5fc0286d01deafe",
+      "size": 1428,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/2f4e7b6852c9ac13108a6637e5fc0286d01deafe"
+    },
+    {
+      "path": "CadRevealComposer/Operations/Tessellating/CircleTessellator.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5cf977ce2e687c77beb8283597e1b69e45b56269",
+      "size": 2261,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/5cf977ce2e687c77beb8283597e1b69e45b56269"
+    },
+    {
+      "path": "CadRevealComposer/Operations/Tessellating/ConeTessellator.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "768af5c682dd85a25b68c29af65848377815632b",
+      "size": 2952,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/768af5c682dd85a25b68c29af65848377815632b"
+    },
+    {
+      "path": "CadRevealComposer/Operations/Tessellating/EccentricConeTessellator.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "38d821d327fd1116a34b81c119e84d502c808ef1",
+      "size": 2434,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/38d821d327fd1116a34b81c119e84d502c808ef1"
+    },
+    {
+      "path": "CadRevealComposer/Operations/Tessellating/GeneralRingTessellator.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e39b089fc4f030a1a388f0b67d18a7ed7815cd1f",
+      "size": 3299,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/e39b089fc4f030a1a388f0b67d18a7ed7815cd1f"
+    },
+    {
+      "path": "CadRevealComposer/Operations/Tessellating/TessellationUtils.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e019ed5682cabc04f10bf70c3bc67e1512512b16",
+      "size": 6636,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/e019ed5682cabc04f10bf70c3bc67e1512512b16"
+    },
+    {
+      "path": "CadRevealComposer/Operations/Tessellating/TorusSegmentTessellator.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "41bd5a4cf19705d6b664af9cfa862c54eaad9c6d",
+      "size": 5602,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/41bd5a4cf19705d6b664af9cfa862c54eaad9c6d"
+    },
+    {
+      "path": "CadRevealComposer/Primitives",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "2298e7106a46236378523181f0cae9d1717c23ce",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/2298e7106a46236378523181f0cae9d1717c23ce"
+    },
+    {
+      "path": "CadRevealComposer/Primitives/APrimitive.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e2d03d5f7ffb9028b032c80a0eb191e74d17c36f",
+      "size": 6344,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/e2d03d5f7ffb9028b032c80a0eb191e74d17c36f"
+    },
+    {
+      "path": "CadRevealComposer/Scene.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ec16901fd5a988909b742979dcfaa8337657ea93",
+      "size": 3790,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/ec16901fd5a988909b742979dcfaa8337657ea93"
+    },
+    {
+      "path": "CadRevealComposer/SceneCreator.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0c41b61513db31648c7425190488ea829fd4d4af",
+      "size": 11369,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/0c41b61513db31648c7425190488ea829fd4d4af"
+    },
+    {
+      "path": "CadRevealComposer/Tessellation",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "9af8695b54d97e9738fa2633ab4f87c3f849b566",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/9af8695b54d97e9738fa2633ab4f87c3f849b566"
+    },
+    {
+      "path": "CadRevealComposer/Tessellation/Mesh.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4b83fb1a54c30f57251484c6c851cdb137b30550",
+      "size": 5728,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/4b83fb1a54c30f57251484c6c851cdb137b30550"
+    },
+    {
+      "path": "CadRevealComposer/Utils",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "15c42d85e91c3185860cbdb79964ede192746fb4",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/15c42d85e91c3185860cbdb79964ede192746fb4"
+    },
+    {
+      "path": "CadRevealComposer/Utils/AlgebraUtils.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0bfece85aff0b70ea3e29530a8f10eb87b2f299d",
+      "size": 14325,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/0bfece85aff0b70ea3e29530a8f10eb87b2f299d"
+    },
+    {
+      "path": "CadRevealComposer/Utils/Comparers",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "2035a6fd4204acff247113ea8d1b4fdf1c82bc65",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/2035a6fd4204acff247113ea8d1b4fdf1c82bc65"
+    },
+    {
+      "path": "CadRevealComposer/Utils/Comparers/RgbaColorComparer.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5c972e57edf8cc70cb81f01adf9a6b9181e03454",
+      "size": 863,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/5c972e57edf8cc70cb81f01adf9a6b9181e03454"
+    },
+    {
+      "path": "CadRevealComposer/Utils/Comparers/XyzVector3Comparer.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "be314215d7e7e5b9db8cd3fc665a3732f5031ff5",
+      "size": 779,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/be314215d7e7e5b9db8cd3fc665a3732f5031ff5"
+    },
+    {
+      "path": "CadRevealComposer/Utils/Comparers/XyzVector3EqualityComparer.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6f4a252ce1af07735bd274c956f8031489686c11",
+      "size": 503,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/6f4a252ce1af07735bd274c956f8031489686c11"
+    },
+    {
+      "path": "CadRevealComposer/Utils/DictionaryExtensions.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "246ed7499d99af13844e57f4fd65328f54ef5837",
+      "size": 556,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/246ed7499d99af13844e57f4fd65328f54ef5837"
+    },
+    {
+      "path": "CadRevealComposer/Utils/EnumerableAPrimitiveExtensions.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f4b3947139cd6d9260d9699ece43b7c44c634f47",
+      "size": 959,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/f4b3947139cd6d9260d9699ece43b7c44c634f47"
+    },
+    {
+      "path": "CadRevealComposer/Utils/FibonacciEncoding.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "436a46bbbc869a60e408089d36724142a25ae92e",
+      "size": 3746,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/436a46bbbc869a60e408089d36724142a25ae92e"
+    },
+    {
+      "path": "CadRevealComposer/Utils/GeometryDistributionNodeStats.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e12a845555c5f5ab9079e4e43b4a94c75c70c821",
+      "size": 7408,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/e12a845555c5f5ab9079e4e43b4a94c75c70c821"
+    },
+    {
+      "path": "CadRevealComposer/Utils/GeometryDistributionNodeStatsDiff.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f960a626471b1cb06176cd4bd254a891b5613dcc",
+      "size": 11892,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/f960a626471b1cb06176cd4bd254a891b5613dcc"
+    },
+    {
+      "path": "CadRevealComposer/Utils/GeometryDistributionStats.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "97d40e5ef71a7e4bdcdc196f87d23543ddc0d74e",
+      "size": 2167,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/97d40e5ef71a7e4bdcdc196f87d23543ddc0d74e"
+    },
+    {
+      "path": "CadRevealComposer/Utils/IGeometryDistributionNodeStats.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4220910ba75bc0259f71760331c7152977053e2f",
+      "size": 1058,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/4220910ba75bc0259f71760331c7152977053e2f"
+    },
+    {
+      "path": "CadRevealComposer/Utils/JsonUtils.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "19ec7c595a232584305c425baeef2170937e41e2",
+      "size": 853,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/19ec7c595a232584305c425baeef2170937e41e2"
+    },
+    {
+      "path": "CadRevealComposer/Utils/LinqExtensions.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "86f28c34afe23660b06e0add1700fa9aac317b2b",
+      "size": 2298,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/86f28c34afe23660b06e0add1700fa9aac317b2b"
+    },
+    {
+      "path": "CadRevealComposer/Utils/MeshOptimization",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "7d6d685c9c739b21e189ed0b886c6f3cf43b8f50",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/7d6d685c9c739b21e189ed0b886c6f3cf43b8f50"
+    },
+    {
+      "path": "CadRevealComposer/Utils/MeshOptimization/LoosePiecesMeshTools.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "afa7b3c95aa926b1102e7638a083c3e11c419cf1",
+      "size": 7685,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/afa7b3c95aa926b1102e7638a083c3e11c419cf1"
+    },
+    {
+      "path": "CadRevealComposer/Utils/MeshOptimization/MeshTools.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "93fc829f7041c09349156cffca3d83a02b6317de",
+      "size": 4276,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/93fc829f7041c09349156cffca3d83a02b6317de"
+    },
+    {
+      "path": "CadRevealComposer/Utils/MeshOptimization/VertexCacheOptimizer.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5594ac76d9c3914bdf88be984cb7c0a8a5a1c9f7",
+      "size": 22499,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/5594ac76d9c3914bdf88be984cb7c0a8a5a1c9f7"
+    },
+    {
+      "path": "CadRevealComposer/Utils/MeshOptimization/VertexFetchOptimizer.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "52cb2da896fb5faf6a1806daaff9f4061015e6f4",
+      "size": 4268,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/52cb2da896fb5faf6a1806daaff9f4061015e6f4"
+    },
+    {
+      "path": "CadRevealComposer/Utils/SimplificationLogObject.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b7e1773ae0ac18494a46d0bf96b99f33457cb749",
+      "size": 3152,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/b7e1773ae0ac18494a46d0bf96b99f33457cb749"
+    },
+    {
+      "path": "CadRevealComposer/Utils/Simplify.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "85c03db1cf8a79fd1b36b888a448db2969b83054",
+      "size": 6145,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/85c03db1cf8a79fd1b36b888a448db2969b83054"
+    },
+    {
+      "path": "CadRevealComposer/Utils/TeamCityLogBlock.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c74a4e8269c4c983ce71b0e2696258b800e5a5bb",
+      "size": 1743,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/c74a4e8269c4c983ce71b0e2696258b800e5a5bb"
+    },
+    {
+      "path": "CadRevealComposer/Utils/VectorExtensions.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e738e74f5f3234f46b6607f9a737cffc4d1f4020",
+      "size": 5309,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/e738e74f5f3234f46b6607f9a737cffc4d1f4020"
+    },
+    {
+      "path": "CadRevealComposer/Writers",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "ebd2bf03eeedc9c152b83eb523c3a2e0e94344a7",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/ebd2bf03eeedc9c152b83eb523c3a2e0e94344a7"
+    },
+    {
+      "path": "CadRevealComposer/Writers/GltfWriter.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c666e01a6da69a4a332e80a51740a35016a345be",
+      "size": 43579,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/c666e01a6da69a4a332e80a51740a35016a345be"
+    },
+    {
+      "path": "CadRevealComposer/Writers/GltfWriterUtils",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "e191caf4017885216d796c2ee81bf3f3bf59d07c",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/e191caf4017885216d796c2ee81bf3f3bf59d07c"
+    },
+    {
+      "path": "CadRevealComposer/Writers/GltfWriterUtils/AccessorExtensions.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a412abdea595a1db83a67458955c0a77385cd5a4",
+      "size": 1089,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/a412abdea595a1db83a67458955c0a77385cd5a4"
+    },
+    {
+      "path": "CadRevealComposer/Writers/GltfWriterUtils/BufferViewAutoOffset.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0e3d9239cce2ade89afc30646f755c77be25ef36",
+      "size": 1070,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/0e3d9239cce2ade89afc30646f755c77be25ef36"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "2f101daa66fd8172c3b6a82b41f97700fbc6cb44",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/2f101daa66fd8172c3b6a82b41f97700fbc6cb44"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/Attributes",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "92d5addd5e4d7b31e5bb6ce91e86f3dbe0da2bd3",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/92d5addd5e4d7b31e5bb6ce91e86f3dbe0da2bd3"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/Attributes/ScaffoldingCsvLineParserTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "531c7bd147c9a4c6aa942cdef7307ee810c7b1e3",
+      "size": 7605,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/531c7bd147c9a4c6aa942cdef7307ee810c7b1e3"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/Attributes/ScaffoldingMetadataTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3f2610dee4499e9fe18b6e7ce41da13a85865c33",
+      "size": 13381,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/3f2610dee4499e9fe18b6e7ce41da13a85865c33"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/BatchUtils",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "7480c0f2acd61d133d853ac02f17a4493905a7a5",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/7480c0f2acd61d133d853ac02f17a4493905a7a5"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/BatchUtils/ScaffoldOptimizer",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "a14ba65399eb98681298801dd125b1962f84b0d6",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/a14ba65399eb98681298801dd125b1962f84b0d6"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/BatchUtils/ScaffoldOptimizer/GeometryInstancerTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "63eb702ad87e0a8757907dd232ec460fa95639a5",
+      "size": 18342,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/63eb702ad87e0a8757907dd232ec460fa95639a5"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/BatchUtils/ScaffoldOptimizer/ReplacementScaffoldParts",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "8aeadf77defb08411293ce0be28a511cd7efa14d",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/8aeadf77defb08411293ce0be28a511cd7efa14d"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/BatchUtils/ScaffoldOptimizer/ReplacementScaffoldParts/PartReplacementUtilsTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "26f853ff3f153344b6916647d5b980967c1786dd",
+      "size": 39679,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/26f853ff3f153344b6916647d5b980967c1786dd"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/BatchUtils/ScaffoldOptimizer/ReplacementScaffoldParts/PrimitiveGeometryDetectorTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "16110117d014550b5eee0f59c4b6c7fd54188868",
+      "size": 11764,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/16110117d014550b5eee0f59c4b6c7fd54188868"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/BatchUtils/ScaffoldOptimizer/ReplacementScaffoldParts/PrincipalComponentAnalyzerTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a9e452b396fee2e7d78d8441e95f3885252227bf",
+      "size": 6124,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/a9e452b396fee2e7d78d8441e95f3885252227bf"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/BatchUtils/ScaffoldOptimizer/ReplacementScaffoldParts/SortedBoundingBoxExtentTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bb5c0047c5f3dda47ac42583866a86b221abcecb",
+      "size": 6827,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/bb5c0047c5f3dda47ac42583866a86b221abcecb"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/BatchUtils/ScaffoldOptimizer/ScaffoldOptimizerTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "53fa4354794a88222ccef2fc9f1075803f0b2b2e",
+      "size": 33017,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/53fa4354794a88222ccef2fc9f1075803f0b2b2e"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/CadRevealFbxProvider.Tests.csproj",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2e77bb3ac20025dab8b68ce29c2705564ed7ab29",
+      "size": 1199,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/2e77bb3ac20025dab8b68ce29c2705564ed7ab29"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/FbxNodeToCadRevealNodeConverterTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3b67143a369151ea905a51ecbf53e6c96c7f618f",
+      "size": 2865,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/3b67143a369151ea905a51ecbf53e6c96c7f618f"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/FbxProviderAttributeParserTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8e2b749d3303be65c3003d87058219e641e56b82",
+      "size": 54802,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/8e2b749d3303be65c3003d87058219e641e56b82"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/FbxProviderTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0b5f82f754863ce36b1d63573550d321d45f68cd",
+      "size": 21443,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/0b5f82f754863ce36b1d63573550d321d45f68cd"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/HelperFunctions.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d75cd74a43313c65fcda3e7b5736b9c557de8cda",
+      "size": 885,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/d75cd74a43313c65fcda3e7b5736b9c557de8cda"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestDataSourceFiles",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "2109af0df31a474212db934e5df40fdc99674939",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/2109af0df31a474212db934e5df40fdc99674939"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestDataSourceFiles/BlenderFbxExportReadme.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4a37aeb156685fcead67c2e21a5a62444df9d566",
+      "size": 206,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/4a37aeb156685fcead67c2e21a5a62444df9d566"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestDataSourceFiles/fbx_test_model.blend",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3f538adc201ca59dfb90dabb9dd508adc95da288",
+      "size": 1061588,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/3f538adc201ca59dfb90dabb9dd508adc95da288"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestDataSourceFiles/fbx_test_model.fbx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3bd178828fb05b06b08d57c1f3340a7fee8d5595",
+      "size": 76092,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/3bd178828fb05b06b08d57c1f3340a7fee8d5595"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "d4c23ee85c24e51f873b77dc4135d9b469ab8843",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/d4c23ee85c24e51f873b77dc4135d9b469ab8843"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/attributes",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "53b7ae407f728ce82a4c12fbeabde1dbd50207f4",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/53b7ae407f728ce82a4c12fbeabde1dbd50207f4"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/attributes/ABC-TEMP-all-scaffs-manuf-test.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cd23bea5edf3f85da56994ff8d20dbe82ea38456",
+      "size": 4185,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/cd23bea5edf3f85da56994ff8d20dbe82ea38456"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/attributes/abc-123456789-woScaffMissingData.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c48f8c4253d6e52c0ab36052c06eac83f31e42f0",
+      "size": 4127,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/c48f8c4253d6e52c0ab36052c06eac83f31e42f0"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/attributes/abc-temp-correct.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7c5b562d58568380f678c99cc6841e76710357d6",
+      "size": 3845,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/7c5b562d58568380f678c99cc6841e76710357d6"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/attributes/legacy_test_model.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "185f80258b61ee763fbf9619b3fc387f81ac8053",
+      "size": 3944,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/185f80258b61ee763fbf9619b3fc387f81ac8053"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/attributes/legacy_test_model_with_header_on_row_two.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "028b8ecb2bc59ad42e3d0dbc84d4bbf468d632af",
+      "size": 3875,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/028b8ecb2bc59ad42e3d0dbc84d4bbf468d632af"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/attributes/missing_data_key_attribute.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "586549c778f364d2ba90398ae632561706df5238",
+      "size": 3797,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/586549c778f364d2ba90398ae632561706df5238"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/attributes/missing_total_weight_entries.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "42937cae2929905b367a460795bd84ab97b4244a",
+      "size": 1030,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/42937cae2929905b367a460795bd84ab97b4244a"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/attributes/missing_total_weight_line.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "135889bb815f30490dede5f1447b40df771f432e",
+      "size": 1014,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/135889bb815f30490dede5f1447b40df771f432e"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/attributes/wrong_count_attributes.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8fdcef1e110a07b9c7c3b49c017c31c6ae42e0db",
+      "size": 3799,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/8fdcef1e110a07b9c7c3b49c017c31c6ae42e0db"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/attributes/wrong_name_key_attribute.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4bc994d13f0dc93e9425e287286a63b9ee4900fc",
+      "size": 3845,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/4bc994d13f0dc93e9425e287286a63b9ee4900fc"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/correct",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "22620baafdb322e7c9ed22b181129a4bb4e3b93a",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/22620baafdb322e7c9ed22b181129a4bb4e3b93a"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/correct/TEST-1235678.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fb7df7737e0247e337fa7c707fdc635d4884dea5",
+      "size": 4129,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/fb7df7737e0247e337fa7c707fdc635d4884dea5"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/correct/TEST-1235678.fbx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3bd178828fb05b06b08d57c1f3340a7fee8d5595",
+      "size": 76092,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/3bd178828fb05b06b08d57c1f3340a7fee8d5595"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/correctWithSuffix",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "445f2a85425a14fe6e0dcbb22c6b7444146a1301",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/445f2a85425a14fe6e0dcbb22c6b7444146a1301"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/correctWithSuffix/TEST-1235678-Copy.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fb7df7737e0247e337fa7c707fdc635d4884dea5",
+      "size": 4129,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/fb7df7737e0247e337fa7c707fdc635d4884dea5"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/correctWithSuffix/TEST-1235678-Copy.fbx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3bd178828fb05b06b08d57c1f3340a7fee8d5595",
+      "size": 76092,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/3bd178828fb05b06b08d57c1f3340a7fee8d5595"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/cube_and_instanced_cube_with_parent.fbx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e2d492a4a1d16afc283dbc6696a185d3718c7623",
+      "size": 14764,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/e2d492a4a1d16afc283dbc6696a185d3718c7623"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/fbx_test_model.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c4bd5b492438c26e1ab46fc456caed07b624aa8a",
+      "size": 3891,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/c4bd5b492438c26e1ab46fc456caed07b624aa8a"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/green_and_red_cubes.fbx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8d5510129cbbc5a704e98b4eddbc7ae8f55aed1c",
+      "size": 18892,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/8d5510129cbbc5a704e98b4eddbc7ae8f55aed1c"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/mismatch",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "195dcaa20531c593a00aad725a95216912125aac",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/195dcaa20531c593a00aad725a95216912125aac"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/mismatch/TEST-1235678.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "69ee00925edbf6b0efef90c6c7dc8c43fa58307c",
+      "size": 3852,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/69ee00925edbf6b0efef90c6c7dc8c43fa58307c"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/mismatch/TEST-1235678.fbx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3bd178828fb05b06b08d57c1f3340a7fee8d5595",
+      "size": 76092,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/3bd178828fb05b06b08d57c1f3340a7fee8d5595"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/mismatchWorkOrders",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "ef7f12bf6ca17dc839125d3c3ad57a965f3d98c2",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/ef7f12bf6ca17dc839125d3c3ad57a965f3d98c2"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/mismatchWorkOrders/TEST-1235678.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0bf42be493b323a5ef3476d31f740536874dda71",
+      "size": 3853,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/0bf42be493b323a5ef3476d31f740536874dda71"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/mismatchWorkOrders/TEST-1235678.fbx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3bd178828fb05b06b08d57c1f3340a7fee8d5595",
+      "size": 76092,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/3bd178828fb05b06b08d57c1f3340a7fee8d5595"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/missingAttributes",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "8c40f8d2517e9806e046f0e933f394c43a0c0bef",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/8c40f8d2517e9806e046f0e933f394c43a0c0bef"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/missingAttributes/TEST-1235678.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b144f7863457b85c40c7cbaba866df22d624e412",
+      "size": 3938,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/b144f7863457b85c40c7cbaba866df22d624e412"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/missingAttributes/TEST-1235678.fbx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3bd178828fb05b06b08d57c1f3340a7fee8d5595",
+      "size": 76092,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/3bd178828fb05b06b08d57c1f3340a7fee8d5595"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/missingKey",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "f047670a000fc7a14c88c31ce605b540ccf96ff2",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/f047670a000fc7a14c88c31ce605b540ccf96ff2"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/missingKey/fbx_test_model.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2f44318b6d28b78e9dbb5f4090ca9c7c24b774b4",
+      "size": 3807,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/2f44318b6d28b78e9dbb5f4090ca9c7c24b774b4"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/missingKey/fbx_test_model.fbx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3bd178828fb05b06b08d57c1f3340a7fee8d5595",
+      "size": 76092,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/3bd178828fb05b06b08d57c1f3340a7fee8d5595"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/missingKey/fbx_test_model_metadata.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c174d39024ea33107f67094d2ebfd868927c5987",
+      "size": 148,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/c174d39024ea33107f67094d2ebfd868927c5987"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/noGeometry",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "7e9607c13cbcf1bbd55638fb2ca27627f0ae7d06",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/7e9607c13cbcf1bbd55638fb2ca27627f0ae7d06"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/noGeometry/ABC-1235678.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fb7df7737e0247e337fa7c707fdc635d4884dea5",
+      "size": 4129,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/fb7df7737e0247e337fa7c707fdc635d4884dea5"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/noGeometry/ABC-1235678.fbx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f09b25d74a0edccd0f93845b72921966a7025646",
+      "size": 23900,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/f09b25d74a0edccd0f93845b72921966a7025646"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/stidPipelineTempScaff",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "d8f3dc26dc8c61310373816c87f61e9f5d44aaea",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/d8f3dc26dc8c61310373816c87f61e9f5d44aaea"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/stidPipelineTempScaff/SCAFF-001.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b5b00815c1d78c567383e87b9a09d84771e6a345",
+      "size": 4017,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/b5b00815c1d78c567383e87b9a09d84771e6a345"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/stidPipelineTempScaff/SCAFF-001.fbx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3bd178828fb05b06b08d57c1f3340a7fee8d5595",
+      "size": 76092,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/3bd178828fb05b06b08d57c1f3340a7fee8d5595"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/stidPipelineTempScaff/SCAFF-001.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b68873bfc5af3729ce9c7213eb0e364c6abb5c77",
+      "size": 745,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/b68873bfc5af3729ce9c7213eb0e364c6abb5c77"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/stidPipelineWoScaff",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "dc651c9b405a8dea62a2c870edd76ce265b3c7a7",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/dc651c9b405a8dea62a2c870edd76ce265b3c7a7"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/stidPipelineWoScaff/SCAFF-002.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fb7df7737e0247e337fa7c707fdc635d4884dea5",
+      "size": 4129,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/fb7df7737e0247e337fa7c707fdc635d4884dea5"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/stidPipelineWoScaff/SCAFF-002.fbx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3bd178828fb05b06b08d57c1f3340a7fee8d5595",
+      "size": 76092,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/3bd178828fb05b06b08d57c1f3340a7fee8d5595"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/stidPipelineWoScaff/SCAFF-002.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "15883f2d4517863a31f91b87d453a5b0acec0bb1",
+      "size": 755,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/15883f2d4517863a31f91b87d453a5b0acec0bb1"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/stidPipelineWoScaff_BuildOpMismatch",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "419c2025b2dbb089bc0f95464c32c321a1447961",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/419c2025b2dbb089bc0f95464c32c321a1447961"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/stidPipelineWoScaff_BuildOpMismatch/SCAFF-004.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fb7df7737e0247e337fa7c707fdc635d4884dea5",
+      "size": 4129,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/fb7df7737e0247e337fa7c707fdc635d4884dea5"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/stidPipelineWoScaff_BuildOpMismatch/SCAFF-004.fbx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3bd178828fb05b06b08d57c1f3340a7fee8d5595",
+      "size": 76092,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/3bd178828fb05b06b08d57c1f3340a7fee8d5595"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/stidPipelineWoScaff_BuildOpMismatch/SCAFF-004.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "93714956ef6429f03022afa2798144cf14215fc3",
+      "size": 757,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/93714956ef6429f03022afa2798144cf14215fc3"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/stidPipelineWoScaff_DismantleOpMissing",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "af78988be238cf82e8cb130816e737052f9d68f8",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/af78988be238cf82e8cb130816e737052f9d68f8"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/stidPipelineWoScaff_DismantleOpMissing/SCAFF-005.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b496d19f09436631f2c1ab44e238feb0ced32e72",
+      "size": 4129,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/b496d19f09436631f2c1ab44e238feb0ced32e72"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/stidPipelineWoScaff_DismantleOpMissing/SCAFF-005.fbx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3bd178828fb05b06b08d57c1f3340a7fee8d5595",
+      "size": 76092,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/3bd178828fb05b06b08d57c1f3340a7fee8d5595"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/stidPipelineWoScaff_DismantleOpMissing/SCAFF-005.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "06a9c47d4fb6d25d7daa86a541789a966728a6ed",
+      "size": 754,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/06a9c47d4fb6d25d7daa86a541789a966728a6ed"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/stidPipelineWoScaff_MissingDismantleOpInStidOnly",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "2ce688712f711c5ef787aceb4b590d5595ab5a82",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/2ce688712f711c5ef787aceb4b590d5595ab5a82"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/stidPipelineWoScaff_MissingDismantleOpInStidOnly/SCAFF-006.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fb7df7737e0247e337fa7c707fdc635d4884dea5",
+      "size": 4129,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/fb7df7737e0247e337fa7c707fdc635d4884dea5"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/stidPipelineWoScaff_MissingDismantleOpInStidOnly/SCAFF-006.fbx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3bd178828fb05b06b08d57c1f3340a7fee8d5595",
+      "size": 76092,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/3bd178828fb05b06b08d57c1f3340a7fee8d5595"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/stidPipelineWoScaff_MissingDismantleOpInStidOnly/SCAFF-006.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ec536aa6b1f16fa0848f649e85c9c90e96404f17",
+      "size": 756,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/ec536aa6b1f16fa0848f649e85c9c90e96404f17"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/stidPipelineWoScaff_WoMismatch",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "9ae74f50ca5eed097281e38a0c9b219d5f5954d4",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/9ae74f50ca5eed097281e38a0c9b219d5f5954d4"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/stidPipelineWoScaff_WoMismatch/SCAFF-003.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fb7df7737e0247e337fa7c707fdc635d4884dea5",
+      "size": 4129,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/fb7df7737e0247e337fa7c707fdc635d4884dea5"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/stidPipelineWoScaff_WoMismatch/SCAFF-003.fbx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3bd178828fb05b06b08d57c1f3340a7fee8d5595",
+      "size": 76092,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/3bd178828fb05b06b08d57c1f3340a7fee8d5595"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/stidPipelineWoScaff_WoMismatch/SCAFF-003.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c0ba47894932a06d65bd6f6d783d861eb2237acf",
+      "size": 756,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/c0ba47894932a06d65bd6f6d783d861eb2237acf"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/tempScaff",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "38e1c2cdf59cc2fb152ed759e37a1dc158f3df2b",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/38e1c2cdf59cc2fb152ed759e37a1dc158f3df2b"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/tempScaff/abc-temp-test.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b5b00815c1d78c567383e87b9a09d84771e6a345",
+      "size": 4017,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/b5b00815c1d78c567383e87b9a09d84771e6a345"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/tempScaff/abc-temp-test.fbx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3bd178828fb05b06b08d57c1f3340a7fee8d5595",
+      "size": 76092,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/3bd178828fb05b06b08d57c1f3340a7fee8d5595"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/tempScaff_wrongNaming",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "b478f91df37ae62e7b9c91c075a08f629b2bd985",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/b478f91df37ae62e7b9c91c075a08f629b2bd985"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/tempScaff_wrongNaming/abc_test.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b5b00815c1d78c567383e87b9a09d84771e6a345",
+      "size": 4017,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/b5b00815c1d78c567383e87b9a09d84771e6a345"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/TestSamples/tempScaff_wrongNaming/abc_test.fbx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3bd178828fb05b06b08d57c1f3340a7fee8d5595",
+      "size": 76092,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/3bd178828fb05b06b08d57c1f3340a7fee8d5595"
+    },
+    {
+      "path": "CadRevealFbxProvider.Tests/Usings.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "324456763afb873e116da92178ad9018cb9e7e50",
+      "size": 30,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/324456763afb873e116da92178ad9018cb9e7e50"
+    },
+    {
+      "path": "CadRevealFbxProvider",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "5be6e5dc86d48d46d516547a8351f6578d6e4be4",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/5be6e5dc86d48d46d516547a8351f6578d6e4be4"
+    },
+    {
+      "path": "CadRevealFbxProvider/Attributes",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "b80a31cf80aab3a9f10788e9646120c095358d7d",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/b80a31cf80aab3a9f10788e9646120c095358d7d"
+    },
+    {
+      "path": "CadRevealFbxProvider/Attributes/ScaffoldingAttributeParser.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9cf778e54e1eabdaebbe8f8d82b1e3c792e4e3d0",
+      "size": 21814,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/9cf778e54e1eabdaebbe8f8d82b1e3c792e4e3d0"
+    },
+    {
+      "path": "CadRevealFbxProvider/Attributes/ScaffoldingAttributeParsingException.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9d467ccdd4a43e35709ef373da9b7281cef39bf9",
+      "size": 556,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/9d467ccdd4a43e35709ef373da9b7281cef39bf9"
+    },
+    {
+      "path": "CadRevealFbxProvider/Attributes/ScaffoldingCsvLineParser.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "182927f3b60bf34b3c16584913b92bc72867af22",
+      "size": 7547,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/182927f3b60bf34b3c16584913b92bc72867af22"
+    },
+    {
+      "path": "CadRevealFbxProvider/Attributes/ScaffoldingFilenameException.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "25219ef206b2633e39c1e653db4850c97d3ad642",
+      "size": 517,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/25219ef206b2633e39c1e653db4850c97d3ad642"
+    },
+    {
+      "path": "CadRevealFbxProvider/Attributes/ScaffoldingMetadata.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bc0ba213f5fbe1104f7e11387345fc195de6b865",
+      "size": 14662,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/bc0ba213f5fbe1104f7e11387345fc195de6b865"
+    },
+    {
+      "path": "CadRevealFbxProvider/Attributes/ScaffoldingMetadataMissingFieldException.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "661eaf7e1927236197fe3c3e406a29d8137d5870",
+      "size": 533,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/661eaf7e1927236197fe3c3e406a29d8137d5870"
+    },
+    {
+      "path": "CadRevealFbxProvider/Attributes/StidScaffoldingDocumentEchoDto.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9bf664c81c038c99cc3cbeeb80a5fb5808c3ba5a",
+      "size": 2205,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/9bf664c81c038c99cc3cbeeb80a5fb5808c3ba5a"
+    },
+    {
+      "path": "CadRevealFbxProvider/BatchUtils",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "2d14a7a84c0cb65e778f6c909b4592708cd9de06",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/2d14a7a84c0cb65e778f6c909b4592708cd9de06"
+    },
+    {
+      "path": "CadRevealFbxProvider/BatchUtils/FbxGeometryUtils.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "38214fe60e51394541e24ebe5d47b9b738de362d",
+      "size": 2017,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/38214fe60e51394541e24ebe5d47b9b738de362d"
+    },
+    {
+      "path": "CadRevealFbxProvider/BatchUtils/FbxWorkload.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "930e8525ebf297d3fcadc6f9f7382a73d3a630bf",
+      "size": 16263,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/930e8525ebf297d3fcadc6f9f7382a73d3a630bf"
+    },
+    {
+      "path": "CadRevealFbxProvider/BatchUtils/ScaffoldOptimizer",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "1110cb0b383e04546280107f37fd68664a86208d",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/1110cb0b383e04546280107f37fd68664a86208d"
+    },
+    {
+      "path": "CadRevealFbxProvider/BatchUtils/ScaffoldOptimizer/GeometryInstancer.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ed3c6c03bce8216cca370bad896896c40c343701",
+      "size": 2472,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/ed3c6c03bce8216cca370bad896896c40c343701"
+    },
+    {
+      "path": "CadRevealFbxProvider/BatchUtils/ScaffoldOptimizer/IScaffoldOptimizerResult.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e4690109c682f2d2e2d2901a9f5dfd87aa78c500",
+      "size": 174,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/e4690109c682f2d2e2d2901a9f5dfd87aa78c500"
+    },
+    {
+      "path": "CadRevealFbxProvider/BatchUtils/ScaffoldOptimizer/ReplacementScaffoldParts",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "a8ac4556d844ad90cf9ad51745d53f9de3f97899",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/a8ac4556d844ad90cf9ad51745d53f9de3f97899"
+    },
+    {
+      "path": "CadRevealFbxProvider/BatchUtils/ScaffoldOptimizer/ReplacementScaffoldParts/PartReplacementUtils.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6f981168cecf2239810ac76a924297b5721829f9",
+      "size": 13531,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/6f981168cecf2239810ac76a924297b5721829f9"
+    },
+    {
+      "path": "CadRevealFbxProvider/BatchUtils/ScaffoldOptimizer/ReplacementScaffoldParts/PrimitiveGeometryDetector.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2c83993056483d420e798a5bcc0232fdc4cc4203",
+      "size": 22400,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/2c83993056483d420e798a5bcc0232fdc4cc4203"
+    },
+    {
+      "path": "CadRevealFbxProvider/BatchUtils/ScaffoldOptimizer/ReplacementScaffoldParts/PrincipalComponentAnalyzer.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "592972907b924d92c68536a312f4001dbae09c4f",
+      "size": 3149,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/592972907b924d92c68536a312f4001dbae09c4f"
+    },
+    {
+      "path": "CadRevealFbxProvider/BatchUtils/ScaffoldOptimizer/ReplacementScaffoldParts/ReplacementLedgerBeam.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b93720cfd30f9f626c037620d4d000bc290859d3",
+      "size": 11758,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/b93720cfd30f9f626c037620d4d000bc290859d3"
+    },
+    {
+      "path": "CadRevealFbxProvider/BatchUtils/ScaffoldOptimizer/ReplacementScaffoldParts/SortedBoundingBoxExtent.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b2e8281821d92e5b20d6fb5641fd330dec433a5b",
+      "size": 3059,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/b2e8281821d92e5b20d6fb5641fd330dec433a5b"
+    },
+    {
+      "path": "CadRevealFbxProvider/BatchUtils/ScaffoldOptimizer/ScaffoldOptimizer.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bb711e9d32bdd92fcca5d9b6d95979791f527132",
+      "size": 12950,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/bb711e9d32bdd92fcca5d9b6d95979791f527132"
+    },
+    {
+      "path": "CadRevealFbxProvider/BatchUtils/ScaffoldOptimizer/ScaffoldOptimizerBase.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "00b7aa91d9068bc348fb80fee6399a905d8e85cd",
+      "size": 3359,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/00b7aa91d9068bc348fb80fee6399a905d8e85cd"
+    },
+    {
+      "path": "CadRevealFbxProvider/BatchUtils/ScaffoldOptimizer/ScaffoldOptimizerResult.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e51dadfa7e5945fc4ea2e0e7b8a95e78cf8fb8f6",
+      "size": 2028,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/e51dadfa7e5945fc4ea2e0e7b8a95e78cf8fb8f6"
+    },
+    {
+      "path": "CadRevealFbxProvider/CadRevealFbxProvider.csproj",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1011eb06a5cfeff5777f49868112e8259071a50e",
+      "size": 1062,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/1011eb06a5cfeff5777f49868112e8259071a50e"
+    },
+    {
+      "path": "CadRevealFbxProvider/FbxGeometryException.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "201c1e59f9f0b3be9215aa5ae9290bb27e6bda3d",
+      "size": 449,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/201c1e59f9f0b3be9215aa5ae9290bb27e6bda3d"
+    },
+    {
+      "path": "CadRevealFbxProvider/FbxImporter.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "64995335a2323ca7a19b3b74f3150720c1ea7972",
+      "size": 759,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/64995335a2323ca7a19b3b74f3150720c1ea7972"
+    },
+    {
+      "path": "CadRevealFbxProvider/FbxMaterialWrapper.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1b8ff9956083c384cefb6fedce40f23b08ef3455",
+      "size": 2007,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/1b8ff9956083c384cefb6fedce40f23b08ef3455"
+    },
+    {
+      "path": "CadRevealFbxProvider/FbxMeshWrapper.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "84a75aff00a7c53598baeb18950a81c87e8caa12",
+      "size": 2536,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/84a75aff00a7c53598baeb18950a81c87e8caa12"
+    },
+    {
+      "path": "CadRevealFbxProvider/FbxNodeToCadRevealNodeConverter.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f4a7b9347606468a208c08c234d8b54b77aa0d54",
+      "size": 8411,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/f4a7b9347606468a208c08c234d8b54b77aa0d54"
+    },
+    {
+      "path": "CadRevealFbxProvider/FbxNodeWrapper.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6052754212493878811d22b414145938d19ecfb2",
+      "size": 3596,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/6052754212493878811d22b414145938d19ecfb2"
+    },
+    {
+      "path": "CadRevealFbxProvider/FbxProvider.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "debcb02d8fcb5fa23335010f8c1e8bc4f9be2ed6",
+      "size": 2735,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/debcb02d8fcb5fa23335010f8c1e8bc4f9be2ed6"
+    },
+    {
+      "path": "CadRevealFbxProvider/FbxSdkWrapper.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "90dada99c50d26e9fc2f39952d9d6399b4d44b52",
+      "size": 2106,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/90dada99c50d26e9fc2f39952d9d6399b4d44b52"
+    },
+    {
+      "path": "CadRevealFbxProvider/FbxTransformConverter.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0449dd0bdc1e77a82b4aae5185dd439741891e7e",
+      "size": 1192,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/0449dd0bdc1e77a82b4aae5185dd439741891e7e"
+    },
+    {
+      "path": "CadRevealFbxProvider/UserFriendlyLogger",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "a4d28862f718656db94c52078476679fb30024af",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/a4d28862f718656db94c52078476679fb30024af"
+    },
+    {
+      "path": "CadRevealFbxProvider/UserFriendlyLogger/UserFriendlyLogException.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "357733cdaa15ebf598fe7f4f4fed13bd7477597c",
+      "size": 224,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/357733cdaa15ebf598fe7f4f4fed13bd7477597c"
+    },
+    {
+      "path": "CadRevealFbxProvider/UserFriendlyLogger/UserFriendlyLoggerExceptionHandler.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0b69baa1b21a30d9dcca01b604b0b4d26e86b539",
+      "size": 912,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/0b69baa1b21a30d9dcca01b604b0b4d26e86b539"
+    },
+    {
+      "path": "CadRevealFbxProvider/lib",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "7c96faaf4c137498f6f6eccd5fefdfbb7cd3f8e5",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/7c96faaf4c137498f6f6eccd5fefdfbb7cd3f8e5"
+    },
+    {
+      "path": "CadRevealFbxProvider/lib/cfbx.dll",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5e37f5671a7303478271d558fa7453b6e805a34d",
+      "size": 7202816,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/5e37f5671a7303478271d558fa7453b6e805a34d"
+    },
+    {
+      "path": "CadRevealFbxProvider/lib/libcfbx.dylib",
+      "mode": "100755",
+      "type": "blob",
+      "sha": "9c2d7696a1ea8d144d9a5c7ae75176b781bfcf8f",
+      "size": 7753776,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/9c2d7696a1ea8d144d9a5c7ae75176b781bfcf8f"
+    },
+    {
+      "path": "CadRevealFbxProvider/lib/libcfbx.so",
+      "mode": "100755",
+      "type": "blob",
+      "sha": "1e0248572b9a39ab326dc232042b2c56845f2bc3",
+      "size": 9636632,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/1e0248572b9a39ab326dc232042b2c56845f2bc3"
+    },
+    {
+      "path": "CadRevealObjProvider.Tests",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "d376511ebef432a957ee9e192feb248249cf7bf7",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/d376511ebef432a957ee9e192feb248249cf7bf7"
+    },
+    {
+      "path": "CadRevealObjProvider.Tests/CadRevealObjProvider.Tests.csproj",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "be61a79e23480b1fff7ac4c5f7c37b66df9039b8",
+      "size": 1113,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/be61a79e23480b1fff7ac4c5f7c37b66df9039b8"
+    },
+    {
+      "path": "CadRevealObjProvider.Tests/ObjProviderTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bfff8fca5686bd8038de8adb7e2d2c965b9701a8",
+      "size": 734,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/bfff8fca5686bd8038de8adb7e2d2c965b9701a8"
+    },
+    {
+      "path": "CadRevealObjProvider.Tests/TestData",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "d564d0bc3dd917926892c55e3706cc116d5b165e",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/d564d0bc3dd917926892c55e3706cc116d5b165e"
+    },
+    {
+      "path": "CadRevealObjProvider.Tests/TestData/.gitkeep",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "size": 0,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "CadRevealObjProvider.Tests/Usings.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "324456763afb873e116da92178ad9018cb9e7e50",
+      "size": 30,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/324456763afb873e116da92178ad9018cb9e7e50"
+    },
+    {
+      "path": "CadRevealObjProvider",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "eba0f2dc869b2442d3299bdfb198ca42b53451fb",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/eba0f2dc869b2442d3299bdfb198ca42b53451fb"
+    },
+    {
+      "path": "CadRevealObjProvider/CadRevealObjProvider.csproj",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ccd12187d8cae30b2205ab851c32d4087ef0ca7c",
+      "size": 410,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/ccd12187d8cae30b2205ab851c32d4087ef0ca7c"
+    },
+    {
+      "path": "CadRevealObjProvider/ObjProvider.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d4e82203e181bef871b58ee75ffb69668dcaccec",
+      "size": 6029,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/d4e82203e181bef871b58ee75ffb69668dcaccec"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "f00fac1f86f372e47c34f89de6082d79448bd98d",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/f00fac1f86f372e47c34f89de6082d79448bd98d"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests/AdditionalMetadataCsvInjectorTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "01900a0a04551f5b6bcf71a13dd280323258b347",
+      "size": 2709,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/01900a0a04551f5b6bcf71a13dd280323258b347"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests/CadRevealRvmProvider.Tests.csproj",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "658a758d8f085017a5eab3eab44113906767bc47",
+      "size": 2307,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/658a758d8f085017a5eab3eab44113906767bc47"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests/Converters",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "290b4c266b1555c0d17fe4fbe45b6858152ade5f",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/290b4c266b1555c0d17fe4fbe45b6858152ade5f"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests/Converters/CapVisibilityTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2e4ceb77eaaabdb627d0d9eaafd5b9033e6d3e35",
+      "size": 58078,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/2e4ceb77eaaabdb627d0d9eaafd5b9033e6d3e35"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests/Converters/ConverterExceptionHandlingTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "73f61a2548092e9d232dd9382459fa1f575523b5",
+      "size": 6235,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/73f61a2548092e9d232dd9382459fa1f575523b5"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests/Converters/RvmBoxConverterTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d7a15f6ce7c196eef79d1f0f058195c655bb408c",
+      "size": 961,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/d7a15f6ce7c196eef79d1f0f058195c655bb408c"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests/Converters/RvmCircularTorusConverterTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b193cd3b0d9ce70a5feff88dac214123d7bd6edc",
+      "size": 1658,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/b193cd3b0d9ce70a5feff88dac214123d7bd6edc"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests/Converters/RvmCylinderConverterTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "184ecb350299ff230fca31ae6499516e972266ad",
+      "size": 1094,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/184ecb350299ff230fca31ae6499516e972266ad"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests/Converters/RvmEllipticalDishConverterTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9aed8b4e06f757366ada20f1a24adf120b06ce1c",
+      "size": 1092,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/9aed8b4e06f757366ada20f1a24adf120b06ce1c"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests/Converters/RvmFacetGroupConverterTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8551a48292582b12692f95200285dc54d9f8720a",
+      "size": 1451,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/8551a48292582b12692f95200285dc54d9f8720a"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests/Converters/RvmPyramidConverterTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b35c5c5c338880515a9dae29eb51f92eea5127cf",
+      "size": 1635,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/b35c5c5c338880515a9dae29eb51f92eea5127cf"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests/Converters/RvmRectangularTorusConverterTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f615cefb4489b4327f38328c9f6fe02ff97f01a7",
+      "size": 4377,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/f615cefb4489b4327f38328c9f6fe02ff97f01a7"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests/Converters/RvmSnoutConverterTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2103e79a60c3dc96e21f2ecf855c9d79baf126b5",
+      "size": 3380,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/2103e79a60c3dc96e21f2ecf855c9d79baf126b5"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests/Converters/RvmSphereConverterTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "27fbad434132b3af2add4afe8dbe928cc9fcc58c",
+      "size": 945,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/27fbad434132b3af2add4afe8dbe928cc9fcc58c"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests/Converters/RvmSphericalDishConverterTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9a606eb906a93981748ea5156cf9e2f2aad85ab5",
+      "size": 1104,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/9a606eb906a93981748ea5156cf9e2f2aad85ab5"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests/Primitives",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "7cae46bc42da093a0ff507804c6363602e795c23",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/7cae46bc42da093a0ff507804c6363602e795c23"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests/Primitives/Instancing",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "138917dfd562001536d697823bf837bc7de973eb",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/138917dfd562001536d697823bf837bc7de973eb"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests/Primitives/Instancing/FacetGroupMatchTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9525b29251da9a781d1895424069d13e906474bb",
+      "size": 5313,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/9525b29251da9a781d1895424069d13e906474bb"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests/Primitives/Instancing/RvmFacetGroupMatcherTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3e17dcaba71e4116ff48edd72ecce9d91408586e",
+      "size": 2724,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/3e17dcaba71e4116ff48edd72ecce9d91408586e"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests/RvmProviderTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "71a15b85b719e1ce44a67cad43d8f357bd0561b8",
+      "size": 2680,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/71a15b85b719e1ce44a67cad43d8f357bd0561b8"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests/RvmPyramidInstancerTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7718f1f529980ccae55f3e76619315a80e820ee5",
+      "size": 3909,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/7718f1f529980ccae55f3e76619315a80e820ee5"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests/RvmPyramidMatcherTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "40ef72cf5fbd2169df56b94c9d056f97727773d3",
+      "size": 2264,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/40ef72cf5fbd2169df56b94c9d056f97727773d3"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests/TestSamples",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "18de5de8f911d18e2e50486e7b35921904595260",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/18de5de8f911d18e2e50486e7b35921904595260"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests/TestSamples/0.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1de3295c8d5ef1a6dbef0920d7f486e5a0d693ff",
+      "size": 5482,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/1de3295c8d5ef1a6dbef0920d7f486e5a0d693ff"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests/TestSamples/2.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "416c7fecb9043cba2bbfd45783cec9dd11e48c10",
+      "size": 5508,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/416c7fecb9043cba2bbfd45783cec9dd11e48c10"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests/TestSamples/43907.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "19a4cfe127f45d22585de81adaf0d22041622bf9",
+      "size": 141138,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/19a4cfe127f45d22585de81adaf0d22041622bf9"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests/TestSamples/43908.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "574cfa1a2f813d6c034cedb3667a8769f5be92a2",
+      "size": 141138,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/574cfa1a2f813d6c034cedb3667a8769f5be92a2"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests/TestSamples/5.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b7ed85315a5e4a1ce826763c4230f01b6133c1d1",
+      "size": 5084,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/b7ed85315a5e4a1ce826763c4230f01b6133c1d1"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests/TestSamples/6.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4448029884273d3893c16ec89b3b56487fca27aa",
+      "size": 5084,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/4448029884273d3893c16ec89b3b56487fca27aa"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests/TestSamples/QuaternionDecomposition.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b4507637302475d7378a4debaeac53f2fcd8265d",
+      "size": 407,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/b4507637302475d7378a4debaeac53f2fcd8265d"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests/TestSamples/m1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0b30dfc9fe680a3952663f1ed8f4a293056e00a5",
+      "size": 30826,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/0b30dfc9fe680a3952663f1ed8f4a293056e00a5"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests/TestSamples/m2.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "af5949c8d424c847b540e7cac223b6ab3d1a06c5",
+      "size": 30288,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/af5949c8d424c847b540e7cac223b6ab3d1a06c5"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests/TestSamples/simple_group.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2640f5516f6094e1ab0f0e53baae49ee05ef0ae1",
+      "size": 1677,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/2640f5516f6094e1ab0f0e53baae49ee05ef0ae1"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests/Usings.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "324456763afb873e116da92178ad9018cb9e7e50",
+      "size": 30,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/324456763afb873e116da92178ad9018cb9e7e50"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests/Utils",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "bf2d1cb7f3d43acbcaa7aafc8a1a691d64338e38",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/bf2d1cb7f3d43acbcaa7aafc8a1a691d64338e38"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests/Utils/FacetGroupHelpers.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8931b1f0333ff64d6a4b0f3a3e017622978c94c3",
+      "size": 5157,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/8931b1f0333ff64d6a4b0f3a3e017622978c94c3"
+    },
+    {
+      "path": "CadRevealRvmProvider.Tests/Utils/TestSampleLoader.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2b28d3b21bd12850f170b2319546c9441d54da9a",
+      "size": 1258,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/2b28d3b21bd12850f170b2319546c9441d54da9a"
+    },
+    {
+      "path": "CadRevealRvmProvider",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "7eda16e98287d9b9c3cf82e06384346cf62be81f",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/7eda16e98287d9b9c3cf82e06384346cf62be81f"
+    },
+    {
+      "path": "CadRevealRvmProvider/AdditionalMetadataCsvInjector.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d1b0439d5c30c62f9fe3ed3c4f78cd2ad2ef2959",
+      "size": 4052,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/d1b0439d5c30c62f9fe3ed3c4f78cd2ad2ef2959"
+    },
+    {
+      "path": "CadRevealRvmProvider/BatchUtils",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "7f16d43528f7c9ae419234492c7db691e54aa084",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/7f16d43528f7c9ae419234492c7db691e54aa084"
+    },
+    {
+      "path": "CadRevealRvmProvider/BatchUtils/RvmWorkload.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fd111c6bf076b48181ed707dd57400bdf6e221ff",
+      "size": 5058,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/fd111c6bf076b48181ed707dd57400bdf6e221ff"
+    },
+    {
+      "path": "CadRevealRvmProvider/CadRevealRvmProvider.csproj",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1b0005d40257db0bc12280ddfcc412bde9714dc5",
+      "size": 442,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/1b0005d40257db0bc12280ddfcc412bde9714dc5"
+    },
+    {
+      "path": "CadRevealRvmProvider/Converters",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "eec80a482fbed963df2cd772f4da9a74925b9d01",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/eec80a482fbed963df2cd772f4da9a74925b9d01"
+    },
+    {
+      "path": "CadRevealRvmProvider/Converters/CapVisibilityHelpers",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "cf700853f7bb63b8936a2a8746a71bd3203616a5",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/cf700853f7bb63b8936a2a8746a71bd3203616a5"
+    },
+    {
+      "path": "CadRevealRvmProvider/Converters/CapVisibilityHelpers/BoxCylinderComparer.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5c7acfe393d071c71dcd6c1dd0415b93487b7195",
+      "size": 1213,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/5c7acfe393d071c71dcd6c1dd0415b93487b7195"
+    },
+    {
+      "path": "CadRevealRvmProvider/Converters/CapVisibilityHelpers/BoxSnoutComparer.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d56cd196b52439c4a977f19a8244f46dc45b5f14",
+      "size": 1408,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/d56cd196b52439c4a977f19a8244f46dc45b5f14"
+    },
+    {
+      "path": "CadRevealRvmProvider/Converters/CapVisibilityHelpers/CapData.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "aacf03e1389e62bbee801f608e1c49bd435ab828",
+      "size": 452,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/aacf03e1389e62bbee801f608e1c49bd435ab828"
+    },
+    {
+      "path": "CadRevealRvmProvider/Converters/CapVisibilityHelpers/CapVisibility.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c2138773bc79d3592ce21d49eaac24056c63c546",
+      "size": 8153,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/c2138773bc79d3592ce21d49eaac24056c63c546"
+    },
+    {
+      "path": "CadRevealRvmProvider/Converters/CapVisibilityHelpers/ComparerHelper.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "16d2a4aaa4550445d384c6f879f9bb3a5bfb9cf2",
+      "size": 2165,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/16d2a4aaa4550445d384c6f879f9bb3a5bfb9cf2"
+    },
+    {
+      "path": "CadRevealRvmProvider/Converters/CapVisibilityHelpers/CylinderCylinderComparer.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e031b1f0396bde0fe0d0fe1fe1f4e6689fa74491",
+      "size": 915,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/e031b1f0396bde0fe0d0fe1fe1f4e6689fa74491"
+    },
+    {
+      "path": "CadRevealRvmProvider/Converters/CapVisibilityHelpers/CylinderEllipticalDishComparer.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "80ebebf8822210f099cf8ed5aa6a7ec3bfc239bb",
+      "size": 981,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/80ebebf8822210f099cf8ed5aa6a7ec3bfc239bb"
+    },
+    {
+      "path": "CadRevealRvmProvider/Converters/CapVisibilityHelpers/CylinderSnoutComparer.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e9661ddc602ced63e7d6202c2e7b7f0ebafc278b",
+      "size": 1337,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/e9661ddc602ced63e7d6202c2e7b7f0ebafc278b"
+    },
+    {
+      "path": "CadRevealRvmProvider/Converters/CapVisibilityHelpers/CylinderSphericalDishComparer.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6b426f7690d7edf5b2181f68054f0e24c0b8c7ed",
+      "size": 976,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/6b426f7690d7edf5b2181f68054f0e24c0b8c7ed"
+    },
+    {
+      "path": "CadRevealRvmProvider/Converters/CapVisibilityHelpers/EllipticalDishSnoutComparer.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "aadb07433d2e129f0c411d81046907ec8d970978",
+      "size": 1413,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/aadb07433d2e129f0c411d81046907ec8d970978"
+    },
+    {
+      "path": "CadRevealRvmProvider/Converters/CapVisibilityHelpers/SnoutSnoutComparer.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2d6df6cfd2f111a9c72f575d046588e93c858af7",
+      "size": 4889,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/2d6df6cfd2f111a9c72f575d046588e93c858af7"
+    },
+    {
+      "path": "CadRevealRvmProvider/Converters/CapVisibilityHelpers/SnoutSphericalDishComparer.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "41556ca0eb55753ce92fe885373ddb0877b0baaa",
+      "size": 1401,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/41556ca0eb55753ce92fe885373ddb0877b0baaa"
+    },
+    {
+      "path": "CadRevealRvmProvider/Converters/CapVisibilityHelpers/TorusCylinderComparer.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "44ff9275b10421c3ba55087a1ce1665b8257a039",
+      "size": 939,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/44ff9275b10421c3ba55087a1ce1665b8257a039"
+    },
+    {
+      "path": "CadRevealRvmProvider/Converters/CapVisibilityHelpers/TorusSnoutComparer.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "16c103a80048ce5b36f596eff00a2f3f77d8406f",
+      "size": 1349,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/16c103a80048ce5b36f596eff00a2f3f77d8406f"
+    },
+    {
+      "path": "CadRevealRvmProvider/Converters/CapVisibilityHelpers/TorusTorusComparer.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "948095b479180144aa441fdf755455a54fbc9319",
+      "size": 925,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/948095b479180144aa441fdf755455a54fbc9319"
+    },
+    {
+      "path": "CadRevealRvmProvider/Converters/CircleConverterHelper.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "159ea4171f719d5e176d09319cd47fffd679a99d",
+      "size": 1166,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/159ea4171f719d5e176d09319cd47fffd679a99d"
+    },
+    {
+      "path": "CadRevealRvmProvider/Converters/ConverterExceptionHandling.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "911bad14a0c2da185c6b7beed6a8e14d60b78eaa",
+      "size": 9238,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/911bad14a0c2da185c6b7beed6a8e14d60b78eaa"
+    },
+    {
+      "path": "CadRevealRvmProvider/Converters/RvmBoxConverter.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bb9125efd7af334d061542fc59c7d9b902f66fbe",
+      "size": 1256,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/bb9125efd7af334d061542fc59c7d9b902f66fbe"
+    },
+    {
+      "path": "CadRevealRvmProvider/Converters/RvmCircularTorusConverter.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8ed5a2c907c0851a5af21d93e0404278398de73b",
+      "size": 3337,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/8ed5a2c907c0851a5af21d93e0404278398de73b"
+    },
+    {
+      "path": "CadRevealRvmProvider/Converters/RvmCylinderConverter.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "17e4c106486db901eabbfc23de2901d1387414b8",
+      "size": 3491,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/17e4c106486db901eabbfc23de2901d1387414b8"
+    },
+    {
+      "path": "CadRevealRvmProvider/Converters/RvmEllipticalDishConverter.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a0dd1e818e5bdfa2163b6f011b0a16af4ec64d63",
+      "size": 1851,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/a0dd1e818e5bdfa2163b6f011b0a16af4ec64d63"
+    },
+    {
+      "path": "CadRevealRvmProvider/Converters/RvmFacetGroupConverter.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "59825be2a3d485e5861adb72bcd3b7dc0f087721",
+      "size": 2112,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/59825be2a3d485e5861adb72bcd3b7dc0f087721"
+    },
+    {
+      "path": "CadRevealRvmProvider/Converters/RvmNodeExtensions.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f8314a000ebec51e4609088f435b1f92671f441e",
+      "size": 412,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/f8314a000ebec51e4609088f435b1f92671f441e"
+    },
+    {
+      "path": "CadRevealRvmProvider/Converters/RvmPrimitiveToAPrimitive.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b0559bd5352a9c24bace93a2b92a114bc4ddb82d",
+      "size": 2691,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/b0559bd5352a9c24bace93a2b92a114bc4ddb82d"
+    },
+    {
+      "path": "CadRevealRvmProvider/Converters/RvmPyramidConverter.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "726f14f6e25095bfab4affc14e42cf2db84ad655",
+      "size": 2663,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/726f14f6e25095bfab4affc14e42cf2db84ad655"
+    },
+    {
+      "path": "CadRevealRvmProvider/Converters/RvmRectangularTorusConverter.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3a5927bc9cf0a3b7e8fbd2d4d6038993ab93feeb",
+      "size": 5616,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/3a5927bc9cf0a3b7e8fbd2d4d6038993ab93feeb"
+    },
+    {
+      "path": "CadRevealRvmProvider/Converters/RvmSnoutConverter.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "da6f632b9a8ee3a6d9ab8f422266dbe66247b137",
+      "size": 10982,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/da6f632b9a8ee3a6d9ab8f422266dbe66247b137"
+    },
+    {
+      "path": "CadRevealRvmProvider/Converters/RvmSphereConverter.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "95985472f86ed724facfd18d508039ae460f1a3a",
+      "size": 1203,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/95985472f86ed724facfd18d508039ae460f1a3a"
+    },
+    {
+      "path": "CadRevealRvmProvider/Converters/RvmSphericalDishConverter.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c7385bf43bdd41d5805db7a6193e26fa8e8d98a6",
+      "size": 2091,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/c7385bf43bdd41d5805db7a6193e26fa8e8d98a6"
+    },
+    {
+      "path": "CadRevealRvmProvider/FailedPrimitivesLogObject.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fd5a576226fd90e400a330d99640ca8ac498e90d",
+      "size": 3124,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/fd5a576226fd90e400a330d99640ca8ac498e90d"
+    },
+    {
+      "path": "CadRevealRvmProvider/Operations",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "a3d7c2ff539ab01490f0f6f31b35dff738cea300",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/a3d7c2ff539ab01490f0f6f31b35dff738cea300"
+    },
+    {
+      "path": "CadRevealRvmProvider/Operations/FacetGroupMatcherLogObject.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "16112a6e42ba53c8586e4cdfff0e86b65a2bdaa4",
+      "size": 1776,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/16112a6e42ba53c8586e4cdfff0e86b65a2bdaa4"
+    },
+    {
+      "path": "CadRevealRvmProvider/Operations/RvmFacetGroupMatcher.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "04e36763713f3d7294f21c218e02925e28b4bb1c",
+      "size": 28352,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/04e36763713f3d7294f21c218e02925e28b4bb1c"
+    },
+    {
+      "path": "CadRevealRvmProvider/Operations/RvmPyramidInstancer.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1c60509be0c36c8f455070515ce0cc0484fe395f",
+      "size": 3773,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/1c60509be0c36c8f455070515ce0cc0484fe395f"
+    },
+    {
+      "path": "CadRevealRvmProvider/Operations/RvmPyramidMatcher.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ef6db12ebe4051e35d1c66516811ec8aaa26e269",
+      "size": 7586,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/ef6db12ebe4051e35d1c66516811ec8aaa26e269"
+    },
+    {
+      "path": "CadRevealRvmProvider/RvmBoundingBoxExtensions.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "577d00b283bc330db2aa987d805ac3c37e337241",
+      "size": 278,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/577d00b283bc330db2aa987d805ac3c37e337241"
+    },
+    {
+      "path": "CadRevealRvmProvider/RvmProtoMesh.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4354326dded4eaecf4602fa18412c39744151585",
+      "size": 1309,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/4354326dded4eaecf4602fa18412c39744151585"
+    },
+    {
+      "path": "CadRevealRvmProvider/RvmProvider.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c3064427ce29d356284845f82e4d1caa65d4bac7",
+      "size": 10623,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/c3064427ce29d356284845f82e4d1caa65d4bac7"
+    },
+    {
+      "path": "CadRevealRvmProvider/RvmStoreToCadRevealNodesConverter.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a6fc22c6ad8fd0e6443e307bf8569ad54843a2ec",
+      "size": 5229,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/a6fc22c6ad8fd0e6443e307bf8569ad54843a2ec"
+    },
+    {
+      "path": "CadRevealRvmProvider/Tessellation",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "6ad00dc16457206453b3ea75c3c38c3868766a3a",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/6ad00dc16457206453b3ea75c3c38c3868766a3a"
+    },
+    {
+      "path": "CadRevealRvmProvider/Tessellation/RvmTessellator.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7a857fca41050a9158b1df91aa1f11283f27eb9c",
+      "size": 9894,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/7a857fca41050a9158b1df91aa1f11283f27eb9c"
+    },
+    {
+      "path": "CadRevealRvmProvider/Tessellation/TessellationLogObject.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "860e0b5363ad7d11648295d67827b8296cdd6208",
+      "size": 1259,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/860e0b5363ad7d11648295d67827b8296cdd6208"
+    },
+    {
+      "path": "Commons.Tests",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "f541a272e1775fe2d4a6f0b37672350762acb3ff",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/f541a272e1775fe2d4a6f0b37672350762acb3ff"
+    },
+    {
+      "path": "Commons.Tests/Commons.Tests.csproj",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "44f0717180bee2279993da3f18a33ef3f728496c",
+      "size": 946,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/44f0717180bee2279993da3f18a33ef3f728496c"
+    },
+    {
+      "path": "Commons.Tests/SagittaUtilsTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "33e324aa6110b77f5b2ccdff3b25668d75c6d48a",
+      "size": 931,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/33e324aa6110b77f5b2ccdff3b25668d75c6d48a"
+    },
+    {
+      "path": "Commons.Tests/Usings.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "324456763afb873e116da92178ad9018cb9e7e50",
+      "size": 30,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/324456763afb873e116da92178ad9018cb9e7e50"
+    },
+    {
+      "path": "Commons.Tests/Utils",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "5b6ab73714ae55b62acf634dad7f14a156dfe5c1",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/5b6ab73714ae55b62acf634dad7f14a156dfe5c1"
+    },
+    {
+      "path": "Commons.Tests/Utils/ByteUtilsTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "eedc93b98df9bd6fda32001ed649fcf4c80c2625",
+      "size": 291,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/eedc93b98df9bd6fda32001ed649fcf4c80c2625"
+    },
+    {
+      "path": "Commons.Tests/Utils/MatrixExtensions.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e2a85e1e6c765db1e330fc2883ab44008a0208e1",
+      "size": 586,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/e2a85e1e6c765db1e330fc2883ab44008a0208e1"
+    },
+    {
+      "path": "Commons.Tests/Utils/StringExtensionsTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c0a591b7c98cd4c7088e7e850618e9bc800ba089",
+      "size": 2176,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/c0a591b7c98cd4c7088e7e850618e9bc800ba089"
+    },
+    {
+      "path": "Commons",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "bfe2ede168a4cf4fc129eeff2d71a6a755e6c99d",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/bfe2ede168a4cf4fc129eeff2d71a6a755e6c99d"
+    },
+    {
+      "path": "Commons/BenStringInternPool.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f1526747ced84d19dc0eaa1339cb51b37f417847",
+      "size": 654,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/f1526747ced84d19dc0eaa1339cb51b37f417847"
+    },
+    {
+      "path": "Commons/Commons.csproj",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "961687fb4559937d055c34b7e5f68f61ddf9f73b",
+      "size": 585,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/961687fb4559937d055c34b7e5f68f61ddf9f73b"
+    },
+    {
+      "path": "Commons/IStringInternPool.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c428c1243baf7c3a3105f2f28c2e8f4c8d714ef3",
+      "size": 306,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/c428c1243baf7c3a3105f2f28c2e8f4c8d714ef3"
+    },
+    {
+      "path": "Commons/Utils",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "8915d1750b1eee9a291333e8044c4a155a837a83",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/8915d1750b1eee9a291333e8044c4a155a837a83"
+    },
+    {
+      "path": "Commons/Utils/ByteUtils.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d08ad3ab2714114afb0beb6202888f1660258a4e",
+      "size": 357,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/d08ad3ab2714114afb0beb6202888f1660258a4e"
+    },
+    {
+      "path": "Commons/Utils/EnvUtil.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7dbc3da6845fc6e5c5ca6f2aaa8106eccea15f0b",
+      "size": 569,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/7dbc3da6845fc6e5c5ca6f2aaa8106eccea15f0b"
+    },
+    {
+      "path": "Commons/Utils/FloatExtensions.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fb15419c5b691300b2c8863600cf2d0195a2004b",
+      "size": 2380,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/fb15419c5b691300b2c8863600cf2d0195a2004b"
+    },
+    {
+      "path": "Commons/Utils/MatrixExtensions.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "566dfaa3bb3638f82b6b7dc6a9481958c343a6d4",
+      "size": 1279,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/566dfaa3bb3638f82b6b7dc6a9481958c343a6d4"
+    },
+    {
+      "path": "Commons/Utils/SagittaUtils.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b5b758ed59eb59df7fd509c34df85a40fad0b04c",
+      "size": 2130,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/b5b758ed59eb59df7fd509c34df85a40fad0b04c"
+    },
+    {
+      "path": "Commons/Utils/StringExtensions.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "759335deaf1aefee602f5f3084834611e2e85582",
+      "size": 914,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/759335deaf1aefee602f5f3084834611e2e85582"
+    },
+    {
+      "path": "Directory.Packages.props",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "42e059b339f2ebba68da168c79882d37852ddc4c",
+      "size": 2190,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/42e059b339f2ebba68da168c79882d37852ddc4c"
+    },
+    {
+      "path": "Dockerfile",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "61abfca2734fe10e1a9d567a37366cc1a626dd33",
+      "size": 853,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/61abfca2734fe10e1a9d567a37366cc1a626dd33"
+    },
+    {
+      "path": "HierarchyComposer.Tests",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "b063339345849aebc92a618d404e9f009389a3e9",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/b063339345849aebc92a618d404e9f009389a3e9"
+    },
+    {
+      "path": "HierarchyComposer.Tests/DatabaseComposerTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ab7ab8b202544339d5335160c7d48e47345fce1d",
+      "size": 1822,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/ab7ab8b202544339d5335160c7d48e47345fce1d"
+    },
+    {
+      "path": "HierarchyComposer.Tests/HierarchyComposer.Tests.csproj",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9f9e7e298fb02abc72344ef457576ddf33fe0458",
+      "size": 890,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/9f9e7e298fb02abc72344ef457576ddf33fe0458"
+    },
+    {
+      "path": "HierarchyComposer.Tests/RefNoTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "64090028739b9d2e607cc7805f6cad040068c4b6",
+      "size": 2148,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/64090028739b9d2e607cc7805f6cad040068c4b6"
+    },
+    {
+      "path": "HierarchyComposer",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "b7d3362a035284bdbafa4b6ee56f962271ee4736",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/b7d3362a035284bdbafa4b6ee56f962271ee4736"
+    },
+    {
+      "path": "HierarchyComposer/Extensions",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "10913e726af92861b0596e69b7b4e7b7696f04d7",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/10913e726af92861b0596e69b7b4e7b7696f04d7"
+    },
+    {
+      "path": "HierarchyComposer/Extensions/KeyExtensions.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4fe764d35a2e1545c0e49eaa2a47b54344dc0221",
+      "size": 437,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/4fe764d35a2e1545c0e49eaa2a47b54344dc0221"
+    },
+    {
+      "path": "HierarchyComposer/Functions",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "083da9a86af9ee46b41f6935ed9d1d5c8380d276",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/083da9a86af9ee46b41f6935ed9d1d5c8380d276"
+    },
+    {
+      "path": "HierarchyComposer/Functions/DatabaseComposer.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1b081568556a333610d1c7ba52d7f749a0dea661",
+      "size": 13174,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/1b081568556a333610d1c7ba52d7f749a0dea661"
+    },
+    {
+      "path": "HierarchyComposer/HierarchyComposer.csproj",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "32aae846567c91156bc151fb7f7f79d82d837b6e",
+      "size": 389,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/32aae846567c91156bc151fb7f7f79d82d837b6e"
+    },
+    {
+      "path": "HierarchyComposer/MOPTimer.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d8b855153b12b19d51b60d22b440c729f19b8121",
+      "size": 1298,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/d8b855153b12b19d51b60d22b440c729f19b8121"
+    },
+    {
+      "path": "HierarchyComposer/Model",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "a79812d7bebc956bfe898566565a5a401f0937bf",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/a79812d7bebc956bfe898566565a5a401f0937bf"
+    },
+    {
+      "path": "HierarchyComposer/Model/AABB.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bdeb678abb458bcf7f61c31766a0551c5031fb70",
+      "size": 2378,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/bdeb678abb458bcf7f61c31766a0551c5031fb70"
+    },
+    {
+      "path": "HierarchyComposer/Model/HierarchyNode.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d60cf782d1b7599c54aa764b9f7ee0def309e898",
+      "size": 669,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/d60cf782d1b7599c54aa764b9f7ee0def309e898"
+    },
+    {
+      "path": "HierarchyComposer/Model/Node.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "11a17a4a0c87923e355e14e9752caa244325c17a",
+      "size": 5583,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/11a17a4a0c87923e355e14e9752caa244325c17a"
+    },
+    {
+      "path": "HierarchyComposer/Model/NodePDMSEntryTable.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e3fa3ff9209bbda5494af8afc0f7ebad20d0bb16",
+      "size": 2847,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/e3fa3ff9209bbda5494af8afc0f7ebad20d0bb16"
+    },
+    {
+      "path": "HierarchyComposer/Model/PDMSEntry.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0c0597afbb9f0c7924d658361a2667398000787b",
+      "size": 4573,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/0c0597afbb9f0c7924d658361a2667398000787b"
+    },
+    {
+      "path": "HierarchyComposer/Model/RefNo.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2b49e98fe4af343b7fbd6df4dbc9eff0dc91f7da",
+      "size": 3818,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/2b49e98fe4af343b7fbd6df4dbc9eff0dc91f7da"
+    },
+    {
+      "path": "HierarchyComposer/Model/Vector3EfSerializable.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f5cf1a51baf1366e0af8d60ec150847f8d8537b5",
+      "size": 1628,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/f5cf1a51baf1366e0af8d60ec150847f8d8537b5"
+    },
+    {
+      "path": "LICENSE",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5fc6e53c973d4c49dbe1e672fdbeeb12521d2bb3",
+      "size": 1073,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/5fc6e53c973d4c49dbe1e672fdbeeb12521d2bb3"
+    },
+    {
+      "path": "PULL_REQUEST_TEMPLATE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d0b3c7b060704d9e2879bc2a9663e6d446a6a5f6",
+      "size": 2943,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/d0b3c7b060704d9e2879bc2a9663e6d446a6a5f6"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6cffb4bc36d7c3c4323e9276a49e9c6d7f1f6165",
+      "size": 3589,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/6cffb4bc36d7c3c4323e9276a49e9c6d7f1f6165"
+    },
+    {
+      "path": "RvmSharp.Exe",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "d3b5a1e2347e198e3e91f1ccd17796b9b4158fac",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/d3b5a1e2347e198e3e91f1ccd17796b9b4158fac"
+    },
+    {
+      "path": "RvmSharp.Exe/Options.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0d2c31ade7d1fe251e23a18b0dd1f34e54284669",
+      "size": 890,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/0d2c31ade7d1fe251e23a18b0dd1f34e54284669"
+    },
+    {
+      "path": "RvmSharp.Exe/Program.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4f2e6a27aac320328ff0397d7be82e15691b044f",
+      "size": 5099,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/4f2e6a27aac320328ff0397d7be82e15691b044f"
+    },
+    {
+      "path": "RvmSharp.Exe/RvmSharp.Exe.csproj",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "956f2042c2ff409fe1e688725f5b6a1a32db66d7",
+      "size": 881,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/956f2042c2ff409fe1e688725f5b6a1a32db66d7"
+    },
+    {
+      "path": "RvmSharp.Tests",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "b9a489b6f8178d0854f53ae72b00daeab0f022b9",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/b9a489b6f8178d0854f53ae72b00daeab0f022b9"
+    },
+    {
+      "path": "RvmSharp.Tests/Containers",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "551da7332590da422841381c5bc226f6347a5682",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/551da7332590da422841381c5bc226f6347a5682"
+    },
+    {
+      "path": "RvmSharp.Tests/Containers/RvmFileTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9bf878c4c2c34855bf3bb8d811edc7a53dff620e",
+      "size": 2752,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/9bf878c4c2c34855bf3bb8d811edc7a53dff620e"
+    },
+    {
+      "path": "RvmSharp.Tests/Operations",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "f91b1b96b3c0a19ee57df96272284035aabc572a",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/f91b1b96b3c0a19ee57df96272284035aabc572a"
+    },
+    {
+      "path": "RvmSharp.Tests/Operations/FloatExtensionsTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "333624f547f13d5268a210608f38b74d907693ab",
+      "size": 591,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/333624f547f13d5268a210608f38b74d907693ab"
+    },
+    {
+      "path": "RvmSharp.Tests/Operations/Matrix4x4HelpersTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6c77268a351f16f27bf054f9b37fc8c97e788bb8",
+      "size": 2675,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/6c77268a351f16f27bf054f9b37fc8c97e788bb8"
+    },
+    {
+      "path": "RvmSharp.Tests/Operations/RvmObjExporterTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "30714bb8b686227dd60745427b76b86e85ad7f7a",
+      "size": 2752,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/30714bb8b686227dd60745427b76b86e85ad7f7a"
+    },
+    {
+      "path": "RvmSharp.Tests/PdmsTextParserTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dd8baede5eee0946fd941e72f7532ddd69512adc",
+      "size": 4729,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/dd8baede5eee0946fd941e72f7532ddd69512adc"
+    },
+    {
+      "path": "RvmSharp.Tests/Primitives",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "0eec1728d0d55413b3f04799376766a0d46eb91a",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/0eec1728d0d55413b3f04799376766a0d46eb91a"
+    },
+    {
+      "path": "RvmSharp.Tests/Primitives/RvmNodeTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f86570ab4b41529db5984fd247bf492ca65a7449",
+      "size": 2952,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/f86570ab4b41529db5984fd247bf492ca65a7449"
+    },
+    {
+      "path": "RvmSharp.Tests/Primitives/RvmPrimitiveTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4e2cfd1c7c7eaffe970242d363c81b2ceb4bfd7d",
+      "size": 23188,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/4e2cfd1c7c7eaffe970242d363c81b2ceb4bfd7d"
+    },
+    {
+      "path": "RvmSharp.Tests/RvmParserTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "940946cb3757b8be7ecaea5d4f02d75506fc03dc",
+      "size": 926,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/940946cb3757b8be7ecaea5d4f02d75506fc03dc"
+    },
+    {
+      "path": "RvmSharp.Tests/RvmSharp.Tests.csproj",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8135152932f6f1c7fdd2b93dbc9561e5048e2aa0",
+      "size": 1759,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/8135152932f6f1c7fdd2b93dbc9561e5048e2aa0"
+    },
+    {
+      "path": "RvmSharp.Tests/Tessellator",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "96534e6e04ae7260d33661b8a8fe62c170787ecc",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/96534e6e04ae7260d33661b8a8fe62c170787ecc"
+    },
+    {
+      "path": "RvmSharp.Tests/Tessellator/MeshTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "610c6c57409beeda56754de266206c4ad7e9fd48",
+      "size": 3190,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/610c6c57409beeda56754de266206c4ad7e9fd48"
+    },
+    {
+      "path": "RvmSharp.Tests/Tessellator/TessellatorBridgeTests.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1afaed988c5024086e8f2ac9d4875f1d6e53de97",
+      "size": 3278,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/1afaed988c5024086e8f2ac9d4875f1d6e53de97"
+    },
+    {
+      "path": "RvmSharp.Tests/TestFileHelpers.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "604f9adc35bea160c79eef549121193cc5634fc0",
+      "size": 823,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/604f9adc35bea160c79eef549121193cc5634fc0"
+    },
+    {
+      "path": "RvmSharp",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "ac40d77cac34a8d73cf26dd3172cefce6f40aec9",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/ac40d77cac34a8d73cf26dd3172cefce6f40aec9"
+    },
+    {
+      "path": "RvmSharp/CompilerServices.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "88eb504a079a8ef00d05babde086106cb2c1723d",
+      "size": 1129,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/88eb504a079a8ef00d05babde086106cb2c1723d"
+    },
+    {
+      "path": "RvmSharp/Containers",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "6c6d3c39c7f4d130fe54e142c08cbe4892d0ce22",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/6c6d3c39c7f4d130fe54e142c08cbe4892d0ce22"
+    },
+    {
+      "path": "RvmSharp/Containers/RvmFile.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c3352f849b6bb004014fd528f30c88a002e71935",
+      "size": 3512,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/c3352f849b6bb004014fd528f30c88a002e71935"
+    },
+    {
+      "path": "RvmSharp/Containers/RvmGroup.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8e3b792f08418d8c2fe84de35c1a12943b9af2f2",
+      "size": 369,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/8e3b792f08418d8c2fe84de35c1a12943b9af2f2"
+    },
+    {
+      "path": "RvmSharp/Containers/RvmModel.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "197c3549c53cc79abed3a871541074875973bcd3",
+      "size": 1246,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/197c3549c53cc79abed3a871541074875973bcd3"
+    },
+    {
+      "path": "RvmSharp/Containers/RvmStore.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "38a2c76de1e6292e1b9c92b28b3e97ac8b19a9d4",
+      "size": 261,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/38a2c76de1e6292e1b9c92b28b3e97ac8b19a9d4"
+    },
+    {
+      "path": "RvmSharp/Exporters",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "234b93a9cb485190a19ab568632ab17a0fef89ae",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/234b93a9cb485190a19ab568632ab17a0fef89ae"
+    },
+    {
+      "path": "RvmSharp/Exporters/ObjExporter.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6a6f0a1337557c8c7278d9292d79a079383a8a53",
+      "size": 5291,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/6a6f0a1337557c8c7278d9292d79a079383a8a53"
+    },
+    {
+      "path": "RvmSharp/Operations",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "12b0cd252adb06b1877f0acda8e061c6253659db",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/12b0cd252adb06b1877f0acda8e061c6253659db"
+    },
+    {
+      "path": "RvmSharp/Operations/ConicSectionsHelper.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f987936b2741d5e2de7b4d828ad18e967cae72f5",
+      "size": 24034,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/f987936b2741d5e2de7b4d828ad18e967cae72f5"
+    },
+    {
+      "path": "RvmSharp/Operations/Matrix4x4Helpers.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b698388005bc3c1dff7979e5d6064732794a72df",
+      "size": 1698,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/b698388005bc3c1dff7979e5d6064732794a72df"
+    },
+    {
+      "path": "RvmSharp/Operations/RvmAlign.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "343952d9977b1dc1a400692d3f7922bd09d273be",
+      "size": 7791,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/343952d9977b1dc1a400692d3f7922bd09d273be"
+    },
+    {
+      "path": "RvmSharp/Operations/RvmConnect.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6734a430a7410e28e4a75c16174eb4c41b43c68b",
+      "size": 12789,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/6734a430a7410e28e4a75c16174eb4c41b43c68b"
+    },
+    {
+      "path": "RvmSharp/Operations/RvmObjExporter.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b1400dc5901fbe710d726eccfb05e98f7236193d",
+      "size": 2115,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/b1400dc5901fbe710d726eccfb05e98f7236193d"
+    },
+    {
+      "path": "RvmSharp/Operations/RvmPrimitiveExtensions.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d1a15b8dcf842287c73c4434be855bd1a4135d5a",
+      "size": 1128,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/d1a15b8dcf842287c73c4434be855bd1a4135d5a"
+    },
+    {
+      "path": "RvmSharp/PdmsTextParser.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c32bd289c41cb7136cc514402983b9360f3bb545",
+      "size": 9230,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/c32bd289c41cb7136cc514402983b9360f3bb545"
+    },
+    {
+      "path": "RvmSharp/Primitives",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "1204fa5c995187f3d001102203a52947921e0bc9",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/1204fa5c995187f3d001102203a52947921e0bc9"
+    },
+    {
+      "path": "RvmSharp/Primitives/PdmsColors.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "94110547d44ec1f4aef3c49d32c234ea878b1b8f",
+      "size": 8810,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/94110547d44ec1f4aef3c49d32c234ea878b1b8f"
+    },
+    {
+      "path": "RvmSharp/Primitives/RvmBoundingBox.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9a7bc69895798f78f534c4488b75c886a28b7728",
+      "size": 4056,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/9a7bc69895798f78f534c4488b75c886a28b7728"
+    },
+    {
+      "path": "RvmSharp/Primitives/RvmBox.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "161f5425ee01a4aff9509d94077603e8b57f8974",
+      "size": 289,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/161f5425ee01a4aff9509d94077603e8b57f8974"
+    },
+    {
+      "path": "RvmSharp/Primitives/RvmCircularTorus.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4238cddc435932a3a4c83e45b19cee1e7c3d8d38",
+      "size": 302,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/4238cddc435932a3a4c83e45b19cee1e7c3d8d38"
+    },
+    {
+      "path": "RvmSharp/Primitives/RvmColor.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4ef48e7aabec79e32e0c32bd409122a091612f7f",
+      "size": 133,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/4ef48e7aabec79e32e0c32bd409122a091612f7f"
+    },
+    {
+      "path": "RvmSharp/Primitives/RvmConnection.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "96f8751bc79baf6f7b2fcf6ec3752b83374ba3bd",
+      "size": 1255,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/96f8751bc79baf6f7b2fcf6ec3752b83374ba3bd"
+    },
+    {
+      "path": "RvmSharp/Primitives/RvmCylinder.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "15b33d13d912a6da5d296febccc6625aaab63119",
+      "size": 257,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/15b33d13d912a6da5d296febccc6625aaab63119"
+    },
+    {
+      "path": "RvmSharp/Primitives/RvmEllipticalDish.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ab632b9c4118f71769577b2db6b7d4fdede245c0",
+      "size": 291,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/ab632b9c4118f71769577b2db6b7d4fdede245c0"
+    },
+    {
+      "path": "RvmSharp/Primitives/RvmFacetGroup.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "02ede835c09d9914d922b6359504ab358c4559c1",
+      "size": 1414,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/02ede835c09d9914d922b6359504ab358c4559c1"
+    },
+    {
+      "path": "RvmSharp/Primitives/RvmLine.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6d53f21776246cd0aa4493d9df3fcea0e3f2ea06",
+      "size": 1040,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/6d53f21776246cd0aa4493d9df3fcea0e3f2ea06"
+    },
+    {
+      "path": "RvmSharp/Primitives/RvmNode.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "94e2ef221114066e2029af4ff2d9b9859dad368c",
+      "size": 3319,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/94e2ef221114066e2029af4ff2d9b9859dad368c"
+    },
+    {
+      "path": "RvmSharp/Primitives/RvmPrimitive.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c4a4cfb1d19d7058f56cf11820509741eefb8fd5",
+      "size": 2566,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/c4a4cfb1d19d7058f56cf11820509741eefb8fd5"
+    },
+    {
+      "path": "RvmSharp/Primitives/RvmPrimitiveKind.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "67e2a024a8ab0dd012f566d38791fd045a579b66",
+      "size": 279,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/67e2a024a8ab0dd012f566d38791fd045a579b66"
+    },
+    {
+      "path": "RvmSharp/Primitives/RvmPyramid.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d872a8608e0ca71c22bf64053374f2d923531027",
+      "size": 997,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/d872a8608e0ca71c22bf64053374f2d923531027"
+    },
+    {
+      "path": "RvmSharp/Primitives/RvmRectangularTorus.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e187163e1acd701c8d3725be3f99af855ceefec8",
+      "size": 336,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/e187163e1acd701c8d3725be3f99af855ceefec8"
+    },
+    {
+      "path": "RvmSharp/Primitives/RvmSnout.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4c54bdf238e592077356c4324bf953e33b46529b",
+      "size": 3663,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/4c54bdf238e592077356c4324bf953e33b46529b"
+    },
+    {
+      "path": "RvmSharp/Primitives/RvmSphere.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e58099721aec70b94df07192d6deb9fee0ee6cec",
+      "size": 239,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/e58099721aec70b94df07192d6deb9fee0ee6cec"
+    },
+    {
+      "path": "RvmSharp/Primitives/RvmSphericalDish.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "abd6b5d76cb7c12a0743b892bfeaf8c47f648deb",
+      "size": 289,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/abd6b5d76cb7c12a0743b892bfeaf8c47f648deb"
+    },
+    {
+      "path": "RvmSharp/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9cac30e9bd679ce4e255e0c8ff4fed82d0582968",
+      "size": 93,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/9cac30e9bd679ce4e255e0c8ff4fed82d0582968"
+    },
+    {
+      "path": "RvmSharp/RvmParser.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "90b0265acf703aa1952487c06f5033c1f8d4c2f5",
+      "size": 19808,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/90b0265acf703aa1952487c06f5033c1f8d4c2f5"
+    },
+    {
+      "path": "RvmSharp/RvmSharp.csproj",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7bb1e91d08b97505637086906374a5c118ddd463",
+      "size": 2384,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/7bb1e91d08b97505637086906374a5c118ddd463"
+    },
+    {
+      "path": "RvmSharp/Tessellation",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "776e469aad59b03e1972df50cb9c3d1cdd131a90",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/776e469aad59b03e1972df50cb9c3d1cdd131a90"
+    },
+    {
+      "path": "RvmSharp/Tessellation/ConnectionInterface.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fa53e7cf7cbf4bdc4be9ecfba6e497c8268177bc",
+      "size": 9480,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/fa53e7cf7cbf4bdc4be9ecfba6e497c8268177bc"
+    },
+    {
+      "path": "RvmSharp/Tessellation/RvmMesh.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "44db03f249ed0d1f7574d393e41c9ffb50d6a0e0",
+      "size": 6043,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/44db03f249ed0d1f7574d393e41c9ffb50d6a0e0"
+    },
+    {
+      "path": "RvmSharp/Tessellation/TessNet.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "18d1be7357d6b915b0a1f065b7ff855b64da017e",
+      "size": 2146,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/18d1be7357d6b915b0a1f065b7ff855b64da017e"
+    },
+    {
+      "path": "RvmSharp/Tessellation/TessellationHelpers.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "659f6636c9d5c4b9e66972e9c9e2b38282d0607b",
+      "size": 1756,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/659f6636c9d5c4b9e66972e9c9e2b38282d0607b"
+    },
+    {
+      "path": "RvmSharp/Tessellation/TessellatorBridge.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b2b0733239141e5b9436a1f7a37e352c90f76456",
+      "size": 42644,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/b2b0733239141e5b9436a1f7a37e352c90f76456"
+    },
+    {
+      "path": "RvmSharp/Utils",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "c0080427535b9dd2b31e9e32520d6fd8c3cc4c7e",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/c0080427535b9dd2b31e9e32520d6fd8c3cc4c7e"
+    },
+    {
+      "path": "RvmSharp/Utils/StreamExtensions.cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a85b1183315dc5ff02cddd30e2ce5243885e368c",
+      "size": 418,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/a85b1183315dc5ff02cddd30e2ce5243885e368c"
+    },
+    {
+      "path": "SECURITY.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "93765ec90e0e87b074f66d1388d18b3ce958c92c",
+      "size": 542,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/93765ec90e0e87b074f66d1388d18b3ce958c92c"
+    },
+    {
+      "path": "TestSamples",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "c4dfd39f961a5d728cb38d48b00ff11f374f06d3",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/c4dfd39f961a5d728cb38d48b00ff11f374f06d3"
+    },
+    {
+      "path": "TestSamples/Huldra",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "57c000a1a24591d76171457a4b2c32f50509163e",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/57c000a1a24591d76171457a4b2c32f50509163e"
+    },
+    {
+      "path": "TestSamples/Huldra/Equinor_open_data_sharing_license_-_Huldra.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b9784b3cbe47f1c407dcecc13d5aa45a2e63cb88",
+      "size": 760320,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/b9784b3cbe47f1c407dcecc13d5aa45a2e63cb88"
+    },
+    {
+      "path": "TestSamples/Huldra/LICENSE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4eabfead564f4ae859e9c336afb56b157cce8929",
+      "size": 212,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/4eabfead564f4ae859e9c336afb56b157cce8929"
+    },
+    {
+      "path": "TestSamples/Huldra/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "624d5adca6b50020740c264e624a508676b58ab9",
+      "size": 1983,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/624d5adca6b50020740c264e624a508676b58ab9"
+    },
+    {
+      "path": "TestSamples/Huldra/WD1-PSUP.RVM",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "93c4b0c6a1dbde636732a3229bf9e4982dd0b54f",
+      "size": 1193280,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/93c4b0c6a1dbde636732a3229bf9e4982dd0b54f"
+    },
+    {
+      "path": "TestSamples/Huldra/WD1-PSUP.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0f8fbf051ac90349cab90cc164f7951c35437c80",
+      "size": 2400946,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/0f8fbf051ac90349cab90cc164f7951c35437c80"
+    },
+    {
+      "path": "ThirdPartyLicenses.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c03edf4f58b20e396644d374fed60f2815411eb7",
+      "size": 897,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/c03edf4f58b20e396644d374fed60f2815411eb7"
+    },
+    {
+      "path": "autobuild",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "e186dc9e3a3e4d2c8121c87ce51d0f89de272c6f",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/e186dc9e3a3e4d2c8121c87ce51d0f89de272c6f"
+    },
+    {
+      "path": "autobuild/azure-pipelines.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "123a843b7584873bd889a7a288ff97352ffa8be2",
+      "size": 1613,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/123a843b7584873bd889a7a288ff97352ffa8be2"
+    },
+    {
+      "path": "catalog-info.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "39dd5cd9655a5502bf67f40750d8c17336cb8b72",
+      "size": 274,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/39dd5cd9655a5502bf67f40750d8c17336cb8b72"
+    },
+    {
+      "path": "fbximport",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "531de65e83a9383f58833c2d47fa1f4a30dedba7",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/531de65e83a9383f58833c2d47fa1f4a30dedba7"
+    },
+    {
+      "path": "fbximport/.dockerignore",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "73efc8b4ec577c7984b17a1a8fd6f9ff0db30e02",
+      "size": 321,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/73efc8b4ec577c7984b17a1a8fd6f9ff0db30e02"
+    },
+    {
+      "path": "fbximport/.editorconfig",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3d2df4e83dc3a16f45e5d288b9ab2abbe1663e22",
+      "size": 74,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/3d2df4e83dc3a16f45e5d288b9ab2abbe1663e22"
+    },
+    {
+      "path": "fbximport/.gitignore",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d7deedc52d09556e79f50069c95978c0368888eb",
+      "size": 33,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/d7deedc52d09556e79f50069c95978c0368888eb"
+    },
+    {
+      "path": "fbximport/CMakeLists.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cf2e3c961ed22734df49db17f7fbaebd105845ef",
+      "size": 1660,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/cf2e3c961ed22734df49db17f7fbaebd105845ef"
+    },
+    {
+      "path": "fbximport/Dockerfile",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "31ef9c06358af7a10e5a5b4394ff27381558d449",
+      "size": 926,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/31ef9c06358af7a10e5a5b4394ff27381558d449"
+    },
+    {
+      "path": "fbximport/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "94197aa1b07914df8eb540098ee26fc84072c61c",
+      "size": 1362,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/94197aa1b07914df8eb540098ee26fc84072c61c"
+    },
+    {
+      "path": "fbximport/build-linux.ps1",
+      "mode": "100755",
+      "type": "blob",
+      "sha": "83154f94212a5508944cc7677ddd65e8fe5047bc",
+      "size": 407,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/83154f94212a5508944cc7677ddd65e8fe5047bc"
+    },
+    {
+      "path": "fbximport/cmake",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "a2bbc00a86bf0e509c37eb0e35912145f53715b5",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/a2bbc00a86bf0e509c37eb0e35912145f53715b5"
+    },
+    {
+      "path": "fbximport/cmake/catch2.cmake",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d0fb04099288182d33a20b8f7f868df8db5e8ea8",
+      "size": 361,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/d0fb04099288182d33a20b8f7f868df8db5e8ea8"
+    },
+    {
+      "path": "fbximport/cmake/fbx.cmake",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "419bb82d8d6eb270561cb73cb1c082ebb333ee39",
+      "size": 4411,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/419bb82d8d6eb270561cb73cb1c082ebb333ee39"
+    },
+    {
+      "path": "fbximport/data",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "2b916f0b47259422395aaff30925049b12310fed",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/2b916f0b47259422395aaff30925049b12310fed"
+    },
+    {
+      "path": "fbximport/data/cube.fbx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e6d82e24d6e70b87da1076bf846af41cfdf33db8",
+      "size": 15164,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/e6d82e24d6e70b87da1076bf846af41cfdf33db8"
+    },
+    {
+      "path": "fbximport/src",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "fba039a1607a40f85462a83d7dd766d6505b6806",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/fba039a1607a40f85462a83d7dd766d6505b6806"
+    },
+    {
+      "path": "fbximport/src/CMakeLists.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dab5739220860dbc4e76c52b8b15a54b69573b13",
+      "size": 704,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/dab5739220860dbc4e76c52b8b15a54b69573b13"
+    },
+    {
+      "path": "fbximport/src/common.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c47af9efdbdc7bcc9b50289d56260d3f8355b169",
+      "size": 1250,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/c47af9efdbdc7bcc9b50289d56260d3f8355b169"
+    },
+    {
+      "path": "fbximport/src/importer.cpp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "04c7d5487ea0e638b7267e3b41da1da780530efb",
+      "size": 1666,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/04c7d5487ea0e638b7267e3b41da1da780530efb"
+    },
+    {
+      "path": "fbximport/src/importer.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fc64ebf650d201ff15aabe8bbb6bce52bd7e787d",
+      "size": 219,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/fc64ebf650d201ff15aabe8bbb6bce52bd7e787d"
+    },
+    {
+      "path": "fbximport/src/manager.cpp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d1a9165fc269367d7ca327eadd9ca22bf74577e4",
+      "size": 597,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/d1a9165fc269367d7ca327eadd9ca22bf74577e4"
+    },
+    {
+      "path": "fbximport/src/manager.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "72756581eae294a0e4bc2353289411bc6d532cb7",
+      "size": 319,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/72756581eae294a0e4bc2353289411bc6d532cb7"
+    },
+    {
+      "path": "fbximport/src/material.cpp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "42334b6fa92cbde89239140f286061ac1fb4a90c",
+      "size": 544,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/42334b6fa92cbde89239140f286061ac1fb4a90c"
+    },
+    {
+      "path": "fbximport/src/material.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "41d0492a6376ae75447d06f81bd5f7ed163c4c2f",
+      "size": 243,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/41d0492a6376ae75447d06f81bd5f7ed163c4c2f"
+    },
+    {
+      "path": "fbximport/src/mesh.cpp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ba47f9a9d46cb54b88cdc3abb9059fa995838830",
+      "size": 3870,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/ba47f9a9d46cb54b88cdc3abb9059fa995838830"
+    },
+    {
+      "path": "fbximport/src/mesh.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f3d98c01ae8f151f3c99377a8f60e5e820ae0f40",
+      "size": 353,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/f3d98c01ae8f151f3c99377a8f60e5e820ae0f40"
+    },
+    {
+      "path": "fbximport/src/node.cpp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a98fe58053c9bc0b8aacfac15e421e3169768b51",
+      "size": 3185,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/a98fe58053c9bc0b8aacfac15e421e3169768b51"
+    },
+    {
+      "path": "fbximport/src/node.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "061aae58c4e3aeda11095e0b6cad9324b21e9060",
+      "size": 762,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/061aae58c4e3aeda11095e0b6cad9324b21e9060"
+    },
+    {
+      "path": "fbximport/tests",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "d31037189493196e7de182609c1b2a520fd5221f",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/d31037189493196e7de182609c1b2a520fd5221f"
+    },
+    {
+      "path": "fbximport/tests/CMakeLists.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3f954bf5377a0c540cd5659bc3a6a5a3a7b7753a",
+      "size": 363,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/3f954bf5377a0c540cd5659bc3a6a5a3a7b7753a"
+    },
+    {
+      "path": "fbximport/tests/data",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "db13b025bcee5cbc3c9276bc507e0319cf230ef1",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/db13b025bcee5cbc3c9276bc507e0319cf230ef1"
+    },
+    {
+      "path": "fbximport/tests/data/cube.fbx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ae0e723d9723e2ebe2ecde4466fb27505ede1f68",
+      "size": 15164,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/ae0e723d9723e2ebe2ecde4466fb27505ede1f68"
+    },
+    {
+      "path": "fbximport/tests/fbx_info.cpp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2ca0c36e33abca664114a98a439cd1264400be26",
+      "size": 4371,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/2ca0c36e33abca664114a98a439cd1264400be26"
+    },
+    {
+      "path": "fbximport/tests/fbx_info.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e1adbfbf939ff53843b333bf52603081eb165395",
+      "size": 1048,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/e1adbfbf939ff53843b333bf52603081eb165395"
+    },
+    {
+      "path": "fbximport/tests/main.cpp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "583d083a2fcdfbdb3313ec70933437922a040b46",
+      "size": 1282,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/583d083a2fcdfbdb3313ec70933437922a040b46"
+    },
+    {
+      "path": "fbximport/tests/tests.cpp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "aaea942df12cefadc3ae3264aa7675707431eaf4",
+      "size": 1644,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/aaea942df12cefadc3ae3264aa7675707431eaf4"
+    },
+    {
+      "path": "fbximport/tests/tests.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "14fe9b119d326ef842ea14118f5e1c04ba7be78f",
+      "size": 157,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/14fe9b119d326ef842ea14118f5e1c04ba7be78f"
+    },
+    {
+      "path": "rvmsharp.sln",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f43f92c6a0e0661540600dba8f5e5d18fd54aaa8",
+      "size": 8679,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/f43f92c6a0e0661540600dba8f5e5d18fd54aaa8"
+    },
+    {
+      "path": "rvmsharp.sln.DotSettings",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d94296fe54fa0f953f210bafd99abd143fd8b8cd",
+      "size": 1346,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/d94296fe54fa0f953f210bafd99abd143fd8b8cd"
+    },
+    {
+      "path": "scripts",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "c8f75543cc571b2ae79c8213bf8145a79933d15c",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/c8f75543cc571b2ae79c8213bf8145a79933d15c"
+    },
+    {
+      "path": "scripts/Convert-RvmToI3df-Params.ps1",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b838e168780b0881f9ced996ae0c8ffd0491e12a",
+      "size": 912,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/b838e168780b0881f9ced996ae0c8ffd0491e12a"
+    },
+    {
+      "path": "scripts/Convert-RvmToI3df.ps1",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ddff6d748adab6197cdbab2358f40c55aac35e93",
+      "size": 3924,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/ddff6d748adab6197cdbab2358f40c55aac35e93"
+    },
+    {
+      "path": "scripts/dev-scripts",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "10e3dad3a45919b62df6c6745461d4d50fd8a541",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/10e3dad3a45919b62df6c6745461d4d50fd8a541"
+    },
+    {
+      "path": "scripts/dev-scripts/Convert-ScaffoldingToReveal.ps1",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e5592d15cd287ef54c2cc637b496649a5d57704f",
+      "size": 7146,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/e5592d15cd287ef54c2cc637b496649a5d57704f"
+    },
+    {
+      "path": "scripts/outputs",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "d564d0bc3dd917926892c55e3706cc116d5b165e",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/d564d0bc3dd917926892c55e3706cc116d5b165e"
+    },
+    {
+      "path": "scripts/outputs/.gitkeep",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "size": 0,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "spikes",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "0f212eb76a000f5ef2256aef6d078c5c9c028de7",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/0f212eb76a000f5ef2256aef6d078c5c9c028de7"
+    },
+    {
+      "path": "spikes/2023-05-23-GroupNodesToMakeSectorsLessOblong.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9807b2b345946c56404a6d68b81775cfe7bbf7d0",
+      "size": 2169,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/9807b2b345946c56404a6d68b81775cfe7bbf7d0"
+    },
+    {
+      "path": "spikes/2023-05-23-LODSystemWithoutForking.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8d924236f6280bfbea70ad8ac8a7f3a170176f9f",
+      "size": 2454,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/8d924236f6280bfbea70ad8ac8a7f3a170176f9f"
+    },
+    {
+      "path": "spikes/2023-05-24-ConvertInstanceMeshesWhenTooFewInASector.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d3ed776582ee88eadc00bae607d841d81767b8a2",
+      "size": 5482,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/d3ed776582ee88eadc00bae607d841d81767b8a2"
+    },
+    {
+      "path": "spikes/2023-05-30-PrioritizedNodes.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c19116499c95a0a025b26c21e5e3b0c2f2ff6e57",
+      "size": 3641,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/c19116499c95a0a025b26c21e5e3b0c2f2ff6e57"
+    },
+    {
+      "path": "spikes/2023-05-30-ShadowLowPolySectors.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "46b7410136befab04ad8835eeb3ea0ec07d79aaa",
+      "size": 3302,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/46b7410136befab04ad8835eeb3ea0ec07d79aaa"
+    },
+    {
+      "path": "spikes/2023-06-01-ConvertPrimitivesWhenTooFewInASector.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c593706374c6ef74b08378e8fd896fd2e26434ac",
+      "size": 1633,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/c593706374c6ef74b08378e8fd896fd2e26434ac"
+    },
+    {
+      "path": "spikes/2023-11-22-SplitOnArea.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d3588fcebff9c5aebf7f0b5a10419f6cff00c475",
+      "size": 1775,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/d3588fcebff9c5aebf7f0b5a10419f6cff00c475"
+    },
+    {
+      "path": "spikes/2023-11-27-KeepOctreeShape.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f7c1b0652d886db3cfc72997d8115381c040750a",
+      "size": 4244,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/f7c1b0652d886db3cfc72997d8115381c040750a"
+    },
+    {
+      "path": "spikes/2023-12-01-SplitOnAreaWithOutlierhandling.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8ac3cd26c61b4d3148972f58024b587af238dfc9",
+      "size": 1547,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/8ac3cd26c61b4d3148972f58024b587af238dfc9"
+    },
+    {
+      "path": "spikes/2023-12-11-MakeSectorsCubic.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e4d4bc5d6d09f8903d6fd1e3a1bf4eb2cc29c105",
+      "size": 1372,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/e4d4bc5d6d09f8903d6fd1e3a1bf4eb2cc29c105"
+    },
+    {
+      "path": "spikes/2023-12-20-NotOctreeSplitting.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "03457c4fcc5a7ee2a916d3c18c4bf074b95ac033",
+      "size": 2628,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/03457c4fcc5a7ee2a916d3c18c4bf074b95ac033"
+    },
+    {
+      "path": "spikes/2024-02-19-EMHI_PicturesWithPlaywright.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "53a89339b022ee5fe58e0d5bcde65a310b28b0a5",
+      "size": 3103,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/53a89339b022ee5fe58e0d5bcde65a310b28b0a5"
+    },
+    {
+      "path": "spikes/2024-04-02-NodeOrderWeighting.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "710dbfb8541eeac061ac3ef799d52c7f030b095a",
+      "size": 1372,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/710dbfb8541eeac061ac3ef799d52c7f030b095a"
+    },
+    {
+      "path": "spikes/2024-07-09-HighlightSectors.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "aaa78bb608c2c1b7f4086b61e6cd09b54332d7b7",
+      "size": 4978,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/aaa78bb608c2c1b7f4086b61e6cd09b54332d7b7"
+    },
+    {
+      "path": "spikes/ClientCode",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "9adb2cf6cd08d34badee91acf4895af4d5cea073",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/9adb2cf6cd08d34badee91acf4895af4d5cea073"
+    },
+    {
+      "path": "spikes/ClientCode/shadowLowPolySectors_echoSectorCullerHelperFunctions.ts",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bf6d28c60bf7c9a11abcce34a2c4bb838a035b0f",
+      "size": 16679,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/bf6d28c60bf7c9a11abcce34a2c4bb838a035b0f"
+    },
+    {
+      "path": "spikes/images",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "b1b2591668710bc597f7ec5d0ff7c53b712af85a",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/b1b2591668710bc597f7ec5d0ff7c53b712af85a"
+    },
+    {
+      "path": "spikes/images/ConvertInstanceMeshesWhenTooFewInASector",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "c9088e1ec76f7edccedceb8c7c9f223674fe9534",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/c9088e1ec76f7edccedceb8c7c9f223674fe9534"
+    },
+    {
+      "path": "spikes/images/ConvertInstanceMeshesWhenTooFewInASector/ASGB_extraTriangles.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9d16edffb28c589c382219afb2cda100982ba040",
+      "size": 31793,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/9d16edffb28c589c382219afb2cda100982ba040"
+    },
+    {
+      "path": "spikes/images/ConvertInstanceMeshesWhenTooFewInASector/ASGB_instanceBatches.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "52e1c203a84dad1e655b934943d178aae048f22c",
+      "size": 30239,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/52e1c203a84dad1e655b934943d178aae048f22c"
+    },
+    {
+      "path": "spikes/images/ConvertInstanceMeshesWhenTooFewInASector/huldra_extraTriangles.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3eb4c07b065c120305f01b7a38ac60fdf2570fda",
+      "size": 31434,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/3eb4c07b065c120305f01b7a38ac60fdf2570fda"
+    },
+    {
+      "path": "spikes/images/ConvertInstanceMeshesWhenTooFewInASector/huldra_instanceBatches.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dd77b371783e6444ef9adbaf392d4632afa070d4",
+      "size": 32354,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/dd77b371783e6444ef9adbaf392d4632afa070d4"
+    },
+    {
+      "path": "spikes/images/ConvertPrimitivesWhenTooFewInASector",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "1ecc0328599e7f1bf10f7426e75888564448ea67",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/1ecc0328599e7f1bf10f7426e75888564448ea67"
+    },
+    {
+      "path": "spikes/images/ConvertPrimitivesWhenTooFewInASector/HULDRA_primitiveBatches.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "26096926a0e075687c6354372ec06745ba61e83c",
+      "size": 28532,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/26096926a0e075687c6354372ec06745ba61e83c"
+    },
+    {
+      "path": "spikes/images/EMHI_PicturesWithPlayground",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "2ac89835524b3dd069940ff0916444837c3c46bc",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/2ac89835524b3dd069940ff0916444837c3c46bc"
+    },
+    {
+      "path": "spikes/images/EMHI_PicturesWithPlayground/EMHI-HUA-Take-screenshot-of-HUA-1-actual.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "51775d8c90edca80014414ba9afc9ac75b1cbd07",
+      "size": 533599,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/51775d8c90edca80014414ba9afc9ac75b1cbd07"
+    },
+    {
+      "path": "spikes/images/LODSystemWithoutForking",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "7387fe08567acd2b71f6c2d2d6f648d2acf6a78b",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/7387fe08567acd2b71f6c2d2d6f648d2acf6a78b"
+    },
+    {
+      "path": "spikes/images/LODSystemWithoutForking/LOD.gif",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "70b2b4a2685e0c76a1a13adcd77cb055ec39251c",
+      "size": 6468448,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/70b2b4a2685e0c76a1a13adcd77cb055ec39251c"
+    },
+    {
+      "path": "spikes/images/NotOctreeSplitting",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "d741715ab93d69fbbb0922794eea87dee7ce623a",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/d741715ab93d69fbbb0922794eea87dee7ce623a"
+    },
+    {
+      "path": "spikes/images/NotOctreeSplitting/huldra_notOctree.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2dbaa868f2b47e07296dcdaa293b08bb6457b213",
+      "size": 1274916,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/2dbaa868f2b47e07296dcdaa293b08bb6457b213"
+    },
+    {
+      "path": "spikes/images/NotOctreeSplitting/not_octree.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ecce79c6808ba0929fecd57f54df956f074741c8",
+      "size": 94759,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/ecce79c6808ba0929fecd57f54df956f074741c8"
+    },
+    {
+      "path": "spikes/images/ShadowLowPolySectors",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "23010b5cfe157902cf87001c053021b5c752b7c0",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/23010b5cfe157902cf87001c053021b5c752b7c0"
+    },
+    {
+      "path": "spikes/images/ShadowLowPolySectors/selection_lod.mp4",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4e495c2d1dcb6456259c3d527817d2d1642733f3",
+      "size": 6639683,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/4e495c2d1dcb6456259c3d527817d2d1642733f3"
+    },
+    {
+      "path": "spikes/images/ShadowLowPolySectors/spike1_1.jpg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "13737870877d5105e441cde951248b1dc93dc5db",
+      "size": 356862,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/13737870877d5105e441cde951248b1dc93dc5db"
+    },
+    {
+      "path": "spikes/images/ShadowLowPolySectors/spike1_2.jpg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cae235cc17d20d8ff30cfffa15fe1b935eba901c",
+      "size": 401453,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/cae235cc17d20d8ff30cfffa15fe1b935eba901c"
+    },
+    {
+      "path": "spikes/images/ShadowLowPolySectors/spike1_3.jpg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "25da99944085d065f1dc06f44a20880e02d13bfc",
+      "size": 390261,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/25da99944085d065f1dc06f44a20880e02d13bfc"
+    },
+    {
+      "path": "spikes/images/SplitOnArea",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "dd56a62484a0194906a220c47bc14dba6c47307e",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/dd56a62484a0194906a220c47bc14dba6c47307e"
+    },
+    {
+      "path": "spikes/images/SplitOnArea/AreaSplit_Huldra_Master.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "44e6948314e2d48cf6d5583dee820cfd63ddb1a3",
+      "size": 821935,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/44e6948314e2d48cf6d5583dee820cfd63ddb1a3"
+    },
+    {
+      "path": "spikes/images/SplitOnArea/AreaSplit_Huldra_Spike.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "36a5b04e87dfd961549682e2cdef5a6b6c829620",
+      "size": 902377,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/36a5b04e87dfd961549682e2cdef5a6b6c829620"
+    },
+    {
+      "path": "spikes/images/SplitOnAreaWithOulierHandling",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "c0c328211f398e8d368d9c9144e0f486dae579c6",
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/trees/c0c328211f398e8d368d9c9144e0f486dae579c6"
+    },
+    {
+      "path": "spikes/images/SplitOnAreaWithOulierHandling/Huldra_HO.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "40b929d5336147c1e21bdf0fe05c2e1fb1a76742",
+      "size": 393351,
+      "url": "https://api.github.com/repos/equinor/rvmsharp/git/blobs/40b929d5336147c1e21bdf0fe05c2e1fb1a76742"
+    }
+  ],
+  "truncated": false
+}

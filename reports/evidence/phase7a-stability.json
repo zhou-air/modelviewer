@@ -1,0 +1,2704 @@
+{
+  "phase": "Phase 7A",
+  "url": "http://127.0.0.1:8765/viewer/index.html",
+  "chrome": "C:\\Users\\34084\\AppData\\Local\\ms-playwright\\chromium-1208\\chrome-win64\\chrome.exe",
+  "headless": true,
+  "startedAt": "2026-09-18T16:06:38.156Z",
+  "viewport": {
+    "width": 1600,
+    "height": 900
+  },
+  "scenarios": [
+    {
+      "no": 1,
+      "name": "F8 开启 / 退出工程导航",
+      "ok": true,
+      "detail": {
+        "before": "orbit",
+        "afterFirstF8": "game",
+        "afterSecondF8": "orbit",
+        "orbitReenabled": true
+      }
+    },
+    {
+      "no": 2,
+      "name": "点击 3D View 捕获鼠标（真实 Pointer Lock）",
+      "ok": true,
+      "detail": {
+        "pointerLocked": true,
+        "captured": true,
+        "crosshair": true,
+        "note": null
+      }
+    },
+    {
+      "no": 3,
+      "name": "鼠标无限旋转（≥3 圈）且 Pitch 不翻转",
+      "ok": true,
+      "detail": {
+        "accumulatedDegrees": 1080,
+        "captureMode": "real",
+        "pitchAfterHardUp": 89,
+        "pitchAfterHardDown": -89
+      }
+    },
+    {
+      "no": 4,
+      "name": "仰视/俯视时 W 仍沿水平投影（不改变高度）",
+      "ok": true,
+      "detail": {
+        "lookUp": {
+          "pitchDegrees": 89,
+          "delta": [
+            -1.611,
+            0,
+            -1.611
+          ],
+          "horizontal": 2.278,
+          "vertical": 0,
+          "speed": 4.952
+        },
+        "lookDown": {
+          "pitchDegrees": -89,
+          "delta": [
+            -1.649,
+            0,
+            -1.649
+          ],
+          "horizontal": 2.332,
+          "vertical": 0,
+          "speed": 4.931
+        }
+      }
+    },
+    {
+      "no": 5,
+      "name": "W+D / W+Space / W+D+Space 组合且不超速",
+      "ok": true,
+      "detail": {
+        "pitchAtTest": 35,
+        "W": {
+          "speed": 4.921,
+          "unit": [
+            -0.7071,
+            0,
+            -0.7071
+          ]
+        },
+        "WD": {
+          "speed": 4.92,
+          "ratio": 1,
+          "angleErrorDeg": 0.47
+        },
+        "WSpace": {
+          "speed": 4.93,
+          "ratio": 1.002,
+          "angleErrorDeg": 0.48,
+          "verticalDelta": 1.611
+        },
+        "WDspace": {
+          "speed": 4.923,
+          "ratio": 1,
+          "angleErrorDeg": 0.81,
+          "verticalDelta": 1.348
+        },
+        "configuredSpeed": 5,
+        "measuredWSpeed": 4.921
+      }
+    },
+    {
+      "no": 8,
+      "name": "双击 W 保持加速 3×，松开立即恢复",
+      "ok": true,
+      "detail": {
+        "normalSpeed": 4.909,
+        "sprintSpeed": 15.077,
+        "ratio": 3.071,
+        "sprintingWhileHeld": true,
+        "sprintingAfterRelease": false,
+        "note": "press+release 30ms，第二次按下距首次约 100ms（<300ms 窗口）"
+      }
+    },
+    {
+      "no": 10,
+      "name": "滚轮 Zoom（原 FOV 回落公式，钳在 10°–100°）",
+      "ok": true,
+      "detail": {
+        "fov0": 50,
+        "afterWheelUp": 45,
+        "afterWheelDown": 50,
+        "clampedMin": 10,
+        "clampedMax": 100,
+        "afterRestoreScroll": 12.16,
+        "expectedStep": "×0.9^(格)，格 = deltaY/100，钳 ±8"
+      }
+    },
+    {
+      "no": 11,
+      "name": "Esc 立即退出工程导航",
+      "ok": true,
+      "detail": {
+        "modeAfterEscape": "orbit",
+        "exitPath": "keydown",
+        "fitReenabled": true,
+        "orbitButtonOn": true,
+        "crosshair": false
+      }
+    },
+    {
+      "no": 12,
+      "name": "Game 中点击不选模型；退出后 Object Selection 正常",
+      "ok": true,
+      "detail": {
+        "target": "ELBOW 1 of BRANCH /PW-10201-100-M1B/B3",
+        "gameClickSelected": null,
+        "orbitClickSelected": "ELBOW 1 of BRANCH /PW-10201-100-M1B/B3",
+        "pointOnCanvas": {
+          "game": "cv",
+          "orbit": "cv"
+        },
+        "modeAfterExit": "orbit"
+      }
+    },
+    {
+      "no": 13,
+      "name": "窗口失焦后按键清空、相机停止（Alt+Tab 事件级复现）",
+      "ok": true,
+      "detail": {
+        "paused": true,
+        "captured": false,
+        "axes": {
+          "forward": 0,
+          "right": 0,
+          "up": 0
+        },
+        "pressed": [],
+        "driftWhileKeyHeld": 0,
+        "modeStillGame": true,
+        "reproduce": "派发 window blur（无头环境无法真实 Alt+Tab）"
+      }
+    },
+    {
+      "no": 14,
+      "name": "恢复焦点后必须重新点击 3D 视图才恢复捕获",
+      "ok": true,
+      "detail": {
+        "capturedAfterFocus": false,
+        "pausedAfterFocus": true,
+        "crosshairAfterFocus": false,
+        "moveWhileNotCaptured": 0,
+        "capturedAfterClick": true,
+        "captureMode": "real",
+        "note": "与原插件一致：未捕获时 W 仍会移动相机，捕获只影响鼠标视角与按键吞并"
+      }
+    },
+    {
+      "no": 15,
+      "name": "Hide / Isolate / Show All 正常",
+      "ok": true,
+      "detail": {
+        "hideResult": true,
+        "hiddenAfterHide": 1,
+        "hiddenAfterShowAll": 0,
+        "isolateResult": true,
+        "hiddenAfterIsolate": 7415,
+        "visibleAfterIsolate": 5,
+        "hiddenAfterFinalShowAll": 0,
+        "buttons": {
+          "hide": false,
+          "isolate": false,
+          "showAll": true
+        }
+      }
+    },
+    {
+      "no": 16,
+      "name": "Tree 选择 / Properties 面板不受导航影响",
+      "ok": true,
+      "detail": {
+        "candidate": "/ENCOSC23059-QICHUANG-SITE",
+        "clicked": true,
+        "treeSelected": "txt:L8",
+        "selected3d": "/ENCOSC23059-QICHUANG-SITE",
+        "propsChanged": true,
+        "propsInfo": "SITE · 15 个子节点"
+      }
+    },
+    {
+      "no": 18,
+      "name": "Orbit ⇄ Game 反复切换（40 次）不叠加监听、无相机漂移",
+      "ok": true,
+      "detail": {
+        "listenerAdds": 0,
+        "listenerRemoves": 0,
+        "kinds": [],
+        "drift": 0,
+        "mode": "orbit",
+        "orbitEnabled": true
+      }
+    },
+    {
+      "no": 17,
+      "name": "连续导航 10 分钟稳定性",
+      "ok": true,
+      "detail": {
+        "samples": 150,
+        "minFps": 32,
+        "maxFps": 181,
+        "heapGrowthMB": -5.4,
+        "allFinite": true
+      }
+    }
+  ],
+  "core": {
+    "results": [
+      {
+        "name": "arbitrary-up horizontal projection",
+        "origin": "REUSE ProjectOntoPlane",
+        "ok": true
+      },
+      {
+        "name": "right-vector direction",
+        "origin": "REUSE CameraFrame.Right",
+        "ok": true
+      },
+      {
+        "name": "W never contributes vertical movement",
+        "origin": "REUSE ComposeMovement（水平投影）",
+        "ok": true
+      },
+      {
+        "name": "full combination normalization",
+        "origin": "REUSE ComposeMovement（组合不超速）",
+        "ok": true
+      },
+      {
+        "name": "near-vertical forward fallback",
+        "origin": "REUSE CreateFrame 垂直兜底",
+        "ok": true
+      },
+      {
+        "name": "pitch clamp",
+        "origin": "REUSE ApplyMouseLook（Pitch 不翻转）",
+        "ok": true
+      },
+      {
+        "name": "mouse-right yaw direction",
+        "origin": "REUSE ApplyMouseLook（yaw 符号）",
+        "ok": true
+      },
+      {
+        "name": "double-tap W sprint",
+        "origin": "REUSE InputState（双击 W）",
+        "ok": true
+      },
+      {
+        "name": "late second tap does not sprint",
+        "origin": "REUSE InputState（300ms 窗口）",
+        "ok": true
+      },
+      {
+        "name": "W auto-repeat ignored",
+        "origin": "REUSE InputState（自动重复）",
+        "ok": true
+      },
+      {
+        "name": "W release clears sprint",
+        "origin": "REUSE InputState（松开立即恢复）",
+        "ok": true
+      },
+      {
+        "name": "opposite keys cancel",
+        "origin": "REUSE InputState（正负相消）",
+        "ok": true
+      },
+      {
+        "name": "mouse delta is consumed once",
+        "origin": "REUSE InputState（每帧消费一次）",
+        "ok": true
+      },
+      {
+        "name": "valid settings retained",
+        "origin": "REUSE ValidateOrDefault",
+        "ok": true
+      },
+      {
+        "name": "invalid settings fall back",
+        "origin": "REUSE ValidateOrDefault",
+        "ok": true
+      },
+      {
+        "name": "settings JSON contract",
+        "origin": "REPLACE settings.json 字段名契约",
+        "ok": true
+      },
+      {
+        "name": "default crosshair geometry is centered",
+        "origin": "PORT CrosshairGeometry（25/3/1/3）",
+        "ok": true
+      },
+      {
+        "name": "crosshair visibility follows capture state",
+        "origin": "REUSE CrosshairVisibility",
+        "ok": true
+      },
+      {
+        "name": "world unit == meter (no speed rescale)",
+        "origin": "§5.1 单位换算系数",
+        "ok": true
+      },
+      {
+        "name": "world up is +Y for this model",
+        "origin": "§5.2 World Up",
+        "ok": true
+      },
+      {
+        "name": "wheel normalization + original fov fallback formula",
+        "origin": "REPLACE 滚轮归一化 + FOV 回落公式",
+        "ok": true
+      },
+      {
+        "name": "mouse sensitivity / timing constants match original",
+        "origin": "REUSE NavigationDefaults 全量",
+        "ok": true
+      }
+    ],
+    "passed": 22,
+    "total": 22
+  },
+  "console": [
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glClear: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glClear: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glClear: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glClear: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glClear: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glClear: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glClear: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glClear: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glClear: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "[warning] [.WebGL-0x4f5c02962900] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size."
+  ],
+  "pageErrors": [],
+  "ok": true,
+  "openedModel": {
+    "project": "qichuang",
+    "model": "main-site",
+    "version": "2026-09-18"
+  },
+  "environment": {
+    "hasFocus": true,
+    "hidden": false,
+    "pointerLockApi": true,
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.0.0 Safari/537.36"
+  },
+  "pointerLockRealAvailable": true,
+  "stability": {
+    "minutes": 10,
+    "samples": [
+      {
+        "minute": 0.07,
+        "fps": 180,
+        "drawCalls": 7,
+        "frameCalls": 8,
+        "heapMB": 63.4,
+        "pos": [
+          5.35,
+          -8.22,
+          25.16
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 0.14,
+        "fps": 180,
+        "drawCalls": 9,
+        "frameCalls": 10,
+        "heapMB": 69.8,
+        "pos": [
+          24.61,
+          -8.22,
+          19.57
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 0.2,
+        "fps": 180,
+        "drawCalls": 10,
+        "frameCalls": 11,
+        "heapMB": 57.6,
+        "pos": [
+          24.61,
+          11.87,
+          19.57
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 0.27,
+        "fps": 180,
+        "drawCalls": 3,
+        "frameCalls": 4,
+        "heapMB": 57.4,
+        "pos": [
+          28.98,
+          11.87,
+          0
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 0.34,
+        "fps": 180,
+        "drawCalls": 11,
+        "frameCalls": 12,
+        "heapMB": 57.8,
+        "pos": [
+          19.84,
+          11.87,
+          17.94
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 0.4,
+        "fps": 180,
+        "drawCalls": 11,
+        "frameCalls": 12,
+        "heapMB": 57.1,
+        "pos": [
+          33.14,
+          11.87,
+          2.86
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 0.47,
+        "fps": 180,
+        "drawCalls": 11,
+        "frameCalls": 12,
+        "heapMB": 58.4,
+        "pos": [
+          44.44,
+          11.87,
+          19.48
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 0.54,
+        "fps": 178,
+        "drawCalls": 7,
+        "frameCalls": 8,
+        "heapMB": 57.7,
+        "pos": [
+          44.44,
+          31.95,
+          19.48
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 0.61,
+        "fps": 179,
+        "drawCalls": 2,
+        "frameCalls": 3,
+        "heapMB": 58.2,
+        "pos": [
+          64.41,
+          31.95,
+          17.59
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 0.67,
+        "fps": 180,
+        "drawCalls": 11,
+        "frameCalls": 12,
+        "heapMB": 57.6,
+        "pos": [
+          44.58,
+          31.95,
+          14.46
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 0.74,
+        "fps": 180,
+        "drawCalls": 5,
+        "frameCalls": 6,
+        "heapMB": 58.5,
+        "pos": [
+          63.02,
+          31.95,
+          22.42
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 0.81,
+        "fps": 180,
+        "drawCalls": 35,
+        "frameCalls": 36,
+        "heapMB": 57.3,
+        "pos": [
+          50.74,
+          31.95,
+          38.25
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 0.87,
+        "fps": 180,
+        "drawCalls": 2,
+        "frameCalls": 3,
+        "heapMB": 58.3,
+        "pos": [
+          50.74,
+          52.05,
+          38.25
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 0.94,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.5,
+        "pos": [
+          58.72,
+          52.05,
+          56.68
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 1.01,
+        "fps": 180,
+        "drawCalls": 2,
+        "frameCalls": 3,
+        "heapMB": 58.7,
+        "pos": [
+          55.58,
+          52.05,
+          36.84
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 1.07,
+        "fps": 180,
+        "drawCalls": 2,
+        "frameCalls": 3,
+        "heapMB": 57.5,
+        "pos": [
+          53.7,
+          52.05,
+          56.83
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 1.14,
+        "fps": 180,
+        "drawCalls": 3,
+        "frameCalls": 4,
+        "heapMB": 56.9,
+        "pos": [
+          34.8,
+          52.05,
+          50.04
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 1.21,
+        "fps": 180,
+        "drawCalls": 1,
+        "frameCalls": 2,
+        "heapMB": 59,
+        "pos": [
+          34.8,
+          72.11,
+          50.04
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 1.28,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 57.5,
+        "pos": [
+          19.76,
+          72.11,
+          63.3
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 1.34,
+        "fps": 180,
+        "drawCalls": 10,
+        "frameCalls": 11,
+        "heapMB": 60,
+        "pos": [
+          37.65,
+          72.11,
+          54.18
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 1.41,
+        "fps": 180,
+        "drawCalls": 1,
+        "frameCalls": 2,
+        "heapMB": 59.2,
+        "pos": [
+          18.07,
+          72.11,
+          58.55
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 1.48,
+        "fps": 180,
+        "drawCalls": 32,
+        "frameCalls": 33,
+        "heapMB": 59.3,
+        "pos": [
+          18.7,
+          72.11,
+          38.48
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 1.54,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 57.8,
+        "pos": [
+          18.7,
+          92.14,
+          38.48
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 1.61,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 59.8,
+        "pos": [
+          1.41,
+          92.14,
+          28.27
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 1.68,
+        "fps": 180,
+        "drawCalls": 1,
+        "frameCalls": 2,
+        "heapMB": 58.6,
+        "pos": [
+          15.59,
+          92.14,
+          42.45
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 1.75,
+        "fps": 180,
+        "drawCalls": 1,
+        "frameCalls": 2,
+        "heapMB": 57.3,
+        "pos": [
+          5.38,
+          92.14,
+          25.18
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 1.81,
+        "fps": 180,
+        "drawCalls": 1,
+        "frameCalls": 2,
+        "heapMB": 59.4,
+        "pos": [
+          24.67,
+          92.14,
+          19.58
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 1.88,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58,
+        "pos": [
+          24.67,
+          112.2,
+          19.58
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 1.95,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58,
+        "pos": [
+          29.04,
+          112.2,
+          -0.02
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 2.01,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 56.7,
+        "pos": [
+          19.94,
+          112.2,
+          17.85
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 2.08,
+        "fps": 179,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.7,
+        "pos": [
+          33.23,
+          112.2,
+          2.77
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 2.15,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 57.4,
+        "pos": [
+          44.54,
+          112.2,
+          19.4
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 2.21,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 59.3,
+        "pos": [
+          44.54,
+          132.25,
+          19.4
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 2.28,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58,
+        "pos": [
+          64.56,
+          132.25,
+          17.5
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 2.35,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 56.8,
+        "pos": [
+          44.72,
+          132.25,
+          14.36
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 2.42,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.7,
+        "pos": [
+          63.13,
+          132.25,
+          22.33
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 2.48,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58,
+        "pos": [
+          50.83,
+          132.25,
+          38.2
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 2.55,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 56.7,
+        "pos": [
+          50.83,
+          152.33,
+          38.2
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 2.62,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.7,
+        "pos": [
+          58.8,
+          152.33,
+          56.63
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 2.68,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 57.4,
+        "pos": [
+          55.66,
+          152.33,
+          36.79
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 2.75,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 59.3,
+        "pos": [
+          53.78,
+          152.33,
+          56.73
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 2.82,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.1,
+        "pos": [
+          34.85,
+          152.33,
+          49.93
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 2.89,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 56.8,
+        "pos": [
+          34.85,
+          172.39,
+          49.93
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 2.95,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.7,
+        "pos": [
+          19.83,
+          172.39,
+          63.17
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 3.02,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 57.4,
+        "pos": [
+          37.72,
+          172.39,
+          54.06
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 3.09,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 59.3,
+        "pos": [
+          18.12,
+          172.39,
+          58.44
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 3.15,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58,
+        "pos": [
+          18.75,
+          172.39,
+          38.36
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 3.22,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 56.8,
+        "pos": [
+          18.75,
+          192.44,
+          38.36
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 3.29,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.7,
+        "pos": [
+          1.49,
+          192.44,
+          28.16
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 3.35,
+        "fps": 181,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 57.4,
+        "pos": [
+          15.69,
+          192.44,
+          42.36
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 3.42,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 59.4,
+        "pos": [
+          5.46,
+          192.44,
+          25.07
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 3.49,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.1,
+        "pos": [
+          24.72,
+          192.44,
+          19.48
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 3.55,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58,
+        "pos": [
+          24.72,
+          212.5,
+          19.48
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 3.62,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 56.7,
+        "pos": [
+          29.09,
+          212.5,
+          -0.07
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 3.69,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.7,
+        "pos": [
+          19.98,
+          212.5,
+          17.8
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 3.76,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 57.4,
+        "pos": [
+          33.25,
+          212.5,
+          2.76
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 3.82,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 59.3,
+        "pos": [
+          44.5,
+          212.5,
+          19.32
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 3.89,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.1,
+        "pos": [
+          44.5,
+          232.58,
+          19.32
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 3.96,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 56.8,
+        "pos": [
+          64.47,
+          232.58,
+          17.44
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 4.02,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.7,
+        "pos": [
+          44.69,
+          232.58,
+          14.3
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 4.09,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58,
+        "pos": [
+          63.07,
+          232.58,
+          22.26
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 4.16,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 56.8,
+        "pos": [
+          50.79,
+          232.58,
+          38.08
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 4.22,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.7,
+        "pos": [
+          50.79,
+          252.67,
+          38.08
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 4.29,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 57.4,
+        "pos": [
+          58.77,
+          252.67,
+          56.51
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 4.36,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 59.3,
+        "pos": [
+          55.62,
+          252.67,
+          36.68
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 4.43,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.1,
+        "pos": [
+          53.73,
+          252.67,
+          56.7
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 4.49,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 56.8,
+        "pos": [
+          34.86,
+          252.67,
+          49.91
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 4.56,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.7,
+        "pos": [
+          34.86,
+          272.75,
+          49.91
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 4.63,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58,
+        "pos": [
+          19.84,
+          272.75,
+          63.15
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 4.69,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 56.7,
+        "pos": [
+          37.68,
+          272.75,
+          54.06
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 4.76,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.7,
+        "pos": [
+          18.12,
+          272.75,
+          58.44
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 4.83,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 57.4,
+        "pos": [
+          18.74,
+          272.75,
+          38.36
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 4.89,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 59.3,
+        "pos": [
+          18.74,
+          292.8,
+          38.36
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 4.96,
+        "fps": 178,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.1,
+        "pos": [
+          1.45,
+          292.8,
+          28.15
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 5.03,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 56.8,
+        "pos": [
+          15.66,
+          292.8,
+          42.34
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 5.09,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.7,
+        "pos": [
+          5.45,
+          292.8,
+          25.08
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 5.16,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58,
+        "pos": [
+          24.76,
+          292.8,
+          19.46
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 5.23,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 56.7,
+        "pos": [
+          24.76,
+          312.89,
+          19.46
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 5.3,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.7,
+        "pos": [
+          29.13,
+          312.89,
+          -0.11
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 5.36,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 57.4,
+        "pos": [
+          20.02,
+          312.89,
+          17.79
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 5.43,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 59.3,
+        "pos": [
+          33.28,
+          312.89,
+          2.74
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 5.5,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.1,
+        "pos": [
+          44.56,
+          312.89,
+          19.33
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 5.56,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 56.8,
+        "pos": [
+          44.56,
+          332.94,
+          19.33
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 5.63,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.7,
+        "pos": [
+          64.54,
+          332.94,
+          17.43
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 5.7,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58,
+        "pos": [
+          44.7,
+          332.94,
+          14.29
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 5.77,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 56.7,
+        "pos": [
+          63.11,
+          332.94,
+          22.25
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 5.83,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.7,
+        "pos": [
+          50.8,
+          332.94,
+          38.12
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 5.9,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 57.4,
+        "pos": [
+          50.8,
+          353,
+          38.12
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 5.97,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 59.3,
+        "pos": [
+          58.76,
+          353,
+          56.52
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 6.03,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.1,
+        "pos": [
+          55.62,
+          353,
+          36.69
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 6.1,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 56.8,
+        "pos": [
+          53.73,
+          353,
+          56.71
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 6.17,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.7,
+        "pos": [
+          34.83,
+          353,
+          49.9
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 6.23,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 57.6,
+        "pos": [
+          34.83,
+          373.08,
+          49.9
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 6.3,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 59.3,
+        "pos": [
+          19.75,
+          373.08,
+          63.21
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 6.37,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.1,
+        "pos": [
+          37.62,
+          373.08,
+          54.1
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 6.44,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 56.8,
+        "pos": [
+          18.02,
+          373.08,
+          58.48
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 6.5,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.7,
+        "pos": [
+          18.65,
+          373.08,
+          38.43
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 6.57,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 57.4,
+        "pos": [
+          18.65,
+          393.14,
+          38.43
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 6.64,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 59.4,
+        "pos": [
+          1.39,
+          393.14,
+          28.22
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 6.7,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.1,
+        "pos": [
+          15.59,
+          393.14,
+          42.43
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 6.77,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58,
+        "pos": [
+          5.38,
+          393.14,
+          25.16
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 6.84,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 56.7,
+        "pos": [
+          24.63,
+          393.14,
+          19.56
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 6.9,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.7,
+        "pos": [
+          24.63,
+          413.16,
+          19.56
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 6.97,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58,
+        "pos": [
+          29.01,
+          413.16,
+          -0.04
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 7.04,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 59.4,
+        "pos": [
+          19.91,
+          413.16,
+          17.83
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 7.11,
+        "fps": 32,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.5,
+        "pos": [
+          33.12,
+          413.16,
+          2.84
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 7.18,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 56.7,
+        "pos": [
+          44.43,
+          413.16,
+          19.47
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 7.24,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.7,
+        "pos": [
+          44.43,
+          433.27,
+          19.47
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 7.31,
+        "fps": 177,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 56.7,
+        "pos": [
+          62.43,
+          433.27,
+          17.76
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 7.38,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 57.3,
+        "pos": [
+          42.58,
+          433.27,
+          14.63
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 7.44,
+        "fps": 135,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 59.2,
+        "pos": [
+          61.11,
+          433.27,
+          22.64
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 7.51,
+        "fps": 154,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 57.4,
+        "pos": [
+          48.71,
+          433.27,
+          38.68
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 7.58,
+        "fps": 170,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 59.3,
+        "pos": [
+          48.71,
+          453.41,
+          38.68
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 7.65,
+        "fps": 172,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58,
+        "pos": [
+          56.68,
+          453.41,
+          57.07
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 7.71,
+        "fps": 166,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 59.9,
+        "pos": [
+          53.53,
+          453.41,
+          37.24
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 7.78,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.7,
+        "pos": [
+          51.65,
+          453.41,
+          57.23
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 7.85,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 57.4,
+        "pos": [
+          32.76,
+          453.41,
+          50.44
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 7.92,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 57.3,
+        "pos": [
+          32.76,
+          473.54,
+          50.44
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 7.98,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 59.3,
+        "pos": [
+          17.71,
+          473.54,
+          63.7
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 8.05,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58,
+        "pos": [
+          35.58,
+          473.54,
+          54.59
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 8.12,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 56.7,
+        "pos": [
+          16.03,
+          473.54,
+          58.96
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 8.18,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.7,
+        "pos": [
+          16.66,
+          473.54,
+          38.89
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 8.25,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 57.4,
+        "pos": [
+          16.66,
+          493.59,
+          38.89
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 8.32,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 59.3,
+        "pos": [
+          -0.6,
+          493.59,
+          28.68
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 8.38,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.1,
+        "pos": [
+          13.58,
+          493.59,
+          42.86
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 8.45,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 57.4,
+        "pos": [
+          3.36,
+          493.59,
+          25.57
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 8.52,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 59.3,
+        "pos": [
+          22.67,
+          493.59,
+          19.95
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 8.59,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58,
+        "pos": [
+          22.67,
+          513.7,
+          19.95
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 8.65,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 56.7,
+        "pos": [
+          27.05,
+          513.7,
+          0.36
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 8.72,
+        "fps": 174,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.7,
+        "pos": [
+          17.95,
+          513.7,
+          18.23
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 8.79,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 57.4,
+        "pos": [
+          31.22,
+          513.7,
+          3.18
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 8.85,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 59.3,
+        "pos": [
+          42.5,
+          513.7,
+          19.79
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 8.92,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.1,
+        "pos": [
+          42.5,
+          533.76,
+          19.79
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 8.99,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 57.7,
+        "pos": [
+          62.48,
+          533.76,
+          17.9
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 9.05,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 59.7,
+        "pos": [
+          42.62,
+          533.76,
+          14.76
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 9.12,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.4,
+        "pos": [
+          61.03,
+          533.76,
+          22.72
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 9.19,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 57.1,
+        "pos": [
+          48.75,
+          533.76,
+          38.55
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 9.26,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 59,
+        "pos": [
+          48.75,
+          553.87,
+          38.55
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 9.32,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 57.7,
+        "pos": [
+          56.72,
+          553.87,
+          56.95
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 9.39,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 59.8,
+        "pos": [
+          53.58,
+          553.87,
+          37.12
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 9.46,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.4,
+        "pos": [
+          51.69,
+          553.87,
+          57.06
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 9.52,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58,
+        "pos": [
+          32.82,
+          553.87,
+          50.27
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 9.59,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 56.7,
+        "pos": [
+          32.82,
+          573.95,
+          50.27
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 9.66,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.7,
+        "pos": [
+          17.8,
+          573.95,
+          63.51
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 9.72,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 57.4,
+        "pos": [
+          35.69,
+          573.95,
+          54.4
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 9.79,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 59.3,
+        "pos": [
+          16.09,
+          573.95,
+          58.78
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 9.86,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58,
+        "pos": [
+          16.72,
+          573.95,
+          38.73
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 9.93,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 56.8,
+        "pos": [
+          16.72,
+          593.98,
+          38.73
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 9.99,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58.7,
+        "pos": [
+          -0.54,
+          593.98,
+          28.52
+        ],
+        "pitch": -23.58,
+        "mode": "game",
+        "captured": true
+      },
+      {
+        "minute": 10.06,
+        "fps": 180,
+        "drawCalls": 0,
+        "frameCalls": 1,
+        "heapMB": 58,
+        "pos": [
+          13.64,
+          593.98,
+          42.71
+        ],
+        "pitch": -28.38,
+        "mode": "game",
+        "captured": true
+      }
+    ],
+    "minFps": 32,
+    "maxFps": 181,
+    "heapGrowth": -5.4
+  },
+  "finishedAt": "2026-09-18T16:17:19.047Z"
+}

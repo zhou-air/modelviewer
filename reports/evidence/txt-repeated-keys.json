@@ -1,0 +1,572 @@
+[
+  {
+    "node_id": "txt:L35751",
+    "key": "RULE",
+    "count": 4,
+    "lines": [
+      90828,
+      90829,
+      90830,
+      90831
+    ]
+  },
+  {
+    "node_id": "txt:L35773",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      90837,
+      90838,
+      90839
+    ]
+  },
+  {
+    "node_id": "txt:L35786",
+    "key": "RULE",
+    "count": 4,
+    "lines": [
+      90843,
+      90844,
+      90845,
+      90846
+    ]
+  },
+  {
+    "node_id": "txt:L35796",
+    "key": "RULE",
+    "count": 4,
+    "lines": [
+      90850,
+      90851,
+      90852,
+      90853
+    ]
+  },
+  {
+    "node_id": "txt:L35806",
+    "key": "RULE",
+    "count": 4,
+    "lines": [
+      90858,
+      90859,
+      90860,
+      90861
+    ]
+  },
+  {
+    "node_id": "txt:L35816",
+    "key": "RULE",
+    "count": 4,
+    "lines": [
+      90866,
+      90867,
+      90868,
+      90869
+    ]
+  },
+  {
+    "node_id": "txt:L35830",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      90877,
+      90879,
+      90880
+    ]
+  },
+  {
+    "node_id": "txt:L35841",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      90884,
+      90886,
+      90887
+    ]
+  },
+  {
+    "node_id": "txt:L35852",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      90891,
+      90893,
+      90894
+    ]
+  },
+  {
+    "node_id": "txt:L35863",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      90898,
+      90900,
+      90901
+    ]
+  },
+  {
+    "node_id": "txt:L35874",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      90905,
+      90907,
+      90908
+    ]
+  },
+  {
+    "node_id": "txt:L35884",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      90912,
+      90913,
+      90914
+    ]
+  },
+  {
+    "node_id": "txt:L35894",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      90918,
+      90919,
+      90920
+    ]
+  },
+  {
+    "node_id": "txt:L35904",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      90924,
+      90925,
+      90926
+    ]
+  },
+  {
+    "node_id": "txt:L35914",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      90930,
+      90931,
+      90932
+    ]
+  },
+  {
+    "node_id": "txt:L35925",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      90936,
+      90937,
+      90938
+    ]
+  },
+  {
+    "node_id": "txt:L35936",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      90942,
+      90943,
+      90944
+    ]
+  },
+  {
+    "node_id": "txt:L35947",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      90948,
+      90949,
+      90950
+    ]
+  },
+  {
+    "node_id": "txt:L35958",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      90954,
+      90955,
+      90956
+    ]
+  },
+  {
+    "node_id": "txt:L35969",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      90960,
+      90961,
+      90962
+    ]
+  },
+  {
+    "node_id": "txt:L35980",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      90966,
+      90967,
+      90968
+    ]
+  },
+  {
+    "node_id": "txt:L35991",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      90972,
+      90974,
+      90975
+    ]
+  },
+  {
+    "node_id": "txt:L36002",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      90979,
+      90980,
+      90981
+    ]
+  },
+  {
+    "node_id": "txt:L36013",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      90985,
+      90986,
+      90987
+    ]
+  },
+  {
+    "node_id": "txt:L36024",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      90992,
+      90994,
+      90995
+    ]
+  },
+  {
+    "node_id": "txt:L36035",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      90999,
+      91001,
+      91002
+    ]
+  },
+  {
+    "node_id": "txt:L36046",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      91006,
+      91008,
+      91009
+    ]
+  },
+  {
+    "node_id": "txt:L36057",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      91013,
+      91015,
+      91016
+    ]
+  },
+  {
+    "node_id": "txt:L38387",
+    "key": "RULE",
+    "count": 4,
+    "lines": [
+      91342,
+      91343,
+      91344,
+      91345
+    ]
+  },
+  {
+    "node_id": "txt:L38409",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      91351,
+      91352,
+      91353
+    ]
+  },
+  {
+    "node_id": "txt:L38422",
+    "key": "RULE",
+    "count": 4,
+    "lines": [
+      91357,
+      91358,
+      91359,
+      91360
+    ]
+  },
+  {
+    "node_id": "txt:L38432",
+    "key": "RULE",
+    "count": 4,
+    "lines": [
+      91364,
+      91365,
+      91366,
+      91367
+    ]
+  },
+  {
+    "node_id": "txt:L38442",
+    "key": "RULE",
+    "count": 4,
+    "lines": [
+      91372,
+      91373,
+      91374,
+      91375
+    ]
+  },
+  {
+    "node_id": "txt:L38452",
+    "key": "RULE",
+    "count": 4,
+    "lines": [
+      91380,
+      91381,
+      91382,
+      91383
+    ]
+  },
+  {
+    "node_id": "txt:L38466",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      91391,
+      91393,
+      91394
+    ]
+  },
+  {
+    "node_id": "txt:L38477",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      91398,
+      91400,
+      91401
+    ]
+  },
+  {
+    "node_id": "txt:L38488",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      91405,
+      91407,
+      91408
+    ]
+  },
+  {
+    "node_id": "txt:L38499",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      91412,
+      91414,
+      91415
+    ]
+  },
+  {
+    "node_id": "txt:L38510",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      91419,
+      91421,
+      91422
+    ]
+  },
+  {
+    "node_id": "txt:L38520",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      91426,
+      91427,
+      91428
+    ]
+  },
+  {
+    "node_id": "txt:L38530",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      91432,
+      91433,
+      91434
+    ]
+  },
+  {
+    "node_id": "txt:L38540",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      91438,
+      91439,
+      91440
+    ]
+  },
+  {
+    "node_id": "txt:L38550",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      91444,
+      91445,
+      91446
+    ]
+  },
+  {
+    "node_id": "txt:L38561",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      91450,
+      91451,
+      91452
+    ]
+  },
+  {
+    "node_id": "txt:L38572",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      91456,
+      91457,
+      91458
+    ]
+  },
+  {
+    "node_id": "txt:L38583",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      91462,
+      91463,
+      91464
+    ]
+  },
+  {
+    "node_id": "txt:L38594",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      91468,
+      91469,
+      91470
+    ]
+  },
+  {
+    "node_id": "txt:L38605",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      91474,
+      91475,
+      91476
+    ]
+  },
+  {
+    "node_id": "txt:L38616",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      91480,
+      91481,
+      91482
+    ]
+  },
+  {
+    "node_id": "txt:L38627",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      91486,
+      91488,
+      91489
+    ]
+  },
+  {
+    "node_id": "txt:L38638",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      91493,
+      91494,
+      91495
+    ]
+  },
+  {
+    "node_id": "txt:L38649",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      91499,
+      91500,
+      91501
+    ]
+  },
+  {
+    "node_id": "txt:L38660",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      91506,
+      91508,
+      91509
+    ]
+  },
+  {
+    "node_id": "txt:L38671",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      91513,
+      91515,
+      91516
+    ]
+  },
+  {
+    "node_id": "txt:L38682",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      91520,
+      91522,
+      91523
+    ]
+  },
+  {
+    "node_id": "txt:L38693",
+    "key": "RULE",
+    "count": 3,
+    "lines": [
+      91527,
+      91529,
+      91530
+    ]
+  }
+]

@@ -1,0 +1,30 @@
+{
+  "contoursOffFps": [
+    45,
+    43,
+    43,
+    45
+  ],
+  "contoursOnFps": [
+    22,
+    24,
+    22,
+    23
+  ],
+  "medianOff": 45,
+  "medianOn": 23,
+  "ratio": 1.96,
+  "frameCallsOff": 5797,
+  "frameCallsOn": 11305,
+  "sceneCalls": 5796,
+  "cameraMovingFpsContoursOn": [
+    22,
+    23,
+    23,
+    22,
+    23,
+    22
+  ],
+  "medianCameraMovingFps": 23,
+  "note": "headless swiftshader 软件渲染；绝对值不代表真机，开关相对差可参考"
+}

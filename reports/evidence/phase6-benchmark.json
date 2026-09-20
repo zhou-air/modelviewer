@@ -1,0 +1,210 @@
+{
+  "meta": {
+    "viewport": {
+      "width": 1760,
+      "height": 940
+    },
+    "reps": 3,
+    "chrome": "chrome.exe",
+    "url": "http://127.0.0.1:8765/viewer/index.html",
+    "at": "2026-09-18T15:10:56.061Z",
+    "note": "无头 Chromium + 实体 GPU；固定视口；rAF 计数法；取中位数"
+  },
+  "staticSizes": {
+    "RVM（源）": {
+      "bytes": 4505600,
+      "MB": 4.3
+    },
+    "TXT（源）": {
+      "bytes": 1344437,
+      "MB": 1.28
+    },
+    "GLB（几何产物）": {
+      "bytes": 18385928,
+      "MB": 17.53
+    },
+    "XKT（xeokit 产物，实验）": {
+      "bytes": 9096708,
+      "MB": 8.68
+    },
+    "metadata.json": {
+      "bytes": 5541010,
+      "MB": 5.28
+    },
+    "metadata.metamodel.json": {
+      "bytes": 5501767,
+      "MB": 5.25
+    },
+    "rvm-node-index.json": {
+      "bytes": 3901591,
+      "MB": 3.72
+    },
+    "mapping.json": {
+      "bytes": 1406286,
+      "MB": 1.34
+    }
+  },
+  "loads": [
+    {
+      "rep": 1,
+      "navToReadyMs": 1057,
+      "mappingMs": 56,
+      "rvmIndexMs": 97,
+      "metadataMs": 129,
+      "jsonAllMs": 129,
+      "indexBuildMs": 11,
+      "jsonBytes": null,
+      "readyMs": 611,
+      "modelLoadMs": 370,
+      "firstFrameMs": 989
+    },
+    {
+      "rep": 2,
+      "navToReadyMs": 947,
+      "mappingMs": 52,
+      "metadataMs": 104,
+      "rvmIndexMs": 134,
+      "jsonAllMs": 135,
+      "indexBuildMs": 9,
+      "jsonBytes": null,
+      "readyMs": 555,
+      "modelLoadMs": 356,
+      "firstFrameMs": 892
+    },
+    {
+      "rep": 3,
+      "navToReadyMs": 1051,
+      "mappingMs": 49,
+      "metadataMs": 78,
+      "rvmIndexMs": 124,
+      "jsonAllMs": 125,
+      "indexBuildMs": 8,
+      "jsonBytes": null,
+      "readyMs": 540,
+      "modelLoadMs": 348,
+      "firstFrameMs": 909
+    }
+  ],
+  "scenarios": {
+    "S1 全模型视野 · 无选中 · 空闲": {
+      "fps": 52,
+      "wallMs": 3025,
+      "stats": {
+        "fps": 55,
+        "drawCalls": 5796,
+        "triangles": 335824,
+        "frameDrawCallsAllPasses": 5797,
+        "outlineEnabled": false,
+        "interacting": false,
+        "visible": 7420,
+        "hidden": 0
+      }
+    },
+    "S2 全模型视野 · 有选中 · 描边开 · 空闲": {
+      "fps": 25,
+      "wallMs": 3028,
+      "stats": {
+        "fps": 25,
+        "drawCalls": 5796,
+        "triangles": 335824,
+        "frameDrawCallsAllPasses": 11600,
+        "outlineEnabled": true,
+        "interacting": false,
+        "visible": 7420,
+        "hidden": 0
+      },
+      "picked": "FLANGE 1 of BRANCH /WG-10401-400-L1G/B2"
+    },
+    "S3 全模型视野 · 有选中 · 拖动中（描边暂停）": {
+      "frames": 227,
+      "ms": 5010,
+      "fps": 45,
+      "midStats": {
+        "fps": 49,
+        "drawCalls": 5796,
+        "triangles": 335824,
+        "frameDrawCallsAllPasses": 5797,
+        "outlineEnabled": false,
+        "interacting": true,
+        "visible": 7420,
+        "hidden": 0
+      }
+    },
+    "S4 缩放到单个元件 · 有选中 · 空闲": {
+      "fps": 101,
+      "wallMs": 3010,
+      "stats": {
+        "fps": 101,
+        "drawCalls": 37,
+        "triangles": 3922,
+        "frameDrawCallsAllPasses": 82,
+        "outlineEnabled": true,
+        "interacting": false,
+        "visible": 7420,
+        "hidden": 0
+      }
+    },
+    "S5 隔离后 · 空闲": {
+      "fps": 165,
+      "wallMs": 3010,
+      "stats": {
+        "fps": 156,
+        "drawCalls": 2,
+        "triangles": 339,
+        "frameDrawCallsAllPasses": 12,
+        "outlineEnabled": true,
+        "interacting": false,
+        "visible": 5,
+        "hidden": 7415
+      }
+    },
+    "S6 全模型视野 · 无选中 · 拖动中": {
+      "frames": 189,
+      "ms": 4032,
+      "fps": 47
+    }
+  },
+  "webgl": {
+    "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+    "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Laptop GPU (0x000028A0) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "drawingBuffer": [
+      1124,
+      940
+    ]
+  },
+  "memory": {
+    "afterLoad": {
+      "usedMB": 56.5,
+      "totalMB": 62.5,
+      "limitMB": 4096,
+      "precise": true
+    },
+    "afterAllScenarios": {
+      "usedMB": 60.2,
+      "totalMB": 64.1,
+      "limitMB": 4096,
+      "precise": true
+    },
+    "deltaUsedMB": 3.7
+  },
+  "viewerInfo": {
+    "modelInfo": {
+      "meshes": 5507,
+      "lines": 289,
+      "namedNodes": 7423
+    },
+    "treeInfo": "8,955 个对象 · 8 层 · 几何对应 7,420",
+    "programs": 3,
+    "geometries": 5797,
+    "textures": 2,
+    "pixelRatio": 1
+  },
+  "pageErrors": [],
+  "summary": {
+    "导航→就绪 (ms)": 1051,
+    "JSON 全部 fetch+parse (ms)": 129,
+    "GLB fetch+parse (ms)": 356,
+    "首帧 (ms)": 909,
+    "就绪(内部计时) (ms)": 555
+  }
+}

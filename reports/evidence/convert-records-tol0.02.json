@@ -1,0 +1,28 @@
+{
+  "source": "QICHUANG-SITE-RVM-2026-08-26.rvm",
+  "source_bytes": 4505600,
+  "glb": "data/processed/model.glb",
+  "glb_bytes": 18385928,
+  "tolerance_m": 0.02,
+  "wall_ms": 339,
+  "parser_ms": 88,
+  "groups": 7420,
+  "geometries": 12385,
+  "anchors_matched": 12714,
+  "anchors_total": 23260,
+  "caps_discarded": 8847,
+  "tessellated_items": 11479,
+  "triangles": 335824,
+  "vertices": 369397,
+  "exe_sha1": "2f7025971a95",
+  "glb_validation": {
+    "magic": "glTF",
+    "declared_len": 18385928,
+    "actual_len": 18385928,
+    "json_ok": true,
+    "bad_offsets": [],
+    "file_node_name": "data/source/QICHUANG-SITE-RVM-2026-08-26.rvm",
+    "structure_ok": true,
+    "nodes": 7931
+  }
+}

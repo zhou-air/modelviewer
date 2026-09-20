@@ -1,0 +1,141 @@
+{
+  "url": "http://127.0.0.1:8765/scratch/xeokit/index.html",
+  "ok": true,
+  "console": [
+    "[warning] [xeokit plugin TreeViewPlugin]: Model already added: qichuang"
+  ],
+  "pageErrors": [],
+  "ready": true,
+  "wallMs": 845,
+  "probe": {
+    "ready": true,
+    "error": null,
+    "loader": "XKTLoaderPlugin",
+    "info": {
+      "loadMs": 293,
+      "metaObjectCount": 5508,
+      "roots": 1,
+      "named": 5508,
+      "withParent": 5507,
+      "maxDepth": 1,
+      "depthHistogram": {
+        "0": 1,
+        "1": 5507
+      },
+      "typeCountTop": [
+        [
+          "Default",
+          5508
+        ]
+      ],
+      "sampleObjects": [
+        {
+          "id": "default",
+          "name": "default",
+          "type": "Default",
+          "parentId": null
+        },
+        {
+          "id": "FLANGE 1 of BRANCH /WG-10401-400-L1G/B2",
+          "name": "FLANGE 1 of BRANCH /WG-10401-400-L1G/B2",
+          "type": "Default",
+          "parentId": "default"
+        },
+        {
+          "id": "ELBOW 1 of BRANCH /WG-10401-400-L1G/B2",
+          "name": "ELBOW 1 of BRANCH /WG-10401-400-L1G/B2",
+          "type": "Default",
+          "parentId": "default"
+        },
+        {
+          "id": "ELBOW 2 of BRANCH /WG-10401-400-L1G/B2",
+          "name": "ELBOW 2 of BRANCH /WG-10401-400-L1G/B2",
+          "type": "Default",
+          "parentId": "default"
+        },
+        {
+          "id": "FLANGE 2 of BRANCH /WG-10401-400-L1G/B2",
+          "name": "FLANGE 2 of BRANCH /WG-10401-400-L1G/B2",
+          "type": "Default",
+          "parentId": "default"
+        }
+      ],
+      "depth2Examples": [],
+      "sceneStats": {},
+      "diag": {
+        "aabb": [
+          -99.59567717452197,
+          -12.803499681642291,
+          -66.6794988071779,
+          99.6000008797273,
+          12.798270848837094,
+          66.67950752703474
+        ],
+        "eyeSet": [
+          142.02868030528236,
+          119.11640106003846,
+          142.02652281260814
+        ],
+        "lookSet": [
+          0.002161852602668546,
+          -0.0026144164025989625,
+          0.000004359928425401449
+        ],
+        "recolor": {
+          "viaModelMaterials": 0,
+          "viaMeshMaterial": 0,
+          "meshCount": 5507,
+          "err": null
+        },
+        "treePlugin": "OK"
+      },
+      "glCounterPatched": true,
+      "fps": 21,
+      "drawCallsPerFrame": 1,
+      "cameraEyeLive": [
+        142.02868030528236,
+        119.11640106003846,
+        142.02652281260814
+      ]
+    }
+  },
+  "webgl": {
+    "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+    "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Laptop GPU (0x000028A0) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+  },
+  "stress": {
+    "frames": 721,
+    "ms": 4004,
+    "fps": 180,
+    "drawCalls": 4320,
+    "drawCallsPerFrame": 5.991678224687933
+  },
+  "screenshot": "C:\\Users\\34084\\Desktop\\modelviewer - 副本\\reports\\xeokit-probe-screenshot-xkt.png",
+  "treeHtmlSample": [
+    "-default",
+    "FLANGE 1 of BRANCH /WG-10401-400-L1G/B2",
+    "ELBOW 1 of BRANCH /WG-10401-400-L1G/B2",
+    "ELBOW 2 of BRANCH /WG-10401-400-L1G/B2",
+    "FLANGE 2 of BRANCH /WG-10401-400-L1G/B2",
+    "VALVE 1 of BRANCH /WG-10401-400-L1G/B2",
+    "FLANGE 3 of BRANCH /WG-10401-400-L1G/B2",
+    "REDUCER 1 of BRANCH /WG-10401-400-L1G/B2",
+    "TEE 1 of BRANCH /WG-10401-400-L1G/B2",
+    "TEE 2 of BRANCH /WG-10401-400-L1G/B2",
+    "TEE 3 of BRANCH /WG-10401-400-L1G/B2",
+    "ELBOW 3 of BRANCH /WG-10401-400-L1G/B2",
+    "ELBOW 4 of BRANCH /WG-10401-400-L1G/B2",
+    "TEE 4 of BRANCH /WG-10401-400-L1G/B2",
+    "ELBOW 5 of BRANCH /WG-10401-400-L1G/B2",
+    "/WG-10401-400-L1G/B2",
+    "ELBOW 1 of BRANCH /WG-10401-400-L1G/B1",
+    "TEE 1 of BRANCH /WG-10401-400-L1G/B1",
+    "ELBOW 2 of BRANCH /WG-10401-400-L1G/B1",
+    "ELBOW 3 of BRANCH /WG-10401-400-L1G/B1",
+    "REDUCER 1 of BRANCH /WG-10401-400-L1G/B1",
+    "REDUCER 2 of BRANCH /WG-10401-400-L1G/B1",
+    "TEE 2 of BRANCH /WG-10401-400-L1G/B1",
+    "TEE 3 of BRANCH /WG-10401-400-L1G/B1",
+    "ELBOW 4 of BRANCH /WG-10401-400-L1G/B1"
+  ]
+}

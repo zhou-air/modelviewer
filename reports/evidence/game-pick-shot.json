@@ -1,0 +1,126 @@
+{
+  "target": "ELBOW 1 of BRANCH /PL-10604-65-M1E/B2",
+  "bright": {
+    "enabled": true,
+    "canonical": "ELBOW 1 of BRANCH /PL-10604-65-M1E/B2",
+    "meshes": 1,
+    "emissiveIntensity": 1.5016,
+    "meshColor": "f2f8fc",
+    "lineColor": "cee5f8",
+    "blinkHz": 2.4,
+    "pollMs": 60
+  },
+  "dim": {
+    "enabled": true,
+    "canonical": "ELBOW 1 of BRANCH /PL-10604-65-M1E/B2",
+    "meshes": 1,
+    "emissiveIntensity": 0.0102,
+    "meshColor": "a5bbcd",
+    "lineColor": "6c8091",
+    "blinkHz": 2.4,
+    "pollMs": 60
+  },
+  "blink": {
+    "brightEmissive": 1.5016,
+    "dimEmissive": 0.0102,
+    "pixelSamples": [
+      [
+        202,
+        214,
+        228
+      ],
+      [
+        217,
+        227,
+        238
+      ],
+      [
+        218,
+        227,
+        238
+      ],
+      [
+        206,
+        218,
+        231
+      ],
+      [
+        169,
+        185,
+        199
+      ],
+      [
+        161,
+        178,
+        190
+      ],
+      [
+        181,
+        196,
+        211
+      ],
+      [
+        213,
+        223,
+        235
+      ],
+      [
+        218,
+        227,
+        238
+      ],
+      [
+        217,
+        227,
+        238
+      ],
+      [
+        205,
+        217,
+        230
+      ],
+      [
+        168,
+        184,
+        198
+      ],
+      [
+        162,
+        178,
+        190
+      ],
+      [
+        181,
+        196,
+        211
+      ],
+      [
+        214,
+        224,
+        236
+      ],
+      [
+        218,
+        227,
+        238
+      ]
+    ],
+    "lumaRange": 50.6
+  },
+  "multi": {
+    "selection": {
+      "count": 2,
+      "canonicals": [
+        "ELBOW 1 of BRANCH /PL-10604-65-M1E/B2",
+        "FLANGE 1 of BRANCH /PL-10604-65-M1E/B2"
+      ],
+      "primary": "FLANGE 1 of BRANCH /PL-10604-65-M1E/B2",
+      "outlineObjects": 2,
+      "swappedObjects": 2
+    },
+    "tree": 2,
+    "badge": "FLANGE 1 of BRANCH /PL-10604-65-M1E/B2（共 2 个对象 · Ctrl+点击增删）"
+  },
+  "pageErrors": [],
+  "at": "2026-09-19T16:30:49.936Z"
+}

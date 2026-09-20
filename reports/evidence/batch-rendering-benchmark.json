@@ -1,0 +1,157 @@
+{
+  "capturedAt": "2026-09-20T03:17:17.095Z",
+  "viewport": {
+    "width": 1760,
+    "height": 940
+  },
+  "maxMeshesPerBatch": 64,
+  "models": [
+    {
+      "target": {
+        "label": "5,796 calls",
+        "project": "qichuang",
+        "model": "site",
+        "version": "2026-09-19"
+      },
+      "baseline": {
+        "fps": 50,
+        "frameTimeMs": 19,
+        "cpuFrameTimeMs": 19.8,
+        "gpuFrameTimeMs": 13.33,
+        "drawCalls": 5796,
+        "allPassCalls": 5797,
+        "triangles": 335824,
+        "visibleMeshes": 5507,
+        "visibleLines": 289,
+        "gpuTimerStatus": "available",
+        "resolution": "1444×896",
+        "pixelRatio": 1,
+        "outline": false,
+        "contours": false
+      },
+      "build": {
+        "enabled": true,
+        "maxMeshesPerBatch": 64,
+        "originalMeshes": 5507,
+        "batches": 105,
+        "recordedRanges": 5507,
+        "recordedCanonicalIds": 5507,
+        "triangles": 335824,
+        "buildMs": 122.2000000178814
+      },
+      "batched": {
+        "fps": 165,
+        "frameTimeMs": 6,
+        "cpuFrameTimeMs": 3.3,
+        "gpuFrameTimeMs": 2.42,
+        "drawCalls": 394,
+        "allPassCalls": 395,
+        "triangles": 335824,
+        "visibleMeshes": 105,
+        "visibleLines": 289,
+        "gpuTimerStatus": "available",
+        "resolution": "1444×896",
+        "pixelRatio": 1,
+        "outline": false,
+        "contours": false
+      },
+      "validation": {
+        "boundaryChecks": 11014,
+        "boundaryFailures": 0,
+        "actualRaycasterHits": 12,
+        "invalidCanonicalHits": 0,
+        "metadataMapsPreserved": true,
+        "originalMeshesHidden": true,
+        "clickSelection": {
+          "expected": "FLOOR 1 of FRMWORK /W-SHOP-1-FLOOR",
+          "actual": "FLOOR 1 of FRMWORK /W-SHOP-1-FLOOR",
+          "pass": true
+        }
+      },
+      "visualDiff": {
+        "meanAbsoluteError": 0,
+        "rootMeanSquareError": 0.16,
+        "pixelsChangedOver8Pct": 0.02,
+        "maxChannelDifference": 24
+      },
+      "screenshots": {
+        "baseline": "reports\\evidence\\batch-site-baseline.png",
+        "prototype": "reports\\evidence\\batch-site-prototype.png"
+      }
+    },
+    {
+      "target": {
+        "label": "16,255 calls",
+        "project": "qichuang",
+        "model": "hygq",
+        "version": "2026-09-20"
+      },
+      "baseline": {
+        "fps": 16,
+        "frameTimeMs": 62.3,
+        "cpuFrameTimeMs": 60.6,
+        "gpuFrameTimeMs": 40.13,
+        "drawCalls": 16255,
+        "allPassCalls": 16256,
+        "triangles": 501323,
+        "visibleMeshes": 16255,
+        "visibleLines": 0,
+        "gpuTimerStatus": "available",
+        "resolution": "1444×896",
+        "pixelRatio": 1,
+        "outline": false,
+        "contours": false
+      },
+      "build": {
+        "enabled": true,
+        "maxMeshesPerBatch": 64,
+        "originalMeshes": 16255,
+        "batches": 317,
+        "recordedRanges": 16255,
+        "recordedCanonicalIds": 16255,
+        "triangles": 501323,
+        "buildMs": 284.80000001192093
+      },
+      "batched": {
+        "fps": 144,
+        "frameTimeMs": 7.1,
+        "cpuFrameTimeMs": 6.9,
+        "gpuFrameTimeMs": 1.07,
+        "drawCalls": 317,
+        "allPassCalls": 318,
+        "triangles": 501323,
+        "visibleMeshes": 317,
+        "visibleLines": 0,
+        "gpuTimerStatus": "available",
+        "resolution": "1444×896",
+        "pixelRatio": 1,
+        "outline": false,
+        "contours": false
+      },
+      "validation": {
+        "boundaryChecks": 32510,
+        "boundaryFailures": 0,
+        "actualRaycasterHits": 17,
+        "invalidCanonicalHits": 0,
+        "metadataMapsPreserved": true,
+        "originalMeshesHidden": true,
+        "clickSelection": {
+          "expected": "FLOOR 1 of FRMWORK /floor",
+          "actual": "FLOOR 1 of FRMWORK /floor",
+          "pass": true
+        }
+      },
+      "visualDiff": {
+        "meanAbsoluteError": 0.01,
+        "rootMeanSquareError": 0.29,
+        "pixelsChangedOver8Pct": 0.05,
+        "maxChannelDifference": 29
+      },
+      "screenshots": {
+        "baseline": "reports\\evidence\\batch-hygq-baseline.png",
+        "prototype": "reports\\evidence\\batch-hygq-prototype.png"
+      }
+    }
+  ],
+  "errors": []
+}

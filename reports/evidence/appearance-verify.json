@@ -1,0 +1,767 @@
+{
+  "url": "http://127.0.0.1:8765/viewer/index.html",
+  "startedAt": "2026-09-20T03:26:49.391Z",
+  "ok": true,
+  "steps": [
+    {
+      "step": "A1 默认两项都是关",
+      "ok": true,
+      "detail": {
+        "contours": false,
+        "xray": false,
+        "xrayOpacity": 0.32,
+        "ghostObjects": 0,
+        "edgePassEnabled": false,
+        "edgeSceneDrawCalls": 0,
+        "ghostMeshOpacity": 0.32,
+        "ghostLineOpacity": 0.512,
+        "ghostMeshColor": "9aa6b2",
+        "ghostDepthWrite": false
+      }
+    },
+    {
+      "step": "A2 默认时轮廓线 pass 不执行",
+      "ok": true
+    },
+    {
+      "step": "A3 面板未打开时 UI 也是未勾选",
+      "ok": true
+    },
+    {
+      "step": "B0 点「外观」打开面板",
+      "ok": true,
+      "detail": {
+        "panelOpen": true,
+        "navPanelOpen": false,
+        "contoursChecked": false,
+        "xrayChecked": false,
+        "opacitySlider": 32,
+        "opacityLabel": "32%",
+        "opacityRowOff": true,
+        "opacityDisabled": true,
+        "opacityVisible": true
+      }
+    },
+    {
+      "step": "B1 勾选后轮廓线开启且 pass 执行",
+      "ok": true,
+      "detail": {
+        "contours": true,
+        "xray": false,
+        "xrayOpacity": 0.32,
+        "ghostObjects": 0,
+        "edgePassEnabled": true,
+        "edgeSceneDrawCalls": 499,
+        "ghostMeshOpacity": 0.32,
+        "ghostLineOpacity": 0.512,
+        "ghostMeshColor": "9aa6b2",
+        "ghostDepthWrite": false
+      }
+    },
+    {
+      "step": "B2 轮廓线离屏那趟真的画了场景",
+      "ok": true,
+      "detail": 499
+    },
+    {
+      "step": "B3 轮廓线改变了画面（截图待离线比对）",
+      "ok": true,
+      "detail": {
+        "shotOff": "C:\\Users\\34084\\Desktop\\modelviewer - 副本\\reports\\evidence\\appearance-01-contours-off.png",
+        "shotOn": "C:\\Users\\34084\\Desktop\\modelviewer - 副本\\reports\\evidence\\appearance-02-contours-on.png"
+      }
+    },
+    {
+      "step": "D0 找到可隐藏的目标对象",
+      "ok": true,
+      "detail": {
+        "c": "FLOOR 6 of FRMWORK /W-SHOP-1-FLOOR",
+        "meshes": 1,
+        "x": 890.5205510020079,
+        "y": 629.9911503922878,
+        "ndcX": 0.022278560501793443,
+        "ndcY": -0.36913820185113955
+      }
+    },
+    {
+      "step": "D1 隐藏后 hidden 计数 +1，ghost 数为 0（半透明还没开）",
+      "ok": true,
+      "detail": {
+        "hidden": 1,
+        "ghost": 0
+      }
+    },
+    {
+      "step": "D2 打开半透明后隐藏件仍在渲染（ghost 对象 > 0）",
+      "ok": true,
+      "detail": {
+        "contours": true,
+        "xray": true,
+        "xrayOpacity": 0.32,
+        "ghostObjects": 1,
+        "edgePassEnabled": true,
+        "edgeSceneDrawCalls": 501,
+        "ghostMeshOpacity": 0.32,
+        "ghostLineOpacity": 0.512,
+        "ghostMeshColor": "9aa6b2",
+        "ghostDepthWrite": false
+      }
+    },
+    {
+      "step": "D3 隐藏计数不变（隐藏语义没被外观选项改掉）",
+      "ok": true,
+      "detail": {
+        "before": 1,
+        "after": 1
+      }
+    },
+    {
+      "step": "D4 可见对象计数不受影响（ghost 不算可见）",
+      "ok": true,
+      "detail": {
+        "before": 7419,
+        "after": 7419
+      }
+    },
+    {
+      "step": "D5 ghost 材质是透明的且不写深度",
+      "ok": true,
+      "detail": {
+        "contours": true,
+        "xray": true,
+        "xrayOpacity": 0.32,
+        "ghostObjects": 1,
+        "edgePassEnabled": true,
+        "edgeSceneDrawCalls": 501,
+        "ghostMeshOpacity": 0.32,
+        "ghostLineOpacity": 0.512,
+        "ghostMeshColor": "9aa6b2",
+        "ghostDepthWrite": false
+      }
+    },
+    {
+      "step": "E1 半透明隐藏件不可拾取（点它不会选中它）",
+      "ok": true,
+      "detail": {
+        "before": 0,
+        "after": 1,
+        "picked": "STWALL 15 of FRMWORK /W-SHOP-1-WALL"
+      }
+    },
+    {
+      "step": "E2 半透明隐藏件不参与描边（此时另有对象被选中，描边只算它）",
+      "ok": true,
+      "detail": {
+        "count": 1,
+        "hiddenIncluded": false
+      }
+    },
+    {
+      "step": "E3 UI 勾选/滑块与 3D 状态一致",
+      "ok": true,
+      "detail": {
+        "panelOpen": true,
+        "navPanelOpen": false,
+        "contoursChecked": true,
+        "xrayChecked": true,
+        "opacitySlider": 32,
+        "opacityLabel": "32%",
+        "opacityRowOff": false,
+        "opacityDisabled": false,
+        "opacityVisible": true
+      }
+    },
+    {
+      "step": "F1 滑块/接口改透明度后材质立即生效",
+      "ok": true,
+      "detail": [
+        {
+          "v": 95,
+          "opacity": 0.95,
+          "line": 0.95
+        },
+        {
+          "v": 15,
+          "opacity": 0.15,
+          "line": 0.24
+        }
+      ]
+    },
+    {
+      "step": "F2 线的不透明度按 1.6 倍提升、并夹在上限内",
+      "ok": true,
+      "detail": [
+        {
+          "v": 95,
+          "opacity": 0.95,
+          "line": 0.95
+        },
+        {
+          "v": 15,
+          "opacity": 0.15,
+          "line": 0.24
+        }
+      ]
+    },
+    {
+      "step": "F3 真实拖动滑块 → 3D 与标签同步",
+      "ok": true,
+      "detail": {
+        "afterDrag": {
+          "contours": true,
+          "xray": true,
+          "xrayOpacity": 0.7,
+          "ghostObjects": 1,
+          "edgePassEnabled": true,
+          "edgeSceneDrawCalls": 503,
+          "ghostMeshOpacity": 0.7,
+          "ghostLineOpacity": 0.95,
+          "ghostMeshColor": "9aa6b2",
+          "ghostDepthWrite": false
+        },
+        "uiAfter": {
+          "panelOpen": true,
+          "navPanelOpen": false,
+          "contoursChecked": true,
+          "xrayChecked": true,
+          "opacitySlider": 70,
+          "opacityLabel": "70%",
+          "opacityRowOff": false,
+          "opacityDisabled": false,
+          "opacityVisible": true
+        }
+      }
+    },
+    {
+      "step": "F4 越界值被夹到 [0.05, 0.95]",
+      "ok": true,
+      "detail": {
+        "lo": 0.05,
+        "hi": 0.95
+      }
+    },
+    {
+      "step": "E4 关掉半透明后 ghost 归零、隐藏件回到真隐藏",
+      "ok": true,
+      "detail": {
+        "a4": {
+          "contours": true,
+          "xray": false,
+          "xrayOpacity": 0.32,
+          "ghostObjects": 0,
+          "edgePassEnabled": true,
+          "edgeSceneDrawCalls": 501,
+          "ghostMeshOpacity": 0.32,
+          "ghostLineOpacity": 0.512,
+          "ghostMeshColor": "9aa6b2",
+          "ghostDepthWrite": false
+        },
+        "stats4": {
+          "frameTimeMs": 10.5,
+          "cpuFrameTimeMs": 9.800000011920929,
+          "gpuFrameTimeMs": 11.044864,
+          "gpuTimerStatus": "available",
+          "resolution": "1124×856",
+          "pixelRatio": 1,
+          "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Laptop GPU (0x000028A0) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+          "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+          "gpuTimerQuery": true,
+          "fps": 96,
+          "drawCalls": 395,
+          "triangles": 335812,
+          "frameDrawCallsAllPasses": 905,
+          "outlineEnabled": true,
+          "contours": true,
+          "xray": false,
+          "xrayOpacity": 0.32,
+          "interacting": false,
+          "visible": 7419,
+          "hidden": 1,
+          "navigationMode": "orbit",
+          "visibleMeshes": 107,
+          "visibleLines": 289
+        }
+      }
+    },
+    {
+      "step": "E5 关掉后半透明隐藏件同样不可拾取",
+      "ok": true,
+      "detail": "STWALL 15 of FRMWORK /W-SHOP-1-WALL"
+    },
+    {
+      "step": "E6 显示全部后隐藏与 ghost 都归零",
+      "ok": true,
+      "detail": {
+        "frameTimeMs": 10.800000011920929,
+        "cpuFrameTimeMs": 9.699999988079071,
+        "gpuFrameTimeMs": 9.208832,
+        "gpuTimerStatus": "available",
+        "resolution": "1124×856",
+        "pixelRatio": 1,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Laptop GPU (0x000028A0) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "gpuTimerQuery": true,
+        "fps": 97,
+        "drawCalls": 395,
+        "triangles": 335824,
+        "frameDrawCallsAllPasses": 905,
+        "outlineEnabled": true,
+        "contours": true,
+        "xray": false,
+        "xrayOpacity": 0.32,
+        "interacting": false,
+        "visible": 7420,
+        "hidden": 0,
+        "navigationMode": "orbit",
+        "visibleMeshes": 106,
+        "visibleLines": 289
+      }
+    },
+    {
+      "step": "G1 关掉轮廓线后 pass 停止执行",
+      "ok": true,
+      "detail": {
+        "contours": false,
+        "xray": false,
+        "xrayOpacity": 0.32,
+        "ghostObjects": 0,
+        "edgePassEnabled": false,
+        "edgeSceneDrawCalls": 499,
+        "ghostMeshOpacity": 0.32,
+        "ghostLineOpacity": 0.512,
+        "ghostMeshColor": "9aa6b2",
+        "ghostDepthWrite": false
+      }
+    },
+    {
+      "step": "G2 轮廓线不引入新的控制台警告量级",
+      "ok": true,
+      "detail": {
+        "off": 0,
+        "on": 0
+      }
+    },
+    {
+      "step": "H1 打开导航设置会关掉外观面板",
+      "ok": true,
+      "detail": {
+        "panelOpen": false,
+        "navPanelOpen": true,
+        "contoursChecked": false,
+        "xrayChecked": false,
+        "opacitySlider": 32,
+        "opacityLabel": "32%",
+        "opacityRowOff": true,
+        "opacityDisabled": true,
+        "opacityVisible": false
+      }
+    },
+    {
+      "step": "H2 打开外观面板会关掉导航设置",
+      "ok": true,
+      "detail": {
+        "panelOpen": true,
+        "navPanelOpen": false,
+        "contoursChecked": false,
+        "xrayChecked": false,
+        "opacitySlider": 32,
+        "opacityLabel": "32%",
+        "opacityRowOff": true,
+        "opacityDisabled": true,
+        "opacityVisible": true
+      }
+    },
+    {
+      "step": "H3 关闭按钮生效",
+      "ok": true
+    },
+    {
+      "step": "I1 重载同一模型后外观开关跨版本保留",
+      "ok": true,
+      "detail": {
+        "contours": true,
+        "xray": true,
+        "xrayOpacity": 0.32,
+        "ghostObjects": 0,
+        "edgePassEnabled": true,
+        "edgeSceneDrawCalls": 499,
+        "ghostMeshOpacity": 0.32,
+        "ghostLineOpacity": 0.512,
+        "ghostMeshColor": "9aa6b2",
+        "ghostDepthWrite": false
+      }
+    },
+    {
+      "step": "I2 几何/纹理计数没有增长（不泄漏）",
+      "ok": true,
+      "detail": {
+        "before": {
+          "geometries": 395,
+          "textures": 10,
+          "programs": 12,
+          "sceneChildren": 6,
+          "namedNodes": 7423,
+          "meshRefs": 7423,
+          "hidden": 0,
+          "selected": null,
+          "outlineObjects": 0,
+          "ready": true
+        },
+        "after": {
+          "geometries": 395,
+          "textures": 3,
+          "programs": 11,
+          "sceneChildren": 6,
+          "namedNodes": 7423,
+          "meshRefs": 7423,
+          "hidden": 0,
+          "selected": null,
+          "outlineObjects": 0,
+          "ready": true
+        }
+      }
+    },
+    {
+      "step": "I3 索引规模一致（模型被完整重建）",
+      "ok": true,
+      "detail": {
+        "before": {
+          "geometries": 395,
+          "textures": 10,
+          "programs": 12,
+          "sceneChildren": 6,
+          "namedNodes": 7423,
+          "meshRefs": 7423,
+          "hidden": 0,
+          "selected": null,
+          "outlineObjects": 0,
+          "ready": true
+        },
+        "after": {
+          "geometries": 395,
+          "textures": 3,
+          "programs": 11,
+          "sceneChildren": 6,
+          "namedNodes": 7423,
+          "meshRefs": 7423,
+          "hidden": 0,
+          "selected": null,
+          "outlineObjects": 0,
+          "ready": true
+        }
+      }
+    }
+  ],
+  "console": [
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glClear: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawElements: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: [.WebGL-0x7fd40011bf00] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
+    "warning: WebGL: too many errors, no more errors will be reported to the console for this context."
+  ],
+  "pageErrors": [],
+  "modelInfo": {
+    "meshes": 5507,
+    "lines": 289,
+    "namedNodes": 7423
+  },
+  "gpuBefore": {
+    "geometries": 395,
+    "textures": 2,
+    "programs": 3,
+    "sceneChildren": 6,
+    "namedNodes": 7423,
+    "meshRefs": 7423,
+    "hidden": 0,
+    "selected": null,
+    "outlineObjects": 0,
+    "ready": true
+  },
+  "perf": {
+    "fpsContoursOff": 165,
+    "fpsContoursOn": 165,
+    "frameCallsOff": 395,
+    "frameCallsOn": 501,
+    "fpsCleanOff": 165,
+    "fpsCleanOn": 165,
+    "consoleWarnOff": 0,
+    "consoleWarnOn": 0
+  },
+  "shots": {
+    "shotOff": "C:\\Users\\34084\\Desktop\\modelviewer - 副本\\reports\\evidence\\appearance-01-contours-off.png",
+    "shotOn": "C:\\Users\\34084\\Desktop\\modelviewer - 副本\\reports\\evidence\\appearance-02-contours-on.png",
+    "shotHardHide": "C:\\Users\\34084\\Desktop\\modelviewer - 副本\\reports\\evidence\\appearance-03-hidden-hard.png",
+    "shotGhost": "C:\\Users\\34084\\Desktop\\modelviewer - 副本\\reports\\evidence\\appearance-04-hidden-ghost.png"
+  },
+  "gpuAfter": {
+    "geometries": 395,
+    "textures": 3,
+    "programs": 11,
+    "sceneChildren": 6,
+    "namedNodes": 7423,
+    "meshRefs": 7423,
+    "hidden": 0,
+    "selected": null,
+    "outlineObjects": 0,
+    "ready": true
+  },
+  "summary": {
+    "total": 31,
+    "passed": 31,
+    "failed": [],
+    "pageErrors": 0,
+    "consoleIssues": 257
+  }
+}

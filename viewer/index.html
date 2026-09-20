@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="data:,">
+<title>PDMS Model Asset Manager — 本地工程模型</title>
+<style>
+  :root {
+    --bg: #eef1f3;
+    --panel: rgba(255,255,255,.3);
+    --border: #d6dade;
+    --text: #23282d;
+    --muted: #6b7280;
+    --accent: #1c5fa8;
+    --accent-soft: #dbe8f6;
+    --sel: #c8791a;
+    --danger: #a32d2d;
+    --ok: #1f7a4d;
+    --warn: #97651a;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; overflow: hidden; }
+  body { font-family: "Segoe UI", "Microsoft YaHei", system-ui, sans-serif;
+         font-size: 13px; color: var(--text); background: var(--bg); }
+  .hidden { display: none !important; }
+  .mut { color: var(--muted); }
+  .small { font-size: 12px; }
+  .mono { font-family: Consolas, "Cascadia Mono", monospace; font-size: 12px; }
+  button { font: inherit; padding: 5px 11px; border: 1px solid var(--border);
+           border-radius: 6px; background: #fff; color: var(--text); cursor: pointer; white-space: nowrap; }
+  button:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+  button:disabled { opacity: .45; cursor: default; }
+  button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  button.primary:hover:not(:disabled) { background: #174e8c; color: #fff; }
+  button.danger { background: var(--danger); border-color: var(--danger); color: #fff; }
+  button.danger:hover:not(:disabled) { background: #8b2626; color: #fff; }
+
+  /* ================= 查看层（原有三栏） ================= */
+  #layout { display: flex; height: 100%; }
+  #left  { width: 316px; min-width: 316px; background: var(--panel);
+           border-right: 1px solid var(--border); display: flex; flex-direction: column; }
+  #right { width: 320px; min-width: 320px; background: var(--panel);
+           border-left: 1px solid var(--border); display: flex; flex-direction: column; }
+  #center { flex: 1; position: relative; background: var(--bg); min-width: 0; }
+  #viewerRoot { display: flex; flex-direction: column; height: 100%; }
+  #viewerRoot > #layout { flex: 1; min-height: 0; }
+
+  #topbar { display: flex; align-items: center; gap: 10px; padding: 7px 12px;
+            background: #fff; border-bottom: 1px solid var(--border); }
+  #topbar .crumb { font-weight: 600; }
+  #topbar .crumb .sep { color: #b9bfc5; margin: 0 6px; font-weight: 400; }
+  #topbar .meta { color: var(--muted); margin-left: auto; font-variant-numeric: tabular-nums; }
+
+  .pane-head { padding: 8px 10px; border-bottom: 1px solid var(--border); }
+  .pane-head h2 { margin: 0; font-size: 13px; font-weight: 600; }
+  .pane-head .sub { color: var(--muted); font-size: 12px; margin-top: 2px; }
+  .pane-body { flex: 1; overflow: auto; padding: 6px 8px; }
+
+  /* ---------- 面板显隐开关（topbar） ---------- */
+  .ptoggle.on { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+
+  /* ---------- 树搜索 ---------- */
+  #treeSearch { display: flex; align-items: center; gap: 6px; padding: 7px 10px;
+                border-bottom: 1px solid var(--border); }
+  #treeSearchInput { flex: 1; min-width: 0; font: inherit; padding: 4px 8px;
+                     border: 1px solid var(--border); border-radius: 6px;
+                     background: #fff; color: var(--text); }
+  #treeSearchInput:focus { outline: none; border-color: var(--accent); }
+  #treeSearchClear { padding: 2px 8px; font-size: 12px; }
+  #searchResults .summary { padding: 4px 2px; color: var(--muted); font-size: 12px; }
+  #searchResults .hit { padding: 4px 6px; border-radius: 4px; cursor: pointer; line-height: 1.5; }
+  #searchResults .hit:hover { background: #f2f6fa; }
+  #searchResults .hit .tp { color: var(--muted); font-size: 11px; margin-left: 4px; }
+  #searchResults .hit .path { color: var(--muted); font-size: 11px; word-break: break-all; }
+
+  /* ---------- 模型树 ---------- */
+  #tree .row { display: flex; align-items: flex-start; gap: 3px; border-radius: 4px;
+               padding: 1px 3px; cursor: pointer; line-height: 1.5; }
+  #tree .row:hover { background: #f2f6fa; }
+  #tree .row.sel { background: var(--accent-soft); outline: 1px solid #9dbde0; }
+  #tree .tw { width: 17px; flex: 0 0 17px; color: #596572; user-select: none;
+              text-align: center; font-size: 17px; line-height: 1.2; }
+  #tree .tw.leaf { visibility: hidden; }
+  #tree .kids { margin-left: 17px; border-left: 1px solid #8996a3; padding-left: 2px; }
+  #tree .nm { word-break: break-all; }
+  #tree .tp { color: var(--muted); font-size: 11px; margin-left: 4px; }
+  #tree .row.nogeo .nm { color: #7b838c; }
+  #tree .row.nogeo .tw { color: #c8ccd0; }
+  #tree .mark { font-size: 10px; color: #b9bfc5; margin-left: 3px; }
+
+  /* ---------- 3D ---------- */
+  #cv { display: block; width: 100%; height: 100%; }
+  .overlay { position: absolute; background: var(--panel);
+             border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; }
+  #stats { display: none; top: 10px; right: 10px; width: 390px; max-width: calc(100% - 20px);
+           font-variant-numeric: tabular-nums; font-size: 12px; }
+  #stats div { display: flex; justify-content: space-between; }
+  #stats .k { color: var(--muted); }
+  #stats .wide { gap: 12px; }
+  #stats .wide span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: right; }
+  #hint { top: 10px; left: 50%; transform: translateX(-50%); color: var(--muted);
+          width: max-content; max-width: calc(100% - 24px); padding: 5px 10px;
+          line-height: 1.25; text-align: center; }
+  #hint b { color: var(--text); font-weight: 500; }
+  #toolbar { bottom: 10px; left: 50%; transform: translateX(-50%);
+             display: flex; gap: 6px; padding: 7px 9px; }
+  #status { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+            background: rgba(255,255,255,.96); border: 1px solid var(--border);
+            border-radius: 8px; padding: 14px 20px; text-align: center; min-width: 260px; }
+  #status.err { border-color: var(--danger); color: var(--danger); max-width: 560px; text-align: left; }
+  #status.hidden { display: none; }
+  #selBadge { display: none; bottom: 10px; left: 10px; max-width: 420px; }
+  #selBadge.on { display: block; }
+  #selBadge .n { font-weight: 500; word-break: break-all; }
+
+  /* ---------- 工程导航 ---------- */
+  #crosshair { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+               display: none; pointer-events: none; }
+  #crosshair.on { display: block; }
+  #navPrompt { position: absolute; left: 50%; bottom: 58px; transform: translateX(-50%);
+               display: none; background: rgba(28,95,168,.94); color: #fff;
+               border-color: transparent; pointer-events: none; max-width: 560px; }
+  #navPrompt.on { display: block; }
+  .navseg { display: inline-flex; border: 1px solid var(--border); border-radius: 6px;
+            overflow: hidden; background: #fff; }
+  .navseg button { border: 0; border-radius: 0; padding: 5px 12px; }
+  .navseg button + button { border-left: 1px solid var(--border); }
+  .navseg button.on { background: var(--accent); color: #fff; }
+  .navseg button.on:hover { color: #fff; }
+  #navSettings, #appearance { display: none; right: 10px; bottom: 10px; width: 268px; }
+  #navSettings.on, #appearance.on { display: block; }
+  #navSettings h3, #appearance h3 { margin: 0 0 4px; font-size: 13px; font-weight: 600; }
+  #navSettings .row, #appearance .row {
+                      display: flex; align-items: center; justify-content: space-between;
+                      gap: 8px; margin: 7px 0; }
+  #navSettings input { width: 92px; font: inherit; padding: 3px 6px; text-align: right;
+                       border: 1px solid var(--border); border-radius: 4px; }
+  #navSettings .hint, #appearance .hint {
+                      color: var(--muted); font-size: 11px; line-height: 1.55; margin-top: 8px; }
+  #navSettings .acts, #appearance .acts {
+                      display: flex; gap: 6px; justify-content: flex-end; margin-top: 6px; }
+
+  /* ---------- 外观选项（轮廓线 / 隐藏件半透明） ---------- */
+  #appearance { width: 292px; }
+  #appearance .row.off { opacity: .45; }
+  #appearance label { cursor: pointer; }
+  #appearance input[type=checkbox] { width: auto; margin: 0; accent-color: var(--accent); cursor: pointer; }
+  #appearance input[type=range] { width: 116px; padding: 0; border: 0; background: none;
+                                  vertical-align: middle; accent-color: var(--accent); cursor: pointer; }
+  #appearance .val { display: inline-block; min-width: 36px; text-align: right; color: var(--muted);
+                     font-size: 11px; font-variant-numeric: tabular-nums; }
+
+  /* ---------- 属性面板 ---------- */
+  #props table { border-collapse: collapse; width: 100%; }
+  #props td { border-bottom: 1px solid #eef0f2; padding: 3px 4px; vertical-align: top; font-size: 12px; }
+  #props td.k { color: var(--muted); white-space: nowrap; padding-right: 8px; }
+  #props td.v { word-break: break-all; }
+  #props .sec { margin: 10px 0 4px; font-weight: 600; font-size: 12px; color: #3c4247;
+                border-bottom: 1px solid var(--border); padding-bottom: 3px; }
+  #props .empty { color: var(--muted); padding: 8px 4px; }
+  #props .cap { color: var(--muted); font-size: 11px; margin: 2px 0 6px; }
+
+  /* ================= 启动层（Project Manager / Model Selector） ================= */
+  #launcher { position: fixed; inset: 0; background: var(--bg); z-index: 40;
+              display: none; flex-direction: column; }
+  #launcher.on { display: flex; }
+  #launcher header { display: flex; align-items: center; gap: 12px; padding: 10px 16px;
+                     background: #fff; border-bottom: 1px solid var(--border); }
+  #launcher header h1 { margin: 0; font-size: 15px; }
+  #launcher header .sub { color: var(--muted); font-size: 12px; }
+  #launcher header .sp { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+  .lbody { flex: 1; display: flex; min-height: 0; }
+  #pmPanel { width: 380px; min-width: 380px; background: var(--panel);
+             border-right: 1px solid var(--border); display: flex; flex-direction: column; }
+  #pmHead { display: flex; align-items: center; gap: 8px; padding: 9px 12px;
+            border-bottom: 1px solid var(--border); }
+  #pmHead h2 { margin: 0; font-size: 13px; }
+  #pmHead .sp { margin-left: auto; display: flex; gap: 6px; }
+  #pmTotals { padding: 7px 12px; color: var(--muted); font-size: 12px;
+              border-bottom: 1px solid var(--border); }
+  #pmTree { flex: 1; overflow: auto; padding: 6px 8px; }
+  #pmBanner { display: none; margin: 10px; padding: 10px 12px; border-radius: 8px;
+              background: #fdecec; border: 1px solid #e6b3b3; color: var(--danger); line-height: 1.6; }
+  #pmBanner.on { display: block; }
+
+  .pm-node { }
+  .pm-row { display: flex; align-items: center; gap: 6px; padding: 4px 6px; border-radius: 6px;
+            cursor: pointer; line-height: 1.5; }
+  .pm-row:hover { background: #f2f6fa; }
+  .pm-row.sel { background: var(--accent-soft); outline: 1px solid #9dbde0; }
+  .pm-row .tw { width: 12px; text-align: center; color: var(--muted); font-size: 11px; user-select: none; }
+  .pm-row .nm { font-weight: 500; }
+  .pm-row .meta { color: var(--muted); font-size: 11px; margin-left: auto; white-space: nowrap; }
+  .pm-row .acts { display: none; gap: 4px; }
+  .pm-row:hover .acts, .pm-row.sel .acts { display: flex; }
+  /* Version 行的 Open 是主操作，常显；其余操作（⋯）仍只在悬停/选中时出现 */
+  .pm-row.lv3 .acts { display: flex; }
+  .pm-row.lv3 .acts button[data-act="menu"] { display: none; }
+  .pm-row.lv3:hover .acts button[data-act="menu"],
+  .pm-row.lv3.sel .acts button[data-act="menu"] { display: inline-block; }
+  .pm-row .acts button { padding: 1px 7px; font-size: 11px; }
+  .pm-row.lv2 { margin-left: 16px; }
+  .pm-row.lv3 { margin-left: 32px; }
+  .pm-row.lv2 .nm, .pm-row.lv3 .nm { font-weight: 400; }
+  .pm-row.mut-row { cursor: default; color: var(--muted); }
+  .pm-row.mut-row:hover { background: none; }
+  .pm-kids { }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: #9aa0a6; flex: 0 0 7px; }
+  .st-ready .dot { background: var(--ok); }
+  .st-failed .dot { background: var(--danger); }
+  .st-importing .dot { background: var(--accent); }
+  .st-ready .nm { color: var(--text); }
+  .pm-empty { padding: 24px 12px; text-align: center; font-size: 14px; font-weight: 500; line-height: 2; }
+
+  .lmain { flex: 1; overflow: auto; padding: 18px 20px; }
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+          padding: 16px 18px; margin-bottom: 16px; max-width: 760px; }
+  .card h3 { margin: 0 0 12px; font-size: 14px; }
+  .sel-grid { display: grid; grid-template-columns: 92px 1fr; gap: 8px 10px; align-items: center; }
+  .sel-grid label { color: var(--muted); }
+  select, input[type=text] { font: inherit; padding: 5px 8px; border: 1px solid var(--border);
+                             border-radius: 6px; background: #fff; color: var(--text); width: 100%; }
+  .ver-card { margin-top: 14px; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+  .ver-card.muted { color: var(--muted); border-style: dashed; line-height: 1.8; }
+  .ver-card .vc-head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .ver-card .tag { font-size: 11px; color: var(--muted); border: 1px solid var(--border);
+                   border-radius: 999px; padding: 1px 8px; }
+  .ver-card .tag.bad { color: var(--danger); border-color: #e6b3b3; }
+  table.kv { border-collapse: collapse; width: 100%; }
+  table.kv td { padding: 2px 4px; font-size: 12px; border-bottom: 1px solid #f1f3f5; vertical-align: top; }
+  table.kv td:first-child { color: var(--muted); width: 150px; white-space: nowrap; }
+  table.kv.wide td:first-child { width: 210px; }
+  .brk { word-break: break-all; }
+  .vc-err { margin-top: 8px; padding: 8px 10px; border-radius: 6px; background: #fdecec;
+            border: 1px solid #e6b3b3; color: var(--danger); line-height: 1.7; }
+  .sel-acts { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+  .sel-acts button { padding: 7px 14px; }
+  .recent-list { display: flex; flex-direction: column; gap: 4px; }
+  .recent-row { display: flex; align-items: center; gap: 10px; padding: 5px 8px;
+                border: 1px solid #eceff1; border-radius: 6px; }
+  .recent-row .rp { font-weight: 500; }
+  .recent-row .rm, .recent-row .rv { color: var(--muted); }
+  .recent-row .rt { margin-left: auto; color: var(--muted); font-size: 11px; }
+  .recent-row.gone { opacity: .6; }
+  .recent-empty { padding: 6px 2px; }
+  .note { max-width: 760px; color: var(--muted); font-size: 12px; line-height: 1.9; }
+  .note code { background: #e7eaec; padding: 0 4px; border-radius: 3px; }
+
+  /* ---------- 弹窗 ---------- */
+  .modal { position: fixed; inset: 0; background: rgba(28,34,40,.35); z-index: 60;
+           display: none; align-items: center; justify-content: center; }
+  .modal.on { display: flex; }
+  .modal-box { background: #fff; border-radius: 10px; width: 620px; max-width: 92vw;
+               max-height: 88vh; display: flex; flex-direction: column;
+               box-shadow: 0 12px 40px rgba(0,0,0,.18); }
+  .modal-box.wide { width: 900px; }
+  .modal-head { display: flex; align-items: center; padding: 12px 14px; border-bottom: 1px solid var(--border); }
+  .modal-title { font-weight: 600; }
+  .modal-x { margin-left: auto; border: 0; background: none; font-size: 16px; padding: 0 6px; }
+  .modal-body { padding: 14px; overflow: auto; }
+  .modal-acts { display: flex; gap: 8px; justify-content: flex-end; padding: 12px 14px;
+                border-top: 1px solid var(--border); }
+  .modal-body h4 { margin: 14px 0 6px; font-size: 12px; color: #3c4247; }
+  .modal-body ul { margin: 4px 0; padding-left: 18px; line-height: 1.8; }
+  ul.cfm { line-height: 1.9; }
+  ul.chk { list-style: none; padding-left: 0; line-height: 1.8; }
+  ul.chk .ok { color: var(--ok); }
+  ul.chk .bad { color: var(--danger); }
+  ul.files { line-height: 1.9; }
+  ul.hist { color: var(--muted); font-size: 12px; }
+  .fld { display: block; margin: 6px 0 10px; }
+  .fld span { display: block; color: var(--muted); margin-bottom: 4px; }
+  pre.log { background: #f6f8f9; border: 1px solid var(--border); border-radius: 6px;
+            padding: 10px; max-height: 420px; overflow: auto; white-space: pre-wrap;
+            word-break: break-all; font-size: 11.5px;
+            font-family: Consolas, "Cascadia Mono", monospace; }
+  pre.log.sm { max-height: 180px; }
+
+  /* ---------- 导入弹窗 ---------- */
+  .imp-grid { display: grid; grid-template-columns: 110px 1fr; gap: 10px 12px; align-items: center; }
+  .imp-grid > .lab { color: var(--muted); }
+  .wrap.new { display: none; }
+  .wrap.new.on { display: block; }
+  .file-field { display: flex; align-items: center; gap: 10px; }
+  .file-field input[type=file] { flex: 1; font: inherit; }
+  .file-name { color: var(--muted); font-size: 12px; min-width: 200px; }
+  #impHint { margin-top: 12px; color: var(--muted); line-height: 1.8; }
+  #impHint.err { color: var(--danger); }
+  #impProgress { display: none; margin-top: 10px; border: 1px solid var(--border);
+                 border-radius: 8px; padding: 10px 12px; }
+  #impProgress.on { display: block; }
+  #impProgress .st-h { font-weight: 600; margin-bottom: 6px; }
+  #impProgress .st { display: flex; align-items: center; gap: 8px; padding: 2px 0; color: var(--muted); }
+  #impProgress .st .mk { width: 14px; text-align: center; }
+  #impProgress .st.done, #impProgress .st.ok { color: var(--ok); }
+  #impProgress .st.bad { color: var(--danger); }
+  #impProgress .st.run { color: var(--accent); font-weight: 500; }
+  #impProgress .st .ms { margin-left: auto; font-size: 11px; }
+  #impProgress .st-note { margin-top: 6px; color: var(--muted); font-size: 11.5px; }
+  #impError { display: none; margin-top: 10px; padding: 10px 12px; border-radius: 8px;
+              background: #fdecec; border: 1px solid #e6b3b3; color: var(--danger);
+              line-height: 1.8; }
+  #impError.on { display: block; }
+  .imp-acts { display: flex; gap: 8px; margin-top: 14px; }
+  #impOpen, #impRetry { display: none; }
+  #impOpen.on, #impRetry.on { display: inline-block; }
+
+  /* ---------- 右键菜单 / 提示条 ---------- */
+  #ctxMenu { position: fixed; z-index: 70; display: none; background: #fff;
+             border: 1px solid var(--border); border-radius: 8px; padding: 4px;
+             box-shadow: 0 8px 24px rgba(0,0,0,.14); min-width: 170px; }
+  #ctxMenu.on { display: flex; flex-direction: column; }
+  #ctxMenu button { border: 0; text-align: left; padding: 6px 10px; }
+  #ctxMenu button:hover { background: var(--accent-soft); }
+  #toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
+           z-index: 80; display: none; background: #23282d; color: #fff; border: 0;
+           padding: 9px 16px; border-radius: 8px; max-width: 70vw; display: none; }
+  #toast.on { display: flex; gap: 10px; align-items: center; }
+  #toast.err { background: var(--danger); }
+  #toast.warn { background: var(--warn); }
+  #toastClose { border: 0; background: none; color: #fff; padding: 0 2px; }
+
+  /* ==================== 访问权限（Access Gateway） ==================== */
+  #roleBadge { color: var(--muted); font-size: 12px; }
+  #roleBadge .rb-role { display: inline-block; border: 1px solid var(--border);
+                        border-radius: 999px; padding: 2px 10px; font-size: 11px;
+                        background: #f6f8f9; }
+  #roleBadge .rb-role.INTERNAL_NETWORK { background: var(--accent-soft);
+                                         border-color: #9dbde0; color: var(--accent); }
+  #roleBadge .rb-role.INTERNAL_REMOTE { background: #fdf3e3; border-color: #e3c78f;
+                                         color: var(--warn); }
+  #roleBadge .rb-role.CLIENT_PROJECT { background: #e8f3ec; border-color: #a9cfb8;
+                                       color: var(--ok); }
+  #internalCodeCard { max-width: 760px; }
+  #internalCodeCard .ic-row { display: flex; align-items: center; gap: 10px; margin: 4px 0 6px; }
+  #internalCodeCard .ic-code { font-family: Consolas, "Cascadia Mono", monospace;
+                               font-size: 22px; letter-spacing: 2px; font-weight: 600;
+                               background: #f2f6fa; border: 1px dashed #9dbde0;
+                               border-radius: 8px; padding: 4px 14px; color: var(--accent); }
+  #accessGate { position: fixed; inset: 0; z-index: 100; background: var(--bg);
+                display: none; align-items: center; justify-content: center; }
+  #accessGate.on { display: flex; }
+  .gate-box { background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+              padding: 30px 34px; width: 360px; max-width: 92vw; text-align: center;
+              box-shadow: 0 12px 40px rgba(0,0,0,.10); }
+  .gate-box h2 { margin: 0 0 4px; font-size: 17px; }
+  .gate-box .gate-sub { color: var(--muted); font-size: 12px; line-height: 1.7; margin-bottom: 16px; }
+  .gate-box input { font-size: 16px; text-align: center; letter-spacing: 3px;
+                    text-transform: uppercase; padding: 9px 10px; margin-bottom: 12px; }
+  .gate-box #gateEnter { width: 100%; padding: 9px; font-size: 14px; }
+  #gateError { display: none; margin-top: 10px; color: var(--danger); font-size: 12px; }
+  #gateError.on { display: block; }
+</style>
+</head>
+<body>
+
+<!-- ==================== 启动层：Project Manager + Model Selector ==================== -->
+<div id="launcher">
+  <header>
+    <h1>PDMS Model Asset Manager</h1>
+    <span class="sub">本地模型资产管理器 · Project / Model / Version · 数据不出本机</span>
+    <span id="roleBadge"></span>
+    <span class="sp">
+      <button id="pmNew">＋ 新建项目</button>
+      <button id="pmRefresh">刷新</button>
+      <button id="pmImport" class="primary">Import Model</button>
+      <button id="pmClose" class="hidden">返回 Viewer</button>
+    </span>
+  </header>
+  <div class="lbody">
+    <aside id="pmPanel">
+      <div id="pmHead">
+        <h2>Projects</h2>
+        <span class="sp"><span class="mut small">点击行选中 · ⋯ 打开菜单</span></span>
+      </div>
+      <div id="pmTotals"></div>
+      <div id="pmBanner"></div>
+      <div id="pmTree"></div>
+    </aside>
+    <main class="lmain">
+      <div class="card hidden" id="internalCodeCard"></div>
+      <div class="card" id="selectorCard"></div>
+      <div class="card">
+        <h3>Recent（最近打开）</h3>
+        <div id="recentCard"></div>
+      </div>
+      <div class="note">
+        选择 Project → Model → Version 后点 <code>Open Model</code> 进入查看器。<br>
+        需要新版本时点 <code>Import Model</code>：选好 Project / Model / 版本名，再选本机的
+        <code>.rvm</code> 与 <code>.txt</code>，导入会自动完成 RVM → GLB、TXT → 元数据、对象映射与独立校验。<br>
+        所有文件只保存在本机 <code>data/projects/</code>，不上传任何服务器；历史版本不会被覆盖。
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ==================== 查看层：原有三栏 ==================== -->
+<div id="viewerRoot" class="hidden">
+  <div id="topbar">
+    <button id="btnBack">‹ 切换模型</button>
+    <div class="crumb">
+      <span id="curProject">—</span><span class="sep">/</span><span id="curModel">—</span>
+      <span class="sep">/</span><span id="curVersion">—</span>
+    </div>
+    <span class="meta" id="curMeta"></span>
+    <button id="btnToggleTree" class="ptoggle on" title="显示 / 隐藏左侧模型树">模型树</button>
+    <button id="btnToggleProps" class="ptoggle" title="显示 / 隐藏右侧属性面板">属性</button>
+    <button id="btnImportTop">Import</button>
+  </div>
+  <div id="layout">
+
+    <div id="left">
+      <div class="pane-head">
+        <h2>模型树</h2>
+        <div class="sub" id="treeInfo">加载中…</div>
+      </div>
+      <div id="treeSearch">
+        <input id="treeSearchInput" type="text" autocomplete="off" spellcheck="false"
+               placeholder="按名称搜索元件">
+        <button id="treeSearchClear" class="hidden" title="清空搜索">✕</button>
+      </div>
+      <div class="pane-body" id="tree"></div>
+      <div class="pane-body hidden" id="searchResults"></div>
+    </div>
+
+    <div id="center">
+      <canvas id="cv"></canvas>
+      <div id="hint" class="overlay"></div>
+      <div id="crosshair" aria-hidden="true">
+        <svg width="25" height="25" viewBox="0 0 25 25" shape-rendering="crispEdges">
+          <g stroke="rgba(0,0,0,.9)" stroke-width="3">
+            <line x1="12.5" y1="0.5" x2="12.5" y2="9.5"/>
+            <line x1="12.5" y1="15.5" x2="12.5" y2="24.5"/>
+            <line x1="0.5" y1="12.5" x2="9.5" y2="12.5"/>
+            <line x1="15.5" y1="12.5" x2="24.5" y2="12.5"/>
+          </g>
+          <g stroke="#ffffff" stroke-width="1">
+            <line x1="12.5" y1="0.5" x2="12.5" y2="9.5"/>
+            <line x1="12.5" y1="15.5" x2="12.5" y2="24.5"/>
+            <line x1="0.5" y1="12.5" x2="9.5" y2="12.5"/>
+            <line x1="15.5" y1="12.5" x2="24.5" y2="12.5"/>
+          </g>
+        </svg>
+      </div>
+      <div id="stats" class="overlay">
+        <div><span class="k">FPS</span><span id="sFps">—</span></div>
+        <div><span class="k">Frame Time</span><span id="sFrame">—</span></div>
+        <div><span class="k">CPU Frame Time</span><span id="sCpu">—</span></div>
+        <div><span class="k">GPU Frame Time</span><span id="sGpu">—</span></div>
+        <div><span class="k">draw calls</span><span id="sCalls">—</span></div>
+        <div><span class="k">三角形</span><span id="sTris">—</span></div>
+        <div><span class="k">可见对象</span><span id="sVis">—</span></div>
+        <div><span class="k">全帧 calls</span><span id="sAll">—</span></div>
+        <div><span class="k">可见 Mesh / Line</span><span id="sRenderables">—</span></div>
+        <div><span class="k">分辨率 / Pixel Ratio</span><span id="sResolution">—</span></div>
+        <div><span class="k">Outline / Contours</span><span id="sEffects">—</span></div>
+        <div class="wide" title="GPU Renderer"><span class="k">GPU</span><span id="sGraphics">—</span></div>
+        <div class="wide" title="WebGL Version"><span class="k">WebGL</span><span id="sWebgl">—</span></div>
+      </div>
+      <div id="toolbar" class="overlay">
+        <div class="navseg" role="group" aria-label="Navigation Mode">
+          <button id="navOrbit" title="Orbit：原 Viewer 的旋转 / 平移 / 缩放">Orbit</button>
+          <button id="navGame" title="Game：游戏式自由相机（F8 开关，Esc 退出）">Game</button>
+        </div>
+        <button id="btnNavSettings" title="普通速度 / 加速倍率">导航设置</button>
+        <button id="btnAppearance" title="元件轮廓线 / 隐藏件半透明（默认关闭）">外观</button>
+        <button id="btnFloorPlan" class="ptoggle on" title="显示 / 隐藏只读设备定位底图">设备定位图</button>
+        <button id="btnFit">复位视角 (F)</button>
+        <button id="btnHide">隐藏选中</button>
+        <button id="btnIsolate">隔离选中</button>
+        <button id="btnShowAll">显示全部</button>
+      </div>
+      <div id="navPrompt" class="overlay"></div>
+      <div id="navSettings" class="overlay">
+        <h3>Navigation Settings</h3>
+        <div class="row"><label for="nsSpeed">普通速度（m/s）</label>
+          <input id="nsSpeed" type="number" step="0.1" min="0.1" max="500"></div>
+        <div class="row"><label for="nsSprint">加速倍率（双击 W）</label>
+          <input id="nsSprint" type="number" step="0.1" min="1" max="10"></div>
+        <div class="acts">
+          <button id="nsReset">恢复默认</button>
+          <button id="nsClose">关闭</button>
+        </div>
+        <div class="hint">对应原插件 settings.json，本版保存在 localStorage。
+          普通速度 0.1–500 m/s、加速倍率 1–10，越界或非法时自动回落到默认值（5 / 3）。</div>
+      </div>
+      <div id="appearance" class="overlay">
+        <h3>Appearance · 外观选项</h3>
+        <div class="row">
+          <label for="apContours">元件轮廓线</label>
+          <input id="apContours" type="checkbox">
+        </div>
+        <div class="row">
+          <label for="apXray">隐藏件半透明</label>
+          <input id="apXray" type="checkbox">
+        </div>
+        <div class="row" id="apOpacityRow">
+          <label for="apOpacity">不透明度</label>
+          <span>
+            <input id="apOpacity" type="range" min="5" max="95" step="1">
+            <span class="val" id="apOpacityVal">32%</span>
+          </span>
+        </div>
+        <div class="row" id="apFloorDebugRow">
+          <label for="apFloorDebug">定位坐标调试</label>
+          <input id="apFloorDebug" type="checkbox">
+        </div>
+        <div class="acts"><button id="apClose">关闭</button></div>
+        <div class="hint">设备定位图默认开启；其余外观调试项默认关闭。<br>
+          <b>元件轮廓线</b>：屏幕空间边缘检测画出元件之间的分界，代价是额外渲染一遍场景（只画法线+深度）。<br>
+          <b>隐藏件半透明</b>：「隐藏选中 / 隔离选中」掉的对象不消失，改用半透明 ghost 显示；
+          它们仍然<u>不可拾取、不参与描边</u>，隐藏的语义不变。<br>
+          <b>定位坐标调试</b>：绿色为 floorplan 定位点，粉色为对应 3D 设备包围盒中心，紫线连接两者。</div>
+      </div>
+      <div id="selBadge" class="overlay">
+        <div class="k" style="color:#6b7280">当前选中</div>
+        <div class="n" id="selName"></div>
+      </div>
+      <div id="status">正在加载模型与元数据…<span id="pct"></span></div>
+    </div>
+
+    <div id="right" class="hidden">
+      <div class="pane-head">
+        <h2>属性</h2>
+        <div class="sub" id="propInfo">未选中</div>
+      </div>
+      <div class="pane-body" id="props"><div class="empty">点击 3D 对象或左侧树节点。</div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ==================== 导入弹窗 ==================== -->
+<div id="importModal" class="modal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-title">Import Model</span>
+      <button class="modal-x" id="impClose">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="imp-grid">
+        <div class="lab">Project</div>
+        <div><select id="impProject"></select></div>
+
+        <div class="lab wrap new" id="impNewProjectLabel">新项目名称</div>
+        <div class="wrap new" id="impNewProjectWrap"><input id="impNewProject" type="text"
+             placeholder="例如 启创项目（可中文）"></div>
+        <div class="lab wrap new" id="impProjectIdLabel">Project ID</div>
+        <div class="wrap new" id="impProjectIdWrap"><input id="impProjectId" type="text"
+             placeholder="ASCII，例如 qichuang"></div>
+
+        <div class="lab">Model</div>
+        <div><select id="impModel"></select></div>
+
+        <div class="lab wrap new" id="impNewModelLabel">新模型名称</div>
+        <div class="wrap new" id="impNewModelWrap"><input id="impNewModel" type="text"
+             placeholder="例如 Main Site（可中文）"></div>
+        <div class="lab wrap new" id="impModelIdLabel">Model ID</div>
+        <div class="wrap new" id="impModelIdWrap"><input id="impModelId" type="text"
+             placeholder="ASCII，例如 main-site"></div>
+
+        <div class="lab">Version</div>
+        <div><input id="impVersion" type="text" placeholder="例如 2026-09-25"></div>
+
+        <div class="lab">RVM</div>
+        <div class="file-field">
+          <input id="impRvm" type="file" accept=".rvm">
+          <span class="file-name" id="impRvmName">未选择文件</span>
+        </div>
+
+        <div class="lab">TXT</div>
+        <div class="file-field">
+          <input id="impTxt" type="file" accept=".txt,.dat">
+          <span class="file-name" id="impTxtName">未选择文件</span>
+        </div>
+      </div>
+
+      <div id="impHint"></div>
+      <div id="impProgress"></div>
+      <div id="impError"></div>
+
+      <div class="imp-acts">
+        <button id="impOpen" class="primary">打开这个模型</button>
+        <button id="impRetry">重试</button>
+        <span style="margin-left:auto"></span>
+        <button id="impCancel">关闭</button>
+        <button id="impStart" class="primary">Import</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 通用弹窗（详情 / 确认 / 输入） ==================== -->
+<div id="modal" class="modal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-title"></span>
+      <button class="modal-x">✕</button>
+    </div>
+    <div class="modal-body"></div>
+    <div class="modal-acts"></div>
+  </div>
+</div>
+
+<div id="ctxMenu"></div>
+<div id="toast"></div>
+
+<!-- ==================== 外网访问门（无有效 Session 时由 access.js 显示） ==================== -->
+<div id="accessGate">
+  <div class="gate-box">
+    <h2>Project Viewer</h2>
+    <div class="gate-sub">请输入访问代码<br>员工：今日内部访问码 · 客户：项目访问码</div>
+    <input id="gateCode" type="text" autocomplete="off" spellcheck="false" maxlength="20"
+           placeholder="XXXX-XXXX">
+    <button id="gateEnter" class="primary">进入</button>
+    <div id="gateError"></div>
+  </div>
+</div>
+
+<script type="importmap">
+{ "imports": { "three": "./vendor/three.module.js" } }
+</script>
+<script type="module" src="./app.js"></script>
+</body>
+</html>

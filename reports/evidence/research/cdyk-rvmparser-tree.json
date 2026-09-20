@@ -1,0 +1,452 @@
+{
+  "sha": "0121659c8b5c56588af7c2f1209d6d8312dfd2b7",
+  "url": "https://api.github.com/repos/cdyk/rvmparser/git/trees/0121659c8b5c56588af7c2f1209d6d8312dfd2b7",
+  "tree": [
+    {
+      "path": ".github",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "3bd96c8e53ab560c5dd8d7385284b3e7d2f58330",
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/trees/3bd96c8e53ab560c5dd8d7385284b3e7d2f58330"
+    },
+    {
+      "path": ".github/workflows",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "d88e88a82e482920a67d4054b5496f8efca2784e",
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/trees/d88e88a82e482920a67d4054b5496f8efca2784e"
+    },
+    {
+      "path": ".github/workflows/build.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9561f31b006226416760d3c69ee60170f0ed3a1f",
+      "size": 2044,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/9561f31b006226416760d3c69ee60170f0ed3a1f"
+    },
+    {
+      "path": ".github/workflows/publish.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d0f263c74577ccaa112f70edfe92efef1334abd8",
+      "size": 1712,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/d0f263c74577ccaa112f70edfe92efef1334abd8"
+    },
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f2cd6d86b2b8aa641fb98692279d14b95ecb5d2d",
+      "size": 368,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/f2cd6d86b2b8aa641fb98692279d14b95ecb5d2d"
+    },
+    {
+      "path": ".gitmodules",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5a910116f7099e7cbfa0f3c728f76d9098c8f689",
+      "size": 199,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/5a910116f7099e7cbfa0f3c728f76d9098c8f689"
+    },
+    {
+      "path": "LICENSE",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "109d9111cb325c5ea4f767c6939fb8ac2551a34c",
+      "size": 1079,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/109d9111cb325c5ea4f767c6939fb8ac2551a34c"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "36708a961805025ae0cbf458ecf8b5546e4aea8c",
+      "size": 6173,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/36708a961805025ae0cbf458ecf8b5546e4aea8c"
+    },
+    {
+      "path": "libs",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "04c4e9268342149dbd167a2b9bd46b8cdfc08052",
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/trees/04c4e9268342149dbd167a2b9bd46b8cdfc08052"
+    },
+    {
+      "path": "libs/libtess2",
+      "mode": "160000",
+      "type": "commit",
+      "sha": "fc52516467dfa124bdd967c15c7cf9faf02a34ca"
+    },
+    {
+      "path": "libs/rapidjson",
+      "mode": "160000",
+      "type": "commit",
+      "sha": "80b6d1c83402a5785c486603c5611923159d0894"
+    },
+    {
+      "path": "make",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "ce2fcb10fbdea7329844a35bc5e7bd9b2c4569ab",
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/trees/ce2fcb10fbdea7329844a35bc5e7bd9b2c4569ab"
+    },
+    {
+      "path": "make/Makefile",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "023cceb713b94d056207b6b15cd8ee13ea0bf3fe",
+      "size": 900,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/023cceb713b94d056207b6b15cd8ee13ea0bf3fe"
+    },
+    {
+      "path": "msvc15",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "9e8f22a78a6a7ecccb547aaac096e4addb1424d0",
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/trees/9e8f22a78a6a7ecccb547aaac096e4addb1424d0"
+    },
+    {
+      "path": "msvc15/rvmparser.sln",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fd9e1472023d024ad837e4a817b31de5e6c0d189",
+      "size": 1400,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/fd9e1472023d024ad837e4a817b31de5e6c0d189"
+    },
+    {
+      "path": "msvc15/rvmparser.vcxproj",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9c0b29fd373736e57bbc83c35ce3cd1936f263a6",
+      "size": 13397,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/9c0b29fd373736e57bbc83c35ce3cd1936f263a6"
+    },
+    {
+      "path": "msvc15/rvmparser.vcxproj.filters",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e7b554866f39b96f248b24b8ea897ce501f73b18",
+      "size": 10680,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/e7b554866f39b96f248b24b8ea897ce501f73b18"
+    },
+    {
+      "path": "src",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "b760df92f8baf7fffe44c6ac03a5c1d345561bd7",
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/trees/b760df92f8baf7fffe44c6ac03a5c1d345561bd7"
+    },
+    {
+      "path": "src/AddGroupBBox.cpp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "27d1f657ac0fec03ffb8e6b7053da8f55d214631",
+      "size": 824,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/27d1f657ac0fec03ffb8e6b7053da8f55d214631"
+    },
+    {
+      "path": "src/AddGroupBBox.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7da9ac7cf124614ae3fdfd3cc0d7b093d8df99a7",
+      "size": 394,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/7da9ac7cf124614ae3fdfd3cc0d7b093d8df99a7"
+    },
+    {
+      "path": "src/AddStats.cpp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dc7ccf7ad16ba1e07e31f593e52c9cbde2c1cef0",
+      "size": 1868,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/dc7ccf7ad16ba1e07e31f593e52c9cbde2c1cef0"
+    },
+    {
+      "path": "src/AddStats.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "42e560ffa8d685efdad0f653a5dcaff2e775d1a0",
+      "size": 895,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/42e560ffa8d685efdad0f653a5dcaff2e775d1a0"
+    },
+    {
+      "path": "src/Align.cpp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6b4518717af3a042d8bbe40e3fd741a96f28af75",
+      "size": 7051,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/6b4518717af3a042d8bbe40e3fd741a96f28af75"
+    },
+    {
+      "path": "src/ChunkTiny.cpp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8255364215397e465b23fc00f8b4396f0ccef7ae",
+      "size": 1190,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/8255364215397e465b23fc00f8b4396f0ccef7ae"
+    },
+    {
+      "path": "src/ChunkTiny.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bee6f41f8c51dc63ca1965481645119af16626e0",
+      "size": 575,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/bee6f41f8c51dc63ca1965481645119af16626e0"
+    },
+    {
+      "path": "src/Colorizer.cpp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "64d5f806264a591c9d0e29f56be152cc577d6806",
+      "size": 18982,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/64d5f806264a591c9d0e29f56be152cc577d6806"
+    },
+    {
+      "path": "src/Colorizer.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2c79db98e0c0cdcc25c0dccb0458f4c981d17782",
+      "size": 753,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/2c79db98e0c0cdcc25c0dccb0458f4c981d17782"
+    },
+    {
+      "path": "src/Common.cpp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cffb726862af4d5a98713ec4aa4dd424d9545279",
+      "size": 4629,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/cffb726862af4d5a98713ec4aa4dd424d9545279"
+    },
+    {
+      "path": "src/Common.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fb3ce451561265419e600e5e32e26e3111f64b0a",
+      "size": 2531,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/fb3ce451561265419e600e5e32e26e3111f64b0a"
+    },
+    {
+      "path": "src/Connect.cpp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "32311185ca9795109055fddcc86102bd877f2fbb",
+      "size": 8970,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/32311185ca9795109055fddcc86102bd877f2fbb"
+    },
+    {
+      "path": "src/DiscardGroups.cpp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d1d5c691b2b351778a74b4588ab79261e315d675",
+      "size": 1838,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/d1d5c691b2b351778a74b4588ab79261e315d675"
+    },
+    {
+      "path": "src/DumpNames.cpp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "66402341f1014ea241d0a0cce1971bcee3f6b9f0",
+      "size": 2056,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/66402341f1014ea241d0a0cce1971bcee3f6b9f0"
+    },
+    {
+      "path": "src/DumpNames.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9fde7eb43ef79a0b8683d6eaa688d99a78971914",
+      "size": 727,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/9fde7eb43ef79a0b8683d6eaa688d99a78971914"
+    },
+    {
+      "path": "src/ExportGLTF.cpp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "76ff7bfb2ce3ea30b96b1905f310588ddf5b8005",
+      "size": 38251,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/76ff7bfb2ce3ea30b96b1905f310588ddf5b8005"
+    },
+    {
+      "path": "src/ExportJson.cpp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ea7ab47e3a92a0053d9421a6ef851ac06cacfaa7",
+      "size": 3655,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/ea7ab47e3a92a0053d9421a6ef851ac06cacfaa7"
+    },
+    {
+      "path": "src/ExportObj.cpp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c618e06f5c273c3cb1f9fa49e2f6ee0ce83329ee",
+      "size": 7457,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/c618e06f5c273c3cb1f9fa49e2f6ee0ce83329ee"
+    },
+    {
+      "path": "src/ExportObj.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "04a2fd1833955bfb57599868a4d904c3ea3a9967",
+      "size": 960,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/04a2fd1833955bfb57599868a4d904c3ea3a9967"
+    },
+    {
+      "path": "src/ExportRev.cpp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9a051479466151645f9ff9e3a0e838997d0bdd8b",
+      "size": 9083,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/9a051479466151645f9ff9e3a0e838997d0bdd8b"
+    },
+    {
+      "path": "src/Flatten.cpp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0b8e5ee462c8cef1d892834f885d9545911dc995",
+      "size": 4783,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/0b8e5ee462c8cef1d892834f885d9545911dc995"
+    },
+    {
+      "path": "src/Flatten.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "af442bf99587cf3df6ca1c3fc5ce59e674b5c195",
+      "size": 1066,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/af442bf99587cf3df6ca1c3fc5ce59e674b5c195"
+    },
+    {
+      "path": "src/FlattenRegex.cpp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fbdf2df86c7240f7cf3ee1d7ab36783f0b851fb2",
+      "size": 3061,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/fbdf2df86c7240f7cf3ee1d7ab36783f0b851fb2"
+    },
+    {
+      "path": "src/LinAlg.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bb60b277195d8597a50f49ed0c0d5553aff534a7",
+      "size": 5138,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/bb60b277195d8597a50f49ed0c0d5553aff534a7"
+    },
+    {
+      "path": "src/LinAlgOps.cpp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cb93e5a88a59b65474d26b9161f5b3dd74d5d605",
+      "size": 2504,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/cb93e5a88a59b65474d26b9161f5b3dd74d5d605"
+    },
+    {
+      "path": "src/LinAlgOps.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cc572cb3680abe87f1a7a43d99cf99270e1b6a75",
+      "size": 4579,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/cc572cb3680abe87f1a7a43d99cf99270e1b6a75"
+    },
+    {
+      "path": "src/Parser.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5af012727ce93c9939639d7d9e959103502ca361",
+      "size": 223,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/5af012727ce93c9939639d7d9e959103502ca361"
+    },
+    {
+      "path": "src/ParserAtt.cpp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "33f782982cf95532b5fe1e7df0cdf42d77df63bb",
+      "size": 6498,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/33f782982cf95532b5fe1e7df0cdf42d77df63bb"
+    },
+    {
+      "path": "src/ParserRVM.cpp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6480b0a469fc2e71ba19462f13688c1a52d84509",
+      "size": 18178,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/6480b0a469fc2e71ba19462f13688c1a52d84509"
+    },
+    {
+      "path": "src/Store.cpp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "32c30009fe5fe7c6452b72fe1abd3b0866bab970",
+      "size": 10496,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/32c30009fe5fe7c6452b72fe1abd3b0866bab970"
+    },
+    {
+      "path": "src/Store.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0f62735b86e67824f0c0b6815bfd992a56769ce9",
+      "size": 6765,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/0f62735b86e67824f0c0b6815bfd992a56769ce9"
+    },
+    {
+      "path": "src/StoreVisitor.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9d94f9f8311b39d23b36b3b15525b83e995a6f7c",
+      "size": 910,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/9d94f9f8311b39d23b36b3b15525b83e995a6f7c"
+    },
+    {
+      "path": "src/Tessellator.cpp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ac9d0e13afa5b12077a0ee2c61cc3cbe28433046",
+      "size": 5578,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/ac9d0e13afa5b12077a0ee2c61cc3cbe28433046"
+    },
+    {
+      "path": "src/Tessellator.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "afa733f47ea03f0ba0e87678995f2980cf23583d",
+      "size": 2909,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/afa733f47ea03f0ba0e87678995f2980cf23583d"
+    },
+    {
+      "path": "src/TriangulationFactory.cpp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a48cb1376b63694062e97310f98dd825946a5c8c",
+      "size": 41876,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/a48cb1376b63694062e97310f98dd825946a5c8c"
+    },
+    {
+      "path": "src/main.cpp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "60d8311b35df0e74f3469f785840a2449e13f493",
+      "size": 19945,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/60d8311b35df0e74f3469f785840a2449e13f493"
+    },
+    {
+      "path": "test",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "0ce5dd834027bc6b4cdbe406bde5290d2a681a6a",
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/trees/0ce5dd834027bc6b4cdbe406bde5290d2a681a6a"
+    },
+    {
+      "path": "test/.gitignore",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bfd5fa9ce8cc32a005ca3984c38744a089e4f2e2",
+      "size": 32,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/bfd5fa9ce8cc32a005ca3984c38744a089e4f2e2"
+    },
+    {
+      "path": "test/test-win32.bat",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "686c28f6ea88b0b6cbb01c78b088873272446f9b",
+      "size": 425,
+      "url": "https://api.github.com/repos/cdyk/rvmparser/git/blobs/686c28f6ea88b0b6cbb01c78b088873272446f9b"
+    }
+  ],
+  "truncated": false
+}

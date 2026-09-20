@@ -1,0 +1,475 @@
+{
+  "source": "C:\\Users\\34084\\Desktop\\modelviewer\\示例模型\\QICHUANG-SITE-2026-08-26.txt",
+  "bytes": 1344437,
+  "encoding": "UTF-8 with BOM; strict decode passed",
+  "physical_lines": 92871,
+  "logical_records": 92843,
+  "crlf_count": 92871,
+  "lf_count": 92871,
+  "nodes": 8955,
+  "new_count_independent": 8955,
+  "end_count_independent": 8955,
+  "named_nodes": 1159,
+  "anonymous_nodes": 7796,
+  "duplicate_names": {},
+  "max_depth_zero_based": 7,
+  "types": {
+    "DISH": 1040,
+    "CYLINDER": 818,
+    "BOX": 796,
+    "POINT": 740,
+    "SCTN": 669,
+    "GASKET": 550,
+    "FLANGE": 473,
+    "ELBOW": 410,
+    "NOZZLE": 390,
+    "SUBSTRUCTURE": 331,
+    "SNODE": 289,
+    "BRANCH": 240,
+    "PAVERT": 185,
+    "SJOINT": 182,
+    "VALVE": 181,
+    "PIPE": 147,
+    "POGON": 140,
+    "TEE": 109,
+    "EQUIPMENT": 98,
+    "CTORUS": 95,
+    "PYRAMID": 87,
+    "CONE": 86,
+    "SUBEQUIPMENT": 84,
+    "RTORUS": 72,
+    "OLET": 66,
+    "FITTING": 63,
+    "SLCYLINDER": 54,
+    "INSTRUMENT": 49,
+    "STRUCTURE": 47,
+    "DPCARTESIAN": 46,
+    "PLOOP": 46,
+    "DPSPHERICAL": 44,
+    "STWALL": 41,
+    "FRMWORK": 39,
+    "FLOOR": 36,
+    "REDUCER": 33,
+    "DDATA": 30,
+    "POHEDRON": 20,
+    "VVALUE": 16,
+    "NBOX": 16,
+    "ZONE": 15,
+    "VERTEX": 14,
+    "GWALL": 10,
+    "PCOMPONENT": 8,
+    "NCYLINDER": 8,
+    "PJOINT": 6,
+    "PNODE": 5,
+    "POINSP": 4,
+    "NXTRUSION": 3,
+    "LOOP": 3,
+    "SBFRAMEWORK": 3,
+    "DATUM": 3,
+    "TMPLATE": 2,
+    "DDSE": 2,
+    "DPSET": 2,
+    "NPYRAMID": 2,
+    "GENSEC": 2,
+    "SPINE": 2,
+    "CURVE": 2,
+    "SITE": 1
+  },
+  "attributes": 63822,
+  "attribute_keys": {
+    "POS": 6738,
+    "ORI": 4127,
+    "BUIL": 4062,
+    "SHOP": 3833,
+    "SPRE": 2625,
+    "HEIG": 2608,
+    "LEVE": 2500,
+    "DELDSG": 2266,
+    "OBST": 2124,
+    "DIAM": 1920,
+    "LSTU": 1879,
+    "ORIF": 1879,
+    "POSF": 1879,
+    "GRADE": 1051,
+    "FIRE": 1051,
+    "XLEN": 800,
+    "YLEN": 800,
+    "ZLEN": 800,
+    "TEMP": 777,
+    "PRES": 777,
+    "TPRESS": 777,
+    "DUTY": 777,
+    "GTYP": 714,
+    "POSS": 710,
+    "POSE": 710,
+    "JLIN": 703,
+    "JUSL": 673,
+    "MEML": 673,
+    "DRNE": 664,
+    "DRNS": 629,
+    "PTSP": 611,
+    "INSC": 611,
+    "DSCO": 569,
+    "CREF": 417,
+    "ARRI": 399,
+    "LEAV": 396,
+    "CATR": 390,
+    "PSPE": 387,
+    "CCEN": 387,
+    "CCLA": 387,
+    "LNTP": 387,
+    "PLANU": 387,
+    "ZDIS": 297,
+    "DESC": 257,
+    "HPOS": 240,
+    "TPOS": 240,
+    "LHEA": 240,
+    "LTAI": 240,
+    "HBOR": 240,
+    "TBOR": 240,
+    "HCON": 240,
+    "TCON": 240,
+    "HSTU": 240,
+    "POSL": 219,
+    "HREF": 217,
+    "RULE": 212,
+    "HDIR": 210,
+    "TDIR": 210,
+    "ROUT": 167,
+    "RINS": 161,
+    "CUTP": 161,
+    "ORRF": 154,
+    "TREF": 152,
+    "NUMB": 149,
+    "BORE": 145,
+    "PURP": 131,
+    "DESP": 121,
+    "RADI": 120,
+    "FUNC": 99,
+    "XBOT": 89,
+    "YBOT": 89,
+    "XTOP": 89,
+    "YTOP": 89,
+    "ISPE": 86,
+    "DTOP": 86,
+    "DBOT": 82,
+    "BANG": 77,
+    "DUNION": 72,
+    "DELP": 64,
+    "ANGL": 62,
+    "LNAME": 62,
+    "RSEQN": 62,
+    "YTSH": 54,
+    "XOFF": 51,
+    "SJUS": 46,
+    "PVIF": 44,
+    "JOIS": 43,
+    "JOIE": 43,
+    "PDNAME": 42,
+    "DDIR": 36,
+    "DKEY": 30,
+    "PTYP": 30,
+    "DTIT": 30,
+    "DDPR": 30,
+    "DDDF": 30,
+    "MAXMIN": 24,
+    "YOFF": 23,
+    "YBSH": 20,
+    "VALIDV": 16,
+    "PRFL": 7,
+    "NPOS": 5,
+    "OPDI": 3,
+    "JLNS": 2,
+    "JLNE": 2,
+    "YDIR": 2,
+    "CURTYP": 2,
+    "JFRE": 2
+  },
+  "old_selectors": 1068,
+  "old_resolution": {
+    "resolved_locally": 1068
+  },
+  "old_attrs": 1628,
+  "multiline_records": [
+    {
+      "line_start": 90853,
+      "line_end": 90854,
+      "raw_lines": [
+        "RULE SET POS  Static Rule ( S ( ATTRIB HEIG OF LNID /CYLI1  - ATTRIB CDPR NDIS / 2 + ATTRIB HEIG OF $",
+        "LNID /CYLI2  / 2 ) )"
+      ],
+      "text": "RULE SET POS  Static Rule ( S ( ATTRIB HEIG OF LNID /CYLI1  - ATTRIB CDPR NDIS / 2 + ATTRIB HEIG OF  LNID /CYLI2  / 2 ) )"
+    },
+    {
+      "line_start": 90861,
+      "line_end": 90862,
+      "raw_lines": [
+        "RULE SET POS  Static Rule ( S ( ATTRIB HEIG OF LNID /CYLI1  - ATTRIB CDPR NDIS / 2 + ATTRIB HEIG OF $",
+        "LNID /CYLI2  + ATTRIB HEIG OF LNID /CYLI3  / 2 ) )"
+      ],
+      "text": "RULE SET POS  Static Rule ( S ( ATTRIB HEIG OF LNID /CYLI1  - ATTRIB CDPR NDIS / 2 + ATTRIB HEIG OF  LNID /CYLI2  + ATTRIB HEIG OF LNID /CYLI3  / 2 ) )"
+    },
+    {
+      "line_start": 90869,
+      "line_end": 90870,
+      "raw_lines": [
+        "RULE SET POS  Static Rule ( S ( ATTRIB CDPR FCDI - ATTRIB CDPR NDIS + ATTRIB HEIG OF LNID /CYLI3  + $",
+        "ATTRIB HEIG OF LNID /CYLI4  / 2 ) )"
+      ],
+      "text": "RULE SET POS  Static Rule ( S ( ATTRIB CDPR FCDI - ATTRIB CDPR NDIS + ATTRIB HEIG OF LNID /CYLI3  +  ATTRIB HEIG OF LNID /CYLI4  / 2 ) )"
+    },
+    {
+      "line_start": 90877,
+      "line_end": 90878,
+      "raw_lines": [
+        "RULE SET POS  Static Rule ( S ( ATTRIB CDPR LENG - ATTRIB CDPR CLDI ) D ( ATTRIB CDPR CHEI + ATTRIB $",
+        "CDPR BHEI + ATTRIB CDPR DIMD ) )"
+      ],
+      "text": "RULE SET POS  Static Rule ( S ( ATTRIB CDPR LENG - ATTRIB CDPR CLDI ) D ( ATTRIB CDPR CHEI + ATTRIB  CDPR BHEI + ATTRIB CDPR DIMD ) )"
+    },
+    {
+      "line_start": 90884,
+      "line_end": 90885,
+      "raw_lines": [
+        "RULE SET POS  Static Rule ( N ( ATTRIB CDPR CLDI ) D ( ATTRIB CDPR CHEI + ATTRIB CDPR BHEI + ATTRIB $",
+        "CDPR DIMD ) )"
+      ],
+      "text": "RULE SET POS  Static Rule ( N ( ATTRIB CDPR CLDI ) D ( ATTRIB CDPR CHEI + ATTRIB CDPR BHEI + ATTRIB  CDPR DIMD ) )"
+    },
+    {
+      "line_start": 90891,
+      "line_end": 90892,
+      "raw_lines": [
+        "RULE SET POS  Static Rule ( E ( ATTRIB CDPR WEID / 2 ) D ( ATTRIB CDPR BHEI + ATTRIB CDPR CHEI + ATTRIB $",
+        "CDPR DIMD ) )"
+      ],
+      "text": "RULE SET POS  Static Rule ( E ( ATTRIB CDPR WEID / 2 ) D ( ATTRIB CDPR BHEI + ATTRIB CDPR CHEI + ATTRIB  CDPR DIMD ) )"
+    },
+    {
+      "line_start": 90898,
+      "line_end": 90899,
+      "raw_lines": [
+        "RULE SET POS  Static Rule ( W ( ATTRIB CDPR WEID / 2 ) D ( ATTRIB CDPR BHEI + ATTRIB CDPR CHEI + ATTRIB $",
+        "CDPR DIMD ) )"
+      ],
+      "text": "RULE SET POS  Static Rule ( W ( ATTRIB CDPR WEID / 2 ) D ( ATTRIB CDPR BHEI + ATTRIB CDPR CHEI + ATTRIB  CDPR DIMD ) )"
+    },
+    {
+      "line_start": 90905,
+      "line_end": 90906,
+      "raw_lines": [
+        "RULE SET POS  Static Rule ( D ( ATTRIB CDPR BHEI + ATTRIB CDPR CHEI ) W ( ATTRIB CDPR WEID / 2 + ATTRIB $",
+        "CDPR DIMD ) )"
+      ],
+      "text": "RULE SET POS  Static Rule ( D ( ATTRIB CDPR BHEI + ATTRIB CDPR CHEI ) W ( ATTRIB CDPR WEID / 2 + ATTRIB  CDPR DIMD ) )"
+    },
+    {
+      "line_start": 90972,
+      "line_end": 90973,
+      "raw_lines": [
+        "RULE SET POS  Static Rule ( D ( ATTRIB CDPR BHEI + ATTRIB CDPR CHEI + ATTRIB CDPR DIMD ) N ( ATTRIB $",
+        "CDPR CLDI ) )"
+      ],
+      "text": "RULE SET POS  Static Rule ( D ( ATTRIB CDPR BHEI + ATTRIB CDPR CHEI + ATTRIB CDPR DIMD ) N ( ATTRIB  CDPR CLDI ) )"
+    },
+    {
+      "line_start": 90987,
+      "line_end": 90988,
+      "raw_lines": [
+        "RULE SET POS  Static Rule ( U ( ATTRIB CDPR HHEI + ATTRIB CDPR DIMD ) S ( ATTRIB CDPR FCDI - ATTRIB $",
+        "CDPR NDIS ) )"
+      ],
+      "text": "RULE SET POS  Static Rule ( U ( ATTRIB CDPR HHEI + ATTRIB CDPR DIMD ) S ( ATTRIB CDPR FCDI - ATTRIB  CDPR NDIS ) )"
+    },
+    {
+      "line_start": 90992,
+      "line_end": 90993,
+      "raw_lines": [
+        "RULE SET POS  Static Rule ( U ( ATTRIB CDPR HHEI + ATTRIB CDPR DIMD ) S ( ATTRIB CDPR FCDI - ATTRIB $",
+        "CDPR NDIS ) )"
+      ],
+      "text": "RULE SET POS  Static Rule ( U ( ATTRIB CDPR HHEI + ATTRIB CDPR DIMD ) S ( ATTRIB CDPR FCDI - ATTRIB  CDPR NDIS ) )"
+    },
+    {
+      "line_start": 90999,
+      "line_end": 91000,
+      "raw_lines": [
+        "RULE SET POS  Static Rule ( U ( ATTRIB CDPR HHEI + ATTRIB CDPR DIMD ) S ( ATTRIB CDPR FCDI - ATTRIB $",
+        "CDPR NDIS + ATTRIB CDPR SCDI ) )"
+      ],
+      "text": "RULE SET POS  Static Rule ( U ( ATTRIB CDPR HHEI + ATTRIB CDPR DIMD ) S ( ATTRIB CDPR FCDI - ATTRIB  CDPR NDIS + ATTRIB CDPR SCDI ) )"
+    },
+    {
+      "line_start": 91006,
+      "line_end": 91007,
+      "raw_lines": [
+        "RULE SET POS  Static Rule ( U ( ATTRIB CDPR HHEI + ATTRIB CDPR DIMD ) S ( ATTRIB CDPR FCDI - ATTRIB $",
+        "CDPR NDIS + ATTRIB CDPR SCDI ) )"
+      ],
+      "text": "RULE SET POS  Static Rule ( U ( ATTRIB CDPR HHEI + ATTRIB CDPR DIMD ) S ( ATTRIB CDPR FCDI - ATTRIB  CDPR NDIS + ATTRIB CDPR SCDI ) )"
+    },
+    {
+      "line_start": 91013,
+      "line_end": 91014,
+      "raw_lines": [
+        "RULE SET POS  Static Rule ( U ( ATTRIB CDPR HHEI + ATTRIB CDPR DIMD ) S ( ATTRIB CDPR FCDI - ATTRIB $",
+        "CDPR NDIS + ATTRIB CDPR SCDI + ATTRIB CDPR LCDI ) )"
+      ],
+      "text": "RULE SET POS  Static Rule ( U ( ATTRIB CDPR HHEI + ATTRIB CDPR DIMD ) S ( ATTRIB CDPR FCDI - ATTRIB  CDPR NDIS + ATTRIB CDPR SCDI + ATTRIB CDPR LCDI ) )"
+    },
+    {
+      "line_start": 91367,
+      "line_end": 91368,
+      "raw_lines": [
+        "RULE SET POS  Static Rule ( S ( ATTRIB HEIG OF LNID /CYLI1  - ATTRIB CDPR NDIS / 2 + ATTRIB HEIG OF $",
+        "LNID /CYLI2  / 2 ) )"
+      ],
+      "text": "RULE SET POS  Static Rule ( S ( ATTRIB HEIG OF LNID /CYLI1  - ATTRIB CDPR NDIS / 2 + ATTRIB HEIG OF  LNID /CYLI2  / 2 ) )"
+    },
+    {
+      "line_start": 91375,
+      "line_end": 91376,
+      "raw_lines": [
+        "RULE SET POS  Static Rule ( S ( ATTRIB HEIG OF LNID /CYLI1  - ATTRIB CDPR NDIS / 2 + ATTRIB HEIG OF $",
+        "LNID /CYLI2  + ATTRIB HEIG OF LNID /CYLI3  / 2 ) )"
+      ],
+      "text": "RULE SET POS  Static Rule ( S ( ATTRIB HEIG OF LNID /CYLI1  - ATTRIB CDPR NDIS / 2 + ATTRIB HEIG OF  LNID /CYLI2  + ATTRIB HEIG OF LNID /CYLI3  / 2 ) )"
+    },
+    {
+      "line_start": 91383,
+      "line_end": 91384,
+      "raw_lines": [
+        "RULE SET POS  Static Rule ( S ( ATTRIB CDPR FCDI - ATTRIB CDPR NDIS + ATTRIB HEIG OF LNID /CYLI3  + $",
+        "ATTRIB HEIG OF LNID /CYLI4  / 2 ) )"
+      ],
+      "text": "RULE SET POS  Static Rule ( S ( ATTRIB CDPR FCDI - ATTRIB CDPR NDIS + ATTRIB HEIG OF LNID /CYLI3  +  ATTRIB HEIG OF LNID /CYLI4  / 2 ) )"
+    },
+    {
+      "line_start": 91391,
+      "line_end": 91392,
+      "raw_lines": [
+        "RULE SET POS  Static Rule ( S ( ATTRIB CDPR LENG - ATTRIB CDPR CLDI ) D ( ATTRIB CDPR CHEI + ATTRIB $",
+        "CDPR BHEI + ATTRIB CDPR DIMD ) )"
+      ],
+      "text": "RULE SET POS  Static Rule ( S ( ATTRIB CDPR LENG - ATTRIB CDPR CLDI ) D ( ATTRIB CDPR CHEI + ATTRIB  CDPR BHEI + ATTRIB CDPR DIMD ) )"
+    },
+    {
+      "line_start": 91398,
+      "line_end": 91399,
+      "raw_lines": [
+        "RULE SET POS  Static Rule ( N ( ATTRIB CDPR CLDI ) D ( ATTRIB CDPR CHEI + ATTRIB CDPR BHEI + ATTRIB $",
+        "CDPR DIMD ) )"
+      ],
+      "text": "RULE SET POS  Static Rule ( N ( ATTRIB CDPR CLDI ) D ( ATTRIB CDPR CHEI + ATTRIB CDPR BHEI + ATTRIB  CDPR DIMD ) )"
+    },
+    {
+      "line_start": 91405,
+      "line_end": 91406,
+      "raw_lines": [
+        "RULE SET POS  Static Rule ( E ( ATTRIB CDPR WEID / 2 ) D ( ATTRIB CDPR BHEI + ATTRIB CDPR CHEI + ATTRIB $",
+        "CDPR DIMD ) )"
+      ],
+      "text": "RULE SET POS  Static Rule ( E ( ATTRIB CDPR WEID / 2 ) D ( ATTRIB CDPR BHEI + ATTRIB CDPR CHEI + ATTRIB  CDPR DIMD ) )"
+    },
+    {
+      "line_start": 91412,
+      "line_end": 91413,
+      "raw_lines": [
+        "RULE SET POS  Static Rule ( W ( ATTRIB CDPR WEID / 2 ) D ( ATTRIB CDPR BHEI + ATTRIB CDPR CHEI + ATTRIB $",
+        "CDPR DIMD ) )"
+      ],
+      "text": "RULE SET POS  Static Rule ( W ( ATTRIB CDPR WEID / 2 ) D ( ATTRIB CDPR BHEI + ATTRIB CDPR CHEI + ATTRIB  CDPR DIMD ) )"
+    },
+    {
+      "line_start": 91419,
+      "line_end": 91420,
+      "raw_lines": [
+        "RULE SET POS  Static Rule ( D ( ATTRIB CDPR BHEI + ATTRIB CDPR CHEI ) W ( ATTRIB CDPR WEID / 2 + ATTRIB $",
+        "CDPR DIMD ) )"
+      ],
+      "text": "RULE SET POS  Static Rule ( D ( ATTRIB CDPR BHEI + ATTRIB CDPR CHEI ) W ( ATTRIB CDPR WEID / 2 + ATTRIB  CDPR DIMD ) )"
+    },
+    {
+      "line_start": 91486,
+      "line_end": 91487,
+      "raw_lines": [
+        "RULE SET POS  Static Rule ( D ( ATTRIB CDPR BHEI + ATTRIB CDPR CHEI + ATTRIB CDPR DIMD ) N ( ATTRIB $",
+        "CDPR CLDI ) )"
+      ],
+      "text": "RULE SET POS  Static Rule ( D ( ATTRIB CDPR BHEI + ATTRIB CDPR CHEI + ATTRIB CDPR DIMD ) N ( ATTRIB  CDPR CLDI ) )"
+    },
+    {
+      "line_start": 91501,
+      "line_end": 91502,
+      "raw_lines": [
+        "RULE SET POS  Static Rule ( U ( ATTRIB CDPR HHEI + ATTRIB CDPR DIMD ) S ( ATTRIB CDPR FCDI - ATTRIB $",
+        "CDPR NDIS ) )"
+      ],
+      "text": "RULE SET POS  Static Rule ( U ( ATTRIB CDPR HHEI + ATTRIB CDPR DIMD ) S ( ATTRIB CDPR FCDI - ATTRIB  CDPR NDIS ) )"
+    },
+    {
+      "line_start": 91506,
+      "line_end": 91507,
+      "raw_lines": [
+        "RULE SET POS  Static Rule ( U ( ATTRIB CDPR HHEI + ATTRIB CDPR DIMD ) S ( ATTRIB CDPR FCDI - ATTRIB $",
+        "CDPR NDIS ) )"
+      ],
+      "text": "RULE SET POS  Static Rule ( U ( ATTRIB CDPR HHEI + ATTRIB CDPR DIMD ) S ( ATTRIB CDPR FCDI - ATTRIB  CDPR NDIS ) )"
+    },
+    {
+      "line_start": 91513,
+      "line_end": 91514,
+      "raw_lines": [
+        "RULE SET POS  Static Rule ( U ( ATTRIB CDPR HHEI + ATTRIB CDPR DIMD ) S ( ATTRIB CDPR FCDI - ATTRIB $",
+        "CDPR NDIS + ATTRIB CDPR SCDI ) )"
+      ],
+      "text": "RULE SET POS  Static Rule ( U ( ATTRIB CDPR HHEI + ATTRIB CDPR DIMD ) S ( ATTRIB CDPR FCDI - ATTRIB  CDPR NDIS + ATTRIB CDPR SCDI ) )"
+    },
+    {
+      "line_start": 91520,
+      "line_end": 91521,
+      "raw_lines": [
+        "RULE SET POS  Static Rule ( U ( ATTRIB CDPR HHEI + ATTRIB CDPR DIMD ) S ( ATTRIB CDPR FCDI - ATTRIB $",
+        "CDPR NDIS + ATTRIB CDPR SCDI ) )"
+      ],
+      "text": "RULE SET POS  Static Rule ( U ( ATTRIB CDPR HHEI + ATTRIB CDPR DIMD ) S ( ATTRIB CDPR FCDI - ATTRIB  CDPR NDIS + ATTRIB CDPR SCDI ) )"
+    },
+    {
+      "line_start": 91527,
+      "line_end": 91528,
+      "raw_lines": [
+        "RULE SET POS  Static Rule ( U ( ATTRIB CDPR HHEI + ATTRIB CDPR DIMD ) S ( ATTRIB CDPR FCDI - ATTRIB $",
+        "CDPR NDIS + ATTRIB CDPR SCDI + ATTRIB CDPR LCDI ) )"
+      ],
+      "text": "RULE SET POS  Static Rule ( U ( ATTRIB CDPR HHEI + ATTRIB CDPR DIMD ) S ( ATTRIB CDPR FCDI - ATTRIB  CDPR NDIS + ATTRIB CDPR SCDI + ATTRIB CDPR LCDI ) )"
+    }
+  ],
+  "repeated_node_keys": 56,
+  "repeated_keys": {
+    "RULE": 56
+  },
+  "reference_key_scope": [
+    "CATR",
+    "CREF",
+    "HREF",
+    "HSTU",
+    "ISPE",
+    "JOIE",
+    "JOIS",
+    "LSTU",
+    "ORRF",
+    "PSPE",
+    "RINS",
+    "SPRE",
+    "TREF"
+  ],
+  "references": 6794,
+  "reference_resolution": {
+    "anchor_missing": 5755,
+    "unsupported_selector": 536,
+    "resolved_locally": 503
+  },
+  "quote_imbalance_records": [],
+  "issues": [],
+  "sentinel_temperature_count": 431
+}

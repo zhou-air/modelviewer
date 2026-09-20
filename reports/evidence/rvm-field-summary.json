@@ -1,0 +1,72 @@
+{
+  "source": "QICHUANG-SITE-RVM-2026-08-26.rvm",
+  "bytes": 4505600,
+  "header": {
+    "info": "AVEVA PDMS Design Mk12.1.SP4.0[4074]  (WINDOWS-NT 6.1)  (25 Jun 2013 : 20:47)",
+    "note": "",
+    "date": "Wed Aug 26 16:33:40 2026",
+    "user": "cdxc@CDXC06",
+    "encoding": "Unicode UTF-8",
+    "project": "XXL",
+    "model": "/MDBs"
+  },
+  "chunk_counts": {
+    "HEAD": 1,
+    "MODL": 1,
+    "CNTB": 7420,
+    "CNTE": 7420,
+    "PRIM": 12385,
+    "END:": 1
+  },
+  "chunk_versions": {
+    "HEAD": {
+      "2": 1
+    },
+    "MODL": {
+      "1": 1
+    },
+    "CNTB": {
+      "2": 7420
+    },
+    "CNTE": {
+      "2": 7420
+    },
+    "PRIM": {
+      "1": 12385
+    }
+  },
+  "groups": 7420,
+  "geometries": 12385,
+  "geometry_kind_counts": {
+    "8": 6551,
+    "7": 1246,
+    "4": 565,
+    "9": 194,
+    "2": 778,
+    "5": 98,
+    "3": 178,
+    "6": 982,
+    "1": 72,
+    "11": 815,
+    "10": 906
+  },
+  "material_counts": {
+    "1": 7420
+  },
+  "color_records": [],
+  "max_depth": 8,
+  "groups_with_direct_geometry": 5835,
+  "groups_without_direct_geometry": 1585,
+  "duplicate_names": {},
+  "world_bbox": [
+    -119.63999635807704,
+    -1.7000000807456672,
+    -3.000000142492354,
+    79.56000377889723,
+    131.65900625346694,
+    22.60699846444186
+  ],
+  "tail_bytes_after_end_header": 580,
+  "all_geometry_matrix_bbox_finite": true,
+  "official_parser_name_parent_count_crosscheck": "PASS"
+}

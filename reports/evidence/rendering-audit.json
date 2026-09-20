@@ -1,0 +1,523 @@
+{
+  "schema": "rendering-optimization-audit/1",
+  "generatedAt": "2026-09-20T10:21:55+08:00",
+  "assets": [
+    {
+      "path": "data/projects/propionic-acid/models/111/versions/2026-09-20/processed/model.glb",
+      "absolutePath": "C:\\Users\\34084\\Desktop\\modelviewer - 副本\\data\\projects\\propionic-acid\\models\\111\\versions\\2026-09-20\\processed\\model.glb",
+      "sha256": "6a9ed4cee03e9ceb13188f22bdf7fc606ef2a8786863ba09eb2918016aae5d10",
+      "bytes": 106365828,
+      "status": "failed",
+      "manifestStats": {},
+      "gltf": {
+        "asset": {
+          "version": "2.0",
+          "generator": "rvmparser",
+          "extras": {
+            "rvmparser-origin": [
+              -1266.30322265625,
+              -10.991249084472656,
+              4.723486423492432
+            ]
+          }
+        },
+        "scenes": 1,
+        "nodes": 33587,
+        "meshDefinitions": 23738,
+        "primitiveDefinitions": 23738,
+        "materials": 1,
+        "buffers": 1,
+        "bufferViews": 70968,
+        "accessors": 70968,
+        "binBytes": 83800056
+      },
+      "render": {
+        "renderablePrimitiveInstances": 23738,
+        "meshInstances": 23603,
+        "lineInstances": 135,
+        "otherInstances": 0,
+        "triangles": 2110412,
+        "modes": {
+          "TRIANGLES": 23603,
+          "LINES": 135
+        },
+        "sourceMaterials": {
+          "0": 23738
+        },
+        "attributeLayouts": 2,
+        "currentSceneDrawCallBaseline": 23738,
+        "viewerGlobalBatchFloor": 2,
+        "sourceBatchFloor": 2,
+        "absolutePrimitiveModeFloor": 2
+      },
+      "instancing": {
+        "repeatedMeshGroups": {},
+        "repeatedMeshGroupCount": 0,
+        "meshRefParticipatingUnits": 0,
+        "meshRefParticipatingShare": 0.0,
+        "meshRefReducibleDraws": 0,
+        "meshRefReducibleDrawShare": 0.0,
+        "exactDuplicatePrimitiveGroups": 0,
+        "exactDuplicateParticipatingUnits": 0,
+        "exactDuplicateParticipatingShare": 0.0,
+        "exactDuplicateReducibleDraws": 0,
+        "exactDuplicateReducibleDrawShare": 0.0,
+        "exactDuplicateTriangleShare": 0.0
+      },
+      "batching": {
+        "sourceGLTFState": {
+          "groups": 2,
+          "largestGroup": 23603,
+          "groupSizeHistogram": {
+            "135": 1,
+            "23603": 1
+          },
+          "batchableUnits": 23738,
+          "batchableShare": 1.0,
+          "reducibleDraws": 23736,
+          "reducibleDrawShare": 0.999916,
+          "trianglesInBatchableGroups": 2110412,
+          "triangleBatchableShare": 1.0,
+          "groupsDetail": [
+            {
+              "size": 23603,
+              "mode": "TRIANGLES",
+              "material": 0,
+              "layout": "{\"attrs\":[[\"NORMAL\",5126,\"VEC3\",false,null],[\"POSITION\",5126,\"VEC3\",false,null]],\"extensions\":[],\"indexed\":true,\"targets\":[]}"
+            },
+            {
+              "size": 135,
+              "mode": "LINES",
+              "material": 0,
+              "layout": "{\"attrs\":[[\"POSITION\",5126,\"VEC3\",false,null]],\"extensions\":[],\"indexed\":false,\"targets\":[]}"
+            }
+          ]
+        },
+        "effectiveViewerState": {
+          "groups": 2,
+          "largestGroup": 23603,
+          "groupSizeHistogram": {
+            "135": 1,
+            "23603": 1
+          },
+          "batchableUnits": 23738,
+          "batchableShare": 1.0,
+          "reducibleDraws": 23736,
+          "reducibleDrawShare": 0.999916,
+          "trianglesInBatchableGroups": 2110412,
+          "triangleBatchableShare": 1.0,
+          "groupsDetail": [
+            {
+              "size": 23603,
+              "mode": "TRIANGLES",
+              "material": 0,
+              "layout": "{\"attrs\":[[\"NORMAL\",5126,\"VEC3\",false,null],[\"POSITION\",5126,\"VEC3\",false,null]],\"extensions\":[],\"indexed\":true,\"targets\":[]}"
+            },
+            {
+              "size": 135,
+              "mode": "LINES",
+              "material": 0,
+              "layout": "{\"attrs\":[[\"POSITION\",5126,\"VEC3\",false,null]],\"extensions\":[],\"indexed\":false,\"targets\":[]}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "path": "data/projects/propionic-acid/models/main-site/versions/2026-09-03/processed/model.glb",
+      "absolutePath": "C:\\Users\\34084\\Desktop\\modelviewer - 副本\\data\\projects\\propionic-acid\\models\\main-site\\versions\\2026-09-03\\processed\\model.glb",
+      "sha256": "6206bad65cbefff3ebdb663467dfed872d3d63fa3e846f17295478a500e17eb4",
+      "bytes": 18385964,
+      "status": "ready",
+      "manifestStats": {
+        "rvmBytes": 4505600,
+        "txtBytes": 1344437,
+        "glbBytes": 18385964,
+        "objectCount": 8955,
+        "namedNodes": 7423,
+        "rvmGroups": 7420,
+        "mappedObjects": 7420,
+        "mappingRate": 1.0,
+        "triangles": 335824,
+        "meshes": 5796,
+        "lines": 867,
+        "durationMs": 6698,
+        "converterVersion": "pdms-import-pipeline/1 · rvmparser/2f7025971a95 · tolerance 0.02 m"
+      },
+      "gltf": {
+        "asset": {
+          "version": "2.0",
+          "generator": "rvmparser",
+          "extras": {
+            "rvmparser-origin": [
+              -20.039997100830078,
+              64.97950744628906,
+              9.803499221801758
+            ]
+          }
+        },
+        "scenes": 1,
+        "nodes": 7931,
+        "meshDefinitions": 5796,
+        "primitiveDefinitions": 5796,
+        "materials": 1,
+        "buffers": 1,
+        "bufferViews": 16849,
+        "accessors": 16849,
+        "binBytes": 12917160
+      },
+      "render": {
+        "renderablePrimitiveInstances": 5796,
+        "meshInstances": 5507,
+        "lineInstances": 289,
+        "otherInstances": 0,
+        "triangles": 335824,
+        "modes": {
+          "TRIANGLES": 5507,
+          "LINES": 289
+        },
+        "sourceMaterials": {
+          "0": 5796
+        },
+        "attributeLayouts": 2,
+        "currentSceneDrawCallBaseline": 5796,
+        "viewerGlobalBatchFloor": 2,
+        "sourceBatchFloor": 2,
+        "absolutePrimitiveModeFloor": 2
+      },
+      "instancing": {
+        "repeatedMeshGroups": {},
+        "repeatedMeshGroupCount": 0,
+        "meshRefParticipatingUnits": 0,
+        "meshRefParticipatingShare": 0.0,
+        "meshRefReducibleDraws": 0,
+        "meshRefReducibleDrawShare": 0.0,
+        "exactDuplicatePrimitiveGroups": 0,
+        "exactDuplicateParticipatingUnits": 0,
+        "exactDuplicateParticipatingShare": 0.0,
+        "exactDuplicateReducibleDraws": 0,
+        "exactDuplicateReducibleDrawShare": 0.0,
+        "exactDuplicateTriangleShare": 0.0
+      },
+      "batching": {
+        "sourceGLTFState": {
+          "groups": 2,
+          "largestGroup": 5507,
+          "groupSizeHistogram": {
+            "289": 1,
+            "5507": 1
+          },
+          "batchableUnits": 5796,
+          "batchableShare": 1.0,
+          "reducibleDraws": 5794,
+          "reducibleDrawShare": 0.999655,
+          "trianglesInBatchableGroups": 335824,
+          "triangleBatchableShare": 1.0,
+          "groupsDetail": [
+            {
+              "size": 5507,
+              "mode": "TRIANGLES",
+              "material": 0,
+              "layout": "{\"attrs\":[[\"NORMAL\",5126,\"VEC3\",false,null],[\"POSITION\",5126,\"VEC3\",false,null]],\"extensions\":[],\"indexed\":true,\"targets\":[]}"
+            },
+            {
+              "size": 289,
+              "mode": "LINES",
+              "material": 0,
+              "layout": "{\"attrs\":[[\"POSITION\",5126,\"VEC3\",false,null]],\"extensions\":[],\"indexed\":false,\"targets\":[]}"
+            }
+          ]
+        },
+        "effectiveViewerState": {
+          "groups": 2,
+          "largestGroup": 5507,
+          "groupSizeHistogram": {
+            "289": 1,
+            "5507": 1
+          },
+          "batchableUnits": 5796,
+          "batchableShare": 1.0,
+          "reducibleDraws": 5794,
+          "reducibleDrawShare": 0.999655,
+          "trianglesInBatchableGroups": 335824,
+          "triangleBatchableShare": 1.0,
+          "groupsDetail": [
+            {
+              "size": 5507,
+              "mode": "TRIANGLES",
+              "material": 0,
+              "layout": "{\"attrs\":[[\"NORMAL\",5126,\"VEC3\",false,null],[\"POSITION\",5126,\"VEC3\",false,null]],\"extensions\":[],\"indexed\":true,\"targets\":[]}"
+            },
+            {
+              "size": 289,
+              "mode": "LINES",
+              "material": 0,
+              "layout": "{\"attrs\":[[\"POSITION\",5126,\"VEC3\",false,null]],\"extensions\":[],\"indexed\":false,\"targets\":[]}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "path": "data/projects/qichuang/models/hygq/versions/2026-09-20/processed/model.glb",
+      "absolutePath": "C:\\Users\\34084\\Desktop\\modelviewer - 副本\\data\\projects\\qichuang\\models\\hygq\\versions\\2026-09-20\\processed\\model.glb",
+      "sha256": "06c718b203f397560f93b5513e84b3fc113b3e3739c9c07f8cc2ece79eb6f8eb",
+      "bytes": 36058420,
+      "status": "ready",
+      "manifestStats": {
+        "rvmBytes": 6512000,
+        "txtBytes": 3093656,
+        "glbBytes": 36058420,
+        "objectCount": 35728,
+        "namedNodes": 18987,
+        "rvmGroups": 18984,
+        "mappedObjects": 18984,
+        "mappingRate": 1.0,
+        "triangles": 501323,
+        "meshes": 16255,
+        "lines": 0,
+        "durationMs": 20504,
+        "converterVersion": "pdms-import-pipeline/1 · rvmparser/2f7025971a95 · tolerance 0.02 m"
+      },
+      "gltf": {
+        "asset": {
+          "version": "2.0",
+          "generator": "rvmparser",
+          "extras": {
+            "rvmparser-origin": [
+              79.6500015258789,
+              51.925498962402344,
+              12.075000762939453
+            ]
+          }
+        },
+        "scenes": 1,
+        "nodes": 19009,
+        "meshDefinitions": 16255,
+        "primitiveDefinitions": 16255,
+        "materials": 1,
+        "buffers": 1,
+        "bufferViews": 48846,
+        "accessors": 48846,
+        "binBytes": 20129436
+      },
+      "render": {
+        "renderablePrimitiveInstances": 16255,
+        "meshInstances": 16255,
+        "lineInstances": 0,
+        "otherInstances": 0,
+        "triangles": 501323,
+        "modes": {
+          "TRIANGLES": 16255
+        },
+        "sourceMaterials": {
+          "0": 16255
+        },
+        "attributeLayouts": 1,
+        "currentSceneDrawCallBaseline": 16255,
+        "viewerGlobalBatchFloor": 1,
+        "sourceBatchFloor": 1,
+        "absolutePrimitiveModeFloor": 1
+      },
+      "instancing": {
+        "repeatedMeshGroups": {},
+        "repeatedMeshGroupCount": 0,
+        "meshRefParticipatingUnits": 0,
+        "meshRefParticipatingShare": 0.0,
+        "meshRefReducibleDraws": 0,
+        "meshRefReducibleDrawShare": 0.0,
+        "exactDuplicatePrimitiveGroups": 0,
+        "exactDuplicateParticipatingUnits": 0,
+        "exactDuplicateParticipatingShare": 0.0,
+        "exactDuplicateReducibleDraws": 0,
+        "exactDuplicateReducibleDrawShare": 0.0,
+        "exactDuplicateTriangleShare": 0.0
+      },
+      "batching": {
+        "sourceGLTFState": {
+          "groups": 1,
+          "largestGroup": 16255,
+          "groupSizeHistogram": {
+            "16255": 1
+          },
+          "batchableUnits": 16255,
+          "batchableShare": 1.0,
+          "reducibleDraws": 16254,
+          "reducibleDrawShare": 0.999938,
+          "trianglesInBatchableGroups": 501323,
+          "triangleBatchableShare": 1.0,
+          "groupsDetail": [
+            {
+              "size": 16255,
+              "mode": "TRIANGLES",
+              "material": 0,
+              "layout": "{\"attrs\":[[\"NORMAL\",5126,\"VEC3\",false,null],[\"POSITION\",5126,\"VEC3\",false,null]],\"extensions\":[],\"indexed\":true,\"targets\":[]}"
+            }
+          ]
+        },
+        "effectiveViewerState": {
+          "groups": 1,
+          "largestGroup": 16255,
+          "groupSizeHistogram": {
+            "16255": 1
+          },
+          "batchableUnits": 16255,
+          "batchableShare": 1.0,
+          "reducibleDraws": 16254,
+          "reducibleDrawShare": 0.999938,
+          "trianglesInBatchableGroups": 501323,
+          "triangleBatchableShare": 1.0,
+          "groupsDetail": [
+            {
+              "size": 16255,
+              "mode": "TRIANGLES",
+              "material": 0,
+              "layout": "{\"attrs\":[[\"NORMAL\",5126,\"VEC3\",false,null],[\"POSITION\",5126,\"VEC3\",false,null]],\"extensions\":[],\"indexed\":true,\"targets\":[]}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "path": "data/projects/qichuang/models/site/versions/2026-09-19/processed/model.glb",
+      "absolutePath": "C:\\Users\\34084\\Desktop\\modelviewer - 副本\\data\\projects\\qichuang\\models\\site\\versions\\2026-09-19\\processed\\model.glb",
+      "sha256": "28aabfe8cf82a6332cab5eb5c668ae83af045a6871005b0358082e8c4da1d9f1",
+      "bytes": 18385952,
+      "status": "ready",
+      "manifestStats": {
+        "rvmBytes": 4505600,
+        "txtBytes": 1344437,
+        "glbBytes": 18385952,
+        "objectCount": 8955,
+        "namedNodes": 7423,
+        "rvmGroups": 7420,
+        "mappedObjects": 7420,
+        "mappingRate": 1.0,
+        "triangles": 335824,
+        "meshes": 5796,
+        "lines": 867,
+        "durationMs": 6073,
+        "converterVersion": "pdms-import-pipeline/1 · rvmparser/2f7025971a95 · tolerance 0.02 m"
+      },
+      "gltf": {
+        "asset": {
+          "version": "2.0",
+          "generator": "rvmparser",
+          "extras": {
+            "rvmparser-origin": [
+              -20.039997100830078,
+              64.97950744628906,
+              9.803499221801758
+            ]
+          }
+        },
+        "scenes": 1,
+        "nodes": 7931,
+        "meshDefinitions": 5796,
+        "primitiveDefinitions": 5796,
+        "materials": 1,
+        "buffers": 1,
+        "bufferViews": 16849,
+        "accessors": 16849,
+        "binBytes": 12917160
+      },
+      "render": {
+        "renderablePrimitiveInstances": 5796,
+        "meshInstances": 5507,
+        "lineInstances": 289,
+        "otherInstances": 0,
+        "triangles": 335824,
+        "modes": {
+          "TRIANGLES": 5507,
+          "LINES": 289
+        },
+        "sourceMaterials": {
+          "0": 5796
+        },
+        "attributeLayouts": 2,
+        "currentSceneDrawCallBaseline": 5796,
+        "viewerGlobalBatchFloor": 2,
+        "sourceBatchFloor": 2,
+        "absolutePrimitiveModeFloor": 2
+      },
+      "instancing": {
+        "repeatedMeshGroups": {},
+        "repeatedMeshGroupCount": 0,
+        "meshRefParticipatingUnits": 0,
+        "meshRefParticipatingShare": 0.0,
+        "meshRefReducibleDraws": 0,
+        "meshRefReducibleDrawShare": 0.0,
+        "exactDuplicatePrimitiveGroups": 0,
+        "exactDuplicateParticipatingUnits": 0,
+        "exactDuplicateParticipatingShare": 0.0,
+        "exactDuplicateReducibleDraws": 0,
+        "exactDuplicateReducibleDrawShare": 0.0,
+        "exactDuplicateTriangleShare": 0.0
+      },
+      "batching": {
+        "sourceGLTFState": {
+          "groups": 2,
+          "largestGroup": 5507,
+          "groupSizeHistogram": {
+            "289": 1,
+            "5507": 1
+          },
+          "batchableUnits": 5796,
+          "batchableShare": 1.0,
+          "reducibleDraws": 5794,
+          "reducibleDrawShare": 0.999655,
+          "trianglesInBatchableGroups": 335824,
+          "triangleBatchableShare": 1.0,
+          "groupsDetail": [
+            {
+              "size": 5507,
+              "mode": "TRIANGLES",
+              "material": 0,
+              "layout": "{\"attrs\":[[\"NORMAL\",5126,\"VEC3\",false,null],[\"POSITION\",5126,\"VEC3\",false,null]],\"extensions\":[],\"indexed\":true,\"targets\":[]}"
+            },
+            {
+              "size": 289,
+              "mode": "LINES",
+              "material": 0,
+              "layout": "{\"attrs\":[[\"POSITION\",5126,\"VEC3\",false,null]],\"extensions\":[],\"indexed\":false,\"targets\":[]}"
+            }
+          ]
+        },
+        "effectiveViewerState": {
+          "groups": 2,
+          "largestGroup": 5507,
+          "groupSizeHistogram": {
+            "289": 1,
+            "5507": 1
+          },
+          "batchableUnits": 5796,
+          "batchableShare": 1.0,
+          "reducibleDraws": 5794,
+          "reducibleDrawShare": 0.999655,
+          "trianglesInBatchableGroups": 335824,
+          "triangleBatchableShare": 1.0,
+          "groupsDetail": [
+            {
+              "size": 5507,
+              "mode": "TRIANGLES",
+              "material": 0,
+              "layout": "{\"attrs\":[[\"NORMAL\",5126,\"VEC3\",false,null],[\"POSITION\",5126,\"VEC3\",false,null]],\"extensions\":[],\"indexed\":true,\"targets\":[]}"
+            },
+            {
+              "size": 289,
+              "mode": "LINES",
+              "material": 0,
+              "layout": "{\"attrs\":[[\"POSITION\",5126,\"VEC3\",false,null]],\"extensions\":[],\"indexed\":false,\"targets\":[]}"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "viewerSources": [
+    "viewer/js/viewer3d.js",
+    "viewer/js/edgeLinesPass.js",
+    "viewer/vendor/jsm/postprocessing/OutlinePass.js",
+    "viewer/vendor/jsm/postprocessing/EffectComposer.js"
+  ]
+}

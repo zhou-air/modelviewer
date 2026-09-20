@@ -1,0 +1,97 @@
+{
+  "url": "http://127.0.0.1:8765/viewer/index.html",
+  "chrome": "C:\\Users\\34084\\AppData\\Local\\ms-playwright\\chromium-1208\\chrome-win64\\chrome.exe",
+  "ok": true,
+  "console": [
+    "[log] [viewer] model size (m): [199.19567805424927, 25.601770530479385, 133.35900633421264]"
+  ],
+  "pageErrors": [],
+  "loadMs": 1013,
+  "ready": true,
+  "viewer": {
+    "ready": true,
+    "error": null,
+    "info": {
+      "nodes": 7932,
+      "meshes": 5507,
+      "lines": 289,
+      "maxDepth": 12,
+      "bbox": {
+        "min": [
+          -99.59567717452197,
+          -12.803499681642291,
+          -66.6794988071779
+        ],
+        "max": [
+          99.6000008797273,
+          12.798270848837094,
+          66.67950752703474
+        ]
+      },
+      "size": [
+        199.19567805424927,
+        25.601770530479385,
+        133.35900633421264
+      ],
+      "fps": 8,
+      "drawCalls": 5796,
+      "drawTriangles": 335824,
+      "geometries": 5796
+    },
+    "statusText": "正在加载模型… 100%",
+    "statusHidden": "hidden"
+  },
+  "webgl": {
+    "available": true,
+    "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+    "vendor": "Google Inc. (NVIDIA)",
+    "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Laptop GPU (0x000028A0) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+  },
+  "fpsMeasured": 55,
+  "finalInfo": {
+    "info": {
+      "nodes": 7932,
+      "meshes": 5507,
+      "lines": 289,
+      "maxDepth": 12,
+      "bbox": {
+        "min": [
+          -99.59567717452197,
+          -12.803499681642291,
+          -66.6794988071779
+        ],
+        "max": [
+          99.6000008797273,
+          12.798270848837094,
+          66.67950752703474
+        ]
+      },
+      "size": [
+        199.19567805424927,
+        25.601770530479385,
+        133.35900633421264
+      ],
+      "fps": 55,
+      "drawCalls": 5796,
+      "drawTriangles": 335824,
+      "geometries": 5796
+    },
+    "render": {
+      "calls": 5796,
+      "triangles": 335824,
+      "frame": 312
+    },
+    "memory": {
+      "geometries": 5796,
+      "textures": 0
+    },
+    "programs": 2
+  },
+  "screenshot": "C:\\Users\\34084\\Desktop\\modelviewer - 副本\\reports\\phase2-viewer-screenshot.png",
+  "cameraAfterDrag": [
+    -91.06370050441188,
+    221.42297391463066,
+    54.86430756744024
+  ],
+  "screenshotRotated": "C:\\Users\\34084\\Desktop\\modelviewer - 副本\\reports\\phase2-viewer-screenshot-rotated.png"
+}

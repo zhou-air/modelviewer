@@ -1,0 +1,117 @@
+{
+  "url": "http://127.0.0.1:8765/scratch/xeokit/index.html?loader=gltf",
+  "ok": true,
+  "console": [
+    "[error] [ERROR] [Component 'qichuang']: Param expected: indices (required for 'lines' primitive type)",
+    "[error] [ERROR] [Component 'qichuang']: Mesh with this ID not found: \"qichuang.2208\" - ignoring this mesh",
+    "[error] [ERROR] [Component 'qichuang']: Param expected: indices (required for 'lines' primitive type)",
+    "[error] [ERROR] [Component 'qichuang']: Mesh with this ID not found: \"qichuang.2209\" - ignoring this mesh",
+    "[error] [ERROR] [Component 'qichuang']: Param expected: indices (required for 'lines' primitive type)",
+    "[error] [ERROR] [Component 'qichuang']: Mesh with this ID not found: \"qichuang.2211\" - ignoring this mesh",
+    "[error] [ERROR] [Component 'qichuang']: Param expected: indices (required for 'lines' primitive type)",
+    "[error] [ERROR] [Component 'qichuang']: Mesh with this ID not found: \"qichuang.2212\" - ignoring this mesh",
+    "[error] [ERROR] [Component 'qichuang']: Param expected: indices (required for 'lines' primitive type)",
+    "[error] [ERROR] [Component 'qichuang']: Mesh with this ID not found: \"qichuang.2214\" - ignoring this mesh",
+    "[error] [ERROR] [Component 'qichuang']: Param expected: indices (required for 'lines' primitive type)",
+    "[error] [ERROR] [Component 'qichuang']: Mesh with this ID not found: \"qichuang.2215\" - ignoring this mesh",
+    "[error] [ERROR] [Component 'qichuang']: Param expected: indices (required for 'lines' primitive type)",
+    "[error] [ERROR] [Component 'qichuang']: Mesh with this ID not found: \"qichuang.2216\" - ignoring this mesh",
+    "[error] [ERROR] [Component 'qichuang']: Param expected: indices (required for 'lines' primitive type)",
+    "[error] [ERROR] [Component 'qichuang']: Mesh with this ID not found: \"qichuang.2218\" - ignoring this mesh",
+    "[error] [ERROR] [Component 'qichuang']: Param expected: indices (required for 'lines' primitive type)",
+    "[error] [ERROR] [Component 'qichuang']: Mesh with this ID not found: \"qichuang.2219\" - ignoring this mesh",
+    "[error] [ERROR] [Component 'qichuang']: Param expected: indices (required for 'lines' primitive type)",
+    "[error] [ERROR] [Component 'qichuang']: Mesh with this ID not found: \"qichuang.2813\" - ignoring this mesh",
+    "[error] [ERROR] [Component 'qichuang']: Param expected: indices (required for 'lines' primitive type)",
+    "[error] [ERROR] [Component 'qichuang']: Mesh with this ID not found: \"qichuang.2815\" - ignoring this mesh",
+    "[error] [ERROR] [Component 'qichuang']: Param expected: indices (required for 'lines' primitive type)",
+    "[error] [ERROR] [Component 'qichuang']: Mesh with this ID not found: \"qichuang.2839\" - ignoring this mesh",
+    "[error] [ERROR] [Component 'qichuang']: Param expected: indices (required for 'lines' primitive type)",
+    "[error] [ERROR] [Component 'qichuang']: Mesh with this ID not found: \"qichuang.2842\" - ignoring this mesh",
+    "[error] [ERROR] [Component 'qichuang']: Param expected: indices (required for 'lines' primitive type)",
+    "[error] [ERROR] [Component 'qichuang']: Mesh with this ID not found: \"qichuang.2887\" - ignoring this mesh",
+    "[error] [ERROR] [Component 'qichuang']: Param expected: indices (required for 'lines' primitive type)",
+    "[error] [ERROR] [Component 'qichuang']: Mesh with this ID not found: \"qichuang.2888\" - ignoring this mesh",
+    "[error] [ERROR] [Component 'qichuang']: Param expected: indices (required for 'lines' primitive type)",
+    "[error] [ERROR] [Component 'qichuang']: Mesh with this ID not found: \"qichuang.2919\" - ignoring this mesh",
+    "[error] [ERROR] [Component 'qichuang']: Param expected: indices (required for 'lines' primitive type)",
+    "[error] [ERROR] [Component 'qichuang']: Mesh with this ID not found: \"qichuang.2923\" - ignoring this mesh",
+    "[error] [ERROR] [Component 'qichuang']: Param expected: indices (required for 'lines' primitive type)",
+    "[error] [ERROR] [Component 'qichuang']: Mesh with this ID not found: \"qichuang.2931\" - ignoring this mesh",
+    "[error] [ERROR] [Component 'qichuang']: Param expected: indices (required for 'lines' primitive type)",
+    "[error] [ERROR] [Component 'qichuang']: Mesh with this ID not found: \"qichuang.2933\" - ignoring this mesh",
+    "[error] [ERROR] [Component 'qichuang']: Param expected: indices (required for 'lines' primitive type)",
+    "[error] [ERROR] [Component 'qichuang']: Mesh with this ID not found: \"qichuang.3025\" - ignoring this mesh"
+  ],
+  "pageErrors": [],
+  "ready": true,
+  "wallMs": 1483,
+  "probe": {
+    "ready": true,
+    "error": null,
+    "loader": "GLTFLoaderPlugin",
+    "info": {
+      "loadMs": 1141,
+      "metaObjectCount": 0,
+      "roots": 0,
+      "named": 0,
+      "withParent": 0,
+      "maxDepth": 0,
+      "depthHistogram": {},
+      "typeCountTop": [],
+      "sampleObjects": [],
+      "depth2Examples": [],
+      "sceneStats": {},
+      "diag": {
+        "aabb": [
+          -99.59567717452197,
+          -12.803499681642291,
+          -66.6794988071779,
+          99.6000008797273,
+          12.798270848837094,
+          66.67950752703474
+        ],
+        "eyeSet": [
+          142.02868030528236,
+          119.11640106003846,
+          142.02652281260814
+        ],
+        "lookSet": [
+          0.002161852602668546,
+          -0.0026144164025989625,
+          0.000004359928425401449
+        ],
+        "recolor": {
+          "viaModelMaterials": 0,
+          "viaMeshMaterial": 0,
+          "meshCount": 5507,
+          "err": null
+        },
+        "treePlugin": "OK"
+      },
+      "glCounterPatched": true,
+      "fps": 13,
+      "drawCallsPerFrame": 0,
+      "cameraEyeLive": [
+        142.02868030528236,
+        119.11640106003846,
+        142.02652281260814
+      ]
+    }
+  },
+  "webgl": {
+    "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+    "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Laptop GPU (0x000028A0) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+  },
+  "stress": {
+    "frames": 721,
+    "ms": 4003,
+    "fps": 180,
+    "drawCalls": 720,
+    "drawCallsPerFrame": 0.9986130374479889
+  },
+  "screenshot": "C:\\Users\\34084\\Desktop\\modelviewer - 副本\\reports\\xeokit-probe-screenshot-gltf.png",
+  "treeHtmlSample": [
+    ""
+  ]
+}

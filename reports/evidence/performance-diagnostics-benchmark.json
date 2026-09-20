@@ -1,0 +1,164 @@
+{
+  "capturedAt": "2026-09-20T03:08:30.298Z",
+  "viewport": {
+    "width": 1760,
+    "height": 940
+  },
+  "models": [
+    {
+      "target": {
+        "label": "5,796 calls",
+        "project": "qichuang",
+        "model": "site",
+        "version": "2026-09-19"
+      },
+      "environment": {
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Laptop GPU (0x000028A0) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "gpuTimerQuery": true,
+        "candidate": "FLANGE 1 of BRANCH /WG-10401-400-L1G/B2",
+        "current": {
+          "projectId": "qichuang",
+          "modelId": "site",
+          "versionId": "2026-09-19",
+          "projectName": "启创",
+          "modelName": "site",
+          "versionName": "2026-09-19",
+          "glb": "/data/projects/qichuang/models/site/versions/2026-09-19/processed/model.glb",
+          "base": "/data/projects/qichuang/models/site/versions/2026-09-19/processed"
+        }
+      },
+      "scenarios": {
+        "fullModel": {
+          "fps": 38,
+          "frameTimeMs": 25,
+          "cpuFrameTimeMs": 25.6,
+          "gpuFrameTimeMs": 18.36,
+          "drawCalls": 5796,
+          "frameDrawCallsAllPasses": 5797,
+          "triangles": 335824,
+          "visibleMeshes": 5507,
+          "visibleLines": 289,
+          "outlineEnabled": false,
+          "contours": false,
+          "resolution": "1444×896",
+          "pixelRatio": 1,
+          "gpuTimerStatus": "available",
+          "samples": 15
+        },
+        "localZoom": {
+          "fps": 165,
+          "frameTimeMs": 6,
+          "cpuFrameTimeMs": 4.9,
+          "gpuFrameTimeMs": 1.06,
+          "drawCalls": 47,
+          "frameDrawCallsAllPasses": 48,
+          "triangles": 5154,
+          "visibleMeshes": 46,
+          "visibleLines": 1,
+          "outlineEnabled": false,
+          "contours": false,
+          "resolution": "1444×896",
+          "pixelRatio": 1,
+          "gpuTimerStatus": "available",
+          "samples": 16
+        },
+        "isolatedObject": {
+          "fps": 165,
+          "frameTimeMs": 6.1,
+          "cpuFrameTimeMs": 2.2,
+          "gpuFrameTimeMs": 0.73,
+          "drawCalls": 2,
+          "frameDrawCallsAllPasses": 3,
+          "triangles": 339,
+          "visibleMeshes": 2,
+          "visibleLines": 0,
+          "outlineEnabled": false,
+          "contours": false,
+          "resolution": "1444×896",
+          "pixelRatio": 1,
+          "gpuTimerStatus": "available",
+          "samples": 16
+        }
+      }
+    },
+    {
+      "target": {
+        "label": "16,255 calls",
+        "project": "qichuang",
+        "model": "hygq",
+        "version": "2026-09-20"
+      },
+      "environment": {
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Laptop GPU (0x000028A0) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "gpuTimerQuery": true,
+        "candidate": "GWALL 1 of FRMWORK /WALLS",
+        "current": {
+          "projectId": "qichuang",
+          "modelId": "hygq",
+          "versionId": "2026-09-20",
+          "projectName": "启创",
+          "modelName": "hygq",
+          "versionName": "2026-09-20",
+          "glb": "/data/projects/qichuang/models/hygq/versions/2026-09-20/processed/model.glb",
+          "base": "/data/projects/qichuang/models/hygq/versions/2026-09-20/processed"
+        }
+      },
+      "scenarios": {
+        "fullModel": {
+          "fps": 14,
+          "frameTimeMs": 77.2,
+          "cpuFrameTimeMs": 74.7,
+          "gpuFrameTimeMs": 50.41,
+          "drawCalls": 16255,
+          "frameDrawCallsAllPasses": 16256,
+          "triangles": 501323,
+          "visibleMeshes": 16255,
+          "visibleLines": 0,
+          "outlineEnabled": false,
+          "contours": false,
+          "resolution": "1444×896",
+          "pixelRatio": 1,
+          "gpuTimerStatus": "available",
+          "samples": 14
+        },
+        "localZoom": {
+          "fps": 73,
+          "frameTimeMs": 13.5,
+          "cpuFrameTimeMs": 13.2,
+          "gpuFrameTimeMs": 0.91,
+          "drawCalls": 65,
+          "frameDrawCallsAllPasses": 66,
+          "triangles": 2699,
+          "visibleMeshes": 65,
+          "visibleLines": 0,
+          "outlineEnabled": false,
+          "contours": false,
+          "resolution": "1444×896",
+          "pixelRatio": 1,
+          "gpuTimerStatus": "available",
+          "samples": 16
+        },
+        "isolatedObject": {
+          "fps": 165,
+          "frameTimeMs": 6,
+          "cpuFrameTimeMs": 4.5,
+          "gpuFrameTimeMs": 0.77,
+          "drawCalls": 1,
+          "frameDrawCallsAllPasses": 2,
+          "triangles": 12,
+          "visibleMeshes": 1,
+          "visibleLines": 0,
+          "outlineEnabled": false,
+          "contours": false,
+          "resolution": "1444×896",
+          "pixelRatio": 1,
+          "gpuTimerStatus": "available",
+          "samples": 16
+        }
+      }
+    }
+  ],
+  "errors": []
+}
