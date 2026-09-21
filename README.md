@@ -1,6 +1,6 @@
 # PDMS Model Asset Manager — 本地工程模型查看与管理
 
-> 本仓库为私人开发仓库。发布副本保留 `示例模型/` 中的 RVM/TXT 示例，真实运行数据、访问密码、临时调试文件和缓存不纳入版本控制。
+> 本仓库为公开开发仓库。发布副本保留 `示例模型/` 中的 RVM/TXT 示例，真实运行数据、访问密码、临时调试文件和缓存不纳入版本控制。
 
 把 AVEVA PDMS 导出的 RVM 几何与 TXT 数据清单，转换成能在**本机浏览器**里流畅查看的工程模型，
 并且按 **Project / Model / Version** 三层管理起来（导入、自动转换、版本迭代、切换查看）。
@@ -123,11 +123,12 @@ python scratch/phase8-api-test.py                                        # 后�
 NODE_PATH=<node-workspace>/node_modules node scratch/phase8-verify.js    # 浏览器（需先起后端）
 python scratch/phase6-benchmark.js 3                                     # 性能基准（需先起后端）
 
-# 外观选项（元件轮廓线 / 隐藏件半透明）：后端起在 8899 端口即可，脚本把端口写死在 PORT 环境变量里
+# 外观与交互实测：后端起在 8899 端口即可，脚本把端口写死在 PORT 环境变量里
 PORT=8899 NODE_PATH=<node-workspace>/node_modules node scratch/appearance-verify.js       # 31 项功能实测
 PORT=8899 NODE_PATH=<node-workspace>/node_modules node scratch/appearance-regression.js   # 15 项既有交互回归
 PORT=8899 NODE_PATH=<node-workspace>/node_modules node scratch/appearance-fps.js          # 开关的帧率对比
 PORT=8899 NODE_PATH=<node-workspace>/node_modules node scratch/appearance-diag.js         # 逐通道诊断（画面不对时用）
+PORT=8899 NODE_PATH=<node-workspace>/node_modules node scratch/appearance-color-ground-verify.js # 颜色、背景、地板与会话边界
 ```
 
 ## 目录
@@ -163,6 +164,8 @@ PORT=8899 NODE_PATH=<node-workspace>/node_modules node scratch/appearance-diag.j
 │  │  ├─ assetManager.js         Project Manager · Model Selector · Import 弹窗 · Recent · Details
 │  │  ├─ data.js                 按版本路径加载三份元数据并建索引
 │  │  ├─ floorPlan.js            只读设备定位底图：轮廓/位号/定位点/坐标调试
+│  │  ├─ appearance.js            用户级外观偏好：颜色、背景、地板与 localStorage
+│  │  ├─ sceneAppearance.js       场景背景与独立地板，不进入模型树和拾取
 │  │  ├─ edgeLinesPass.js        元件轮廓线后处理：离屏法线/深度 + 屏幕空间边缘检测
 │  │  ├─ viewer3d.js             场景、加载/卸载、拾取、高亮、显隐、外观选项、视图适配、统计
 │  │  ├─ batchRendering.js       indexed 空间合批 + faceIndex→canonicalId + 增量状态同步
@@ -186,7 +189,7 @@ PORT=8899 NODE_PATH=<node-workspace>/node_modules node scratch/appearance-diag.j
 已实现：Orbit/Pan/Zoom/Fit、点击选中（真实射线拾取）、选中高亮与描边、隐藏/隔离/显示全部、
 8 层模型树与 3D 双向联动、属性面板（含 RVM 字节偏移等映射信息）、
 工程导航（Orbit/Game）、多项目/多模型/多版本管理、导入即转换即校验、模型切换与状态复位、
-**外观选项（元件轮廓线 / 隐藏件半透明，见下）**，以及默认启用的
+**外观系统（模型颜色、对象覆盖色、场景背景、地板及既有选项，见下）**，以及默认启用的
 **indexed 中粒度空间 Batching**（保留 canonicalId / metadata / 树 / 拾取 / 高亮 / 显隐语义）。
 
 ### Batch Rendering
@@ -197,14 +200,22 @@ ghost 只重建状态变化涉及的中粒度 Batch；Isolate/Show All 等全局
 实测基础场景从 5,796 / 16,255 calls 降到 394 / 317 calls，详见
 `reports/batch-rendering-integration-report.md`。
 
-### 外观选项（工具条「外观」，两项均默认关闭）
+### 外观系统（工具条「外观」）
 
 | 选项 | 作用 | 实现 | 代价 |
 |---|---|---|---|
+| **全局模型颜色** | 修改没有对象覆盖色的模型对象；恢复默认后回到默认模型色 | 共享批处理材质通过 `objectColor/objectColorMix` 属性混合全局色，不为每个原始对象创建材质 | 不拆 Batch；只更新受影响的批次 |
+| **对象单独改色** | 右键对单个或多个选中对象设置常用色、自定义色或恢复默认色 | `Map<canonicalId, color>`；取消选中后恢复对象自己的颜色 | 只更新受影响的 Batch，切换模型/版本清空 |
+| **背景颜色** | 设置纯色场景背景 | `SceneAppearance` 管理 `scene.background` | 无额外渲染 pass |
+| **显示地板 / 地板颜色** | 按模型包围盒自动放置水平地板 | 独立场景节点，不参与 raycast、模型树、隐藏/隔离和测量；FloorPlan 位于其上方 | 默认关闭，无阴影/AO |
 | **元件轮廓线** | 给每个元件画出分界轮廓，工程审图时结构层次比纯着色清楚得多 | 屏幕空间边缘检测后处理（`viewer/js/edgeLinesPass.js`）：先用 `overrideMaterial` 离屏渲染一遍法线 + 线性深度，再按 4 邻域做法线夹角与相对深度差的边缘检测，合成回画面 | 开启时每帧多一轮场景渲染 + 一个全屏 pass。关掉后该 pass 被 EffectComposer 直接跳过，**零开销** |
 | **隐藏件半透明** | 「隐藏选中 / 隔离选中」掉的对象不消失，改用半透明 ghost 显示，不透明度 5%–95% 可调 | 隐藏件保留在渲染里，仅换成 `transparent + depthWrite:false` 的 ghost 材质；显隐状态仍记在 `hiddenCanonicals` | 只有存在隐藏对象时才多一趟全场景材质同步；画面上是半透明混合，几乎无开销 |
 
-两项的语义边界（都经过实测断言）：
+新外观项的语义边界（都经过实测断言）：
+
+- 颜色优先级为选中/悬停高亮 → 对象覆盖色 → 全局模型颜色 → 默认模型颜色；选中高亮、Ghost、轮廓线、FloorPlan、Measurement 和 Orientation Gizmo 不使用对象覆盖材质替代。
+- `globalModelColor`、`backgroundColor`、`groundEnabled`、`groundColor` 写入当前设备的 `localStorage`，切换 Project/Model/Version 保留；对象覆盖色只在当前模型查看会话内保留，切换模型或版本清空。
+- 地板根据模型 BoundingBox 自动定尺寸和高度；FloorPlan 单独位于模型根节点之外，并在地板上方保留偏移，避免遮挡和 Z-fighting。
 
 - 轮廓线用**视图法线 + 线性深度双通道**。只看法线分不出前后遮挡的同朝向元件，只看深度分不出贴近的相邻元件，两路取或才能覆盖。仍属屏幕空间近似：**深度与法线同时连续的贴合面不会被描边**（要彻底解决需要物体 ID 缓冲，而 5,796 个 mesh 逐对象换材质不划算）。
 - 半透明只改**外观**，不改**语义**：ghost 对象仍然不可拾取、不参与描边、不计入“可见对象”统计，`hidden` 计数也不变；关掉开关立即回到真隐藏。
@@ -216,7 +227,7 @@ ghost 只重建状态变化涉及的中粒度 Batch；Isolate/Show All 等全局
 - Viewer 读取 GLB 内的 `asset.extras.rvmparser-origin`，严格复用当前转换的“中心平移 + Z-up→Y-up”映射；底图落在 Three.js XZ 平面、`modelBox.min.y` 下方极小偏移处，不允许手工平移或缩放对齐。
 - `FloorPlanGroup` 与模型根节点平级，不参与 raycast、模型树、选中、隐藏或隔离。位号按纹理批处理，轮廓和定位点分别合并为单个 `LineSegments`。
 - “外观 → 定位坐标调试”可同时显示绿色 floorplan 定位点、粉色 3D 设备包围盒中心和紫色连接线。
-- 两项的选择状态在**当前页面会话内跨版本保留**，刷新页面回到默认关闭。
+- 设备定位图仍按既有页面会话语义管理；新加入的四项用户级外观偏好写入 localStorage，刷新和切换 Project/Model/Version 均保留。
 
 性能取舍：Outline 依然会增加额外 pass，因此沿用交互期间暂停、停止后恢复的既有策略。
 元件轮廓线是同类性质的取舍（多一轮场景渲染），

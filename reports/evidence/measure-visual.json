@@ -1,0 +1,293 @@
+{
+  "picks": [
+    {
+      "canonical": "FLANGE 1 of BRANCH /WG-10401-400-L1G/B2",
+      "center": [
+        29.762996672637428,
+        -5.616999220005609,
+        41.65950774563208
+      ]
+    },
+    {
+      "canonical": "ELBOW 2 of BRANCH /WG-10401-400-L1G/B2",
+      "center": [
+        20.825391462633668,
+        -4.653963105940297,
+        41.73452604243399
+      ]
+    }
+  ],
+  "state": {
+    "enabled": true,
+    "kind": "surface",
+    "revision": 2,
+    "axes": "PDMS_WORLD_Z_UP",
+    "origin": [
+      -20.039997100830078,
+      64.97950744628906,
+      9.803499221801758
+    ],
+    "aim": {
+      "canonicalId": "/PL-10710-65-M2G/B1",
+      "point": [
+        26.06666115907881,
+        -4.706332778837707,
+        42.4694839854763
+      ],
+      "bboxCenter": [
+        25.434425578202763,
+        -7.2323701120961505,
+        52.99858834422248
+      ],
+      "distanceWorldM": 12.50109115305626
+    },
+    "pending": null,
+    "pendingResult": null,
+    "pendingLabel": null,
+    "aimComputed": true,
+    "showComponents": true,
+    "components": [
+      {
+        "id": "M1-mu9sns7l",
+        "axis": "X",
+        "mm": -8951.722106950132,
+        "a": [
+          29.816023534979358,
+          -5.563972357663671,
+          41.71253460797404
+        ],
+        "b": [
+          20.864301428029226,
+          -5.563972357663671,
+          41.71253460797404
+        ]
+      },
+      {
+        "id": "M1-mu9sns7l",
+        "axis": "Y",
+        "mm": -60.901399855545606,
+        "a": [
+          20.864301428029226,
+          -5.563972357663671,
+          41.71253460797404
+        ],
+        "b": [
+          20.864301428029226,
+          -5.563972357663671,
+          41.77343600782959
+        ]
+      },
+      {
+        "id": "M1-mu9sns7l",
+        "axis": "Z",
+        "mm": 948.9192171189407,
+        "a": [
+          20.864301428029226,
+          -5.563972357663671,
+          41.77343600782959
+        ],
+        "b": [
+          20.864301428029226,
+          -4.61505314054473,
+          41.77343600782959
+        ]
+      }
+    ],
+    "clipboardText": "From\tTo\tDirect(mm)\tX(mm)\tY(mm)\tZ(mm)\tHorizontal(mm)\nP1\tP2\t9002\t-8952\t-61\t949\t8952",
+    "measurements": [
+      {
+        "id": "M1-mu9sns7l",
+        "a": {
+          "kind": "surface",
+          "displayName": "P1",
+          "canonicalId": "/WG-10401-400-L1G/B2",
+          "point": [
+            29.816023534979358,
+            -5.563972357663671,
+            41.71253460797404
+          ],
+          "hitPoint": [
+            29.816023534979358,
+            -5.563972357663671,
+            41.71253460797404
+          ],
+          "bboxCenter": [
+            25.247088838922124,
+            -3.666749203287976,
+            52.977007637813614
+          ]
+        },
+        "b": {
+          "kind": "surface",
+          "displayName": "P2",
+          "canonicalId": "ELBOW 2 of BRANCH /WG-10401-400-L1G/B2",
+          "point": [
+            20.864301428029226,
+            -4.61505314054473,
+            41.77343600782959
+          ],
+          "hitPoint": [
+            20.864301428029226,
+            -4.61505314054473,
+            41.77343600782959
+          ],
+          "bboxCenter": [
+            20.825391462633668,
+            -4.653963105940297,
+            41.73452604243399
+          ]
+        },
+        "result": {
+          "axes": "PDMS_WORLD_Z_UP",
+          "distanceMm": 9002.082278072206,
+          "distanceWorldM": 9.002082278072207,
+          "dxMm": -8951.722106950132,
+          "dyMm": -60.901399855545606,
+          "dzMm": 948.9192171189407,
+          "verticalMm": 948.9192171189407,
+          "horizontalMm": 8951.929270306155
+        },
+        "record": {
+          "from": "P1",
+          "to": "P2",
+          "direct": 9002,
+          "dx": -8952,
+          "dy": -61,
+          "dz": 949,
+          "horizontal": 8952,
+          "aWorld": [
+            29.816023534979358,
+            -5.563972357663671,
+            41.71253460797404
+          ],
+          "bWorld": [
+            20.864301428029226,
+            -4.61505314054473,
+            41.77343600782959
+          ],
+          "axes": "PDMS_WORLD_Z_UP"
+        },
+        "legs": [
+          "X",
+          "Y",
+          "Z"
+        ]
+      }
+    ],
+    "labels": 1,
+    "componentLabels": 3,
+    "componentLabelTexts": [
+      "X  8,951.7 mm",
+      "Y  60.9 mm",
+      "Z  948.9 mm"
+    ],
+    "reticle": {
+      "visible": true,
+      "glyph": "⊕",
+      "state": "surface"
+    },
+    "group": {
+      "visible": true,
+      "markers": 2,
+      "segments": 1,
+      "components": 3,
+      "preview": false,
+      "capacity": {
+        "points": 1024,
+        "segments": 512,
+        "components": 1536
+      }
+    },
+    "lineObjectsRegistered": true
+  },
+  "ui": {
+    "panelOpen": true,
+    "panelVisible": true,
+    "buttonOn": true,
+    "xyzChecked": true,
+    "xyzDisabled": false,
+    "copyDisabled": false,
+    "toast": "已复制 1 条测量结果（TAB 分隔），可直接粘贴进 Excel",
+    "reticleVisible": true,
+    "reticleGlyph": "●",
+    "reticleState": "recorded",
+    "reticleShapeCenter": {
+      "svgCenter": {
+        "x": 878,
+        "y": 472
+      },
+      "boxCenter": {
+        "x": 878,
+        "y": 472
+      }
+    },
+    "reticleCenter": {
+      "x": 562,
+      "y": 428,
+      "cx": 562,
+      "cy": 428
+    },
+    "items": 1,
+    "labels": 4,
+    "labelTexts": [
+      "9,002.1 mm",
+      "X  8,951.7 mm",
+      "Y  60.9 mm",
+      "Z  948.9 mm"
+    ],
+    "componentLabels": 3,
+    "componentLabelTexts": [
+      "X  8,951.7 mm",
+      "Y  60.9 mm",
+      "Z  948.9 mm"
+    ],
+    "labelVisible": 4,
+    "axesText": "PDMS 世界坐标（Z 向上）",
+    "clearDisabled": false,
+    "listText": "#1\nP1 → P2\nDirect Distance\n9,002.1\nΔX\n-8,951.7\nΔY\n-60.9\nΔZ\n948.9\nHorizontal Distance\n8,951.9",
+    "nowText": "命中 /PL-10710-65-M2G/B1\n左键取表面点（⊕）· C 取对象中心（◎）"
+  },
+  "clipboard": "From\tTo\tDirect(mm)\tX(mm)\tY(mm)\tZ(mm)\tHorizontal(mm)\r\nP1\tP2\t9002\t-8952\t-61\t949\t8952",
+  "xyzOn": 3,
+  "layout": {
+    "innerHeight": 900,
+    "center": {
+      "top": 44,
+      "bottom": 900,
+      "height": 856
+    },
+    "canvas": {
+      "top": 44,
+      "bottom": 900,
+      "height": 856
+    },
+    "toolbar": {
+      "top": 845,
+      "bottom": 890,
+      "height": 45
+    },
+    "measurePanel": {
+      "top": 407,
+      "bottom": 890,
+      "height": 484
+    }
+  },
+  "reticleOffsets": {
+    "miss": {
+      "measurePx": 0,
+      "navPx": 0
+    },
+    "surface": {
+      "measurePx": 0,
+      "navPx": 0
+    },
+    "center": {
+      "measurePx": 0,
+      "navPx": 0
+    },
+    "recorded": {
+      "measurePx": 0,
+      "navPx": 0
+    }
+  }
+}

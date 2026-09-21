@@ -1,7 +1,7 @@
 {
   "phase": "game-pick-multiselect",
-  "url": "http://127.0.0.1:8765/viewer/index.html",
-  "startedAt": "2026-09-19T16:31:49.262Z",
+  "url": "http://127.0.0.1:8900/viewer/index.html",
+  "startedAt": "2026-09-21T13:10:11.274Z",
   "scenarios": [
     {
       "no": "C1",
@@ -102,11 +102,43 @@
     },
     {
       "no": "B3",
-      "name": "捕获后右键取消选中所有",
+      "name": "捕获后右键打开已选对象菜单",
       "ok": true,
       "detail": {
         "before": "ELBOW 1 of BRANCH /PL-10604-65-M1E/B2",
-        "after": null
+        "after": "ELBOW 1 of BRANCH /PL-10604-65-M1E/B2",
+        "menu": {
+          "open": true,
+          "actions": [
+            "color-open",
+            "color-preset",
+            "color-preset",
+            "color-preset",
+            "color-preset",
+            "color-preset",
+            "color-preset",
+            "color-custom",
+            "color-reset",
+            "hide",
+            "isolate",
+            "show-all"
+          ]
+        }
+      }
+    },
+    {
+      "no": "B3b",
+      "name": "游戏导航左键点空处取消选中",
+      "ok": true,
+      "detail": {
+        "state": {
+          "count": 0,
+          "canonicals": [],
+          "primary": null,
+          "outlineObjects": 0,
+          "swappedObjects": 1
+        },
+        "treeSelectedCount": 0
       }
     },
     {
@@ -115,6 +147,7 @@
       "ok": true,
       "detail": {
         "mode": "orbit",
+        "aimed": "ELBOW 1 of BRANCH /PL-10604-65-M1E/B2",
         "selected": "ELBOW 1 of BRANCH /PL-10604-65-M1E/B2"
       }
     },
@@ -230,7 +263,7 @@
             "/QICHUANG-MAIN-PIPE"
           ],
           "primary": "/QICHUANG-MAIN-PIPE",
-          "outlineObjects": 5796,
+          "outlineObjects": 105,
           "swappedObjects": 5796
         }
       }
@@ -245,25 +278,55 @@
           "enabled": true,
           "canonical": "ELBOW 1 of BRANCH /PL-10604-65-M1E/B2",
           "meshes": 1,
-          "emissiveIntensity": 0.2124,
-          "meshColor": "b2c4d5",
-          "lineColor": "7f93a4",
-          "blinkHz": 2.4,
+          "emissiveIntensity": 0.2168,
+          "meshColor": "b3c7d8",
+          "lineColor": "869dae",
+          "blinkHz": 0.3,
+          "emissivePeak": 0.85,
+          "peakSharpness": 2.2,
           "pollMs": 60
         },
         "painted": {
           "materialIsHover": true,
           "count": 1
         },
+        "windowMs": 4666.666666666667,
+        "sampleCount": 32,
         "emissiveSamples": [
-          0.0061,
-          1.3513,
-          1.486,
-          0.0159,
-          0.624,
-          1.5947
+          0.2432,
+          0.3939,
+          0.5665,
+          0.7211,
+          0.8236,
+          0.8479,
+          0.7848,
+          0.6586,
+          0.4921,
+          0.3101,
+          0.1698,
+          0.0737,
+          0.0257,
+          0.0047,
+          0.0002,
+          0,
+          0.0002,
+          0.0038,
+          0.0218,
+          0.066,
+          0.1549,
+          0.29,
+          0.448,
+          0.6244,
+          0.7565,
+          0.8391,
+          0.8379,
+          0.7544,
+          0.6196,
+          0.4551,
+          0.2957,
+          0.1572
         ],
-        "span": 1.589
+        "span": 0.848
       }
     },
     {
@@ -274,10 +337,12 @@
         "enabled": false,
         "canonical": null,
         "meshes": 0,
-        "emissiveIntensity": 0.0006,
-        "meshColor": "a4bacd",
-        "lineColor": "6b7f90",
-        "blinkHz": 2.4,
+        "emissiveIntensity": 0.0597,
+        "meshColor": "a8bed0",
+        "lineColor": "738899",
+        "blinkHz": 0.3,
+        "emissivePeak": 0.85,
+        "peakSharpness": 2.2,
         "pollMs": 60
       }
     },
@@ -299,8 +364,8 @@
         },
         "afterHide": "CYLINDER 2 of EQUIPMENT /V2014",
         "probe": {
-          "hiddenStillSolid": false,
-          "hoverIsSolid": true
+          "hiddenInHiddenChain": true,
+          "hoverInHiddenChain": false
         }
       }
     },
@@ -332,17 +397,21 @@
     },
     {
       "no": "F5",
-      "name": "游戏导航：右键清空选择集（3D 与树同步）",
+      "name": "游戏导航：右键菜单隐藏已选",
       "ok": true,
       "detail": {
         "state": {
-          "count": 0,
-          "canonicals": [],
-          "primary": null,
+          "count": 2,
+          "canonicals": [
+            "ELBOW 1 of BRANCH /PW-10201-100-M1B/B3",
+            "ELBOW 1 of BRANCH /PL-10604-65-M1E/B2"
+          ],
+          "primary": "ELBOW 1 of BRANCH /PL-10604-65-M1E/B2",
           "outlineObjects": 0,
-          "swappedObjects": 1
+          "swappedObjects": 2
         },
-        "treeSelectedCount": 0
+        "treeSelectedCount": 2,
+        "hidden": 2
       }
     },
     {
@@ -353,72 +422,32 @@
         "enabled": false,
         "canonical": null,
         "meshes": 0,
-        "emissiveIntensity": 1.4134,
-        "meshColor": "eef5fa",
-        "lineColor": "c9e1f3",
-        "blinkHz": 2.4,
+        "emissiveIntensity": 0.0056,
+        "meshColor": "a4bacd",
+        "lineColor": "6c8091",
+        "blinkHz": 0.3,
+        "emissivePeak": 0.85,
+        "peakSharpness": 2.2,
         "pollMs": 60
       }
     }
   ],
-  "console": [
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glClear: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size.",
-    "[warning] [.WebGL-0xadc00d1e200] GL_INVALID_FRAMEBUFFER_OPERATION: glDrawArrays: Framebuffer is incomplete: Attachment has zero size."
-  ],
+  "console": [],
   "pageErrors": [],
   "ok": true,
   "launcherTotals": {
-    "projects": 1,
-    "models": 1,
-    "versions": 1
+    "projects": 2,
+    "models": 3,
+    "versions": 3
   },
   "aim": {
     "canonical": "ELBOW 1 of BRANCH /PL-10604-65-M1E/B2",
     "aimedAt": "ELBOW 1 of BRANCH /PL-10604-65-M1E/B2",
-    "centerHit": "ELBOW 1 of BRANCH /PL-10604-65-M1E/B2",
-    "dist": 1
+    "centerHit": "ELBOW 1 of BRANCH /PL-10604-65-M1E/B2"
   },
   "aimPair": [
     "ELBOW 1 of BRANCH /PL-10604-65-M1E/B2",
     "ELBOW 1 of BRANCH /PW-10201-100-M1B/B3"
   ],
-  "finishedAt": "2026-09-19T16:32:15.454Z"
+  "finishedAt": "2026-09-21T13:10:35.494Z"
 }

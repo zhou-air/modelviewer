@@ -1,0 +1,215 @@
+{
+  "startedAt": "2026-09-21T07:21:59.902Z",
+  "steps": [
+    {
+      "step": "R1 取到一个叶子级元件",
+      "ok": true,
+      "detail": {
+        "canonical": "/PG-10603",
+        "name": "/PG-10603",
+        "meshes": 1
+      }
+    },
+    {
+      "step": "R2 搜索结果点击 → 3D 选中 + 属性面板有内容 + 描边生效",
+      "ok": true,
+      "detail": {
+        "sel": "/PG-10603",
+        "selCount": 1,
+        "props": 366,
+        "outline": 1
+      }
+    },
+    {
+      "step": "R3 3D 选中反向同步到树",
+      "ok": true,
+      "detail": "/PG-10603INSTRUMENT"
+    },
+    {
+      "step": "R3b 直接选中叶子元件",
+      "ok": true,
+      "detail": {
+        "sel": "/PG-10603",
+        "selCount": 1,
+        "hidden": 0,
+        "visible": 7420,
+        "outline": 1,
+        "treeSelected": "/PG-10603INSTRUMENT",
+        "treeCount": 1,
+        "props": 366,
+        "btn": {
+          "hide": false,
+          "isolate": false,
+          "showAll": true
+        }
+      }
+    },
+    {
+      "step": "R4 隐藏选中 → hidden+1、可见-1、描边清空、按钮态更新",
+      "ok": true,
+      "detail": {
+        "sel": "/PG-10603",
+        "selCount": 1,
+        "hidden": 1,
+        "visible": 7419,
+        "outline": 0,
+        "treeSelected": "/PG-10603INSTRUMENT",
+        "treeCount": 1,
+        "props": 366,
+        "btn": {
+          "hide": false,
+          "isolate": false,
+          "showAll": false
+        }
+      }
+    },
+    {
+      "step": "R5 显示全部 → 恢复原状",
+      "ok": true,
+      "detail": {
+        "sel": "/PG-10603",
+        "selCount": 1,
+        "hidden": 0,
+        "visible": 7420,
+        "outline": 1,
+        "treeSelected": "/PG-10603INSTRUMENT",
+        "treeCount": 1,
+        "props": 366,
+        "btn": {
+          "hide": false,
+          "isolate": false,
+          "showAll": true
+        }
+      }
+    },
+    {
+      "step": "R6 隔离选中 → 隐藏数大幅增加、可见数很小、选中项仍可见",
+      "ok": true,
+      "detail": {
+        "hidden": 7415,
+        "visible": 5,
+        "total": 7420
+      }
+    },
+    {
+      "step": "R7 显示全部恢复",
+      "ok": true,
+      "detail": {
+        "sel": "/PG-10603",
+        "selCount": 1,
+        "hidden": 0,
+        "visible": 7420,
+        "outline": 1,
+        "treeSelected": "/PG-10603INSTRUMENT",
+        "treeCount": 1,
+        "props": 366,
+        "btn": {
+          "hide": false,
+          "isolate": false,
+          "showAll": true
+        }
+      }
+    },
+    {
+      "step": "R8 Ctrl 多选 → 选择集为 2、树也标 2 行",
+      "ok": true,
+      "detail": {
+        "selCount": 2,
+        "treeCount": 2
+      }
+    },
+    {
+      "step": "R9 多选隐藏 → hidden+2",
+      "ok": true,
+      "detail": {
+        "before": 0,
+        "after": 2
+      }
+    },
+    {
+      "step": "R10 轮廓线开启后选择/描边状态不变",
+      "ok": true,
+      "detail": {
+        "sel": "/PG-10501",
+        "selCount": 2,
+        "hidden": 2,
+        "visible": 7418,
+        "outline": 0,
+        "treeSelected": "/PG-10501INSTRUMENT",
+        "treeCount": 2,
+        "props": 368,
+        "btn": {
+          "hide": false,
+          "isolate": false,
+          "showAll": false
+        }
+      }
+    },
+    {
+      "step": "R11 轮廓线开启时隔离仍正确",
+      "ok": true,
+      "detail": {
+        "sel": "/PG-10501",
+        "selCount": 2,
+        "hidden": 7411,
+        "visible": 9,
+        "outline": 2,
+        "treeSelected": "/PG-10501INSTRUMENT",
+        "treeCount": 2,
+        "props": 368,
+        "btn": {
+          "hide": false,
+          "isolate": false,
+          "showAll": false
+        },
+        "totalAll": 7420
+      }
+    },
+    {
+      "step": "R12 轮廓线开启时显示全部仍正确",
+      "ok": true,
+      "detail": {
+        "sel": "/PG-10501",
+        "selCount": 2,
+        "hidden": 0,
+        "visible": 7420,
+        "outline": 2,
+        "treeSelected": "/PG-10501INSTRUMENT",
+        "treeCount": 2,
+        "props": 368,
+        "btn": {
+          "hide": false,
+          "isolate": false,
+          "showAll": true
+        },
+        "totalAll": 7420
+      }
+    },
+    {
+      "step": "R13 树/属性面板开关未受影响",
+      "ok": true,
+      "detail": {
+        "leftVisible": false,
+        "rightVisible": true,
+        "treeBtnOn": false,
+        "propsBtnOn": true
+      }
+    },
+    {
+      "step": "R14 复位视角正常（相机位姿有限）",
+      "ok": true,
+      "detail": [
+        29.725813584805564,
+        -4.877406714284129,
+        64.97252412344531
+      ]
+    }
+  ],
+  "ok": true,
+  "pageErrors": [],
+  "summary": {
+    "total": 15,
+    "passed": 15,
+    "failed": []
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-09-20T03:28:02.417Z",
+  "startedAt": "2026-09-21T03:31:17.675Z",
   "steps": [
     {
       "name": "site: indexed batches",
@@ -23,7 +23,7 @@
         "lastSync": {
           "changedEntries": 0,
           "rebuiltBatches": 0,
-          "ms": 0.699999988079071
+          "ms": 0.8999999761581421
         }
       }
     },
@@ -31,8 +31,8 @@
       "name": "site: triangle conservation",
       "ok": true,
       "detail": {
-        "original": 335824,
-        "batched": 335824
+        "original": 336216,
+        "batched": 336216
       }
     },
     {
@@ -65,7 +65,7 @@
         "lastSync": {
           "changedEntries": 0,
           "rebuiltBatches": 0,
-          "ms": 3.5
+          "ms": 4
         }
       }
     },
@@ -73,8 +73,8 @@
       "name": "hygq: triangle conservation",
       "ok": true,
       "detail": {
-        "original": 501323,
-        "batched": 501323
+        "original": 502339,
+        "batched": 502339
       }
     },
     {
@@ -144,7 +144,7 @@
           "lastSync": {
             "changedEntries": 1,
             "rebuiltBatches": 1,
-            "ms": 2.199999988079071
+            "ms": 2.900000035762787
           }
         }
       }
@@ -154,19 +154,19 @@
       "ok": true,
       "detail": {
         "stats": {
-          "frameTimeMs": 5.700000017881393,
-          "cpuFrameTimeMs": 4.5999999940395355,
-          "gpuFrameTimeMs": 8.655872,
+          "frameTimeMs": 6,
+          "cpuFrameTimeMs": 3.5,
+          "gpuFrameTimeMs": 3.410944,
           "gpuTimerStatus": "available",
           "resolution": "1444×896",
           "pixelRatio": 1,
           "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Laptop GPU (0x000028A0) Direct3D11 vs_5_0 ps_5_0, D3D11)",
           "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
           "gpuTimerQuery": true,
-          "fps": 93,
-          "drawCalls": 394,
-          "triangles": 335768,
-          "frameDrawCallsAllPasses": 395,
+          "fps": 147,
+          "drawCalls": 398,
+          "triangles": 336160,
+          "frameDrawCallsAllPasses": 399,
           "outlineEnabled": true,
           "contours": false,
           "xray": false,
@@ -175,8 +175,8 @@
           "visible": 7419,
           "hidden": 1,
           "navigationMode": "orbit",
-          "visibleMeshes": 105,
-          "visibleLines": 289
+          "visibleMeshes": 106,
+          "visibleLines": 291
         },
         "selection": {
           "count": 1,
@@ -206,7 +206,7 @@
           "lastSync": {
             "changedEntries": 1,
             "rebuiltBatches": 1,
-            "ms": 2.4000000059604645
+            "ms": 3.300000011920929
           }
         }
       }
@@ -216,19 +216,19 @@
       "ok": true,
       "detail": {
         "stats": {
-          "frameTimeMs": 8.599999994039536,
-          "cpuFrameTimeMs": 9.599999994039536,
-          "gpuFrameTimeMs": 6.674432,
+          "frameTimeMs": 11.100000023841858,
+          "cpuFrameTimeMs": 9.799999952316284,
+          "gpuFrameTimeMs": 8.551424,
           "gpuTimerStatus": "available",
           "resolution": "1444×896",
           "pixelRatio": 1,
           "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Laptop GPU (0x000028A0) Direct3D11 vs_5_0 ps_5_0, D3D11)",
           "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
           "gpuTimerQuery": true,
-          "fps": 105,
-          "drawCalls": 395,
-          "triangles": 335824,
-          "frameDrawCallsAllPasses": 798,
+          "fps": 114,
+          "drawCalls": 399,
+          "triangles": 336216,
+          "frameDrawCallsAllPasses": 805,
           "outlineEnabled": true,
           "contours": false,
           "xray": false,
@@ -237,8 +237,8 @@
           "visible": 7420,
           "hidden": 0,
           "navigationMode": "orbit",
-          "visibleMeshes": 106,
-          "visibleLines": 289
+          "visibleMeshes": 107,
+          "visibleLines": 291
         },
         "batch": {
           "enabled": true,
@@ -259,7 +259,7 @@
           "lastSync": {
             "changedEntries": 1,
             "rebuiltBatches": 1,
-            "ms": 2.199999988079071
+            "ms": 3.700000047683716
           }
         }
       }
@@ -269,19 +269,19 @@
       "ok": true,
       "detail": {
         "stats": {
-          "frameTimeMs": 8.400000005960464,
-          "cpuFrameTimeMs": 6.5999999940395355,
-          "gpuFrameTimeMs": 1.350656,
+          "frameTimeMs": 7.699999988079071,
+          "cpuFrameTimeMs": 7.5,
+          "gpuFrameTimeMs": 0.982016,
           "gpuTimerStatus": "available",
           "resolution": "1444×896",
           "pixelRatio": 1,
           "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Laptop GPU (0x000028A0) Direct3D11 vs_5_0 ps_5_0, D3D11)",
           "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
           "gpuTimerQuery": true,
-          "fps": 133,
-          "drawCalls": 2,
-          "triangles": 68,
-          "frameDrawCallsAllPasses": 12,
+          "fps": 117,
+          "drawCalls": 6,
+          "triangles": 460,
+          "frameDrawCallsAllPasses": 19,
           "outlineEnabled": true,
           "contours": false,
           "xray": false,
@@ -290,8 +290,8 @@
           "visible": 5,
           "hidden": 7415,
           "navigationMode": "orbit",
-          "visibleMeshes": 2,
-          "visibleLines": 0
+          "visibleMeshes": 107,
+          "visibleLines": 291
         },
         "batch": {
           "enabled": true,
@@ -312,7 +312,7 @@
           "lastSync": {
             "changedEntries": 5505,
             "rebuiltBatches": 105,
-            "ms": 1.5999999940395355
+            "ms": 1.699999988079071
           }
         },
         "selection": {
@@ -336,18 +336,18 @@
       "detail": {
         "stats": {
           "frameTimeMs": 6,
-          "cpuFrameTimeMs": 3,
-          "gpuFrameTimeMs": 2.702336,
+          "cpuFrameTimeMs": 3.600000023841858,
+          "gpuFrameTimeMs": 3.644416,
           "gpuTimerStatus": "available",
           "resolution": "1444×896",
           "pixelRatio": 1,
           "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Laptop GPU (0x000028A0) Direct3D11 vs_5_0 ps_5_0, D3D11)",
           "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
           "gpuTimerQuery": true,
-          "fps": 121,
-          "drawCalls": 395,
-          "triangles": 335824,
-          "frameDrawCallsAllPasses": 396,
+          "fps": 104,
+          "drawCalls": 399,
+          "triangles": 336216,
+          "frameDrawCallsAllPasses": 400,
           "outlineEnabled": true,
           "contours": false,
           "xray": true,
@@ -356,10 +356,17 @@
           "visible": 7419,
           "hidden": 1,
           "navigationMode": "orbit",
-          "visibleMeshes": 106,
-          "visibleLines": 289
+          "visibleMeshes": 107,
+          "visibleLines": 291
         },
         "app": {
+          "globalModelColor": "#8d949c",
+          "backgroundColor": "#eef1f3",
+          "groundEnabled": false,
+          "groundColor": "#d7dde3",
+          "groundVisible": false,
+          "groundY": null,
+          "groundSize": null,
           "contours": false,
           "xray": true,
           "xrayOpacity": 0.32,
@@ -369,7 +376,8 @@
           "ghostMeshOpacity": 0.32,
           "ghostLineOpacity": 0.512,
           "ghostMeshColor": "9aa6b2",
-          "ghostDepthWrite": false
+          "ghostDepthWrite": false,
+          "objectColorOverrides": 0
         },
         "batch": {
           "enabled": true,
@@ -390,7 +398,7 @@
           "lastSync": {
             "changedEntries": 1,
             "rebuiltBatches": 1,
-            "ms": 2.4000000059604645
+            "ms": 1.9000000357627869
           }
         },
         "ghostMaterials": true
@@ -437,25 +445,25 @@
         "vid": "2026-09-19"
       },
       "original": {
-        "fps": 40,
-        "frameTimeMs": 25.7,
-        "cpuFrameTimeMs": 22.2,
-        "gpuFrameTimeMs": 16.88,
-        "drawCalls": 5796,
-        "triangles": 335824,
-        "allPassCalls": 5797
+        "fps": 34,
+        "frameTimeMs": 31.4,
+        "cpuFrameTimeMs": 28.2,
+        "gpuFrameTimeMs": 20.09,
+        "drawCalls": 5800,
+        "triangles": 336216,
+        "allPassCalls": 5801
       },
       "batched": {
-        "fps": 165,
-        "frameTimeMs": 6,
-        "cpuFrameTimeMs": 3.6,
-        "gpuFrameTimeMs": 2.54,
-        "drawCalls": 394,
-        "triangles": 335824,
-        "allPassCalls": 395
+        "fps": 164,
+        "frameTimeMs": 6.2,
+        "cpuFrameTimeMs": 4.6,
+        "gpuFrameTimeMs": 2.63,
+        "drawCalls": 398,
+        "triangles": 336216,
+        "allPassCalls": 399
       },
       "build": {
-        "ms": 100.90000000596046,
+        "ms": 151.5,
         "state": {
           "enabled": true,
           "indexed": true,
@@ -475,27 +483,27 @@
           "lastSync": {
             "changedEntries": 5507,
             "rebuiltBatches": 105,
-            "ms": 89.40000000596046
+            "ms": 138.79999995231628
           }
         }
       },
       "originalMemory": {
-        "usedMB": 57.1,
-        "totalMB": 62.2,
+        "usedMB": 59,
+        "totalMB": 63.3,
         "limitMB": 4096,
         "precise": true,
-        "geometries": 5797,
-        "textures": 2
+        "geometries": 5800,
+        "textures": 3
       },
       "batchedMemory": {
-        "usedMB": 63.5,
-        "totalMB": 66.9,
+        "usedMB": 69.2,
+        "totalMB": 74.7,
         "limitMB": 4096,
         "precise": true,
-        "geometries": 395,
-        "textures": 2
+        "geometries": 398,
+        "textures": 3
       },
-      "memoryDeltaUsedMB": 6.4,
+      "memoryDeltaUsedMB": 10.2,
       "visualDiff": {
         "rmse": 0.16,
         "changedPixelsOver8Pct": 0.02
@@ -509,25 +517,25 @@
         "vid": "2026-09-20"
       },
       "original": {
-        "fps": 13,
-        "frameTimeMs": 78.9,
-        "cpuFrameTimeMs": 75,
-        "gpuFrameTimeMs": 54.03,
-        "drawCalls": 16255,
-        "triangles": 501323,
-        "allPassCalls": 16256
+        "fps": 12,
+        "frameTimeMs": 82.9,
+        "cpuFrameTimeMs": 80.8,
+        "gpuFrameTimeMs": 54.16,
+        "drawCalls": 16259,
+        "triangles": 502339,
+        "allPassCalls": 16260
       },
       "batched": {
-        "fps": 155,
-        "frameTimeMs": 6.4,
-        "cpuFrameTimeMs": 6.3,
-        "gpuFrameTimeMs": 1.27,
-        "drawCalls": 317,
-        "triangles": 501323,
-        "allPassCalls": 318
+        "fps": 136,
+        "frameTimeMs": 6.9,
+        "cpuFrameTimeMs": 7.1,
+        "gpuFrameTimeMs": 1.7,
+        "drawCalls": 321,
+        "triangles": 502339,
+        "allPassCalls": 322
       },
       "build": {
-        "ms": 237.40000000596046,
+        "ms": 240.30000001192093,
         "state": {
           "enabled": true,
           "indexed": true,
@@ -547,27 +555,27 @@
           "lastSync": {
             "changedEntries": 16255,
             "rebuiltBatches": 317,
-            "ms": 204.90000000596046
+            "ms": 214.19999998807907
           }
         }
       },
       "originalMemory": {
-        "usedMB": 132.7,
-        "totalMB": 136.2,
-        "limitMB": 4096,
-        "precise": true,
-        "geometries": 16256,
-        "textures": 2
-      },
-      "batchedMemory": {
-        "usedMB": 135.7,
+        "usedMB": 134.7,
         "totalMB": 139.8,
         "limitMB": 4096,
         "precise": true,
-        "geometries": 318,
-        "textures": 2
+        "geometries": 16259,
+        "textures": 3
       },
-      "memoryDeltaUsedMB": 3,
+      "batchedMemory": {
+        "usedMB": 146.3,
+        "totalMB": 152.3,
+        "limitMB": 4096,
+        "precise": true,
+        "geometries": 321,
+        "textures": 3
+      },
+      "memoryDeltaUsedMB": 11.6,
       "visualDiff": {
         "rmse": 0.29,
         "changedPixelsOver8Pct": 0.05

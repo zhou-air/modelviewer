@@ -1,0 +1,60 @@
+[
+  {
+    "view": "whole",
+    "current": {
+      "meanDarkening": 0.01859,
+      "changedPctOver2": 0.2935,
+      "p99Darkening": 0.333
+    },
+    "optimized": {
+      "meanDarkening": 0.0,
+      "changedPctOver2": 0.0,
+      "p99Darkening": 0.0
+    },
+    "legacyFixtureMaxDifference": 0.0,
+    "beforeAfterOffMaxDifference": 0.0
+  },
+  {
+    "view": "equipment",
+    "current": {
+      "meanDarkening": 0.02036,
+      "changedPctOver2": 0.3269,
+      "p99Darkening": 0.333
+    },
+    "optimized": {
+      "meanDarkening": 0.0,
+      "changedPctOver2": 0.0,
+      "p99Darkening": 0.0
+    },
+    "legacyFixtureMaxDifference": 0.0,
+    "beforeAfterOffMaxDifference": 0.0
+  },
+  {
+    "view": "structure",
+    "current": {
+      "meanDarkening": 0.09757,
+      "changedPctOver2": 1.7017,
+      "p99Darkening": 3.667
+    },
+    "optimized": {
+      "meanDarkening": 0.00047,
+      "changedPctOver2": 0.0,
+      "p99Darkening": 0.0
+    },
+    "legacyFixtureMaxDifference": 0.0,
+    "beforeAfterOffMaxDifference": 0.0
+  },
+  {
+    "view": "close",
+    "current": {
+      "meanDarkening": 3.50226,
+      "changedPctOver2": 23.7691,
+      "p99Darkening": 38.0
+    },
+    "optimized": {
+      "meanDarkening": 0.0461,
+      "changedPctOver2": 0.6619,
+      "p99Darkening": 1.667
+    }
+  }
+]

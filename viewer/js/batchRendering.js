@@ -107,11 +107,33 @@ export class BatchRenderingManager {
     return geometry;
   }
 
+  _worldGeometryForState(entry, state) {
+    const geometry = this._worldGeometry(entry);
+    if (state !== 'solid') return geometry;
+
+    // 所有 solid 几何都带相同的属性，避免 mergeGeometries 因属性集合不同而失败。
+    // mix=0 表示使用共享 meshMat 的全局色；mix=1 才使用 canonical 对象色。
+    const count = geometry.attributes.position.count;
+    const color = new Float32Array(count * 3);
+    const mix = new Float32Array(count);
+    const objectColor = this.model._objectColorForObject(entry.object);
+    if (objectColor) {
+      const r = objectColor.r, g = objectColor.g, b = objectColor.b;
+      for (let i = 0; i < count; i++) {
+        color[i * 3] = r; color[i * 3 + 1] = g; color[i * 3 + 2] = b;
+        mix[i] = 1;
+      }
+    }
+    geometry.setAttribute('objectColor', new THREE.BufferAttribute(color, 3));
+    geometry.setAttribute('objectColorMix', new THREE.BufferAttribute(mix, 1));
+    return geometry;
+  }
+
   _material(state) {
     if (state === 'selected') return this.model.selMeshMat;
     if (state === 'hover') return this.model.hoverMeshMat;
     if (state === 'ghost') return this.model.ghostMeshMat;
-    return this.model.meshMat;
+    return this.model.batchMeshMat || this.model.meshMat;
   }
 
   _rebuildBatch(batch) {
@@ -127,7 +149,7 @@ export class BatchRenderingManager {
       const ranges = [];
       let triangleCursor = 0;
       for (const entry of entries) {
-        const geometry = this._worldGeometry(entry);
+        const geometry = this._worldGeometryForState(entry, state);
         const triangleCount = geometry.index.count / 3;
         ranges.push({ canonicalId: entry.canonicalId, sourceMeshUuid: entry.object.uuid,
           triangleStart: triangleCursor, triangleEnd: triangleCursor + triangleCount,
@@ -169,6 +191,31 @@ export class BatchRenderingManager {
       if (mesh) out.push(mesh);
     }
     return out;
+  }
+
+  /** 只重建包含受影响 canonical 子树的批次，保持现有合批边界。 */
+  updateObjectColors(canonicals) {
+    if (!this.enabled || !canonicals?.length) return this.lastSync;
+    const targets = new Set(canonicals);
+    const affected = new Set();
+    for (const entry of this.entries) {
+      if (entry.state !== 'solid') continue;
+      for (let node = entry.object; node; node = node.parent) {
+        if (targets.has(node.userData?.name)) {
+          affected.add(entry.batch);
+          break;
+        }
+        if (node === this.model.root) break;
+      }
+    }
+    const started = performance.now();
+    for (const batch of affected) this._rebuildBatch(batch);
+    this.lastSync = {
+      changedEntries: 0,
+      rebuiltBatches: affected.size,
+      ms: performance.now() - started,
+    };
+    return this.lastSync;
   }
 
   stats() {

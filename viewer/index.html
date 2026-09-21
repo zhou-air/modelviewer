@@ -90,6 +90,9 @@
 
   /* ---------- 3D ---------- */
   #cv { display: block; width: 100%; height: 100%; }
+  .orientation-gizmo { position: absolute; top: 10px; right: 10px; width: 94px; height: 94px;
+                       z-index: 2; pointer-events: auto; user-select: none; cursor: pointer;
+                       filter: drop-shadow(0 1px 1px rgba(20,30,40,.10)); }
   .overlay { position: absolute; background: var(--panel);
              border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; }
   #stats { display: none; top: 10px; right: 10px; width: 390px; max-width: calc(100% - 20px);
@@ -117,6 +120,10 @@
   #crosshair { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
                display: none; pointer-events: none; }
   #crosshair.on { display: block; }
+  /* svg 必须 block：inline 的 SVG 会坐在文本基线上，把 25px 的盒撑到 ~28px，
+     于是 translate(-50%,-50%) 按盒高算中心，准星整体偏上 1.5px——
+     表现为"测量准星与导航准星没对准"。 */
+  #crosshair svg { display: block; }
   #navPrompt { position: absolute; left: 50%; bottom: 58px; transform: translateX(-50%);
                display: none; background: rgba(28,95,168,.94); color: #fff;
                border-color: transparent; pointer-events: none; max-width: 560px; }
@@ -127,8 +134,9 @@
   .navseg button + button { border-left: 1px solid var(--border); }
   .navseg button.on { background: var(--accent); color: #fff; }
   .navseg button.on:hover { color: #fff; }
-  #navSettings, #appearance { display: none; right: 10px; bottom: 10px; width: 268px; }
-  #navSettings.on, #appearance.on { display: block; }
+  #navSettings, #appearance, #keyBindingsPanel { display: none; right: 10px; bottom: 10px; width: 268px; }
+  #keyBindingsPanel { top: 10px; bottom: auto; width: 320px; max-height: calc(100% - 20px); overflow: auto; }
+  #navSettings.on, #appearance.on, #keyBindingsPanel.on { display: block; }
   #navSettings h3, #appearance h3 { margin: 0 0 4px; font-size: 13px; font-weight: 600; }
   #navSettings .row, #appearance .row {
                       display: flex; align-items: center; justify-content: space-between;
@@ -139,16 +147,102 @@
                       color: var(--muted); font-size: 11px; line-height: 1.55; margin-top: 8px; }
   #navSettings .acts, #appearance .acts {
                       display: flex; gap: 6px; justify-content: flex-end; margin-top: 6px; }
+  #keyBindingsPanel h3 { margin: 0 0 4px; font-size: 13px; font-weight: 600; }
+  #keyBindingsPanel h4 { margin: 10px 0 3px; font-size: 12px; color: var(--muted); }
+  #keyBindingsPanel .row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 5px 0; }
+  #keyBindingsPanel .key-binding { min-width: 92px; text-align: center; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+  #keyBindingsPanel .hint { color: var(--muted); font-size: 11px; line-height: 1.55; margin-top: 8px; }
+  #keyBindingsPanel .acts { display: flex; gap: 6px; justify-content: flex-end; margin-top: 8px; }
 
   /* ---------- 外观选项（轮廓线 / 隐藏件半透明） ---------- */
-  #appearance { width: 292px; }
+  #appearance { width: 292px; max-height: calc(100% - 20px); overflow-y: auto; }
   #appearance .row.off { opacity: .45; }
   #appearance label { cursor: pointer; }
+  #appearance section + section { border-top: 1px solid var(--border); margin-top: 8px; padding-top: 3px; }
+  #appearance h4 { margin: 6px 0 2px; color: var(--muted); font-size: 11px; font-weight: 600; }
+  #appearance input[type=color] { width: 38px; height: 25px; padding: 2px; border: 1px solid var(--border);
+                                   border-radius: 5px; background: #fff; cursor: pointer; }
+  #appearance select { max-width: 150px; padding: 3px 5px; border: 1px solid var(--border);
+                       border-radius: 5px; background: #fff; color: var(--text); }
+  #appearance .color-value { display: inline-flex; align-items: center; gap: 6px; }
+  #appearance .color-reset { padding: 3px 7px; font-size: 11px; }
   #appearance input[type=checkbox] { width: auto; margin: 0; accent-color: var(--accent); cursor: pointer; }
   #appearance input[type=range] { width: 116px; padding: 0; border: 0; background: none;
                                   vertical-align: middle; accent-color: var(--accent); cursor: pointer; }
   #appearance .val { display: inline-block; min-width: 36px; text-align: right; color: var(--muted);
                      font-size: 11px; font-variant-numeric: tabular-nums; }
+
+  /* ---------- 游戏式测距（准星 / 3D 标签 / 结果面板） ---------- */
+  /* 准星与工程导航的 #crosshair 同点且**严格同心**：字形用 SVG 几何而不是文本字符，
+     并把墨迹控制在 ~9 px 内，正好落在导航准星中间那 6 px 空档里，两者可同时显示。
+     （文本字符受基线/字体度量影响，光学中心会上下偏 1 px，就是"准星与测量圈没对准"的来源。）
+     四态由 data-state 切换可见的 <g>。 */
+  #measureReticle { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+                    display: none; pointer-events: none; width: 12px; height: 12px;
+                    color: var(--muted); }
+  #measureReticle.on { display: block; }
+  #measureReticle svg { display: block; width: 12px; height: 12px; overflow: visible;
+                        filter: drop-shadow(0 0 1.5px rgba(238,241,243,.95))
+                                drop-shadow(0 0 1.5px rgba(238,241,243,.95)); }
+  #measureReticle svg g { display: none; }
+  #measureReticle[data-state="miss"] g[data-shape="miss"],
+  #measureReticle[data-state="surface"] g[data-shape="surface"],
+  #measureReticle[data-state="center"] g[data-shape="center"],
+  #measureReticle[data-state="recorded"] g[data-shape="recorded"] { display: block; }
+  #measureReticle[data-state="surface"] { color: var(--accent); }
+  #measureReticle[data-state="center"] { color: #0f8f8f; }
+  #measureReticle[data-state="recorded"] { color: var(--ok); }
+
+  /* 3D 距离标签：靠每帧投影世界坐标定位，永远正对屏幕、不被几何遮挡 */
+  #measureLabels { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+  #measureLabels .mlabel { position: absolute; left: 0; top: 0; padding: 1px 6px;
+                           border-radius: 6px; background: rgba(255,255,255,.88);
+                           border: 1px solid #9dbde0; color: var(--accent);
+                           font-size: 11.5px; font-variant-numeric: tabular-nums;
+                           white-space: nowrap; }
+  #measureLabels .mlabel.preview { border-color: #8fd0d0; color: #0f6f6f; }
+  /* XYZ 分量标签：比直线标签小一号，颜色按轴向（X 红 / Y 绿 / Z 蓝） */
+  #measureLabels .mlabel.comp { font-size: 10.5px; padding: 0 5px;
+                                background: rgba(255,255,255,.82); }
+  #measureLabels .mlabel.mxx { border-color: #d9a099; color: #a5321f; }
+  #measureLabels .mlabel.mxy { border-color: #9dc9ad; color: #17693a; }
+  #measureLabels .mlabel.mxz { border-color: #9db6de; color: #1a56a8; }
+  /* 测点名字徽章：圆形（长名退化为胶囊），flex 居中，尺寸由 JS 按文本量出 */
+  #measureLabels .mlabel.pt { display: flex; align-items: center; justify-content: center;
+                              border-radius: 50%; font-size: 10px; font-weight: 600;
+                              padding: 0; background: rgba(255,255,255,.94); }
+  #measureLabels .mlabel.pt[data-kind="surface"] { border-color: #9dbde0; color: var(--accent); }
+  #measureLabels .mlabel.pt[data-kind="center"] { border-color: #8fd0d0; color: #0f6f6f; }
+  #measureLabels .mlabel.pt.pill { border-radius: 999px; }
+
+  #measurePanel { display: none; right: 10px; bottom: 10px; width: 320px; }
+  #measurePanel.on { display: block; }
+  #measurePanel h3 { margin: 0 0 4px; font-size: 13px; font-weight: 600; }
+  #measurePanel .row { display: flex; align-items: center; justify-content: space-between;
+                       gap: 8px; margin: 6px 0; }
+  #measurePanel .row label { cursor: pointer; }
+  #measurePanel input[type=checkbox] { width: auto; margin: 0; accent-color: var(--accent);
+                                       cursor: pointer; }
+  #measurePanel .axial { color: var(--muted); font-size: 10.5px; }
+  #measurePanel .swatch { display: inline-block; width: 7px; height: 7px; border-radius: 2px;
+                          margin: 0 1px 0 3px; vertical-align: middle; }
+  #measurePanel .mnow { margin: 4px 0; font-size: 11.5px; color: var(--muted);
+                        line-height: 1.6; word-break: break-all; }
+  #measurePanel .mnow b { color: var(--text); font-weight: 500; }
+  #measurePanel .mlist { max-height: 224px; overflow: auto; margin: 4px 0 6px; }
+  #measurePanel .mempty { color: var(--muted); font-size: 11.5px; padding: 6px 2px; }
+  #measurePanel .mitem { border-top: 1px solid var(--border); padding: 5px 0 4px; }
+  #measurePanel .mitem .mh { display: flex; gap: 6px; align-items: baseline;
+                             font-size: 11px; color: var(--muted); }
+  #measurePanel .mitem .mh b { color: var(--accent); flex: 0 0 auto; }
+  #measurePanel .mitem .mh span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #measurePanel .kv2 { display: grid; grid-template-columns: auto 1fr; gap: 1px 8px;
+                       font-size: 11.5px; margin-top: 3px; }
+  #measurePanel .kv2 .k { color: var(--muted); }
+  #measurePanel .kv2 .v { text-align: right; font-variant-numeric: tabular-nums; }
+  #measurePanel .kv2 .v.hi { color: var(--accent); font-weight: 500; }
+  #measurePanel .acts { display: flex; gap: 6px; justify-content: flex-end; margin-top: 6px; }
+  #measurePanel .hint { color: var(--muted); font-size: 11px; line-height: 1.6; margin-top: 8px; }
 
   /* ---------- 属性面板 ---------- */
   #props table { border-collapse: collapse; width: 100%; }
@@ -312,6 +406,22 @@
   #ctxMenu.on { display: flex; flex-direction: column; }
   #ctxMenu button { border: 0; text-align: left; padding: 6px 10px; }
   #ctxMenu button:hover { background: var(--accent-soft); }
+  #gameCtxMenu { position: fixed; z-index: 75; display: none; background: #fff;
+                 border: 1px solid var(--border); border-radius: 8px; padding: 4px;
+                 box-shadow: 0 8px 24px rgba(0,0,0,.14); min-width: 150px; }
+  #gameCtxMenu.on { display: flex; flex-direction: column; }
+  #gameCtxMenu button { border: 0; text-align: left; padding: 7px 12px; }
+  #gameCtxMenu button:hover { background: var(--accent-soft); }
+  #gameCtxMenu .menu-sub { position: relative; }
+  #gameCtxMenu .menu-sub > button { width: 100%; display: flex; justify-content: space-between; }
+  #gameColorSubmenu { position: absolute; right: calc(100% - 4px); top: -4px; display: none;
+                      min-width: 184px; padding: 4px; background: #fff; border: 1px solid var(--border);
+                      border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,.14); }
+  #gameColorSubmenu.on { display: flex; flex-direction: column; }
+  #gameColorSubmenu .swatch { width: 14px; height: 14px; display: inline-block; vertical-align: -2px;
+                               border: 1px solid rgba(0,0,0,.2); border-radius: 3px; margin-right: 7px; }
+  #gameColorSubmenu button { width: 100%; }
+  #gameColorPicker { position: fixed; left: -100px; top: -100px; width: 1px; height: 1px; opacity: 0; }
   #toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
            z-index: 80; display: none; background: #23282d; color: #fff; border: 0;
            padding: 9px 16px; border-radius: 8px; max-width: 70vw; display: none; }
@@ -405,6 +515,7 @@
     <span class="meta" id="curMeta"></span>
     <button id="btnToggleTree" class="ptoggle on" title="显示 / 隐藏左侧模型树">模型树</button>
     <button id="btnToggleProps" class="ptoggle" title="显示 / 隐藏右侧属性面板">属性</button>
+    <button id="btnKeyBindings" title="自定义控制键位">控制 / 键位设置</button>
     <button id="btnImportTop">Import</button>
   </div>
   <div id="layout">
@@ -442,6 +553,31 @@
           </g>
         </svg>
       </div>
+      <div id="measureReticle" aria-hidden="true" data-state="miss">
+        <!-- 12×12 viewBox：所有图形都以 (6,6) 为几何中心，所以它与屏幕中心/导航准星严格同心。
+             +  未命中   ⊕  表面点   ◎  对象中心   ●  已记录点 -->
+        <svg width="12" height="12" viewBox="0 0 12 12">
+          <g data-shape="miss" fill="none" stroke="currentColor" stroke-width="1.3"
+             stroke-linecap="round">
+            <line x1="6" y1="1.4" x2="6" y2="10.6"/>
+            <line x1="1.4" y1="6" x2="10.6" y2="6"/>
+          </g>
+          <g data-shape="surface" fill="none" stroke="currentColor" stroke-width="1.3"
+             stroke-linecap="round">
+            <circle cx="6" cy="6" r="2.9"/>
+            <line x1="6" y1="0.9" x2="6" y2="11.1"/>
+            <line x1="0.9" y1="6" x2="11.1" y2="6"/>
+          </g>
+          <g data-shape="center" fill="none" stroke="currentColor" stroke-width="1.3">
+            <circle cx="6" cy="6" r="3.4"/>
+            <circle cx="6" cy="6" r="1.4"/>
+          </g>
+          <g data-shape="recorded" fill="currentColor">
+            <circle cx="6" cy="6" r="1.9"/>
+          </g>
+        </svg>
+      </div>
+      <div id="measureLabels" aria-hidden="true"></div>
       <div id="stats" class="overlay">
         <div><span class="k">FPS</span><span id="sFps">—</span></div>
         <div><span class="k">Frame Time</span><span id="sFrame">—</span></div>
@@ -464,6 +600,7 @@
         </div>
         <button id="btnNavSettings" title="普通速度 / 加速倍率">导航设置</button>
         <button id="btnAppearance" title="元件轮廓线 / 隐藏件半透明（默认关闭）">外观</button>
+        <button id="btnMeasure" title="游戏式测距：准星取点，左键取表面点 / C 取对象中心点（Esc 取消 · Delete 删上一条）">测量</button>
         <button id="btnFloorPlan" class="ptoggle on" title="显示 / 隐藏只读设备定位底图">设备定位图</button>
         <button id="btnFit">复位视角 (F)</button>
         <button id="btnHide">隐藏选中</button>
@@ -484,33 +621,94 @@
         <div class="hint">对应原插件 settings.json，本版保存在 localStorage。
           普通速度 0.1–500 m/s、加速倍率 1–10，越界或非法时自动回落到默认值（5 / 3）。</div>
       </div>
+      <div id="keyBindingsPanel" class="overlay">
+        <h3>控制 / 键位设置</h3><div id="keyBindingsRows"></div>
+        <div class="acts"><button id="keyBindingsReset">恢复默认键位</button><button id="keyBindingsClose">关闭</button></div>
+        <div class="hint">点击键位后按下新按键即可修改。保存的是物理键位，仅保存在当前浏览器设备。</div>
+      </div>
       <div id="appearance" class="overlay">
-        <h3>Appearance · 外观选项</h3>
+        <h3>外观</h3>
+        <section>
+          <h4>模型</h4>
+          <div class="row"><label for="apGlobalColor">全局模型颜色</label>
+            <span class="color-value"><input id="apGlobalColor" type="color"><button id="apGlobalReset" class="color-reset">恢复默认颜色</button></span></div>
+          <div class="row"><label for="apContours">元件轮廓线</label><input id="apContours" type="checkbox"></div>
+          <div class="row"><label for="apXray">隐藏件半透明</label><input id="apXray" type="checkbox"></div>
+          <div class="row" id="apOpacityRow"><label for="apOpacity">不透明度</label>
+            <span><input id="apOpacity" type="range" min="5" max="95" step="1"><span class="val" id="apOpacityVal">32%</span></span></div>
+        </section>
+        <section>
+          <h4>光影</h4>
+          <div class="row"><label for="apLightingEnabled">光照增强</label><input id="apLightingEnabled" type="checkbox"></div>
+          <div class="row"><label for="apLightingIntensity">光照强度</label><span><input id="apLightingIntensity" type="range" min="20" max="200" step="5"><span class="val" id="apLightingIntensityVal"></span></span></div>
+          <div class="row"><label for="apAoEnabled">环境遮蔽 AO</label><input id="apAoEnabled" type="checkbox"></div>
+          <div class="row"><label for="apAoIntensity">AO 强度</label><span><input id="apAoIntensity" type="range" min="0" max="150" step="5"><span class="val" id="apAoIntensityVal"></span></span></div>
+          <details><summary style="font-size:11px;cursor:pointer;color:var(--muted)">AO 高级设置</summary>
+            <div class="row"><label for="apAoRadius">接触范围</label><span><input id="apAoRadius" type="range" min="2" max="50" step="1"><span class="val" id="apAoRadiusVal"></span></span></div>
+            <div class="hint">仅增强局部接触；默认 12 cm。较大范围会增加平面暗化。</div>
+          </details>
+        </section>
+        <section>
+          <h4>环境</h4>
+          <div class="row"><label for="apEnvironmentMode">环境模式</label><select id="apEnvironmentMode">
+            <option value="solid">纯色</option><option value="horizon">地平线</option><option value="texture">环境贴图</option>
+          </select></div>
+          <div class="row" id="apBackgroundColorRow"><label for="apBackgroundColor">纯色背景</label><input id="apBackgroundColor" type="color"></div>
+          <div class="row" id="apEnvironmentPresetRow"><label for="apEnvironmentPreset">环境预设</label><select id="apEnvironmentPreset">
+            <option value="engineering-light">工程浅灰</option><option value="blue-sky">蓝天</option>
+            <option value="overcast">阴天</option><option value="dark">深色</option><option value="custom">自定义</option>
+          </select></div>
+          <div class="row" id="apEnvironmentTextureRow"><label for="apEnvironmentTexture">环境贴图</label><select id="apEnvironmentTexture"><option value="">未配置</option></select></div>
+          <details id="apEnvironmentAdvanced"><summary style="font-size:11px;cursor:pointer;color:var(--muted)">高级设置</summary>
+            <div class="row"><label for="apSkyColor">天空颜色</label><input id="apSkyColor" type="color"></div>
+            <div class="row"><label for="apHorizonColor">地平线颜色</label><input id="apHorizonColor" type="color"></div>
+            <div class="row"><label for="apGroundFarColor">地面远景颜色</label><input id="apGroundFarColor" type="color"></div>
+          </details>
+          <div class="hint" id="apEnvironmentStatus">环境与 Ground Plane、FloorPlan 相互独立。</div>
+        </section>
+        <section>
+          <h4>地面</h4>
+          <div class="row"><label for="apGround">显示地板</label><input id="apGround" type="checkbox"></div>
+          <div class="row" id="apGroundColorRow"><label for="apGroundColor">地板颜色</label><input id="apGroundColor" type="color"></div>
+        </section>
+        <section>
+          <h4>辅助显示</h4>
+          <div class="row" id="apFloorPlanRow"><label for="apFloorPlan">设备定位图</label><input id="apFloorPlan" type="checkbox"></div>
+          <div class="row" id="apFloorDebugRow"><label for="apFloorDebug">定位坐标调试</label><input id="apFloorDebug" type="checkbox"></div>
+        </section>
+        <div class="acts"><button id="apReset">恢复默认外观</button><button id="apClose">关闭</button></div>
+        <div class="hint">颜色、光影和地板偏好保存在当前设备；对象单独改色只保留在当前模型会话。轮廓线与隐藏件半透明沿用现有运行时状态。</div>
+      </div>
+      <div id="measurePanel" class="overlay">
+        <h3>Measure · 游戏式测距</h3>
         <div class="row">
-          <label for="apContours">元件轮廓线</label>
-          <input id="apContours" type="checkbox">
+          <label for="measureXyz">XYZ 分量
+            <span class="axial">X<span class="swatch" style="background:#c0392b"></span>
+              Y<span class="swatch" style="background:#1f8a4c"></span>
+              Z<span class="swatch" style="background:#1f6fd0"></span></span>
+          </label>
+          <input id="measureXyz" type="checkbox">
         </div>
-        <div class="row">
-          <label for="apXray">隐藏件半透明</label>
-          <input id="apXray" type="checkbox">
+        <div class="mnow" id="measureNow">—</div>
+        <div class="mlist" id="measureList"></div>
+        <div class="acts">
+          <button id="measureCopy" title="复制为 TAB 分隔文本，可直接 Ctrl+V 粘贴进 Excel">复制测量结果</button>
+          <button id="measureClear">清除测量</button>
+          <button id="measureClose">关闭</button>
         </div>
-        <div class="row" id="apOpacityRow">
-          <label for="apOpacity">不透明度</label>
-          <span>
-            <input id="apOpacity" type="range" min="5" max="95" step="1">
-            <span class="val" id="apOpacityVal">32%</span>
-          </span>
+        <div class="hint">
+          射线固定从<b>屏幕中心</b>发出（不用鼠标光标）· <b>左键</b> 表面点 <b>⊕</b> ·
+          <b>C</b> 对象中心 <b>◎</b> · 未命中 <b>+</b> · 取点闪 <b>●</b><br>
+          A → B 两点成一条测量；只取了 A 想反悔就按 <b>右键</b>（或 <b>Esc</b>）取消这个点 ·
+          <b>Ctrl+Z</b> 撤销上一步（未完成的点，或最后一条测量——起点回到待取状态）·
+          <b>Delete</b> 删上一条 · 面板可全清；测量开启时<b>左键专用于取点</b>（不改动选择集）。<br>
+          <b>XYZ 分量</b>：按<b>模型坐标系</b>画 ΔX/ΔY/ΔZ 阶梯辅助线（与相机朝向无关），
+          标注取绝对值、正负留在数据里；某方向≈0 时不画该线。<br>
+          测点命名：表面点 <b>P1/P2…</b>；对象中心点在元数据里有名称/位号时直接用该名称。
+          <b>V</b> 连续测量：每完成一条，终点自动作为下一条的起点（P1→P2→P3…），右键/Esc 断开。<br>
+          <b>复制测量结果</b>：TAB 分列 + 表头（单位只写在表头），可直接 Ctrl+V 粘进 Excel。<br>
+          单位 <b>mm</b>，轴向为 <b id="measureAxes">PDMS 世界坐标（Z 向上）</b>。
         </div>
-        <div class="row" id="apFloorDebugRow">
-          <label for="apFloorDebug">定位坐标调试</label>
-          <input id="apFloorDebug" type="checkbox">
-        </div>
-        <div class="acts"><button id="apClose">关闭</button></div>
-        <div class="hint">设备定位图默认开启；其余外观调试项默认关闭。<br>
-          <b>元件轮廓线</b>：屏幕空间边缘检测画出元件之间的分界，代价是额外渲染一遍场景（只画法线+深度）。<br>
-          <b>隐藏件半透明</b>：「隐藏选中 / 隔离选中」掉的对象不消失，改用半透明 ghost 显示；
-          它们仍然<u>不可拾取、不参与描边</u>，隐藏的语义不变。<br>
-          <b>定位坐标调试</b>：绿色为 floorplan 定位点，粉色为对应 3D 设备包围盒中心，紫线连接两者。</div>
       </div>
       <div id="selBadge" class="overlay">
         <div class="k" style="color:#6b7280">当前选中</div>
@@ -603,6 +801,25 @@
 </div>
 
 <div id="ctxMenu"></div>
+<div id="gameCtxMenu" role="menu" aria-label="已选模型操作">
+  <div class="menu-sub">
+    <button type="button" data-action="color-open">颜色 <span>›</span></button>
+    <div id="gameColorSubmenu">
+      <button type="button" data-action="color-preset" data-color="#ef4444"><span class="swatch" style="background:#ef4444"></span>红色</button>
+      <button type="button" data-action="color-preset" data-color="#f97316"><span class="swatch" style="background:#f97316"></span>橙色</button>
+      <button type="button" data-action="color-preset" data-color="#facc15"><span class="swatch" style="background:#facc15"></span>黄色</button>
+      <button type="button" data-action="color-preset" data-color="#22c55e"><span class="swatch" style="background:#22c55e"></span>绿色</button>
+      <button type="button" data-action="color-preset" data-color="#3b82f6"><span class="swatch" style="background:#3b82f6"></span>蓝色</button>
+      <button type="button" data-action="color-preset" data-color="#8b5cf6"><span class="swatch" style="background:#8b5cf6"></span>紫色</button>
+      <button type="button" data-action="color-custom">自定义颜色…</button>
+      <button type="button" data-action="color-reset">恢复默认颜色</button>
+    </div>
+  </div>
+  <button type="button" data-action="hide">隐藏已选</button>
+  <button type="button" data-action="isolate">隔离已选</button>
+  <button type="button" data-action="show-all">显示全部</button>
+</div>
+<input id="gameColorPicker" type="color" value="#ef4444" aria-label="自定义对象颜色">
 <div id="toast"></div>
 
 <!-- ==================== 外网访问门（无有效 Session 时由 access.js 显示） ==================== -->

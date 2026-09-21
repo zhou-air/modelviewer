@@ -1,0 +1,1477 @@
+{
+  "url": "http://127.0.0.1:8899/viewer/index.html",
+  "target": {
+    "pid": "qichuang",
+    "mid": "site",
+    "vid": "2026-09-19"
+  },
+  "startedAt": "2026-09-21T03:49:55.462Z",
+  "ok": true,
+  "scenarios": [
+    {
+      "no": "A0",
+      "name": "模型就绪 · 批量渲染开启 · 取到 rvmparser-origin",
+      "ok": true,
+      "detail": {
+        "namedNodes": 7423,
+        "batches": 105,
+        "renderMeshes": 105,
+        "origin": [
+          -20.039997100830078,
+          64.97950744628906,
+          9.803499221801758
+        ]
+      }
+    },
+    {
+      "no": "A1",
+      "name": "默认：测量关 · 准星不可见 · 按钮未亮 · 面板未开 · 轴向回显已就绪",
+      "ok": true,
+      "detail": {
+        "enabled": false,
+        "axesText": "PDMS 世界坐标（Z 向上）",
+        "reticleVisible": false,
+        "buttonOn": false,
+        "panelOpen": false
+      }
+    },
+    {
+      "no": "A2",
+      "name": "点工具条「测量」→ 开启 · 准星可见且位于屏幕中心 · 面板打开",
+      "ok": true,
+      "detail": {
+        "reticle": {
+          "x": 562,
+          "y": 428,
+          "cx": 562,
+          "cy": 428
+        },
+        "axes": "PDMS 世界坐标（Z 向上）",
+        "glyph": "+"
+      }
+    },
+    {
+      "no": "A3",
+      "name": "测距开启后游戏导航操作不变：模式仍为 game · W 键仍推进相机",
+      "ok": true,
+      "detail": {
+        "mode": "game",
+        "captured": true,
+        "movedMeters": 2.554
+      }
+    },
+    {
+      "no": "B0",
+      "name": "挑到可用于精确对准的元件（含真实表面点与外法线）",
+      "ok": true,
+      "detail": {
+        "canonical": "/QICHUANG-LANDING-3300",
+        "meshes": 57,
+        "scanned": 6255
+      }
+    },
+    {
+      "no": "B1",
+      "name": "准星命中：canonicalId 解析正确（faceIndex→canonicalId 归属该元件）",
+      "ok": true,
+      "detail": {
+        "aim": "DISH 2 of SUBSTRUCTURE 10 of STRUCTURE /QICHUANG-LANDING-3300",
+        "target": "/QICHUANG-LANDING-3300"
+      }
+    },
+    {
+      "no": "B2",
+      "name": "准星命中：实际 Surface Hit Point 落在命中对象包围盒内（≤5 cm 误差）",
+      "ok": true,
+      "detail": {
+        "hitPoint": [
+          36.3639984114249,
+          -5.456499067815715,
+          60.04150764620864
+        ],
+        "probePoint": [
+          36.36399841225542,
+          -5.437498993822361,
+          60.04150764620864
+        ],
+        "errMeters": 0.019
+      }
+    },
+    {
+      "no": "B3",
+      "name": "命中的数据齐全：SurfaceHitPoint + canonicalId + BoundingBoxCenter",
+      "ok": true,
+      "detail": {
+        "point": [
+          36.3639984114249,
+          -5.456499067815715,
+          60.04150764620864
+        ],
+        "canonicalId": "DISH 2 of SUBSTRUCTURE 10 of STRUCTURE /QICHUANG-LANDING-3300",
+        "bboxCenter": [
+          36.36399841499328,
+          -5.418498992919909,
+          60.022507720875346
+        ]
+      }
+    },
+    {
+      "no": "B4",
+      "name": "BoundingBoxCenter 与页面内独立计算的 Box3 中心一致",
+      "ok": true,
+      "detail": {
+        "ref": [
+          36.36399841499328,
+          -5.418498992919909,
+          60.022507720875346
+        ],
+        "state": [
+          36.36399841499328,
+          -5.418498992919909,
+          60.022507720875346
+        ],
+        "err": 0
+      }
+    },
+    {
+      "no": "B5",
+      "name": "未命中：准星指向空白 → aim = null 且字形为 +",
+      "ok": true,
+      "detail": {
+        "aim": null,
+        "glyph": "+",
+        "state": "miss"
+      }
+    },
+    {
+      "no": "C1",
+      "name": "游戏导航已捕获时左键 = 取准星命中的 Surface Point（A 点）",
+      "ok": true,
+      "detail": {
+        "pending": {
+          "kind": "surface",
+          "canonicalId": "DISH 2 of SUBSTRUCTURE 10 of STRUCTURE /QICHUANG-LANDING-3300",
+          "point": [
+            36.3639984114249,
+            -5.456499067815715,
+            60.04150764620864
+          ],
+          "hitPoint": [
+            36.3639984114249,
+            -5.456499067815715,
+            60.04150764620864
+          ],
+          "hasBox": true
+        }
+      }
+    },
+    {
+      "no": "C2",
+      "name": "取点后准星闪 ●（已记录点）",
+      "ok": true,
+      "detail": {
+        "glyph": "●",
+        "state": "recorded"
+      }
+    },
+    {
+      "no": "C3",
+      "name": "A 已记录 + 准星移动 → 实时预览线与预览距离（与现算一致）",
+      "ok": true,
+      "detail": {
+        "degenerateWhenOnA": true,
+        "previewVisible": true,
+        "previewMm": 350.654491479579,
+        "expectedMm": 350.654491479579,
+        "label": "350.7 mm",
+        "labels": 2
+      }
+    },
+    {
+      "no": "C4",
+      "name": "第二次取点（C 键 = 对象中心）→ 固定为一条测量 · 预览线收起",
+      "ok": true,
+      "detail": {
+        "a": "surface",
+        "b": "center",
+        "segments": 1,
+        "markers": 2,
+        "preview": false,
+        "items": 1
+      }
+    },
+    {
+      "no": "D1",
+      "name": "distanceMm == hypot(ΔX, ΔY, ΔZ)（坐标映射自洽，旋转不变量）",
+      "ok": true,
+      "detail": {
+        "distanceMm": 2356.52721894108,
+        "hypot": 2356.5272189410794,
+        "diff": 4.547473508864641e-13
+      }
+    },
+    {
+      "no": "D2",
+      "name": "distanceMm == 世界空间距离(米) × 1000（不是基于屏幕像素）",
+      "ok": true,
+      "detail": {
+        "distanceMm": 2356.52721894108,
+        "worldMeters": 2.3565272189410797,
+        "stateWorldM": 2.3565272189410797
+      }
+    },
+    {
+      "no": "D3",
+      "name": "ΔX/ΔY/ΔZ 与独立复算的 PDMS 世界坐标差值逐项一致",
+      "ok": true,
+      "detail": {
+        "state": [
+          -409.00039506748,
+          -2319.999769562855,
+          -59.500249353461186
+        ],
+        "recomputed": [
+          -409.00039506748,
+          -2319.999769562855,
+          -59.500249353461186
+        ],
+        "aPdms": [
+          16324.001310594824,
+          4937.999800080419,
+          4347.000153986043
+        ],
+        "bPdms": [
+          15915.000915527344,
+          2618.000030517564,
+          4287.499904632582
+        ],
+        "axes": "PDMS_WORLD_Z_UP"
+      }
+    },
+    {
+      "no": "D4",
+      "name": "ΔZ = 高差 · Horizontal Distance = XY 平面距离",
+      "ok": true,
+      "detail": {
+        "horizontalMm": 2355.7759345780432,
+        "verticalMm": -59.500249353461186,
+        "zDiffMm": -59.500249353461186
+      }
+    },
+    {
+      "no": "D5",
+      "name": "同一相机位姿重复取点，数值逐位可复现",
+      "ok": true,
+      "detail": {
+        "r1": {
+          "axes": "PDMS_WORLD_Z_UP",
+          "distanceMm": 41.018787651654335,
+          "distanceWorldM": 0.041018787651654336,
+          "dxMm": 32.909378175552774,
+          "dyMm": 0,
+          "dzMm": 24.484970257484747,
+          "verticalMm": 24.484970257484747,
+          "horizontalMm": 32.909378175552774
+        },
+        "r2": {
+          "axes": "PDMS_WORLD_Z_UP",
+          "distanceMm": 41.018787651654335,
+          "distanceWorldM": 0.041018787651654336,
+          "dxMm": 32.909378175552774,
+          "dyMm": 0,
+          "dzMm": 24.484970257484747,
+          "verticalMm": 24.484970257484747,
+          "horizontalMm": 32.909378175552774
+        }
+      }
+    },
+    {
+      "no": "E1",
+      "name": "测量对象不参与 raycast（group 内对象 raycast 已被摘掉）",
+      "ok": true,
+      "detail": {
+        "found": true,
+        "raycastNoop": 5,
+        "total": 5,
+        "inTree": 0,
+        "inMeshIndex": 0
+      }
+    },
+    {
+      "no": "E2",
+      "name": "测量对象不进入模型树（树行数不因测量变化）",
+      "ok": true,
+      "detail": {
+        "before": 16,
+        "after": 16
+      }
+    },
+    {
+      "no": "E3",
+      "name": "隐藏/隔离不影响测量显示（测量视觉仍可见、数量不变）",
+      "ok": true,
+      "detail": {
+        "hiddenCount": 7420,
+        "before": {
+          "visible": true,
+          "markers": 3,
+          "segments": 1,
+          "components": 2,
+          "preview": false,
+          "capacity": {
+            "points": 1024,
+            "segments": 512,
+            "components": 1536
+          }
+        },
+        "after": {
+          "visible": true,
+          "markers": 3,
+          "segments": 1,
+          "components": 2,
+          "preview": false,
+          "capacity": {
+            "points": 1024,
+            "segments": 512,
+            "components": 1536
+          }
+        }
+      }
+    },
+    {
+      "no": "E4",
+      "name": "测量开启时取点不改动选择集",
+      "ok": true,
+      "detail": {
+        "before": 0,
+        "after": 0
+      }
+    },
+    {
+      "no": "E5",
+      "name": "Orbit 模式下同样可测：射线仍从屏幕中心发出（鼠标点在哪都取中心点）",
+      "ok": true,
+      "detail": {
+        "aimCanonical": "DISH 2 of SUBSTRUCTURE 10 of STRUCTURE /QICHUANG-LANDING-3300",
+        "pendingCanonical": "DISH 2 of SUBSTRUCTURE 10 of STRUCTURE /QICHUANG-LANDING-3300",
+        "samePoint": 0,
+        "orbit": "orbit"
+      }
+    },
+    {
+      "no": "F1",
+      "name": "Esc 取消未完成测量（已固定的测量保留）",
+      "ok": true,
+      "detail": {
+        "hadPending": true,
+        "afterPending": null,
+        "measurements": 2
+      }
+    },
+    {
+      "no": "F2",
+      "name": "Delete 删除上一条测量",
+      "ok": true,
+      "detail": {
+        "before": 2,
+        "after": 1,
+        "segments": 1,
+        "items": 1
+      }
+    },
+    {
+      "no": "F3",
+      "name": "「清除测量」清空全部测量（按钮可用性同步）",
+      "ok": true,
+      "detail": {
+        "armedClearDisabled": false,
+        "state": {
+          "visible": true,
+          "markers": 0,
+          "segments": 0,
+          "components": 0,
+          "preview": false,
+          "capacity": {
+            "points": 1024,
+            "segments": 512,
+            "components": 1536
+          }
+        },
+        "labels": 0
+      }
+    },
+    {
+      "no": "F4",
+      "name": "关闭测量 → 准星消失、按钮复位；重新开启后测量开关状态一致",
+      "ok": true,
+      "detail": {
+        "off": {
+          "enabled": false,
+          "ui": false
+        },
+        "on": {
+          "enabled": true
+        }
+      }
+    },
+    {
+      "no": "H1",
+      "name": "XYZ 分量默认开启，辅助线数与\"非零方向数\"一致",
+      "ok": true,
+      "detail": {
+        "showComponents": true,
+        "legs": [
+          "X",
+          "Y",
+          "Z"
+        ],
+        "expectAxes": [
+          "X",
+          "Y",
+          "Z"
+        ],
+        "drawn": 3,
+        "result": {
+          "dx": 30.091715358550573,
+          "dy": -12.538206884172723,
+          "dz": 35.29973245223118
+        }
+      }
+    },
+    {
+      "no": "H2",
+      "name": "辅助线方向 = 模型坐标系轴向（世界空间，与相机无关）",
+      "ok": true,
+      "detail": [
+        {
+          "axis": "X",
+          "mm": 30.091715358550573,
+          "unitDot": 1,
+          "offAxisMeters": 0,
+          "aligned": true
+        },
+        {
+          "axis": "Y",
+          "mm": -12.538206884172723,
+          "unitDot": -1,
+          "offAxisMeters": 0,
+          "aligned": true
+        },
+        {
+          "axis": "Z",
+          "mm": 35.29973245223118,
+          "unitDot": 1,
+          "offAxisMeters": 0,
+          "aligned": true
+        }
+      ]
+    },
+    {
+      "no": "H3",
+      "name": "辅助线长度与世界空间 |Δ| 一致，且阶梯首尾相接（末端 = P2）",
+      "ok": true,
+      "detail": {
+        "rows": [
+          {
+            "axis": "X",
+            "lenMm": 30.091715358551596,
+            "expectMm": 30.091715358550573,
+            "diff": 1.0231815394945443e-12
+          },
+          {
+            "axis": "Y",
+            "lenMm": 12.538206884173064,
+            "expectMm": 12.538206884172723,
+            "diff": 3.410605131648481e-13
+          },
+          {
+            "axis": "Z",
+            "lenMm": 35.2997324522315,
+            "expectMm": 35.29973245223118,
+            "diff": 3.197442310920451e-13
+          }
+        ],
+        "headAtA": true,
+        "tailAtB": true,
+        "chainOk": true,
+        "tailGap": 0
+      }
+    },
+    {
+      "no": "H4",
+      "name": "各向标签=轴向+绝对值（负号只留在数据里，界面不显示）",
+      "ok": true,
+      "detail": {
+        "texts": [
+          "X  30.1 mm",
+          "Y  12.5 mm",
+          "Z  35.3 mm"
+        ],
+        "legs": [
+          "X",
+          "Y",
+          "Z"
+        ],
+        "signed": {
+          "dx": 30.091715358550573,
+          "dy": -12.538206884172723,
+          "dz": 35.29973245223118
+        }
+      }
+    },
+    {
+      "no": "H5",
+      "name": "关闭 XYZ 开关 → 辅助线归零，直线距离等既有结果不变",
+      "ok": true,
+      "detail": {
+        "offComponents": 0,
+        "resultUnchanged": true,
+        "restoredComponents": 3,
+        "uiChecked": true
+      }
+    },
+    {
+      "no": "H6",
+      "name": "某方向差值为 0 → 不画该方向辅助线（同一位置取两次对象中心）",
+      "ok": true,
+      "detail": {
+        "result": {
+          "dx": 0,
+          "dy": 0,
+          "dz": 0
+        },
+        "legs": [],
+        "components": 0,
+        "segments": 1,
+        "compLabels": [],
+        "points": {
+          "a": "P1",
+          "b": "P2"
+        }
+      }
+    },
+    {
+      "no": "I0",
+      "name": "挑到一个\"元数据里有名称\"的对象用于命名验证",
+      "ok": true,
+      "detail": {
+        "canonical": "/PG-10306-300-M2G/B2",
+        "name": "/PG-10306-300-M2G/B2"
+      }
+    },
+    {
+      "no": "I1",
+      "name": "表面点自动命名 P1/P2…（按取点顺序连续编号）",
+      "ok": true,
+      "detail": {
+        "aDisplayName": "P1",
+        "from": "P1",
+        "to": "P2",
+        "kinds": [
+          "surface",
+          "surface"
+        ]
+      }
+    },
+    {
+      "no": "I2",
+      "name": "对象中心点直接用元数据名称/位号（V1011A 这类）",
+      "ok": true,
+      "detail": {
+        "expectName": "/PG-10306-300-M2G/B2",
+        "displayName": "/PG-10306-300-M2G/B2",
+        "canonicalId": "/PG-10306-300-M2G/B2",
+        "hitCanonical": "/PG-10306-300-M2G/B2"
+      }
+    },
+    {
+      "no": "I3",
+      "name": "中心点拿不到名称时退回 P 编号（注入空解析器验证回退分支）",
+      "ok": true,
+      "detail": {
+        "displayName": "P1",
+        "kind": "center",
+        "canonicalId": "/PG-10306-300-M2G/B2"
+      }
+    },
+    {
+      "no": "I4",
+      "name": "名称解析复用既有 canonicalId→metadata 映射（未重新解析模型）",
+      "ok": true,
+      "detail": {
+        "probeNull": null,
+        "mapped": {
+          "id": "txt:L769",
+          "name": "/PG-10306-300-M2G/B2",
+          "resolved": "/PG-10306-300-M2G/B2"
+        }
+      }
+    },
+    {
+      "no": "J1",
+      "name": "结构化记录字段齐全，且与面板读数一致（整数 mm，带原始世界坐标）",
+      "ok": true,
+      "detail": {
+        "record": {
+          "from": "P1",
+          "to": "P2",
+          "direct": 41,
+          "dx": 26,
+          "dy": -17,
+          "dz": 27,
+          "horizontal": 31,
+          "aWorld": [
+            36.36399822016718,
+            -5.456498957394147,
+            60.04150764620864
+          ],
+          "bWorld": [
+            36.38975723260478,
+            -5.429219372957008,
+            60.05806688793935
+          ],
+          "axes": "PDMS_WORLD_Z_UP"
+        },
+        "present": true,
+        "rounded": true,
+        "signs": true,
+        "positive": true,
+        "worldKept": true
+      }
+    },
+    {
+      "no": "J2",
+      "name": "复制文本：表头 + TAB 分列 + 纯数字（不带 mm 文字、保留正负号）",
+      "ok": true,
+      "detail": {
+        "headOk": true,
+        "shapeOk": true,
+        "numericOk": true,
+        "signOk": true,
+        "lineCount": 2,
+        "text": "From\tTo\tDirect(mm)\tX(mm)\tY(mm)\tZ(mm)\tHorizontal(mm)\nP1\tP2\t41\t26\t-17\t27\t31"
+      }
+    },
+    {
+      "no": "J3",
+      "name": "「复制测量结果」真写入剪贴板（Clipboard API）并给出提示",
+      "ok": true,
+      "detail": {
+        "same": true,
+        "clipboard": "From\tTo\tDirect(mm)\tX(mm)\tY(mm)\tZ(mm)\tHorizontal(mm)\r\nP1\tP2\t41\t26\t-17\t27\t31",
+        "toast": "已复制 1 条测量结果（TAB 分隔），可直接粘贴进 Excel",
+        "expectHead": "From\tTo\tDirect(mm)\tX(mm)\tY(mm)\tZ(mm)\tHorizontal(mm)"
+      }
+    },
+    {
+      "no": "J4",
+      "name": "无测量结果时：复制按钮禁用、文本只有表头",
+      "ok": true,
+      "detail": {
+        "copyDisabled": true,
+        "text": "From\tTo\tDirect(mm)\tX(mm)\tY(mm)\tZ(mm)\tHorizontal(mm)"
+      }
+    },
+    {
+      "no": "J5",
+      "name": "剪贴板两条通道都不可用时：给出明确失败提示（不静默失败）",
+      "ok": true,
+      "detail": {
+        "returned": false,
+        "toast": "复制失败：浏览器拒绝了剪贴板写入。请用 https 或 localhost 打开本页，或手动从面板抄录。"
+      }
+    },
+    {
+      "no": "K1",
+      "name": "静态相机取点：记录点投影 = 屏幕中心（≤0.5 px）",
+      "ok": true,
+      "detail": {
+        "pointToCenterPx": 0,
+        "reticleToCenterPx": 0,
+        "screen": {
+          "x": 878,
+          "y": 472
+        },
+        "center": {
+          "x": 878,
+          "y": 472
+        }
+      }
+    },
+    {
+      "no": "K2",
+      "name": "准星与导航准星严格同心（SVG 几何中心，≤0.5 px）",
+      "ok": true,
+      "detail": {
+        "navVisible": true,
+        "navCrosshairPx": 0,
+        "measureReticlePx": 0,
+        "glyphInkPx": 0,
+        "visibleShape": "recorded",
+        "reportedState": "recorded",
+        "shapeMatchesState": true,
+        "nav": {
+          "x": 878,
+          "y": 472,
+          "w": 25,
+          "h": 25,
+          "on": true
+        }
+      }
+    },
+    {
+      "no": "K3",
+      "name": "四态字形各自几何居中（切到每一态都同心）",
+      "ok": true,
+      "detail": {
+        "rows": [
+          {
+            "shape": "miss",
+            "offPx": 0,
+            "w": 9.2,
+            "h": 9.2
+          },
+          {
+            "shape": "surface",
+            "offPx": 0,
+            "w": 10.2,
+            "h": 10.2
+          },
+          {
+            "shape": "center",
+            "offPx": 0,
+            "w": 6.8,
+            "h": 6.8
+          },
+          {
+            "shape": "recorded",
+            "offPx": 0,
+            "w": 3.8,
+            "h": 3.8
+          }
+        ],
+        "restoredState": "recorded"
+      }
+    },
+    {
+      "no": "K4",
+      "name": "取点用\"本帧已展示的命中\"：相机刚动过也不跳到新位姿",
+      "ok": true,
+      "detail": {
+        "distanceToShownAim": 0,
+        "distanceFromFreshRay": 0.0428,
+        "recordedIsShown": true,
+        "freshDiffersEnough": true
+      }
+    },
+    {
+      "no": "K5",
+      "name": "瞄准值每帧刷新（不再有 33 ms 节流窗口）",
+      "ok": true,
+      "detail": {
+        "aimFollowedCamera": true,
+        "aimMovedMeters": 0.025118,
+        "gapToFreshRayMeters": 0
+      }
+    },
+    {
+      "no": "K6",
+      "name": "已记录点不随相机移动（世界坐标固定，只是投影随视角变化）",
+      "ok": true,
+      "detail": {
+        "worldUnchanged": true,
+        "projectedMovedPx": 16907.9,
+        "world": [
+          36.36399841225542,
+          -5.437499045495204,
+          59.97808868524485
+        ]
+      }
+    },
+    {
+      "no": "L1",
+      "name": "Game 已捕获：只取了 A → 右键取消该点，已有测量不受影响",
+      "ok": true,
+      "detail": {
+        "committedBefore": 1,
+        "hadPending": true,
+        "pendingAfter": null,
+        "committedAfter": 1,
+        "markers": 2,
+        "segments": 1
+      }
+    },
+    {
+      "no": "L2",
+      "name": "Orbit 模式：真实右键点击也能取消未完成的点",
+      "ok": true,
+      "detail": {
+        "hadPending": true,
+        "pendingAfter": null,
+        "markers": 0,
+        "mode": "orbit"
+      }
+    },
+    {
+      "no": "L3",
+      "name": "右键拖动（Orbit 平移）不会误取消测量点",
+      "ok": true,
+      "detail": {
+        "pendingKept": true,
+        "samePoint": 0
+      }
+    },
+    {
+      "no": "L4",
+      "name": "没有未完成点时右键幂等；Game 右键菜单打开时保留选择集供菜单操作",
+      "ok": true,
+      "detail": {
+        "preconditionNoPending": true,
+        "selectionBefore": 1,
+        "selectionAfter": 1,
+        "measurementsUnchanged": true,
+        "committed": 0
+      }
+    },
+    {
+      "no": "L5",
+      "name": "右键取消后仍能正常完成一条两点测量，且编号不出现空洞",
+      "ok": true,
+      "detail": {
+        "firstAttempt": "P1",
+        "afterCancelPending": null,
+        "secondAttempt": "P1",
+        "from": "P1",
+        "to": "P2",
+        "segments": 1,
+        "markers": 2
+      }
+    },
+    {
+      "no": "N1",
+      "name": "空状态 Ctrl+Z：状态不变、不报错",
+      "ok": true,
+      "detail": {
+        "unchanged": true
+      }
+    },
+    {
+      "no": "N2",
+      "name": "未完成点：Ctrl+Z 撤销该点且编号退回",
+      "ok": true,
+      "detail": {
+        "armedName": "P1",
+        "pendingAfterUndo": null,
+        "markers": 0,
+        "nextPointName": "P1"
+      }
+    },
+    {
+      "no": "N3",
+      "name": "已完成测量：Ctrl+Z 撤掉测量与终点数据，起点回到待取状态",
+      "ok": true,
+      "detail": {
+        "committedBefore": 1,
+        "restored": "P1",
+        "segments": 0,
+        "markers": 1,
+        "reuseOk": true,
+        "redoneFrom": "P1",
+        "redoneTo": "P2"
+      }
+    },
+    {
+      "no": "N4",
+      "name": "连续模式：Ctrl+Z 逐点回退（先撤链头开点，再逐段撤测量）",
+      "ok": true,
+      "detail": {
+        "afterThree": {
+          "m": 2,
+          "open": "P3"
+        },
+        "z1": {
+          "m": 2,
+          "pending": null
+        },
+        "z2": {
+          "m": 1,
+          "pending": "P2",
+          "equalsPrevEnd": 0
+        },
+        "z3": {
+          "m": 1,
+          "pending": null
+        },
+        "z4": {
+          "m": 0,
+          "pending": "P1"
+        }
+      }
+    },
+    {
+      "no": "N5",
+      "name": "连续模式撤销干净后再测：数值正常、无任何视觉残留",
+      "ok": true,
+      "detail": {
+        "cleanAfterUndos": {
+          "m": 0,
+          "pending": null
+        },
+        "committed": 1,
+        "hypotOk": true,
+        "record": {
+          "from": "P1",
+          "to": "P2",
+          "direct": 47,
+          "dx": 31,
+          "dy": -10,
+          "dz": 34,
+          "horizontal": 32,
+          "aWorld": [
+            36.3639984114249,
+            -5.456499067815715,
+            60.04150764620864
+          ],
+          "bWorld": [
+            36.39461437842621,
+            -5.422191010625447,
+            60.05171296833993
+          ],
+          "axes": "PDMS_WORLD_Z_UP"
+        },
+        "pointLabels": [
+          {
+            "text": "P1",
+            "kind": "surface",
+            "circle": true,
+            "w": 22,
+            "h": 22
+          },
+          {
+            "text": "P2",
+            "kind": "surface",
+            "circle": true,
+            "w": 22,
+            "h": 22
+          }
+        ]
+      }
+    },
+    {
+      "no": "G1",
+      "name": "关闭测量后 Orbit 左键点选恢复（选择集 = 1）",
+      "ok": true,
+      "detail": {
+        "clicked": "ELBOW 1 of BRANCH /WG-10401-400-L1G/B1",
+        "rayHit": "ELBOW 1 of BRANCH /WG-10401-400-L1G/B1",
+        "selected": [
+          "ELBOW 1 of BRANCH /WG-10401-400-L1G/B1"
+        ]
+      }
+    },
+    {
+      "no": "G2",
+      "name": "预选中仍工作：测量开启时 hover 直接沿用准星命中结果",
+      "ok": true,
+      "detail": {
+        "hover": "DISH 2 of SUBSTRUCTURE 10 of STRUCTURE /QICHUANG-LANDING-3300",
+        "aim": "DISH 2 of SUBSTRUCTURE 10 of STRUCTURE /QICHUANG-LANDING-3300",
+        "enabled": true
+      }
+    },
+    {
+      "no": "G3",
+      "name": "设备定位图 / 性能统计未受影响",
+      "ok": true,
+      "detail": {
+        "floorplanAvailable": true,
+        "floorplanVisible": true,
+        "fps": 90,
+        "drawCalls": 39,
+        "allPasses": 122
+      }
+    },
+    {
+      "no": "G4",
+      "name": "切换模型后测量结果作废（坐标属于上一个模型）",
+      "ok": true,
+      "detail": {
+        "before": 1,
+        "after": {
+          "measurements": 0,
+          "enabled": true,
+          "origin": [
+            -20.039997100830078,
+            64.97950744628906,
+            9.803499221801758
+          ]
+        }
+      }
+    }
+  ],
+  "console": [],
+  "pageErrors": [],
+  "modelInfo": {
+    "meshes": 5507,
+    "lines": 289,
+    "namedNodes": 7423,
+    "floorplan": {
+      "equipment": 98,
+      "positioned": 98,
+      "outlines": 608,
+      "outlineSegments": 8778,
+      "labelBatches": 1,
+      "debugCenters": 0,
+      "floorY": -12.80591046975783,
+      "floorOffset": 0.0024107881155389006
+    },
+    "floorplanError": null
+  },
+  "batch": {
+    "enabled": true,
+    "indexed": true,
+    "maxMeshesPerBatch": 64,
+    "sourceMeshes": 5507,
+    "spatialBatches": 105,
+    "renderMeshes": 105,
+    "stateMeshes": {
+      "solid": 105,
+      "selected": 0,
+      "hover": 0,
+      "ghost": 0
+    },
+    "recordedRanges": 5507,
+    "triangles": 335824,
+    "indices": 1007472,
+    "lastSync": {
+      "changedEntries": 5507,
+      "rebuiltBatches": 105,
+      "ms": 92.5
+    }
+  },
+  "origin": [
+    -20.039997100830078,
+    64.97950744628906,
+    9.803499221801758
+  ],
+  "probe": {
+    "canonical": "/QICHUANG-LANDING-3300",
+    "point": [
+      36.36399841225542,
+      -5.437498993822361,
+      60.04150764620864
+    ],
+    "normal": [
+      -4.371138828673788e-8,
+      -0.9999999999999991,
+      -4.814824632276186e-32
+    ],
+    "box": {
+      "min": [
+        35.139997069956735,
+        -6.5134994512773,
+        59.05750759947115
+      ],
+      "max": [
+        36.43999713170342,
+        -5.380498991115006,
+        60.31750765931794
+      ]
+    },
+    "meshes": 57,
+    "scanned": 6255
+  },
+  "b1": {
+    "enabled": true,
+    "kind": "surface",
+    "revision": 1,
+    "axes": "PDMS_WORLD_Z_UP",
+    "origin": [
+      -20.039997100830078,
+      64.97950744628906,
+      9.803499221801758
+    ],
+    "aim": {
+      "canonicalId": "DISH 2 of SUBSTRUCTURE 10 of STRUCTURE /QICHUANG-LANDING-3300",
+      "point": [
+        36.3639984114249,
+        -5.456499067815715,
+        60.04150764620864
+      ],
+      "bboxCenter": [
+        36.36399841499328,
+        -5.418498992919909,
+        60.022507720875346
+      ],
+      "distanceWorldM": 0.13099992600664578
+    },
+    "pending": null,
+    "pendingResult": null,
+    "pendingLabel": null,
+    "aimComputed": true,
+    "showComponents": true,
+    "continuous": false,
+    "components": [],
+    "clipboardText": "From\tTo\tDirect(mm)\tX(mm)\tY(mm)\tZ(mm)\tHorizontal(mm)",
+    "measurements": [],
+    "labels": 0,
+    "pointLabels": [],
+    "componentLabels": 0,
+    "componentLabelTexts": [],
+    "reticle": {
+      "visible": true,
+      "glyph": "⊕",
+      "state": "surface"
+    },
+    "group": {
+      "visible": true,
+      "markers": 0,
+      "segments": 0,
+      "components": 0,
+      "preview": false,
+      "capacity": {
+        "points": 1024,
+        "segments": 512,
+        "components": 1536
+      }
+    },
+    "lineObjectsRegistered": true
+  },
+  "c1": {
+    "enabled": true,
+    "kind": "surface",
+    "revision": 1,
+    "axes": "PDMS_WORLD_Z_UP",
+    "origin": [
+      -20.039997100830078,
+      64.97950744628906,
+      9.803499221801758
+    ],
+    "aim": {
+      "canonicalId": "DISH 2 of SUBSTRUCTURE 10 of STRUCTURE /QICHUANG-LANDING-3300",
+      "point": [
+        36.3639984114249,
+        -5.456499067815715,
+        60.04150764620864
+      ],
+      "bboxCenter": [
+        36.36399841499328,
+        -5.418498992919909,
+        60.022507720875346
+      ],
+      "distanceWorldM": 0.13099992600664578
+    },
+    "pending": {
+      "kind": "surface",
+      "displayName": "P1",
+      "canonicalId": "DISH 2 of SUBSTRUCTURE 10 of STRUCTURE /QICHUANG-LANDING-3300",
+      "point": [
+        36.3639984114249,
+        -5.456499067815715,
+        60.04150764620864
+      ],
+      "hitPoint": [
+        36.3639984114249,
+        -5.456499067815715,
+        60.04150764620864
+      ],
+      "bboxCenter": [
+        36.36399841499328,
+        -5.418498992919909,
+        60.022507720875346
+      ]
+    },
+    "pendingResult": null,
+    "pendingLabel": null,
+    "aimComputed": true,
+    "showComponents": true,
+    "continuous": false,
+    "components": [],
+    "clipboardText": "From\tTo\tDirect(mm)\tX(mm)\tY(mm)\tZ(mm)\tHorizontal(mm)",
+    "measurements": [],
+    "labels": 0,
+    "pointLabels": [
+      {
+        "text": "P1",
+        "kind": "surface",
+        "circle": true,
+        "w": 22,
+        "h": 22
+      }
+    ],
+    "componentLabels": 0,
+    "componentLabelTexts": [],
+    "reticle": {
+      "visible": true,
+      "glyph": "●",
+      "state": "recorded"
+    },
+    "group": {
+      "visible": true,
+      "markers": 1,
+      "segments": 0,
+      "components": 0,
+      "preview": false,
+      "capacity": {
+        "points": 1024,
+        "segments": 512,
+        "components": 1536
+      }
+    },
+    "lineObjectsRegistered": true
+  },
+  "measurement1": {
+    "id": "M1-muapilrz",
+    "a": {
+      "kind": "surface",
+      "displayName": "P1",
+      "canonicalId": "DISH 2 of SUBSTRUCTURE 10 of STRUCTURE /QICHUANG-LANDING-3300",
+      "point": [
+        36.3639984114249,
+        -5.456499067815715,
+        60.04150764620864
+      ],
+      "hitPoint": [
+        36.3639984114249,
+        -5.456499067815715,
+        60.04150764620864
+      ],
+      "bboxCenter": [
+        36.36399841499328,
+        -5.418498992919909,
+        60.022507720875346
+      ]
+    },
+    "b": {
+      "kind": "center",
+      "displayName": "P2",
+      "canonicalId": "BOX 1 of SUBSTRUCTURE 1 of STRUCTURE /QICHUANG-FLOOR-PLATE-4300",
+      "point": [
+        35.95499801635742,
+        -5.515999317169176,
+        62.3615074157715
+      ],
+      "hitPoint": [
+        36.60666542857625,
+        -5.528499126434326,
+        60.28417466650721
+      ],
+      "bboxCenter": [
+        35.95499801635742,
+        -5.515999317169176,
+        62.3615074157715
+      ]
+    },
+    "result": {
+      "axes": "PDMS_WORLD_Z_UP",
+      "distanceMm": 2356.52721894108,
+      "distanceWorldM": 2.3565272189410797,
+      "dxMm": -409.00039506748,
+      "dyMm": -2319.999769562855,
+      "dzMm": -59.500249353461186,
+      "verticalMm": -59.500249353461186,
+      "horizontalMm": 2355.7759345780432
+    },
+    "record": {
+      "from": "P1",
+      "to": "P2",
+      "direct": 2357,
+      "dx": -409,
+      "dy": -2320,
+      "dz": -60,
+      "horizontal": 2356,
+      "aWorld": [
+        36.3639984114249,
+        -5.456499067815715,
+        60.04150764620864
+      ],
+      "bWorld": [
+        35.95499801635742,
+        -5.515999317169176,
+        62.3615074157715
+      ],
+      "axes": "PDMS_WORLD_Z_UP"
+    },
+    "legs": [
+      "X",
+      "Y",
+      "Z"
+    ]
+  },
+  "repeat": {
+    "r1": {
+      "axes": "PDMS_WORLD_Z_UP",
+      "distanceMm": 41.018787651654335,
+      "distanceWorldM": 0.041018787651654336,
+      "dxMm": 32.909378175552774,
+      "dyMm": 0,
+      "dzMm": 24.484970257484747,
+      "verticalMm": 24.484970257484747,
+      "horizontalMm": 32.909378175552774
+    },
+    "r2": {
+      "axes": "PDMS_WORLD_Z_UP",
+      "distanceMm": 41.018787651654335,
+      "distanceWorldM": 0.041018787651654336,
+      "dxMm": 32.909378175552774,
+      "dyMm": 0,
+      "dzMm": 24.484970257484747,
+      "verticalMm": 24.484970257484747,
+      "horizontalMm": 32.909378175552774
+    },
+    "s": true
+  },
+  "xyzMeasurement": {
+    "id": "M1-muapiqi4",
+    "a": {
+      "kind": "surface",
+      "displayName": "P1",
+      "canonicalId": "DISH 2 of SUBSTRUCTURE 10 of STRUCTURE /QICHUANG-LANDING-3300",
+      "point": [
+        36.36399839325451,
+        -5.456499057325144,
+        60.04150764620864
+      ],
+      "hitPoint": [
+        36.36399839325451,
+        -5.456499057325144,
+        60.04150764620864
+      ],
+      "bboxCenter": [
+        36.36399841499328,
+        -5.418498992919909,
+        60.022507720875346
+      ]
+    },
+    "b": {
+      "kind": "surface",
+      "displayName": "P2",
+      "canonicalId": "DISH 1 of SUBSTRUCTURE 10 of STRUCTURE /QICHUANG-LANDING-3300",
+      "point": [
+        36.394090108613064,
+        -5.421199324872912,
+        60.054045853092816
+      ],
+      "hitPoint": [
+        36.394090108613064,
+        -5.421199324872912,
+        60.054045853092816
+      ],
+      "bboxCenter": [
+        36.36399841117859,
+        -5.418498992919909,
+        60.06050772101921
+      ]
+    },
+    "result": {
+      "axes": "PDMS_WORLD_Z_UP",
+      "distanceMm": 48.04986031498469,
+      "distanceWorldM": 0.04804986031498469,
+      "dxMm": 30.091715358550573,
+      "dyMm": -12.538206884172723,
+      "dzMm": 35.29973245223118,
+      "verticalMm": 35.29973245223118,
+      "horizontalMm": 32.59935528642161
+    },
+    "record": {
+      "from": "P1",
+      "to": "P2",
+      "direct": 48,
+      "dx": 30,
+      "dy": -13,
+      "dz": 35,
+      "horizontal": 33,
+      "aWorld": [
+        36.36399839325451,
+        -5.456499057325144,
+        60.04150764620864
+      ],
+      "bWorld": [
+        36.394090108613064,
+        -5.421199324872912,
+        60.054045853092816
+      ],
+      "axes": "PDMS_WORLD_Z_UP"
+    },
+    "legs": [
+      "X",
+      "Y",
+      "Z"
+    ]
+  },
+  "namedTarget": {
+    "canonical": "/PG-10306-300-M2G/B2",
+    "name": "/PG-10306-300-M2G/B2"
+  },
+  "record": {
+    "from": "P1",
+    "to": "P2",
+    "direct": 41,
+    "dx": 26,
+    "dy": -17,
+    "dz": 27,
+    "horizontal": 31,
+    "aWorld": [
+      36.36399822016718,
+      -5.456498957394147,
+      60.04150764620864
+    ],
+    "bWorld": [
+      36.38975723260478,
+      -5.429219372957008,
+      60.05806688793935
+    ],
+    "axes": "PDMS_WORLD_Z_UP"
+  },
+  "clipboardText": "From\tTo\tDirect(mm)\tX(mm)\tY(mm)\tZ(mm)\tHorizontal(mm)\nP1\tP2\t41\t26\t-17\t27\t31",
+  "undoCheck": {
+    "done": {
+      "from": "P1",
+      "to": "P2",
+      "direct": 43,
+      "dx": 30,
+      "dy": -11,
+      "dz": 29,
+      "horizontal": 32,
+      "aWorld": [
+        36.3639984114249,
+        -5.456499067815715,
+        60.04150764620864
+      ],
+      "bWorld": [
+        36.39442163450298,
+        -5.427818877594982,
+        60.052570636182786
+      ],
+      "axes": "PDMS_WORLD_Z_UP"
+    },
+    "undonePending": "P1",
+    "redone": {
+      "from": "P1",
+      "to": "P2",
+      "direct": 38,
+      "dx": 27,
+      "dy": -12,
+      "dz": 24,
+      "horizontal": 29,
+      "aWorld": [
+        36.3639984114249,
+        -5.456499067815715,
+        60.04150764620864
+      ],
+      "bWorld": [
+        36.39058624343651,
+        -5.432385949338667,
+        60.053778952969495
+      ],
+      "axes": "PDMS_WORLD_Z_UP"
+    }
+  },
+  "pageErrorCount": 0,
+  "consoleErrors": 0,
+  "summary": {
+    "total": 64,
+    "passed": 64,
+    "failed": []
+  }
+}

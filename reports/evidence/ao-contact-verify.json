@@ -1,0 +1,76 @@
+{
+  "results": [
+    {
+      "name": "flat plane stays white",
+      "ok": true,
+      "min": 255
+    },
+    {
+      "name": "small corner contact remains visible",
+      "ok": true,
+      "count": 7199,
+      "min": 190
+    },
+    {
+      "name": "distant plane unaffected",
+      "ok": true,
+      "farDark": 0
+    },
+    {
+      "name": "non-model surfaces do not receive AO",
+      "ok": true,
+      "protectedCount": 83468,
+      "protectedDark": 0
+    },
+    {
+      "name": "engineering overlay pixels and parent preserved",
+      "ok": true,
+      "helperPixels": 160000,
+      "helperChanged": 0
+    },
+    {
+      "name": "migrate old default, preserve custom intensity",
+      "ok": true,
+      "migrated": {
+        "lightingEnabled": true,
+        "lightingIntensity": 1,
+        "aoEnabled": false,
+        "aoIntensity": 0.3,
+        "aoRadius": 0.12,
+        "globalModelColor": "#8d949c",
+        "backgroundColor": "#eef1f3",
+        "groundEnabled": false,
+        "groundColor": "#d7dde3"
+      },
+      "custom": {
+        "lightingEnabled": true,
+        "lightingIntensity": 1,
+        "aoEnabled": false,
+        "aoIntensity": 0.85,
+        "aoRadius": 0.12,
+        "globalModelColor": "#8d949c",
+        "backgroundColor": "#eef1f3",
+        "groundEnabled": false,
+        "groundColor": "#d7dde3"
+      }
+    },
+    {
+      "name": "radius saved, shared depth reused, no AO blur",
+      "ok": true
+    },
+    {
+      "name": "advanced slider, reload/model switch and reset",
+      "ok": true,
+      "ui": {
+        "radius": 0.17,
+        "label": "17 cm"
+      },
+      "persisted": {
+        "saved": 0.17,
+        "reset": 0.12
+      }
+    }
+  ],
+  "errors": [],
+  "ok": true
+}

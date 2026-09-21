@@ -1,0 +1,85 @@
+{
+  "steps": [
+    {
+      "name": "defaults/shared PBR/indexed Batch",
+      "ok": true
+    },
+    {
+      "name": "one shared prepass / no prepass when both OFF",
+      "ok": true,
+      "once": 1,
+      "shared": true
+    },
+    {
+      "name": "AO bounded, selection and hover excluded in GPU buffer",
+      "ok": true,
+      "shaded": 36686,
+      "min": 205,
+      "selected": 16029,
+      "hover": 16029
+    },
+    {
+      "name": "camera-relative lighting in Orbit and Game; bounds unchanged",
+      "ok": true,
+      "error": 7.502019408590033e-15
+    },
+    {
+      "name": "Resize and DPR 1.5 targets",
+      "ok": true,
+      "main": [
+        1296,
+        1074
+      ],
+      "normal": [
+        1296,
+        1074
+      ],
+      "ao": [
+        1296,
+        1074
+      ]
+    },
+    {
+      "name": "UI settings persist across model/version",
+      "ok": true,
+      "a": {
+        "globalModelColor": "#8d949c",
+        "backgroundColor": "#eef1f3",
+        "groundEnabled": false,
+        "groundColor": "#d7dde3",
+        "groundVisible": false,
+        "groundY": null,
+        "groundSize": null,
+        "lightingEnabled": false,
+        "lightingIntensity": 1,
+        "aoEnabled": true,
+        "aoIntensity": 1.1,
+        "aoRadius": 0.12,
+        "aoPassEnabled": true,
+        "normalDepthPassEnabled": true,
+        "contours": true,
+        "xray": false,
+        "xrayOpacity": 0.32,
+        "ghostObjects": 0,
+        "edgePassEnabled": true,
+        "edgeSceneDrawCalls": 317,
+        "ghostMeshOpacity": 0.32,
+        "ghostLineOpacity": 0.512,
+        "ghostMeshColor": "9aa6b2",
+        "ghostDepthWrite": false,
+        "objectColorOverrides": 0
+      }
+    },
+    {
+      "name": "settings persist across reload; reset and invalid values",
+      "ok": true
+    },
+    {
+      "name": "no WebGL/page errors",
+      "ok": true,
+      "errors": []
+    }
+  ],
+  "errors": [],
+  "ok": true
+}

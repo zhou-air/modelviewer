@@ -1,0 +1,84 @@
+{
+  "environment": {
+    "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Laptop GPU (0x000028A0) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+    "resolution": "1124×856",
+    "pixelRatio": 1,
+    "gpuTimerStatus": "available"
+  },
+  "rows": [
+    {
+      "mid": "site",
+      "mode": "off",
+      "fps": 165,
+      "frameMs": 6.100000023841858,
+      "gpuMs": 2.57024,
+      "calls": 398,
+      "allCalls": 399
+    },
+    {
+      "mid": "site",
+      "mode": "ao",
+      "fps": 133,
+      "frameMs": 7.399999976158142,
+      "gpuMs": 5.504,
+      "calls": 398,
+      "allCalls": 506
+    },
+    {
+      "mid": "site",
+      "mode": "edge",
+      "fps": 133,
+      "frameMs": 7.199999988079071,
+      "gpuMs": 5.254144,
+      "calls": 398,
+      "allCalls": 505
+    },
+    {
+      "mid": "site",
+      "mode": "both",
+      "fps": 135,
+      "frameMs": 7.800000011920929,
+      "gpuMs": 5.83168,
+      "calls": 398,
+      "allCalls": 507
+    },
+    {
+      "mid": "hygq",
+      "mode": "off",
+      "fps": 139,
+      "frameMs": 7.100000023841858,
+      "gpuMs": 1.993728,
+      "calls": 321,
+      "allCalls": 322
+    },
+    {
+      "mid": "hygq",
+      "mode": "ao",
+      "fps": 71,
+      "frameMs": 14.800000011920929,
+      "gpuMs": 9.588736,
+      "calls": 321,
+      "allCalls": 641
+    },
+    {
+      "mid": "hygq",
+      "mode": "edge",
+      "fps": 71,
+      "frameMs": 13.400000035762787,
+      "gpuMs": 9.49248,
+      "calls": 321,
+      "allCalls": 640
+    },
+    {
+      "mid": "hygq",
+      "mode": "both",
+      "fps": 71,
+      "frameMs": 15.5,
+      "gpuMs": 10.179584,
+      "calls": 321,
+      "allCalls": 642
+    }
+  ],
+  "errors": []
+}

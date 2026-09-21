@@ -13,12 +13,15 @@ import { ModelTree } from './js/tree.js';
 import { PropsPanel } from './js/props.js';
 import { AssetManager, bindImportModal } from './js/assetManager.js';
 import { access } from './js/access.js';
+import { fmtMm, MeasureGlyph } from './js/measurement.js';
 import { CameraMath, CameraFrame, CrosshairVisibility } from './js/navigation/engineeringNavigation.js';
 import { InputState, NavigationKey, normalizeWheelEvent } from './js/navigation/inputState.js';
 import {
   NavigationDefaults, MouseSensitivityRadiansPerPixel, MaxPitchRadians, WORLD_UNITS_PER_METER,
   createDefaultSettings, validateOrDefault, NavigationSettingsStore,
 } from './js/navigation/navigationSettings.js';
+import { keyBindings, KEY_BINDING_DEFINITIONS } from './js/keyBindings.js';
+import { AppearanceSettings, APPEARANCE_DEFAULTS, ENVIRONMENT_PRESETS } from './js/appearance.js';
 
 const el = (id) => document.getElementById(id);
 const statusEl = el('status');
@@ -27,15 +30,50 @@ const viewer = {
   current: null, starts: 0, switches: 0,
 };
 window.__viewer = viewer;
+const appearanceSettings = new AppearanceSettings();
+
+async function loadEnvironmentTextureOptions() {
+  const select = el('apEnvironmentTexture');
+  try {
+    const response = await fetch('./assets/environments/manifest.json', { cache: 'no-cache' });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const manifest = await response.json();
+    const textures = Array.isArray(manifest?.textures) ? manifest.textures : [];
+    for (const item of textures) {
+      const file = typeof item?.file === 'string' ? item.file.trim() : '';
+      if (!/^[^/\\]+\.(?:jpe?g|png)$/i.test(file)) continue;
+      const option = document.createElement('option');
+      option.value = `assets/environments/${file}`;
+      option.textContent = String(item.label || item.id || file);
+      select.append(option);
+    }
+  } catch (error) {
+    console.warn('[viewer] 环境贴图清单未加载：', error);
+  }
+  const saved = appearanceSettings.current.environmentTexture;
+  if (saved && ![...select.options].some((option) => option.value === saved)) {
+    const option = document.createElement('option');
+    option.value = saved;
+    option.textContent = `已保存（清单中不可用）`;
+    select.append(option);
+  }
+  select.value = saved;
+  syncAppearanceInputs();
+}
 
 const ORBIT_HINT = '<b>左键</b>旋转 · <b>右键</b>平移 · <b>滚轮</b>缩放 · <b>单击</b>选中 · '
   + '<b>Ctrl+单击</b>多选 · <b>F</b> 复位<br>'
-  + '<b>F8</b> 或点工具条 <b>Game</b> 切换到工程导航 · 灰显节点 = TXT 中有但 RVM 未导出几何';
+  + '<b>F8</b> 或点工具条 <b>Game</b> 切换到工程导航 · 灰显节点 = TXT 中有但 RVM 未导出几何<br>'
+  + '工具条 <b>测量</b>：射线固定从屏幕中心发出（左键 Surface · <b>C</b> Center · '
+  + '<b>右键</b>/<b>Esc</b> 取消未完成的点）';
 const GAME_HINT = '<b>F8</b> 开关工程导航 · 点击 3D 视图捕获鼠标（准星居中）· <b>W/S</b> 沿镜头水平投影前后 · '
   + '<b>A/D</b> 水平左右 · <b>Space</b> 升 / <b>Shift</b> 降 · <b>双击并按住 W</b> 加速 · '
   + '<b>滚轮</b> 缩放 · <b>左键</b> 选中准星对象 · <b>Ctrl+左键</b> 加入/移出多选 · '
-  + '<b>右键</b> 取消选中所有 · 准星指到的部件会浅蓝闪烁（预选中）· '
-  + '<b>F</b> 复位到选中部件 · <b>Esc</b> 释放鼠标（模式不变）· 导航方式仅 <b>F8</b>/工具条切换';
+  + '<b>左键点空处</b> 取消选中 · <b>右键</b> 打开已选模型的显隐/隔离菜单 · '
+  + '准星指到的部件会浅蓝闪烁（预选中）· '
+  + '<b>F</b> 复位到选中部件 · <b>Esc</b> 释放鼠标（模式不变）· 导航方式仅 <b>F8</b>/工具条切换<br>'
+  + '工具条 <b>测量</b>：准星取点（<b>左键</b> Surface · <b>C</b> Center · <b>V</b> 连续测量 · '
+  + '<b>右键</b>/<b>Esc</b> 取消未完成的点 · <b>Ctrl+Z</b> 撤销上一步 · <b>Delete</b> 删上一条）';
 
 function setStatus(text, isErr, detail) {
   statusEl.classList.toggle('hidden', !text);
@@ -63,6 +101,7 @@ am.show(false);                                     // 启动先显示 Model Sel
 
 el('btnBack').onclick = () => backToLauncher();
 el('btnImportTop').onclick = () => am.openImport(viewer.current || {});
+bindKeyBindingsUI();
 
 // ---------------------------------------------------------------- 面板显隐（左树默认开，右属性默认隐藏）
 
@@ -170,10 +209,65 @@ function backToLauncher() {
 // ---------------------------------------------------------------- 查看层（懒创建，只建一次）
 
 let model = null, tree = null, props = null, data = null;
+loadEnvironmentTextureOptions();
+const gameCtxMenu = el('gameCtxMenu');
+const gameColorSubmenu = el('gameColorSubmenu');
+const gameColorPicker = el('gameColorPicker');
+
+function closeGameContextMenu() {
+  gameCtxMenu.classList.remove('on');
+  gameColorSubmenu?.classList.remove('on');
+}
+function openGameContextMenu(point = {}) {
+  if (!model?.selectedCanonicals.length) return;
+  const x = Number.isFinite(point.clientX) && point.clientX > 0 ? point.clientX : innerWidth / 2;
+  const y = Number.isFinite(point.clientY) && point.clientY > 0 ? point.clientY : innerHeight / 2;
+  gameCtxMenu.classList.add('on');
+  gameCtxMenu.style.left = `${Math.max(8, Math.min(x, innerWidth - 170))}px`;
+  gameCtxMenu.style.top = `${Math.max(8, Math.min(y, innerHeight - 130))}px`;
+}
+gameCtxMenu.addEventListener('click', (e) => {
+  const button = e.target.closest('button');
+  const action = button?.dataset.action;
+  if (!action || !model) return;
+  if (action === 'color-open') {
+    gameColorSubmenu?.classList.toggle('on');
+    return;
+  }
+  if (action === 'color-preset') {
+    model.setObjectColor(model.selectedCanonicals, button.dataset.color);
+    closeGameContextMenu();
+    return;
+  }
+  if (action === 'color-custom') {
+    gameColorPicker?.click();
+    return;
+  }
+  if (action === 'color-reset') {
+    model.clearSelectedObjectColor();
+    closeGameContextMenu();
+    return;
+  }
+  if (action === 'hide') model.hideSelected();
+  if (action === 'isolate') model.isolateSelected();
+  if (action === 'show-all') model.showAll();
+  closeGameContextMenu();
+  refreshButtons();
+});
+gameColorPicker?.addEventListener('input', () => {
+  if (!model || !model.selectedCanonicals.length) return;
+  model.setObjectColor(model.selectedCanonicals, gameColorPicker.value);
+  closeGameContextMenu();
+});
+document.addEventListener('pointerdown', (e) => {
+  if (gameCtxMenu.classList.contains('on') && !gameCtxMenu.contains(e.target)) closeGameContextMenu();
+}, true);
+addEventListener('keydown', (e) => { if (e.key === 'Escape') closeGameContextMenu(); });
 
 function ensureViewer() {
   if (model) return;
   model = new Model3D(el('cv'), {
+    appearance: appearanceSettings.current,
     onSelect: (canonical, opts = {}) => {
       viewer.selected = canonical;                   // 主选中（最后加入的那个），单值语义保持
       const canonicals = model.selectedCanonicals;
@@ -199,11 +293,24 @@ function ensureViewer() {
     onReady: (info) => {
       viewer.modelInfo = info;
       setStatus('');
-      viewer.ready = true;
+    viewer.ready = true;
       if (viewer.__t0) viewer.timings.readyMs = Math.round(performance.now() - viewer.__t0);
       refreshButtons();
+      // 模型就绪后才知道有没有 rvmparser-origin（决定测距按 PDMS 还是 GLB 轴向展示），
+      // 这里补一次回显，不然面板会停在加载前的默认文案上
+      syncMeasurePanel();
+      syncAppearanceInputs();
     },
     onNavigationState: (state) => applyNavigationState(state),
+    onMeasurementChange: (state) => syncMeasurePanel(state),
+    onGameContextMenu: (point) => openGameContextMenu(point),
+    // 测量点命名：复用既有的 canonicalId → metadata 映射（data.idOf / objects[].name），
+    // 不为显示名称重新解析模型。取不到名称就返回 null，由测量层退回 P 编号。
+    resolvePointName: (canonical) => {
+      const id = canonical && data ? data.idOf(canonical) : null;
+      const name = id ? data.objects[id]?.name : null;
+      return name ? String(name).trim() : null;
+    },
   });
   model.onStats = (s) => {
     viewer.stats = s;
@@ -247,7 +354,9 @@ function bindToolbar() {
   el('navGame').onclick = () => model.setNavigationMode('game');
   el('btnNavSettings').onclick = () => {
     el('navSettings').classList.toggle('on');
+    el('keyBindingsPanel').classList.remove('on');
     el('appearance').classList.remove('on');   // 两个设置面板都贴在右下角，不能同时开
+    setMeasurePanel(false);                    // 测量面板同位置，一并让位
     syncNavSettingsInputs();
   };
   el('nsClose').onclick = () => el('navSettings').classList.remove('on');
@@ -258,6 +367,8 @@ function bindToolbar() {
   el('btnAppearance').onclick = () => {
     el('appearance').classList.toggle('on');
     el('navSettings').classList.remove('on');
+    el('keyBindingsPanel').classList.remove('on');
+    setMeasurePanel(false);
     syncAppearanceInputs();
   };
   el('apClose').onclick = () => el('appearance').classList.remove('on');
@@ -276,11 +387,247 @@ function bindToolbar() {
     model.setFloorPlanDebug(el('apFloorDebug').checked);
     syncFloorPlanInputs();
   });
+  el('apGlobalColor').addEventListener('input', () => {
+    const value = model.setGlobalModelColor(el('apGlobalColor').value);
+    appearanceSettings.patch({ globalModelColor: value });
+    syncAppearanceInputs();
+  });
+  el('apGlobalReset').onclick = () => {
+    const value = model.setGlobalModelColor(APPEARANCE_DEFAULTS.globalModelColor);
+    appearanceSettings.patch({ globalModelColor: value });
+    syncAppearanceInputs();
+  };
+  el('apBackgroundColor').addEventListener('input', () => {
+    const value = model.setBackgroundColor(el('apBackgroundColor').value);
+    appearanceSettings.patch({ backgroundColor: value });
+    syncAppearanceInputs();
+  });
+  el('apEnvironmentMode').addEventListener('change', () => {
+    const environmentMode = el('apEnvironmentMode').value;
+    appearanceSettings.patch({ environmentMode });
+    model.setEnvironmentMode(environmentMode).finally(syncAppearanceInputs);
+    syncAppearanceInputs();
+  });
+  el('apEnvironmentPreset').addEventListener('change', () => {
+    const environmentPreset = el('apEnvironmentPreset').value;
+    if (environmentPreset === 'custom') return;
+    const { label, ...environmentColors } = ENVIRONMENT_PRESETS[environmentPreset];
+    appearanceSettings.patch({ environmentPreset, environmentColors });
+    model.setEnvironmentPreset(environmentPreset);
+    syncAppearanceInputs();
+  });
+  el('apEnvironmentTexture').addEventListener('change', () => {
+    const environmentTexture = el('apEnvironmentTexture').value;
+    appearanceSettings.patch({ environmentTexture });
+    model.setEnvironmentTexture(environmentTexture).finally(syncAppearanceInputs);
+    syncAppearanceInputs();
+  });
+  for (const id of ['apSkyColor', 'apHorizonColor', 'apGroundFarColor']) {
+    el(id).addEventListener('input', () => {
+      const current = appearanceSettings.current.environmentColors;
+      const environmentColors = {
+        ...current,
+        skyTopColor: el('apSkyColor').value,
+        skyHorizonColor: el('apHorizonColor').value,
+        groundHorizonColor: el('apHorizonColor').value,
+        groundFarColor: el('apGroundFarColor').value,
+      };
+      appearanceSettings.patch({ environmentPreset: 'custom', environmentColors });
+      model.setEnvironmentColors(environmentColors);
+      syncAppearanceInputs();
+    });
+  }
+  for (const [id, key, slider] of [
+    ['apLightingEnabled', 'lightingEnabled', false], ['apLightingIntensity', 'lightingIntensity', true],
+    ['apAoEnabled', 'aoEnabled', false], ['apAoIntensity', 'aoIntensity', true],
+    ['apAoRadius', 'aoRadius', true],
+  ]) {
+    el(id).addEventListener(slider ? 'input' : 'change', () => {
+      const value = slider ? Number(el(id).value) / 100 : el(id).checked;
+      model.setLightingAppearance(appearanceSettings.patch({ [key]: value }));
+      syncAppearanceInputs();
+    });
+  }
+  el('apGround').addEventListener('change', () => {
+    const value = model.setGroundEnabled(el('apGround').checked);
+    appearanceSettings.patch({ groundEnabled: value });
+    syncAppearanceInputs();
+  });
+  el('apGroundColor').addEventListener('input', () => {
+    const value = model.setGroundColor(el('apGroundColor').value);
+    appearanceSettings.patch({ groundColor: value });
+    syncAppearanceInputs();
+  });
+  el('apFloorPlan').addEventListener('change', () => {
+    model.setFloorPlanVisible(el('apFloorPlan').checked);
+    syncAppearanceInputs();
+    syncFloorPlanInputs();
+  });
+  el('apReset').onclick = () => {
+    const settings = appearanceSettings.reset();
+    model.applyUserAppearance(settings);
+    model.resetTransientAppearance();
+    syncAppearanceInputs();
+    syncFloorPlanInputs();
+  };
+
+  el('btnMeasure').onclick = () => {
+    // 开启测量顺手把面板打开；关闭测量顺手收起面板（结果仍会保留，重新打开即可查看）
+    const on = model.toggleMeasurement();
+    setMeasurePanel(on);
+    syncMeasurePanel();
+  };
+  el('measureClose').onclick = () => setMeasurePanel(false);
+  el('measureClear').onclick = () => { model.clearMeasurements(); syncMeasurePanel(); };
+  el('measureXyz').addEventListener('change', () => {
+    model.setMeasureComponents(el('measureXyz').checked);
+    syncMeasurePanel();
+  });
+  el('measureCopy').onclick = () => copyMeasurements();
 
   syncNavSettingsInputs();
   syncAppearanceInputs();
   syncFloorPlanInputs();
+  syncMeasurePanel();
   applyNavigationState(model.navigationState());
+}
+
+function bindKeyBindingsUI() {
+  el('btnKeyBindings').onclick = () => {
+    el('keyBindingsPanel').classList.toggle('on');
+    el('navSettings').classList.remove('on'); el('appearance').classList.remove('on'); setMeasurePanel(false);
+    renderKeyBindings();
+  };
+  el('keyBindingsClose').onclick = () => el('keyBindingsPanel').classList.remove('on');
+  el('keyBindingsReset').onclick = () => { keyBindings.reset(); renderKeyBindings(); };
+}
+
+function renderKeyBindings() {
+  const root = el('keyBindingsRows'); root.innerHTML = ''; let group = '';
+  for (const def of KEY_BINDING_DEFINITIONS) {
+    if (def.group !== group) { group = def.group; root.insertAdjacentHTML('beforeend', `<h4>${def.group}</h4>`); }
+    const row = document.createElement('div'); row.className = 'row';
+    row.innerHTML = `<label>${def.label}</label><button class="key-binding" type="button">${keyBindings.get(def.id)}</button>`;
+    row.lastElementChild.onclick = () => {
+      const button = row.lastElementChild; button.textContent = '请按键…';
+      const listen = (event) => { event.preventDefault(); event.stopPropagation(); const result = keyBindings.set(def.id, event.code); window.removeEventListener('keydown', listen, true); if (!result.ok) alert('键位冲突，未修改。'); renderKeyBindings(); };
+      window.addEventListener('keydown', listen, true);
+    };
+    root.appendChild(row);
+  }
+}
+
+// ------------------------------------------------ 游戏式测距（面板回显）
+
+let measurePanelOpen = false;
+let measureRenderedRevision = -1;
+let measureNowCache = '';
+
+/** 右下角三个面板（导航设置 / 外观 / 测量）同位置，互斥显示 */
+function setMeasurePanel(open) {
+  measurePanelOpen = !!open;
+  el('measurePanel').classList.toggle('on', measurePanelOpen);
+  if (measurePanelOpen) {
+    el('navSettings').classList.remove('on');
+    el('appearance').classList.remove('on');
+    el('keyBindingsPanel').classList.remove('on');
+  }
+}
+
+const measureRowHtml = (r, live) => `<div class="kv2">
+      <span class="k">Direct Distance</span><span class="v hi">${fmtMm(r.distanceMm)}</span>
+      <span class="k">ΔX</span><span class="v">${fmtMm(r.dxMm)}</span>
+      <span class="k">ΔY</span><span class="v">${fmtMm(r.dyMm)}</span>
+      <span class="k">ΔZ</span><span class="v">${fmtMm(r.dzMm)}</span>
+      <span class="k">Horizontal Distance</span><span class="v">${fmtMm(r.horizontalMm)}</span>
+    </div>`;
+
+/** 复制测量结果到剪贴板。
+ *  上下文：本机 localhost 是安全上下文可用 Clipboard API，但局域网 http://192.168.x.x 不是，
+ *  `navigator.clipboard` 会是 undefined —— 所以失败时退化到 textarea + execCommand('copy')，
+ *  两者都失败才给明确提示（不静默失败）。 */
+async function copyMeasurements() {
+  if (!model) return false;
+  const text = model.measurementClipboardText();
+  if (!text || !model.measurementState().measurements.length) {
+    am.toast('还没有测量结果可复制', 'err');
+    return false;
+  }
+  let via = null;
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text);
+      via = 'clipboard';
+    }
+  } catch (e) { via = null; }
+  if (!via) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0';
+    document.body.appendChild(ta);
+    ta.select();
+    ta.setSelectionRange(0, text.length);
+    let ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    ta.remove();
+    via = ok ? 'execCommand' : null;
+  }
+  if (!via) {
+    am.toast('复制失败：浏览器拒绝了剪贴板写入。请用 https 或 localhost 打开本页，或手动从面板抄录。', 'err');
+    return false;
+  }
+  const n = model.measurementState().measurements.length;
+  am.toast(`已复制 ${n} 条测量结果（TAB 分隔），可直接粘贴进 Excel`);
+  return true;
+}
+
+/** 测量状态 → 面板。实时区每次变化都刷新（内容相同时不写 DOM）；
+ *  结果列表只在"测量集合变化"（revision 自增）时重建，避免 30 Hz 重建 DOM。 */
+function syncMeasurePanel(state) {
+  if (!model) return;
+  const s = state || model.measurementState();
+  el('btnMeasure').classList.toggle('on', s.enabled);
+  el('measureAxes').textContent = s.axes === 'PDMS_WORLD_Z_UP'
+    ? 'PDMS 世界坐标（Z 向上）'
+    : 'GLB 坐标（Y 向上，本版本未取到 rvmparser-origin）';
+  el('measureClear').disabled = !s.measurements.length && !s.pending;
+  el('measureCopy').disabled = s.measurements.length === 0;
+  el('measureXyz').checked = s.showComponents;
+
+  let now = s.aim
+    ? `命中 <b>${escHtml(s.aim.canonicalId)}</b>`
+    : '未命中模型（准星指向空白）';
+  if (s.continuous) {
+    now += ' · <b>连续测量中</b>（V 关闭）';
+  }
+  if (s.pending) {
+    now += `<br>已取 A（${s.pending.kind === 'center' ? '对象中心 ◎' : '表面点 ⊕'}）`
+      + `：<b>${escHtml(s.pending.displayName || '')}</b>`
+      + `　${escHtml(s.pending.canonicalId || '')} · `
+      + (s.continuous ? '下一点自动接续（右键/Esc 断开）' : '再取一次固定 B');
+  } else if (s.enabled) {
+    now += '<br>左键取表面点（⊕）· C 取对象中心（◎）· V 连续测量';
+  }
+  if (s.pendingResult) now += `<br>${measureRowHtml(s.pendingResult, true)}`;
+  if (now !== measureNowCache) {
+    measureNowCache = now;
+    el('measureNow').innerHTML = now;
+  }
+
+  if (s.revision !== measureRenderedRevision) {
+    measureRenderedRevision = s.revision;
+    el('measureList').innerHTML = s.measurements.length
+      ? s.measurements.map((m, i) => {
+        const r = m.record || {};
+        const title = `A ${escHtml(m.a.canonicalId || '')} → B ${escHtml(m.b.canonicalId || '')}`;
+        return `<div class="mitem">
+      <div class="mh"><b>#${i + 1}</b><span title="${title}">${escHtml(r.from || '')} → ${escHtml(r.to || '')}</span></div>
+      ${measureRowHtml(m.result, false)}
+    </div>`;
+      }).join('')
+      : '<div class="mempty">还没有测量结果。开启测量后：左键取 A → 移动准星 → 再左键（或 C）取 B。</div>';
+  }
 }
 
 // ------------------------------------------------ 外观选项（元件轮廓线 / 隐藏件半透明）
@@ -289,6 +636,47 @@ function bindToolbar() {
 function syncAppearanceInputs() {
   if (!model) return;
   const a = model.appearanceState();
+  el('apLightingEnabled').checked = a.lightingEnabled;
+  el('apAoEnabled').checked = a.aoEnabled;
+  el('apAoRadius').value = Math.round(a.aoRadius * 100);
+  el('apAoRadiusVal').textContent = `${Math.round(a.aoRadius * 100)} cm`;
+  el('apAoRadius').disabled = !a.aoEnabled;
+  for (const [id, value, enabled] of [
+    ['apLightingIntensity', a.lightingIntensity, a.lightingEnabled],
+    ['apAoIntensity', a.aoIntensity, a.aoEnabled],
+  ]) {
+    el(id).value = Math.round(value * 100);
+    el(id + 'Val').textContent = `${Math.round(value * 100)}%`;
+    el(id).disabled = !enabled;
+    el(id).closest('.row').classList.toggle('off', !enabled);
+  }
+  el('apGlobalColor').value = a.globalModelColor;
+  el('apBackgroundColor').value = a.backgroundColor;
+  el('apEnvironmentMode').value = a.environmentMode;
+  el('apEnvironmentPreset').value = a.environmentPreset;
+  el('apEnvironmentTexture').value = a.environmentTexture;
+  el('apSkyColor').value = a.environmentColors.skyTopColor;
+  el('apHorizonColor').value = a.environmentColors.skyHorizonColor;
+  el('apGroundFarColor').value = a.environmentColors.groundFarColor;
+  const solid = a.environmentMode === 'solid';
+  const horizon = a.environmentMode === 'horizon';
+  const texture = a.environmentMode === 'texture';
+  for (const [id, enabled] of [
+    ['apBackgroundColorRow', solid], ['apEnvironmentPresetRow', horizon],
+    ['apEnvironmentTextureRow', texture], ['apEnvironmentAdvanced', horizon],
+  ]) el(id).classList.toggle('off', !enabled);
+  el('apBackgroundColor').disabled = !solid;
+  el('apEnvironmentPreset').disabled = !horizon;
+  el('apEnvironmentTexture').disabled = !texture;
+  for (const id of ['apSkyColor', 'apHorizonColor', 'apGroundFarColor']) el(id).disabled = !horizon;
+  el('apEnvironmentStatus').textContent = texture
+    ? (a.environmentStatus === 'loading' ? '正在加载当前贴图…'
+      : (a.environmentError || '贴图仅用于背景，不影响模型光照与反射。'))
+    : '环境与 Ground Plane、FloorPlan 相互独立。';
+  el('apGround').checked = a.groundEnabled;
+  el('apGroundColor').value = a.groundColor;
+  el('apGroundColor').disabled = !a.groundEnabled;
+  el('apGroundColorRow').classList.toggle('off', !a.groundEnabled);
   el('apContours').checked = a.contours;
   el('apXray').checked = a.xray;
   el('apOpacity').value = Math.round(a.xrayOpacity * 100);
@@ -296,6 +684,7 @@ function syncAppearanceInputs() {
   // 半透明关着时"不透明度"没有作用对象 → 灰显；但保留调过的值，下次打开还是它
   el('apOpacityRow').classList.toggle('off', !a.xray);
   el('apOpacity').disabled = !a.xray;
+  el('apFloorPlan').checked = model.floorPlanState().visible;
 }
 
 function syncFloorPlanInputs() {
@@ -309,6 +698,9 @@ function syncFloorPlanInputs() {
   el('apFloorDebug').checked = s.debug;
   el('apFloorDebug').disabled = !s.available;
   el('apFloorDebugRow').classList.toggle('off', !s.available);
+  el('apFloorPlan').checked = s.visible;
+  el('apFloorPlan').disabled = !s.available;
+  el('apFloorPlanRow').classList.toggle('off', !s.available);
 }
 
 function applyNavigationState(s) {
@@ -443,11 +835,13 @@ async function openVersion(ctx) {
     await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
     viewer.timings.firstFrameMs = Math.round(performance.now() - viewer.__t0);
     refreshButtons();
+    syncAppearanceInputs();
     syncFloorPlanInputs();
   } catch (e) {
     viewer.error = '模型加载失败：' + e.message;
     setStatus(viewer.error, true, `请确认 ${version.assets.glb} 存在（用「切换模型」返回后重新导入）。`);
     syncFloorPlanInputs();
+    syncAppearanceInputs();
   }
 }
 
@@ -464,15 +858,76 @@ viewer.showAll = () => { model.showAll(); refreshButtons(); };
 
 // 外观选项：与面板走同一条生产路径（都落在 Model3D 上），再回写界面
 viewer.appearanceState = () => model.appearanceState();
+for (const key of ['lightingEnabled', 'lightingIntensity', 'aoEnabled', 'aoIntensity', 'aoRadius']) {
+  viewer['set' + key[0].toUpperCase() + key.slice(1)] = value => {
+    const settings = appearanceSettings.patch({ [key]: value });
+    model.setLightingAppearance(settings); syncAppearanceInputs(); return settings[key];
+  };
+}
 viewer.setContours = (v) => { const r = model.setContours(v); syncAppearanceInputs(); return r; };
 viewer.setXray = (v) => { const r = model.setXray(v); syncAppearanceInputs(); return r; };
 viewer.setXrayOpacity = (v) => { const r = model.setXrayOpacity(v); syncAppearanceInputs(); return r; };
+viewer.setGlobalModelColor = (v) => {
+  const r = model.setGlobalModelColor(v); appearanceSettings.patch({ globalModelColor: r });
+  syncAppearanceInputs(); return r;
+};
+viewer.setBackgroundColor = (v) => {
+  const r = model.setBackgroundColor(v); appearanceSettings.patch({ backgroundColor: r });
+  syncAppearanceInputs(); return r;
+};
+viewer.setEnvironmentMode = (v) => {
+  appearanceSettings.patch({ environmentMode: v });
+  const r = model.setEnvironmentMode(v); r.finally(syncAppearanceInputs); syncAppearanceInputs(); return r;
+};
+viewer.setEnvironmentPreset = (v) => {
+  const preset = ENVIRONMENT_PRESETS[v];
+  if (!preset) return false;
+  const { label, ...environmentColors } = preset;
+  appearanceSettings.patch({ environmentPreset: v, environmentColors });
+  model.setEnvironmentPreset(v); syncAppearanceInputs(); return true;
+};
+viewer.setEnvironmentColors = (v) => {
+  const settings = appearanceSettings.patch({ environmentPreset: 'custom', environmentColors: v });
+  model.setEnvironmentColors(settings.environmentColors); syncAppearanceInputs(); return settings.environmentColors;
+};
+viewer.setEnvironmentTexture = async (v) => {
+  appearanceSettings.patch({ environmentTexture: v });
+  const r = await model.setEnvironmentTexture(v); syncAppearanceInputs(); return r;
+};
+viewer.setGroundEnabled = (v) => {
+  const r = model.setGroundEnabled(v); appearanceSettings.patch({ groundEnabled: r });
+  syncAppearanceInputs(); return r;
+};
+viewer.setGroundColor = (v) => {
+  const r = model.setGroundColor(v); appearanceSettings.patch({ groundColor: r });
+  syncAppearanceInputs(); return r;
+};
+viewer.setObjectColor = (v) => model.setObjectColor(model.selectedCanonicals, v);
+viewer.clearSelectedObjectColor = () => model.clearSelectedObjectColor();
+viewer.objectColorState = () => model.objectColorState();
+viewer.resetAppearance = () => {
+  const settings = appearanceSettings.reset();
+  model.applyUserAppearance(settings);
+  model.resetTransientAppearance();
+  syncAppearanceInputs(); syncFloorPlanInputs();
+  return model.appearanceState();
+};
 viewer.floorPlanState = () => model.floorPlanState();
 viewer.setFloorPlanVisible = (v) => { const r = model.setFloorPlanVisible(v); syncFloorPlanInputs(); return r; };
 viewer.setFloorPlanDebug = (v) => { const r = model.setFloorPlanDebug(v); syncFloorPlanInputs(); return r; };
 viewer.appearanceUi = () => ({
   panelOpen: el('appearance').classList.contains('on'),
   navPanelOpen: el('navSettings').classList.contains('on'),
+  globalColor: el('apGlobalColor').value,
+  backgroundColor: el('apBackgroundColor').value,
+  environmentMode: el('apEnvironmentMode').value,
+  environmentPreset: el('apEnvironmentPreset').value,
+  environmentTexture: el('apEnvironmentTexture').value,
+  environmentStatus: el('apEnvironmentStatus').textContent,
+  groundChecked: el('apGround').checked,
+  groundColor: el('apGroundColor').value,
+  groundColorDisabled: el('apGroundColor').disabled,
+  floorPlanChecked: el('apFloorPlan').checked,
   contoursChecked: el('apContours').checked,
   xrayChecked: el('apXray').checked,
   opacitySlider: Number(el('apOpacity').value),
@@ -480,6 +935,69 @@ viewer.appearanceUi = () => ({
   opacityRowOff: el('apOpacityRow').classList.contains('off'),
   opacityDisabled: el('apOpacity').disabled,
   opacityVisible: !!el('apOpacity').offsetParent,
+  measurePanelOpen: el('measurePanel').classList.contains('on'),
+  measureButtonOn: el('btnMeasure').classList.contains('on'),
+});
+
+// 游戏式测距：与工具条/面板走同一条生产路径（都落在 Model3D 上），再回写界面
+viewer.measureState = () => model.measurementState();
+viewer.setMeasure = (v) => { const r = model.setMeasurement(v); syncMeasurePanel(); return r; };
+viewer.toggleMeasure = () => { const r = model.toggleMeasurement(); syncMeasurePanel(); return r; };
+viewer.measureSurface = () => model.measureSurfacePoint();
+viewer.measureCenter = () => model.measureObjectCenter();
+viewer.measureCancel = () => model.cancelMeasurement();
+viewer.measureDeleteLast = () => model.removeLastMeasurement();
+viewer.measureUndo = () => model.undoLastMeasurement();
+viewer.setContinuous = (v) => { const r = model.setMeasureContinuous(v); syncMeasurePanel(); return r; };
+viewer.measureClear = () => { const r = model.clearMeasurements(); syncMeasurePanel(); return r; };
+viewer.setMeasureComponents = (v) => {
+  const r = model.setMeasureComponents(v); syncMeasurePanel(); return r;
+};
+viewer.measureClipboardText = () => model.measurementClipboardText();
+viewer.copyMeasurements = () => copyMeasurements();
+viewer.measureUi = () => ({
+  panelOpen: measurePanelOpen,
+  panelVisible: el('measurePanel').classList.contains('on'),
+  buttonOn: el('btnMeasure').classList.contains('on'),
+  xyzChecked: el('measureXyz').checked,
+  xyzDisabled: el('measureXyz').disabled,
+  copyDisabled: el('measureCopy').disabled,
+  toast: el('toast').classList.contains('on') ? (el('toast').innerText || '') : null,
+  reticleVisible: el('measureReticle').classList.contains('on'),
+  // 字形是 SVG 几何（按 data-state 显示对应 <g>），这里回报它与界面语义一致的字形字符
+  reticleGlyph: ({
+    miss: MeasureGlyph.miss, surface: MeasureGlyph.surface,
+    center: MeasureGlyph.center, recorded: MeasureGlyph.recorded,
+  })[el('measureReticle').dataset.state] || null,
+  reticleState: el('measureReticle').dataset.state || null,
+  reticleShapeCenter: (() => {
+    // 当前可见的那个 <g> 的几何中心 vs 准星盒中心：用来断言"准星与测量圈同心"
+    const el = document.getElementById('measureReticle');
+    const c = el.getBoundingClientRect();
+    const svg = el.querySelector('svg').getBoundingClientRect();
+    return { svgCenter: { x: +(svg.left + svg.width / 2).toFixed(2),
+      y: +(svg.top + svg.height / 2).toFixed(2) },
+    boxCenter: { x: +(c.left + c.width / 2).toFixed(2), y: +(c.top + c.height / 2).toFixed(2) } };
+  })(),
+  reticleCenter: (() => {
+    const r = el('measureReticle').getBoundingClientRect();
+    const c = el('center').getBoundingClientRect();
+    return { x: +(r.left + r.width / 2 - c.left).toFixed(1),
+             y: +(r.top + r.height / 2 - c.top).toFixed(1),
+             cx: +(c.width / 2).toFixed(1), cy: +(c.height / 2).toFixed(1) };
+  })(),
+  items: el('measureList').querySelectorAll('.mitem').length,
+  labels: el('measureLabels').querySelectorAll('.mlabel').length,
+  labelTexts: [...el('measureLabels').querySelectorAll('.mlabel')].map((d) => d.textContent),
+  componentLabels: el('measureLabels').querySelectorAll('.mlabel.comp').length,
+  componentLabelTexts: [...el('measureLabels').querySelectorAll('.mlabel.comp')]
+    .filter((d) => d.style.display !== 'none').map((d) => d.textContent),
+  labelVisible: [...el('measureLabels').querySelectorAll('.mlabel')]
+    .filter((d) => d.style.display !== 'none').length,
+  axesText: el('measureAxes').textContent,
+  clearDisabled: el('measureClear').disabled,
+  listText: (el('measureList').innerText || '').slice(0, 600),
+  nowText: (el('measureNow').innerText || '').slice(0, 400),
 });
 viewer.fit = (c) => model.fit(c);
 viewer.enableBatchRendering = (options) => model.enableBatchRendering(options);

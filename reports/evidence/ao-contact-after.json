@@ -1,0 +1,533 @@
+{
+  "results": [
+    {
+      "view": "whole",
+      "mode": "off",
+      "pose": {
+        "target": null,
+        "position": [
+          152.8181415757926,
+          116.73181453881192,
+          152.81598408311837
+        ],
+        "quaternion": [
+          -0.22644488917865632,
+          0.37101053583103955,
+          0.09379654422787197,
+          0.895698667386605
+        ],
+        "radius": 0.12
+      },
+      "stats": {
+        "frameTimeMs": 6,
+        "cpuFrameTimeMs": 2.5,
+        "gpuFrameTimeMs": 2.731008,
+        "gpuTimerStatus": "available",
+        "resolution": "1124×856",
+        "pixelRatio": 1,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Laptop GPU (0x000028A0) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "gpuTimerQuery": true,
+        "fps": 165,
+        "drawCalls": 399,
+        "triangles": 336218,
+        "frameDrawCallsAllPasses": 400,
+        "outlineEnabled": false,
+        "contours": false,
+        "xray": false,
+        "xrayOpacity": 0.32,
+        "interacting": false,
+        "visible": 7420,
+        "hidden": 0,
+        "navigationMode": "orbit",
+        "visibleMeshes": 107,
+        "visibleLines": 291
+      }
+    },
+    {
+      "view": "whole",
+      "mode": "current",
+      "pose": {
+        "target": null,
+        "position": [
+          152.8181415757926,
+          116.73181453881192,
+          152.81598408311837
+        ],
+        "quaternion": [
+          -0.22644488917865632,
+          0.37101053583103955,
+          0.09379654422787197,
+          0.895698667386605
+        ],
+        "radius": 0.12
+      },
+      "stats": {
+        "frameTimeMs": 5.899999976158142,
+        "cpuFrameTimeMs": 6.199999988079071,
+        "gpuFrameTimeMs": 2.041856,
+        "gpuTimerStatus": "available",
+        "resolution": "1124×856",
+        "pixelRatio": 1,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Laptop GPU (0x000028A0) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "gpuTimerQuery": true,
+        "fps": 165,
+        "drawCalls": 399,
+        "triangles": 336218,
+        "frameDrawCallsAllPasses": 508,
+        "outlineEnabled": false,
+        "contours": false,
+        "xray": false,
+        "xrayOpacity": 0.32,
+        "interacting": false,
+        "visible": 7420,
+        "hidden": 0,
+        "navigationMode": "orbit",
+        "visibleMeshes": 107,
+        "visibleLines": 291
+      }
+    },
+    {
+      "view": "whole",
+      "mode": "optimized",
+      "pose": {
+        "target": null,
+        "position": [
+          152.8181415757926,
+          116.73181453881192,
+          152.81598408311837
+        ],
+        "quaternion": [
+          -0.22644488917865632,
+          0.37101053583103955,
+          0.09379654422787197,
+          0.895698667386605
+        ],
+        "radius": 0.12
+      },
+      "stats": {
+        "frameTimeMs": 6.600000023841858,
+        "cpuFrameTimeMs": 6,
+        "gpuFrameTimeMs": 2.655232,
+        "gpuTimerStatus": "available",
+        "resolution": "1124×856",
+        "pixelRatio": 1,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Laptop GPU (0x000028A0) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "gpuTimerQuery": true,
+        "fps": 152,
+        "drawCalls": 399,
+        "triangles": 336218,
+        "frameDrawCallsAllPasses": 508,
+        "outlineEnabled": false,
+        "contours": false,
+        "xray": false,
+        "xrayOpacity": 0.32,
+        "interacting": false,
+        "visible": 7420,
+        "hidden": 0,
+        "navigationMode": "orbit",
+        "visibleMeshes": 106,
+        "visibleLines": 289
+      }
+    },
+    {
+      "view": "equipment",
+      "mode": "off",
+      "pose": {
+        "target": "/QICHUANG-EQUIPMENT-01",
+        "position": [
+          136.00493217693827,
+          92.79877206612193,
+          173.6178203510563
+        ],
+        "quaternion": [
+          -0.22644488917865652,
+          0.37101053583103955,
+          0.09379654422787204,
+          0.895698667386605
+        ],
+        "radius": 0.12
+      },
+      "stats": {
+        "frameTimeMs": 5.899999976158142,
+        "cpuFrameTimeMs": 2.699999988079071,
+        "gpuFrameTimeMs": 0.72704,
+        "gpuTimerStatus": "available",
+        "resolution": "1124×856",
+        "pixelRatio": 1,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Laptop GPU (0x000028A0) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "gpuTimerQuery": true,
+        "fps": 165,
+        "drawCalls": 399,
+        "triangles": 336218,
+        "frameDrawCallsAllPasses": 400,
+        "outlineEnabled": false,
+        "contours": false,
+        "xray": false,
+        "xrayOpacity": 0.32,
+        "interacting": false,
+        "visible": 7420,
+        "hidden": 0,
+        "navigationMode": "orbit",
+        "visibleMeshes": 107,
+        "visibleLines": 291
+      }
+    },
+    {
+      "view": "equipment",
+      "mode": "current",
+      "pose": {
+        "target": "/QICHUANG-EQUIPMENT-01",
+        "position": [
+          136.00493217693827,
+          92.79877206612193,
+          173.6178203510563
+        ],
+        "quaternion": [
+          -0.22644488917865652,
+          0.37101053583103955,
+          0.09379654422787204,
+          0.895698667386605
+        ],
+        "radius": 0.12
+      },
+      "stats": {
+        "frameTimeMs": 7.300000011920929,
+        "cpuFrameTimeMs": 5.799999952316284,
+        "gpuFrameTimeMs": 3.08736,
+        "gpuTimerStatus": "available",
+        "resolution": "1124×856",
+        "pixelRatio": 1,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Laptop GPU (0x000028A0) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "gpuTimerQuery": true,
+        "fps": 152,
+        "drawCalls": 399,
+        "triangles": 336218,
+        "frameDrawCallsAllPasses": 508,
+        "outlineEnabled": false,
+        "contours": false,
+        "xray": false,
+        "xrayOpacity": 0.32,
+        "interacting": false,
+        "visible": 7420,
+        "hidden": 0,
+        "navigationMode": "orbit",
+        "visibleMeshes": 107,
+        "visibleLines": 291
+      }
+    },
+    {
+      "view": "equipment",
+      "mode": "optimized",
+      "pose": {
+        "target": "/QICHUANG-EQUIPMENT-01",
+        "position": [
+          136.00493217693827,
+          92.79877206612193,
+          173.6178203510563
+        ],
+        "quaternion": [
+          -0.22644488917865652,
+          0.37101053583103955,
+          0.09379654422787204,
+          0.895698667386605
+        ],
+        "radius": 0.12
+      },
+      "stats": {
+        "frameTimeMs": 6,
+        "cpuFrameTimeMs": 6.200000047683716,
+        "gpuFrameTimeMs": 5.19168,
+        "gpuTimerStatus": "available",
+        "resolution": "1124×856",
+        "pixelRatio": 1,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Laptop GPU (0x000028A0) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "gpuTimerQuery": true,
+        "fps": 149,
+        "drawCalls": 399,
+        "triangles": 336218,
+        "frameDrawCallsAllPasses": 508,
+        "outlineEnabled": false,
+        "contours": false,
+        "xray": false,
+        "xrayOpacity": 0.32,
+        "interacting": false,
+        "visible": 7420,
+        "hidden": 0,
+        "navigationMode": "orbit",
+        "visibleMeshes": 106,
+        "visibleLines": 289
+      }
+    },
+    {
+      "view": "structure",
+      "mode": "off",
+      "pose": {
+        "target": "/QICHUANG-WORKSHOP-01",
+        "position": [
+          114.53081992108702,
+          42.36314765795297,
+          110.57032794392063
+        ],
+        "quaternion": [
+          -0.22644488917865635,
+          0.37101053583103966,
+          0.093796544227872,
+          0.8956986673866048
+        ],
+        "radius": 0.12
+      },
+      "stats": {
+        "frameTimeMs": 6.100000023841858,
+        "cpuFrameTimeMs": 3.600000023841858,
+        "gpuFrameTimeMs": 3.274752,
+        "gpuTimerStatus": "available",
+        "resolution": "1124×856",
+        "pixelRatio": 1,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Laptop GPU (0x000028A0) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "gpuTimerQuery": true,
+        "fps": 165,
+        "drawCalls": 398,
+        "triangles": 336218,
+        "frameDrawCallsAllPasses": 399,
+        "outlineEnabled": false,
+        "contours": false,
+        "xray": false,
+        "xrayOpacity": 0.32,
+        "interacting": false,
+        "visible": 7420,
+        "hidden": 0,
+        "navigationMode": "orbit",
+        "visibleMeshes": 107,
+        "visibleLines": 290
+      }
+    },
+    {
+      "view": "structure",
+      "mode": "current",
+      "pose": {
+        "target": "/QICHUANG-WORKSHOP-01",
+        "position": [
+          114.53081992108702,
+          42.36314765795297,
+          110.57032794392063
+        ],
+        "quaternion": [
+          -0.22644488917865635,
+          0.37101053583103966,
+          0.093796544227872,
+          0.8956986673866048
+        ],
+        "radius": 0.12
+      },
+      "stats": {
+        "frameTimeMs": 5.900000035762787,
+        "cpuFrameTimeMs": 6.099999964237213,
+        "gpuFrameTimeMs": 5.728256,
+        "gpuTimerStatus": "available",
+        "resolution": "1124×856",
+        "pixelRatio": 1,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Laptop GPU (0x000028A0) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "gpuTimerQuery": true,
+        "fps": 157,
+        "drawCalls": 398,
+        "triangles": 336218,
+        "frameDrawCallsAllPasses": 507,
+        "outlineEnabled": false,
+        "contours": false,
+        "xray": false,
+        "xrayOpacity": 0.32,
+        "interacting": false,
+        "visible": 7420,
+        "hidden": 0,
+        "navigationMode": "orbit",
+        "visibleMeshes": 107,
+        "visibleLines": 290
+      }
+    },
+    {
+      "view": "structure",
+      "mode": "optimized",
+      "pose": {
+        "target": "/QICHUANG-WORKSHOP-01",
+        "position": [
+          114.53081992108702,
+          42.36314765795297,
+          110.57032794392063
+        ],
+        "quaternion": [
+          -0.22644488917865635,
+          0.37101053583103966,
+          0.093796544227872,
+          0.8956986673866048
+        ],
+        "radius": 0.12
+      },
+      "stats": {
+        "frameTimeMs": 7,
+        "cpuFrameTimeMs": 6.100000023841858,
+        "gpuFrameTimeMs": 7.131136,
+        "gpuTimerStatus": "available",
+        "resolution": "1124×856",
+        "pixelRatio": 1,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Laptop GPU (0x000028A0) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "gpuTimerQuery": true,
+        "fps": 149,
+        "drawCalls": 398,
+        "triangles": 336218,
+        "frameDrawCallsAllPasses": 507,
+        "outlineEnabled": false,
+        "contours": false,
+        "xray": false,
+        "xrayOpacity": 0.32,
+        "interacting": false,
+        "visible": 7420,
+        "hidden": 0,
+        "navigationMode": "orbit",
+        "visibleMeshes": 106,
+        "visibleLines": 288
+      }
+    },
+    {
+      "view": "close",
+      "mode": "off",
+      "pose": {
+        "target": "/V1081",
+        "position": [
+          96.2627561266211,
+          -3.7760389057036803,
+          67.58727242300785
+        ],
+        "quaternion": [
+          -0.226444889178656,
+          0.37101053583103927,
+          0.09379654422787172,
+          0.8956986673866051
+        ],
+        "radius": 0.12
+      },
+      "stats": {
+        "frameTimeMs": 6.099999964237213,
+        "cpuFrameTimeMs": 2.900000035762787,
+        "gpuFrameTimeMs": 2.796544,
+        "gpuTimerStatus": "available",
+        "resolution": "1124×856",
+        "pixelRatio": 1,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Laptop GPU (0x000028A0) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "gpuTimerQuery": true,
+        "fps": 165,
+        "drawCalls": 83,
+        "triangles": 229385,
+        "frameDrawCallsAllPasses": 84,
+        "outlineEnabled": false,
+        "contours": false,
+        "xray": false,
+        "xrayOpacity": 0.32,
+        "interacting": false,
+        "visible": 7420,
+        "hidden": 0,
+        "navigationMode": "orbit",
+        "visibleMeshes": 58,
+        "visibleLines": 24
+      }
+    },
+    {
+      "view": "close",
+      "mode": "current",
+      "pose": {
+        "target": "/V1081",
+        "position": [
+          96.2627561266211,
+          -3.7760389057036803,
+          67.58727242300785
+        ],
+        "quaternion": [
+          -0.226444889178656,
+          0.37101053583103927,
+          0.09379654422787172,
+          0.8956986673866051
+        ],
+        "radius": 0.12
+      },
+      "stats": {
+        "frameTimeMs": 7.199999988079071,
+        "cpuFrameTimeMs": 5.600000023841858,
+        "gpuFrameTimeMs": 1.693696,
+        "gpuTimerStatus": "available",
+        "resolution": "1124×856",
+        "pixelRatio": 1,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Laptop GPU (0x000028A0) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "gpuTimerQuery": true,
+        "fps": 165,
+        "drawCalls": 83,
+        "triangles": 229385,
+        "frameDrawCallsAllPasses": 143,
+        "outlineEnabled": false,
+        "contours": false,
+        "xray": false,
+        "xrayOpacity": 0.32,
+        "interacting": false,
+        "visible": 7420,
+        "hidden": 0,
+        "navigationMode": "orbit",
+        "visibleMeshes": 58,
+        "visibleLines": 24
+      }
+    },
+    {
+      "view": "close",
+      "mode": "optimized",
+      "pose": {
+        "target": "/V1081",
+        "position": [
+          96.2627561266211,
+          -3.7760389057036803,
+          67.58727242300785
+        ],
+        "quaternion": [
+          -0.226444889178656,
+          0.37101053583103927,
+          0.09379654422787172,
+          0.8956986673866051
+        ],
+        "radius": 0.12
+      },
+      "stats": {
+        "frameTimeMs": 6.100000023841858,
+        "cpuFrameTimeMs": 5.300000011920929,
+        "gpuFrameTimeMs": 1.851392,
+        "gpuTimerStatus": "available",
+        "resolution": "1124×856",
+        "pixelRatio": 1,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Laptop GPU (0x000028A0) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "gpuTimerQuery": true,
+        "fps": 165,
+        "drawCalls": 83,
+        "triangles": 229385,
+        "frameDrawCallsAllPasses": 143,
+        "outlineEnabled": false,
+        "contours": false,
+        "xray": false,
+        "xrayOpacity": 0.32,
+        "interacting": false,
+        "visible": 7420,
+        "hidden": 0,
+        "navigationMode": "orbit",
+        "visibleMeshes": 57,
+        "visibleLines": 22
+      }
+    }
+  ],
+  "errors": []
+}

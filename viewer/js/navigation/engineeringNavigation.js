@@ -119,7 +119,7 @@ export class EngineeringNavigation {
    * @param {object} options.settings                 NavigationSettingsStore
    */
   constructor({ camera, canvas, worldUp, settings, onRequestModeToggle, onStateChange,
-                onRequestCenterPick, onRequestDeselectAll }) {
+                onRequestCenterPick, onRequestSelectionMenu }) {
     this.camera = camera;
     this.canvas = canvas;
     this.settings = settings;
@@ -146,9 +146,9 @@ export class EngineeringNavigation {
       onWheel: (notches) => { this.pendingZoomNotches += notches; },
       // 场景内的一次点击 = 原插件的 MouseDown：暂停中则恢复，否则开始捕获
       onCaptureRequested: () => { if (this.paused) this.resume(); },
-      // 已捕获时的左键 = 选中准星指向的对象（opts 里带 Ctrl 多选标记）；右键 = 取消选中所有
+      // 已捕获时的左键 = 选中准星指向的对象（点空处会清空选中）；右键 = 选中对象菜单
       onCenterPick: (opts) => onRequestCenterPick?.(opts),
-      onDeselectAll: () => onRequestDeselectAll?.(),
+      onSelectionMenuRequested: (point) => onRequestSelectionMenu?.(point),
       onCaptureChanged: ({ captured }) => {
         // 捕获丢失即清空按键与未消费的鼠标增量：否则重新捕获的瞬间
         // 残留输入会生效，表现为"自动移动 / 视角瞬移"

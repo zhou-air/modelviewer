@@ -1,0 +1,320 @@
+{
+  "url": "http://127.0.0.1:8899/viewer/index.html",
+  "ok": true,
+  "steps": [
+    {
+      "name": "找到 Batch solid 测试对象",
+      "ok": true,
+      "detail": {
+        "canonical": "/WG-10401-400-L1G/B2",
+        "batchIndex": 53
+      }
+    },
+    {
+      "name": "初始偏好为默认且 Batch 仍启用",
+      "ok": true,
+      "detail": {
+        "appearance": {
+          "globalModelColor": "#8d949c",
+          "backgroundColor": "#eef1f3",
+          "groundEnabled": false,
+          "groundColor": "#d7dde3",
+          "groundVisible": false,
+          "groundY": null,
+          "groundSize": null,
+          "lightingEnabled": true,
+          "lightingIntensity": 1,
+          "aoEnabled": true,
+          "aoIntensity": 0.65,
+          "aoPassEnabled": true,
+          "normalDepthPassEnabled": true,
+          "contours": false,
+          "xray": false,
+          "xrayOpacity": 0.32,
+          "ghostObjects": 0,
+          "edgePassEnabled": false,
+          "edgeSceneDrawCalls": 105,
+          "ghostMeshOpacity": 0.32,
+          "ghostLineOpacity": 0.512,
+          "ghostMeshColor": "9aa6b2",
+          "ghostDepthWrite": false,
+          "objectColorOverrides": 0
+        },
+        "batch": {
+          "enabled": true,
+          "indexed": true,
+          "maxMeshesPerBatch": 64,
+          "sourceMeshes": 5507,
+          "spatialBatches": 105,
+          "renderMeshes": 105,
+          "stateMeshes": {
+            "solid": 105,
+            "selected": 0,
+            "hover": 0,
+            "ghost": 0
+          },
+          "recordedRanges": 5507,
+          "triangles": 335824,
+          "indices": 1007472,
+          "lastSync": {
+            "changedEntries": 5507,
+            "rebuiltBatches": 105,
+            "ms": 112.69999998807907
+          }
+        },
+        "floorplan": {
+          "available": true,
+          "visible": true,
+          "debug": false,
+          "error": null,
+          "stats": {
+            "equipment": 98,
+            "positioned": 98,
+            "outlines": 608,
+            "outlineSegments": 8778,
+            "labelBatches": 1,
+            "debugCenters": 0,
+            "floorY": -12.80591046975783,
+            "floorOffset": 0.0024107881155389006
+          }
+        }
+      }
+    },
+    {
+      "name": "全局色/背景/地板生效且地板不进入模型树或拾取",
+      "ok": true,
+      "detail": {
+        "appearance": {
+          "globalModelColor": "#ff00aa",
+          "backgroundColor": "#102030",
+          "groundEnabled": true,
+          "groundColor": "#445566",
+          "groundVisible": true,
+          "groundY": -12.8075,
+          "groundSize": [
+            231.06698654292916,
+            165.23031482289252
+          ],
+          "lightingEnabled": true,
+          "lightingIntensity": 1,
+          "aoEnabled": true,
+          "aoIntensity": 0.65,
+          "aoPassEnabled": true,
+          "normalDepthPassEnabled": true,
+          "contours": false,
+          "xray": false,
+          "xrayOpacity": 0.32,
+          "ghostObjects": 0,
+          "edgePassEnabled": false,
+          "edgeSceneDrawCalls": 106,
+          "ghostMeshOpacity": 0.32,
+          "ghostLineOpacity": 0.512,
+          "ghostMeshColor": "9aa6b2",
+          "ghostDepthWrite": false,
+          "objectColorOverrides": 0
+        },
+        "meshColor": "ff00aa",
+        "batchMeshColor": "ff00aa",
+        "background": "102030",
+        "groundName": "__GROUND_PLANE__",
+        "groundRaycastDisabled": true,
+        "groundInRoot": false,
+        "floorplanIsSceneChild": true,
+        "floorplanY": -12.80591046975783
+      }
+    },
+    {
+      "name": "右键颜色子菜单支持常用颜色并绑定当前选择集",
+      "ok": true,
+      "detail": {
+        "overrides": [
+          {
+            "canonical": "/WG-10401-400-L1G/B2",
+            "color": "#ef4444"
+          }
+        ],
+        "count": 1
+      }
+    },
+    {
+      "name": "对象色按 canonicalId 写入并保持选中高亮优先",
+      "ok": true,
+      "detail": {
+        "state": "selected",
+        "overrides": {
+          "overrides": [
+            {
+              "canonical": "/WG-10401-400-L1G/B2",
+              "color": "#00ff00"
+            }
+          ],
+          "count": 1
+        },
+        "material": "selected",
+        "batchIndex": 53,
+        "solidMix": 0,
+        "solidColor": [
+          0,
+          0,
+          0
+        ],
+        "targetBatchRebuilt": 0
+      }
+    },
+    {
+      "name": "取消选中后恢复对象色，且全局色不覆盖对象色",
+      "ok": true,
+      "detail": {
+        "state": "solid",
+        "global": "aa00ff",
+        "mix": 1,
+        "color": [
+          0,
+          1,
+          0
+        ]
+      }
+    },
+    {
+      "name": "对象色 → Hide → Ghost 后 canonical 覆盖仍在",
+      "ok": true,
+      "detail": {
+        "state": "ghost",
+        "overrides": 1,
+        "ghostMeshes": 2
+      }
+    },
+    {
+      "name": "恢复显示后对象色仍正确",
+      "ok": true,
+      "detail": {
+        "state": "solid",
+        "mix": 1,
+        "overrides": 1
+      }
+    },
+    {
+      "name": "恢复所选对象颜色后使用当前全局色",
+      "ok": true,
+      "detail": {
+        "mix": 0,
+        "overrides": 0,
+        "global": "aa00ff"
+      }
+    },
+    {
+      "name": "关闭 Batch 时对象色仍支持选中优先级并可恢复",
+      "ok": true,
+      "detail": {
+        "rawOverride": {
+          "color": "00ccff",
+          "selectedBefore": false
+        },
+        "rawSelected": true,
+        "rawReset": "aa00ff"
+      }
+    },
+    {
+      "name": "切换模型后对象色清空、用户级偏好保留、Batch 未拆除",
+      "ok": true,
+      "detail": {
+        "appearance": {
+          "globalModelColor": "#aa00ff",
+          "backgroundColor": "#102030",
+          "groundEnabled": true,
+          "groundColor": "#445566",
+          "groundVisible": true,
+          "groundY": -12.8075,
+          "groundSize": [
+            231.06698654292916,
+            165.23031482289252
+          ],
+          "lightingEnabled": true,
+          "lightingIntensity": 1,
+          "aoEnabled": true,
+          "aoIntensity": 0.65,
+          "aoPassEnabled": true,
+          "normalDepthPassEnabled": true,
+          "contours": false,
+          "xray": false,
+          "xrayOpacity": 0.32,
+          "ghostObjects": 0,
+          "edgePassEnabled": false,
+          "edgeSceneDrawCalls": 106,
+          "ghostMeshOpacity": 0.32,
+          "ghostLineOpacity": 0.512,
+          "ghostMeshColor": "9aa6b2",
+          "ghostDepthWrite": false,
+          "objectColorOverrides": 0
+        },
+        "objectColors": {
+          "overrides": [],
+          "count": 0
+        },
+        "batch": {
+          "enabled": true,
+          "indexed": true,
+          "maxMeshesPerBatch": 64,
+          "sourceMeshes": 5507,
+          "spatialBatches": 105,
+          "renderMeshes": 105,
+          "stateMeshes": {
+            "solid": 105,
+            "selected": 0,
+            "hover": 0,
+            "ghost": 0
+          },
+          "recordedRanges": 5507,
+          "triangles": 335824,
+          "indices": 1007472,
+          "lastSync": {
+            "changedEntries": 5507,
+            "rebuiltBatches": 105,
+            "ms": 165.30000001192093
+          }
+        }
+      }
+    },
+    {
+      "name": "刷新 Viewer 后自动恢复用户级偏好且不恢复对象色",
+      "ok": true,
+      "detail": {
+        "appearance": {
+          "globalModelColor": "#aa00ff",
+          "backgroundColor": "#102030",
+          "groundEnabled": true,
+          "groundColor": "#445566",
+          "groundVisible": true,
+          "groundY": -12.8075,
+          "groundSize": [
+            231.06698654292916,
+            165.23031482289252
+          ],
+          "lightingEnabled": true,
+          "lightingIntensity": 1,
+          "aoEnabled": true,
+          "aoIntensity": 0.65,
+          "aoPassEnabled": true,
+          "normalDepthPassEnabled": true,
+          "contours": false,
+          "xray": false,
+          "xrayOpacity": 0.32,
+          "ghostObjects": 0,
+          "edgePassEnabled": false,
+          "edgeSceneDrawCalls": 106,
+          "ghostMeshOpacity": 0.32,
+          "ghostLineOpacity": 0.512,
+          "ghostMeshColor": "9aa6b2",
+          "ghostDepthWrite": false,
+          "objectColorOverrides": 0
+        },
+        "objectColors": {
+          "overrides": [],
+          "count": 0
+        }
+      }
+    }
+  ],
+  "pageErrors": [],
+  "console": []
+}

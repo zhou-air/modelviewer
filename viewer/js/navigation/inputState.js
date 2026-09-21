@@ -14,6 +14,7 @@
  */
 
 import { NavigationDefaults } from './navigationSettings.js';
+import { keyBindings } from '../keyBindings.js';
 
 /** 原插件 `Core/NavigationKey.cs` */
 export const NavigationKey = Object.freeze({
@@ -53,6 +54,12 @@ const KEY_TO_NAVIGATION_KEY = new Map([
 ]);
 
 export function navigationKeyOf(event) {
+  const configured = [
+    ['navigation.forward', NavigationKey.Forward], ['navigation.backward', NavigationKey.Backward],
+    ['navigation.left', NavigationKey.Left], ['navigation.right', NavigationKey.Right],
+    ['navigation.up', NavigationKey.Up], ['navigation.down', NavigationKey.Down],
+  ].find(([id]) => keyBindings.has(id, event.code));
+  if (configured) return configured[1];
   if (event.code && CODE_TO_NAVIGATION_KEY.has(event.code)) {
     return CODE_TO_NAVIGATION_KEY.get(event.code);
   }
@@ -283,13 +290,13 @@ export class NavigationInputSource {
     // 设置面板的数字框里打字时不驱动相机（Web 才有的输入框，原插件无此情形）
     if (isEditableTarget(e.target)) return;
 
-    if (e.key === 'F8') {
+    if (keyBindings.has('navigation.toggle', e.code) || (!e.code && e.key === 'F8')) {
       e.preventDefault();
       this._options.onToggleNavigation?.();
       return;
     }
 
-    if (e.key === 'Escape') {
+    if (keyBindings.has('navigation.escape', e.code) || (!e.code && e.key === 'Escape')) {
       // 指针锁定时浏览器会自己吞掉 Esc（只解除锁定，不给 keydown），
       // 那条路径由 pointerlockchange 处理；这里覆盖"未锁定但导航开着"的情况。
       if (this._isActive()) {
@@ -341,11 +348,13 @@ export class NavigationInputSource {
 
   _onPointerDown(e) {
     if (!this._isActive()) return;
-    // 游戏导航 + 已捕获：右键 = 取消选中所有（准星模式下的"反选"操作）
+    // 游戏导航 + 已捕获：右键 = 打开已选对象的显隐 / 隔离菜单。
+    // 菜单需要普通鼠标操作，因此先释放 Pointer Lock。
     if (e.pointerType === 'mouse' && e.button === 2) {
       if (this.isCaptured) {
         e.preventDefault();
-        this._options.onDeselectAll?.();
+        this.releaseCapture();
+        this._options.onSelectionMenuRequested?.({ clientX: e.clientX, clientY: e.clientY });
       }
       return;
     }
@@ -363,7 +372,7 @@ export class NavigationInputSource {
   }
 
   _onContextMenu(e) {
-    // 游戏导航中不弹浏览器右键菜单（右键承担"取消选中"语义，且锁定状态下弹菜单没有意义）
+    // 游戏导航中使用自定义右键菜单，始终屏蔽浏览器菜单。
     if (this._isActive()) e.preventDefault();
   }
 

@@ -1,0 +1,371 @@
+{
+  "startedAt": "2026-09-21T13:09:28.256Z",
+  "steps": [
+    {
+      "step": "E1 默认继续为纯色背景",
+      "ok": true,
+      "detail": {
+        "globalModelColor": "#8d949c",
+        "backgroundColor": "#eef1f3",
+        "environmentMode": "solid",
+        "environmentPreset": "engineering-light",
+        "environmentTexture": "",
+        "environmentColors": {
+          "skyTopColor": "#dce4ea",
+          "skyHorizonColor": "#f4f6f7",
+          "groundHorizonColor": "#d9dde0",
+          "groundFarColor": "#aeb6bd"
+        },
+        "environmentStatus": "ready",
+        "environmentError": null,
+        "environmentBackgroundType": "color",
+        "groundEnabled": false,
+        "groundColor": "#d7dde3",
+        "groundVisible": false,
+        "groundY": null,
+        "groundSize": null,
+        "lightingEnabled": true,
+        "lightingIntensity": 1,
+        "aoEnabled": false,
+        "aoIntensity": 0.3,
+        "aoRadius": 0.12,
+        "aoPassEnabled": false,
+        "normalDepthPassEnabled": false,
+        "contours": false,
+        "xray": false,
+        "xrayOpacity": 0.32,
+        "ghostObjects": 0,
+        "edgePassEnabled": false,
+        "edgeSceneDrawCalls": 0,
+        "ghostMeshOpacity": 0.32,
+        "ghostLineOpacity": 0.512,
+        "ghostMeshColor": "9aa6b2",
+        "ghostDepthWrite": false,
+        "objectColorOverrides": 0
+      }
+    },
+    {
+      "step": "E2 背景不写入 scene.environment",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "E3 地平线是程序生成的 2:1 等距柱状背景",
+      "ok": true,
+      "detail": {
+        "state": {
+          "globalModelColor": "#8d949c",
+          "backgroundColor": "#eef1f3",
+          "environmentMode": "horizon",
+          "environmentPreset": "engineering-light",
+          "environmentTexture": "",
+          "environmentColors": {
+            "skyTopColor": "#dce4ea",
+            "skyHorizonColor": "#f4f6f7",
+            "groundHorizonColor": "#d9dde0",
+            "groundFarColor": "#aeb6bd"
+          },
+          "environmentStatus": "ready",
+          "environmentError": null,
+          "environmentBackgroundType": "texture",
+          "groundEnabled": false,
+          "groundColor": "#d7dde3",
+          "groundVisible": false,
+          "groundY": null,
+          "groundSize": null,
+          "lightingEnabled": true,
+          "lightingIntensity": 1,
+          "aoEnabled": false,
+          "aoIntensity": 0.3,
+          "aoRadius": 0.12,
+          "aoPassEnabled": false,
+          "normalDepthPassEnabled": false,
+          "contours": false,
+          "xray": false,
+          "xrayOpacity": 0.32,
+          "ghostObjects": 0,
+          "edgePassEnabled": false,
+          "edgeSceneDrawCalls": 0,
+          "ghostMeshOpacity": 0.32,
+          "ghostLineOpacity": 0.512,
+          "ghostMeshColor": "9aa6b2",
+          "ghostDepthWrite": false,
+          "objectColorOverrides": 0
+        },
+        "width": 512,
+        "height": 256,
+        "mapping": 303,
+        "expectedMapping": 303,
+        "sceneEnvironment": null,
+        "children": 7,
+        "envObjects": 0,
+        "passCount": 7
+      }
+    },
+    {
+      "step": "E4 不增加 Render Pass / 场景对象 / 光照环境",
+      "ok": true,
+      "detail": {
+        "state": {
+          "globalModelColor": "#8d949c",
+          "backgroundColor": "#eef1f3",
+          "environmentMode": "horizon",
+          "environmentPreset": "engineering-light",
+          "environmentTexture": "",
+          "environmentColors": {
+            "skyTopColor": "#dce4ea",
+            "skyHorizonColor": "#f4f6f7",
+            "groundHorizonColor": "#d9dde0",
+            "groundFarColor": "#aeb6bd"
+          },
+          "environmentStatus": "ready",
+          "environmentError": null,
+          "environmentBackgroundType": "texture",
+          "groundEnabled": false,
+          "groundColor": "#d7dde3",
+          "groundVisible": false,
+          "groundY": null,
+          "groundSize": null,
+          "lightingEnabled": true,
+          "lightingIntensity": 1,
+          "aoEnabled": false,
+          "aoIntensity": 0.3,
+          "aoRadius": 0.12,
+          "aoPassEnabled": false,
+          "normalDepthPassEnabled": false,
+          "contours": false,
+          "xray": false,
+          "xrayOpacity": 0.32,
+          "ghostObjects": 0,
+          "edgePassEnabled": false,
+          "edgeSceneDrawCalls": 0,
+          "ghostMeshOpacity": 0.32,
+          "ghostLineOpacity": 0.512,
+          "ghostMeshColor": "9aa6b2",
+          "ghostDepthWrite": false,
+          "objectColorOverrides": 0
+        },
+        "width": 512,
+        "height": 256,
+        "mapping": 303,
+        "expectedMapping": 303,
+        "sceneEnvironment": null,
+        "children": 7,
+        "envObjects": 0,
+        "passCount": 7
+      }
+    },
+    {
+      "step": "E5 四套地平线预设均可切换",
+      "ok": true,
+      "detail": {
+        "engineering-light": {
+          "skyTopColor": "#dce4ea",
+          "skyHorizonColor": "#f4f6f7",
+          "groundHorizonColor": "#d9dde0",
+          "groundFarColor": "#aeb6bd"
+        },
+        "blue-sky": {
+          "skyTopColor": "#5f9fd4",
+          "skyHorizonColor": "#d9edf8",
+          "groundHorizonColor": "#cdd5d0",
+          "groundFarColor": "#87958b"
+        },
+        "overcast": {
+          "skyTopColor": "#78838c",
+          "skyHorizonColor": "#c5cbd0",
+          "groundHorizonColor": "#aeb4b6",
+          "groundFarColor": "#687176"
+        },
+        "dark": {
+          "skyTopColor": "#101820",
+          "skyHorizonColor": "#35424c",
+          "groundHorizonColor": "#2b3337",
+          "groundFarColor": "#111719"
+        }
+      }
+    },
+    {
+      "step": "E6 平移/WASD 无视差，俯仰旋转会改变天空与地面构图",
+      "ok": true,
+      "detail": {
+        "translationMeanPixelDiff": 0.6666586983514595,
+        "pitchMeanPixelDiff": 12.299118773627788,
+        "translatedHashSame": false
+      }
+    },
+    {
+      "step": "E7 2:1 JPG/PNG 接口仅设置 Scene Background",
+      "ok": true,
+      "detail": {
+        "appearance": {
+          "globalModelColor": "#8d949c",
+          "backgroundColor": "#eef1f3",
+          "environmentMode": "texture",
+          "environmentPreset": "dark",
+          "environmentTexture": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAACCAYAAAB/qH1jAAAAFklEQVR4AWJSbTjwHxkzRT9oYEDGAAAAAP//p9dINQAAAAZJREFUAwAsixCBYZsubgAAAABJRU5ErkJggg==",
+          "environmentColors": {
+            "skyTopColor": "#101820",
+            "skyHorizonColor": "#35424c",
+            "groundHorizonColor": "#2b3337",
+            "groundFarColor": "#111719"
+          },
+          "environmentStatus": "ready",
+          "environmentError": null,
+          "environmentBackgroundType": "texture",
+          "groundEnabled": true,
+          "groundColor": "#d7dde3",
+          "groundVisible": true,
+          "groundY": -12.8075,
+          "groundSize": [
+            231.06698654292916,
+            165.23031482289252
+          ],
+          "lightingEnabled": true,
+          "lightingIntensity": 1,
+          "aoEnabled": false,
+          "aoIntensity": 0.3,
+          "aoRadius": 0.12,
+          "aoPassEnabled": false,
+          "normalDepthPassEnabled": true,
+          "contours": true,
+          "xray": true,
+          "xrayOpacity": 0.32,
+          "ghostObjects": 1,
+          "edgePassEnabled": true,
+          "edgeSceneDrawCalls": 107,
+          "ghostMeshOpacity": 0.32,
+          "ghostLineOpacity": 0.512,
+          "ghostMeshColor": "9aa6b2",
+          "ghostDepthWrite": false,
+          "objectColorOverrides": 1
+        },
+        "sceneEnvironment": null,
+        "width": 4,
+        "height": 2
+      }
+    },
+    {
+      "step": "E8 切换环境时释放旧 Texture",
+      "ok": true,
+      "detail": {
+        "disposed": true
+      }
+    },
+    {
+      "step": "E9 环境切换不改变选择/改色/Edge/Ghost/Measurement/Ground/FloorPlan",
+      "ok": true,
+      "detail": {
+        "before": {
+          "selection": {
+            "count": 1,
+            "canonicals": [
+              "FLANGE 1 of BRANCH /WG-10401-400-L1G/B2"
+            ],
+            "primary": "FLANGE 1 of BRANCH /WG-10401-400-L1G/B2",
+            "outlineObjects": 0,
+            "swappedObjects": 1
+          },
+          "objectColors": {
+            "overrides": [
+              {
+                "canonical": "FLANGE 1 of BRANCH /WG-10401-400-L1G/B2",
+                "color": "#ef4444"
+              }
+            ],
+            "count": 1
+          },
+          "hidden": 1,
+          "contours": true,
+          "xray": true,
+          "ghostObjects": 1,
+          "measurement": true,
+          "floorPlan": true,
+          "ground": true,
+          "groundY": -12.8075,
+          "floorY": -12.80591046975783,
+          "modelMinY": -12.803499681642291,
+          "gizmoVisible": false
+        },
+        "after": {
+          "selection": {
+            "count": 1,
+            "canonicals": [
+              "FLANGE 1 of BRANCH /WG-10401-400-L1G/B2"
+            ],
+            "primary": "FLANGE 1 of BRANCH /WG-10401-400-L1G/B2",
+            "outlineObjects": 0,
+            "swappedObjects": 1
+          },
+          "objectColors": {
+            "overrides": [
+              {
+                "canonical": "FLANGE 1 of BRANCH /WG-10401-400-L1G/B2",
+                "color": "#ef4444"
+              }
+            ],
+            "count": 1
+          },
+          "hidden": 1,
+          "contours": true,
+          "xray": true,
+          "ghostObjects": 1,
+          "measurement": true,
+          "floorPlan": true,
+          "ground": true
+        }
+      }
+    },
+    {
+      "step": "E10 空间高度为 Model > FloorPlan > Ground Plane",
+      "ok": true,
+      "detail": {
+        "modelMinY": -12.803499681642291,
+        "floorY": -12.80591046975783,
+        "groundY": -12.8075
+      }
+    },
+    {
+      "step": "E11 Orbit/Game 导航切换不改变环境",
+      "ok": true,
+      "detail": {
+        "gameMode": {
+          "nav": "game",
+          "environment": "horizon"
+        },
+        "orbitMode": {
+          "nav": "orbit",
+          "environment": "horizon"
+        }
+      }
+    },
+    {
+      "step": "E12 设备级 AppearanceSettings 保存四个环境字段",
+      "ok": true,
+      "detail": {
+        "lightingEnabled": true,
+        "lightingIntensity": 1,
+        "aoEnabled": false,
+        "aoIntensity": 0.3,
+        "aoRadius": 0.12,
+        "globalModelColor": "#8d949c",
+        "backgroundColor": "#eef1f3",
+        "environmentMode": "horizon",
+        "environmentPreset": "dark",
+        "environmentTexture": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAACCAYAAAB/qH1jAAAAFklEQVR4AWJSbTjwHxkzRT9oYEDGAAAAAP//p9dINQAAAAZJREFUAwAsixCBYZsubgAAAABJRU5ErkJggg==",
+        "environmentColors": {
+          "skyTopColor": "#101820",
+          "skyHorizonColor": "#35424c",
+          "groundHorizonColor": "#2b3337",
+          "groundFarColor": "#111719"
+        },
+        "groundEnabled": true,
+        "groundColor": "#d7dde3"
+      }
+    }
+  ],
+  "pageErrors": [],
+  "consoleIssues": [],
+  "ok": true,
+  "finishedAt": "2026-09-21T13:09:33.051Z"
+}
