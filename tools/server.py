@@ -27,6 +27,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+import issue_store as I
 import asset_store as S            # noqa: E402
 import import_pipeline as P        # noqa: E402
 import access_control as AC        # noqa: E402  访问权限层（内网识别 / Session / 权限判定）
@@ -118,6 +119,18 @@ def api_delete_model(req, pid: str, mid: str) -> dict:
 
 def api_version(req, pid: str, mid: str, vid: str) -> dict:
     return S.find_version(pid, mid, vid)
+
+
+def api_issues(req, pid, mid, vid):
+    return I.read(pid, mid, vid)
+
+
+def api_issue_create(req, pid, mid, vid):
+    return I.create(pid, mid, vid, req.body_json())
+
+
+def api_issue_update(req, pid, mid, vid, iid):
+    return I.update(pid, mid, vid, iid, req.body_json())
 
 
 def api_version_log(req, pid: str, mid: str, vid: str) -> dict:
@@ -275,6 +288,9 @@ def api_project_access_post(req, pid: str) -> dict:
 
 # (http_method, 正则, 处理函数, 参数名列表)
 ROUTES: list[tuple[str, re.Pattern, object, tuple[str, ...]]] = [
+    ("GET", re.compile(r"^/versions/(?P<pid>[^/]+)/(?P<mid>[^/]+)/(?P<vid>[^/]+)/issues$"), api_issues, ("pid", "mid", "vid")),
+    ("POST", re.compile(r"^/versions/(?P<pid>[^/]+)/(?P<mid>[^/]+)/(?P<vid>[^/]+)/issues$"), api_issue_create, ("pid", "mid", "vid")),
+    ("PATCH", re.compile(r"^/versions/(?P<pid>[^/]+)/(?P<mid>[^/]+)/(?P<vid>[^/]+)/issues/(?P<iid>[^/]+)$"), api_issue_update, ("pid", "mid", "vid", "iid")),
     ("GET",    re.compile(r"^/health$"), api_health, ()),
     ("GET",    re.compile(r"^/suggest-id$"), api_suggest_id, ()),
     ("GET",    re.compile(r"^/access/status$"), api_access_status, ()),

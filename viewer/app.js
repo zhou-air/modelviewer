@@ -9,6 +9,7 @@
 import * as THREE from 'three';
 import { loadData } from './js/data.js';
 import { Model3D } from './js/viewer3d.js';
+import { IssueController } from './js/issues.js';
 import { ModelTree } from './js/tree.js';
 import { PropsPanel } from './js/props.js';
 import { AssetManager, bindImportModal } from './js/assetManager.js';
@@ -208,6 +209,7 @@ function backToLauncher() {
 
 // ---------------------------------------------------------------- 查看层（懒创建，只建一次）
 
+let issues = null, issueContextPoint = null;
 let model = null, tree = null, props = null, data = null;
 loadEnvironmentTextureOptions();
 const gameCtxMenu = el('gameCtxMenu');
@@ -219,17 +221,20 @@ function closeGameContextMenu() {
   gameColorSubmenu?.classList.remove('on');
 }
 function openGameContextMenu(point = {}) {
-  if (!model?.selectedCanonicals.length) return;
+  if (!model?.selectedCanonicals.length || !viewer.ready) return;
+  issueContextPoint = point;
+  gameCtxMenu.querySelector('[data-action="add-issue"]').disabled = !access.isInternal;
   const x = Number.isFinite(point.clientX) && point.clientX > 0 ? point.clientX : innerWidth / 2;
   const y = Number.isFinite(point.clientY) && point.clientY > 0 ? point.clientY : innerHeight / 2;
   gameCtxMenu.classList.add('on');
-  gameCtxMenu.style.left = `${Math.max(8, Math.min(x, innerWidth - 170))}px`;
-  gameCtxMenu.style.top = `${Math.max(8, Math.min(y, innerHeight - 130))}px`;
+  gameCtxMenu.style.left = `${Math.max(8, Math.min(x, innerWidth - gameCtxMenu.offsetWidth - 8))}px`;
+  gameCtxMenu.style.top = `${Math.max(8, Math.min(y, innerHeight - gameCtxMenu.offsetHeight - 8))}px`;
 }
 gameCtxMenu.addEventListener('click', (e) => {
   const button = e.target.closest('button');
   const action = button?.dataset.action;
   if (!action || !model) return;
+  if (action === 'add-issue') { closeGameContextMenu(); issues?.begin(issueContextPoint); return; }
   if (action === 'color-open') {
     gameColorSubmenu?.classList.toggle('on');
     return;
@@ -311,6 +316,13 @@ function ensureViewer() {
       const name = id ? data.objects[id]?.name : null;
       return name ? String(name).trim() : null;
     },
+  });
+  issues = new IssueController(model);
+  viewer.issues = issues;
+  el('cv').addEventListener('contextmenu', (e) => {
+    if (model.navigationMode !== 'orbit') return;
+    e.preventDefault();
+    openGameContextMenu(e);
   });
   model.onStats = (s) => {
     viewer.stats = s;
@@ -672,7 +684,7 @@ function syncAppearanceInputs() {
   el('apEnvironmentStatus').textContent = texture
     ? (a.environmentStatus === 'loading' ? '正在加载当前贴图…'
       : (a.environmentError || '贴图仅用于背景，不影响模型光照与反射。'))
-    : '环境与 Ground Plane、FloorPlan 相互独立。';
+    : (a.environmentMode === 'silver-rain' ? '黑色背景上的银色线条持续向下循环。' : '环境与 Ground Plane、FloorPlan 相互独立。');
   el('apGround').checked = a.groundEnabled;
   el('apGroundColor').value = a.groundColor;
   el('apGroundColor').disabled = !a.groundEnabled;
@@ -757,6 +769,8 @@ async function openVersion(ctx) {
   };
   el('viewerRoot').classList.remove('hidden');
   ensureViewer();
+  issues.clear();
+  closeGameContextMenu();
   model.setNavigationMode('orbit');                  // 换模型前退出游戏导航
   setTitle(ctx);
 
@@ -830,6 +844,7 @@ async function openVersion(ctx) {
         pctEl.textContent = `${Math.round(evt.loaded / evt.total * 100)}%`;
       }
     }, { floorplan: data.floorplan });
+    await issues.bind(viewer.current, data, tree);
     viewer.timings.modelLoadMs = Math.round(performance.now() - tModelStart);
     model.resize();
     await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));

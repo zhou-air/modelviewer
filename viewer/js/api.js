@@ -34,6 +34,9 @@ const delHeaders = (password) =>
   password ? { "X-Delete-Password": password } : {};
 
 export const api = {
+  issues: (p, m, v) => call('GET', `/versions/${p}/${m}/${v}/issues`),
+  createIssue: (p, m, v, body) => call('POST', `/versions/${p}/${m}/${v}/issues`, body),
+  updateIssue: (p, m, v, id, body) => call('PATCH', `/versions/${p}/${m}/${v}/issues/${id}`, body),
   health: () => call("GET", "/health"),
   // ---- 访问权限 ----
   accessStatus: () => call("GET", "/access/status"),

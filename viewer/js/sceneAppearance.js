@@ -1,5 +1,6 @@
 import * as THREE from 'three';
-import { ENVIRONMENT_PRESETS } from './appearance.js';
+import { ENVIRONMENT_PRESETS, ENVIRONMENT_MODES } from './appearance.js';
+import { SilverRain } from './silverRain.js';
 
 function noRaycast(object) {
   object.raycast = () => {};
@@ -37,6 +38,7 @@ export class SceneAppearance {
   }
 
   _disposeBackgroundTexture() {
+    this.silverRain = null;
     if (!this.backgroundTexture) return;
     if (this.scene.background === this.backgroundTexture) this.scene.background = null;
     this.backgroundTexture.dispose();
@@ -119,12 +121,21 @@ export class SceneAppearance {
   }
 
   applyEnvironment(settings = {}) {
-    this.environmentMode = ['solid', 'horizon', 'texture'].includes(settings.environmentMode)
+    this.environmentMode = ENVIRONMENT_MODES.includes(settings.environmentMode)
       ? settings.environmentMode : this.environmentMode;
     if (settings.environmentPreset) this.environmentPreset = settings.environmentPreset;
     if (typeof settings.environmentTexture === 'string') this.environmentTexture = settings.environmentTexture;
     if (settings.environmentColors) this.environmentColors = { ...this.environmentColors, ...settings.environmentColors };
     const generation = ++this._environmentGeneration;
+    if (this.environmentMode === 'silver-rain') {
+      this._disposeBackgroundTexture();
+      this.silverRain = new SilverRain();
+      this.backgroundTexture = this.silverRain.texture;
+      this.scene.background = this.backgroundTexture;
+      this.environmentStatus = 'ready';
+      this.environmentError = null;
+      return Promise.resolve(true);
+    }
     if (this.environmentMode === 'solid') {
       this._showSolidBackground();
       return Promise.resolve(true);
@@ -137,6 +148,8 @@ export class SceneAppearance {
   }
 
   setEnvironmentMode(mode) { return this.applyEnvironment({ environmentMode: mode }); }
+
+  update(deltaSeconds) { this.silverRain?.update(deltaSeconds); }
 
   setEnvironmentPreset(preset) {
     const colors = ENVIRONMENT_PRESETS[preset];

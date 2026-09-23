@@ -1,0 +1,24 @@
+#issuePanel { width: 300px; min-width: 260px; max-width: 32vw; display:flex; flex-direction:column; background:#f7f9fc; border-left:1px solid var(--border); overflow:hidden; }
+#issuePanel.hidden { display:none; }
+.issue-head, .issue-actions { display:flex; flex-wrap:wrap; gap:6px; padding:10px; align-items:center; }
+.issue-head strong { flex:1; }
+#issueMessage { font-size:12px; padding:0 10px; color:#8b4513; overflow-wrap:anywhere; }
+#issueList { flex:1; overflow:auto; padding:8px; }
+.issue-row { display:flex; flex-direction:column; width:100%; text-align:left; gap:6px; margin-bottom:8px; padding:10px; white-space:normal; overflow-wrap:anywhere; }
+.issue-row.active { border-color:#2563eb; background:#eaf1ff; }
+.issue-row small { color:#687588; }
+.issue-row span, #issueDetailText { white-space:pre-wrap; overflow-wrap:anywhere; }
+#issueDetail { padding:12px; border-top:1px solid var(--border); max-height:35%; overflow:auto; }
+#issueDetail label { display:block; margin-top:8px; }
+.issue-empty { color:#687588; font-size:12px; }
+#issueMarkers { position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:5; }
+.issue-marker { position:absolute; left:0; top:0; min-width:24px; height:24px; padding:0 4px; border-radius:50%; border:2px solid white; background:#be3434; color:white; font-weight:bold; pointer-events:auto; box-shadow:0 1px 4px #0006; }
+.issue-marker[hidden] { display:none; }
+.issue-marker.resolved { background:#667085; opacity:.65; }
+.review-mode .issue-marker.unresolved, .issue-marker.active { box-shadow:0 0 0 3px #f59e0b88,0 1px 5px #0008; }
+.issue-count { color:#b42318; margin-left:5px; font-size:11px; border:0; background:#fee4e2; border-radius:8px; padding:1px 5px; cursor:pointer; }
+#issueDialog { width:min(420px,85vw); border:1px solid #cbd5e1; border-radius:10px; padding:20px; }
+#issueDialog::backdrop { background:#0005; }
+#issueText { width:100%; box-sizing:border-box; min-height:120px; margin:12px 0; resize:vertical; }
+#issueDraftObject, #issueDraftError { font-size:12px; overflow-wrap:anywhere; }
+#issueDraftError { color:#b42318; }

@@ -10,6 +10,7 @@ export class ModelTree {
     this.host = host;
     this.data = data;
     this.onPick = onPick;
+    this.issueCounts = new Map();
     this.rows = new Map();          // txtId → row element
     this.expanded = new Set();
     this.selectedId = null;
@@ -22,6 +23,7 @@ export class ModelTree {
    *  必须复用同一个实例 —— 每次 new 都会在 host 上再挂一个 click 监听，切换多次就叠加多次。 */
   setData(data) {
     this.data = data;
+    this.issueCounts.clear();
     this.host.innerHTML = '';
     this.rows.clear();
     this.expanded.clear();
@@ -66,6 +68,7 @@ export class ModelTree {
     wrap.dataset.id = id;
     wrap.innerHTML = this._rowHtml(o);
     this.rows.set(id, wrap.firstElementChild);
+    this._issueBadge(id, wrap.firstElementChild);
     return wrap;
   }
 
@@ -111,6 +114,7 @@ export class ModelTree {
       this.toggle(id);
       return;
     }
+    if (e.target.closest('.issue-count')) { this.onIssuePick?.(o.canonical); return; }
     // CTRL（或 ⌘）多选：切换该行的选中态，不影响其他已选行。
     // 两个方向都联动 3D（加入 = additive 选中，移出 = 同一 additive 语义的切换关闭），
     // 否则 3D 高亮会与树上的选择集不一致。
@@ -195,6 +199,20 @@ export class ModelTree {
     const id = this.data.idOf(canonical);
     if (id) this.select(id, opts);
     return id;
+  }
+  setIssueCounts(counts) {
+    this.issueCounts = counts;
+    for (const [id, row] of this.rows) this._issueBadge(id, row);
+  }
+  _issueBadge(id, row) {
+    row.querySelector('.issue-count')?.remove();
+    const count = this.issueCounts.get(this.data.objectOf(id)?.canonical) || 0;
+    if (!count) return;
+    const badge = document.createElement('button');
+    badge.className = 'issue-count';
+    badge.textContent = `🔴 ${count}`;
+    badge.title = `${count} 个未处理批注，点击定位`;
+    row.querySelector('.nm').after(badge);
   }
   counts() {
     return { total: this.data.meta.stats.objects, rendered: this.rows.size };

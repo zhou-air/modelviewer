@@ -1,0 +1,112 @@
+{
+  "results": [
+    {
+      "name": "Found real model surface",
+      "ok": true
+    },
+    {
+      "name": "Surface selection",
+      "ok": true,
+      "detail": {
+        "selected": "STWALL 22 of FRMWORK /W-SHOP-1-WALL",
+        "mode": "orbit",
+        "ready": true
+      }
+    },
+    {
+      "name": "Created with surface anchor and default state",
+      "ok": true,
+      "detail": [
+        76.29060955612357,
+        -5.489057362388635,
+        65.17950439453125
+      ]
+    },
+    {
+      "name": "Exact clicked position",
+      "ok": true
+    },
+    {
+      "name": "List and marker",
+      "ok": true
+    },
+    {
+      "name": "Tree count",
+      "ok": true
+    },
+    {
+      "name": "Camera restore",
+      "ok": true
+    },
+    {
+      "name": "Mode and navigation",
+      "ok": true
+    },
+    {
+      "name": "Closed removes tree count",
+      "ok": true
+    },
+    {
+      "name": "No-change removes tree count",
+      "ok": true
+    },
+    {
+      "name": "Locate reveals hidden object",
+      "ok": true
+    },
+    {
+      "name": "Game camera direction restoration",
+      "ok": true
+    },
+    {
+      "name": "Game camera position restoration",
+      "ok": true
+    },
+    {
+      "name": "Marker opens panel",
+      "ok": true
+    },
+    {
+      "name": "Tree badge locates issue",
+      "ok": true
+    },
+    {
+      "name": "Failed save retains draft",
+      "ok": true
+    },
+    {
+      "name": "Game creation and numbering",
+      "ok": true
+    },
+    {
+      "name": "Previous issue",
+      "ok": true
+    },
+    {
+      "name": "Navigation skips resolved issues",
+      "ok": true
+    },
+    {
+      "name": "Reload persistence",
+      "ok": true
+    },
+    {
+      "name": "Stale update rejected",
+      "ok": true
+    },
+    {
+      "name": "Invalid issue rejected",
+      "ok": true
+    },
+    {
+      "name": "Version isolation",
+      "ok": true
+    },
+    {
+      "name": "Zero browser errors",
+      "ok": true,
+      "detail": []
+    }
+  ],
+  "errors": []
+}

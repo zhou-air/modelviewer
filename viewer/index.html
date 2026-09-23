@@ -461,6 +461,7 @@
   #gateError { display: none; margin-top: 10px; color: var(--danger); font-size: 12px; }
   #gateError.on { display: block; }
 </style>
+<link rel="stylesheet" href="./issues.css">
 </head>
 <body>
 
@@ -515,6 +516,7 @@
     <span class="meta" id="curMeta"></span>
     <button id="btnToggleTree" class="ptoggle on" title="显示 / 隐藏左侧模型树">模型树</button>
     <button id="btnToggleProps" class="ptoggle" title="显示 / 隐藏右侧属性面板">属性</button>
+    <button id="btnIssues" class="ptoggle" aria-pressed="false">批注</button>
     <button id="btnKeyBindings" title="自定义控制键位">控制 / 键位设置</button>
     <button id="btnImportTop">Import</button>
   </div>
@@ -651,7 +653,7 @@
         <section>
           <h4>环境</h4>
           <div class="row"><label for="apEnvironmentMode">环境模式</label><select id="apEnvironmentMode">
-            <option value="solid">纯色</option><option value="horizon">地平线</option><option value="texture">环境贴图</option>
+            <option value="solid">纯色</option><option value="horizon">地平线</option><option value="texture">环境贴图</option><option value="silver-rain">银线下落</option>
           </select></div>
           <div class="row" id="apBackgroundColorRow"><label for="apBackgroundColor">纯色背景</label><input id="apBackgroundColor" type="color"></div>
           <div class="row" id="apEnvironmentPresetRow"><label for="apEnvironmentPreset">环境预设</label><select id="apEnvironmentPreset">
@@ -717,6 +719,12 @@
       <div id="status">正在加载模型与元数据…<span id="pct"></span></div>
     </div>
 
+    <aside id="issuePanel" class="hidden" aria-label="Issue 批注">
+      <div class="issue-head"><strong>Issue 批注</strong><button id="issueCollapse" title="折叠批注面板">收起</button></div>
+      <div class="issue-actions"><button id="issuePrev">上一个</button><button id="issueNext">下一个</button><button id="issueLocate" disabled>定位问题</button><button id="issueToggleMarkers" aria-pressed="false" title="显示或隐藏模型中的全部批注标记">隐藏所有批注</button><button id="issueReload">重新加载</button></div>
+      <div id="issueMessage" role="status"></div><div id="issueList"></div>
+      <div id="issueDetail" class="hidden"><div id="issueDetailText"></div><label>状态 <select id="issueStatus"><option value="open">待修改</option><option value="review">已修改待复核</option><option value="closed">已关闭</option><option value="wontfix">无需修改</option></select></label></div>
+    </aside>
     <div id="right" class="hidden">
       <div class="pane-head">
         <h2>属性</h2>
@@ -800,8 +808,10 @@
   </div>
 </div>
 
+<dialog id="issueDialog"><form id="issueForm"><h3>添加批注</h3><div id="issueDraftObject"></div><textarea id="issueText" maxlength="4000" required aria-label="批注文字" placeholder="请输入修改意见…"></textarea><div id="issueDraftError" role="alert"></div><div class="issue-actions"><button type="submit" id="issueSave">保存批注</button><button type="button" id="issueCancel">取消</button></div></form></dialog>
 <div id="ctxMenu"></div>
 <div id="gameCtxMenu" role="menu" aria-label="已选模型操作">
+  <button type="button" data-action="add-issue">添加批注</button>
   <div class="menu-sub">
     <button type="button" data-action="color-open">颜色 <span>›</span></button>
     <div id="gameColorSubmenu">

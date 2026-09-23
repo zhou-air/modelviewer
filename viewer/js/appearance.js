@@ -1,6 +1,6 @@
 const STORAGE_KEY = 'pdms-model-viewer-appearance-v1';
 
-export const ENVIRONMENT_MODES = Object.freeze(['solid', 'horizon', 'texture']);
+export const ENVIRONMENT_MODES = Object.freeze(['solid', 'horizon', 'texture', 'silver-rain']);
 
 export const ENVIRONMENT_PRESETS = Object.freeze({
   'engineering-light': Object.freeze({

@@ -1,0 +1,45 @@
+{
+  "checks": [
+    {
+      "name": "UI enables silver rain",
+      "ok": true
+    },
+    {
+      "name": "down",
+      "ok": true
+    },
+    {
+      "name": "wrap",
+      "ok": true
+    },
+    {
+      "name": "background",
+      "ok": true
+    },
+    {
+      "name": "environment",
+      "ok": true
+    },
+    {
+      "name": "render loop advances animation",
+      "ok": true
+    },
+    {
+      "name": "switch disposes animation",
+      "ok": true
+    },
+    {
+      "name": "scene object count unchanged",
+      "ok": true
+    },
+    {
+      "name": "reload restores background",
+      "ok": true
+    },
+    {
+      "name": "no page errors",
+      "ok": true
+    }
+  ],
+  "errors": []
+}

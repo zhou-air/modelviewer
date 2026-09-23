@@ -60,7 +60,7 @@ const ORIENTATION_VECTORS = Object.freeze({
   D: ENGINEERING_AXES.U.clone().negate(),
 });
 
-// ---- 外观选项默认值（两项默认都是关）
+// ---- 外观选项默认值
 const XRAY_OPACITY_DEFAULT = 0.32;      // 隐藏件半透明的默认不透明度
 const XRAY_OPACITY_MIN = 0.05;
 const XRAY_OPACITY_MAX = 0.95;
@@ -129,9 +129,9 @@ export class Model3D {
     this._objectColorsDirty = false;
     this.globalModelColor = new THREE.Color(appearance?.globalModelColor || MODEL_COLOR);
 
-    // ---- 外观选项（默认关）。跨版本保留：换模型不清掉用户开着的开关，但页面刷新回到默认关。
+    // ---- 外观选项。跨版本保留运行时状态；页面刷新使用下列默认值。
     this.contours = false;                // 元件轮廓线
-    this.xray = false;                    // 隐藏件半透明
+    this.xray = true;                     // 隐藏件半透明默认开启
     this.xrayOpacity = XRAY_OPACITY_DEFAULT;
     this.lineObjects = [];                // 所有 Line/LineSegments（轮廓线的法线趟要把它们摘掉）
     // 材质替换台账：obj → 原始材质。用 Map 而不是数组 —— 父子节点同时被选中时，
@@ -749,6 +749,56 @@ export class Model3D {
     return null;
   }
 
+  issueAnchor(point) {
+    const rect = this.canvas.getBoundingClientRect();
+    const hit = this.navigationMode === 'game' ? this._hitAtNdc(0, 0) : point && Number.isFinite(point.clientX)
+      ? this._hitAtNdc((point.clientX - rect.left) / rect.width * 2 - 1,
+          -(point.clientY - rect.top) / rect.height * 2 + 1) : null;
+    for (const h of [hit, this.lastPick]) {
+      if (h?.canonicalId === this.selected) return { position: h.point.toArray(), source: 'surface' };
+    }
+    const node = this.nodeByCanonical.get(this.selected);
+    if (!node) return null;
+    const box = new THREE.Box3().setFromObject(node);
+    return box.isEmpty() ? null : { position: box.getCenter(new THREE.Vector3()).toArray(), source: 'object-center' };
+  }
+
+  captureReviewCamera() {
+    const c = this.camera;
+    const target = this.navigationMode === 'game'
+      ? c.position.clone().addScaledVector(c.getWorldDirection(new THREE.Vector3()), this._orbitDistance || 10)
+      : this.controls.target;
+    return { position: c.position.toArray(), target: target.toArray(), quaternion: c.quaternion.toArray(),
+      up: c.up.toArray(), fov: c.fov, near: c.near, far: c.far };
+  }
+
+  restoreReviewCamera(pose) {
+    this.navigation.inputSource.releaseCapture();
+    const c = this.camera, damping = this.controls.enableDamping;
+    // Flush residual orbit motion before restoring a saved pose.
+    this.controls.enableDamping = false;
+    this.controls.update();
+    c.position.fromArray(pose.position);
+    c.up.fromArray(pose.up);
+    this.controls.target.fromArray(pose.target);
+    Object.assign(c, { fov: pose.fov, near: pose.near, far: pose.far });
+    c.updateProjectionMatrix();
+    this.controls.update();
+    c.quaternion.fromArray(pose.quaternion);
+    this.controls.enableDamping = damping;
+    this._orbitDistance = c.position.distanceTo(this.controls.target);
+    if (this.navigationMode === 'game') this.navigation.rebase();
+    this._hoverDirty = true;
+  }
+
+  revealReviewNode(canonical) {
+    const root = this.nodeByCanonical.get(canonical);
+    if (!root) return;
+    root.traverse(n => this.hiddenCanonicals.delete(n.userData?.name));
+    for (let n = root; n; n = n.parent) this.hiddenCanonicals.delete(n.userData?.name);
+    this._applyVisibility();
+  }
+
   enableBatchRendering(options = {}) {
     this.batchRendering?.dispose();
     this.batchRendering = new BatchRenderingManager(this, options);
@@ -764,7 +814,9 @@ export class Model3D {
   }
 
   _pickAtNdc(ndcX, ndcY, opts = {}) {
-    const key = this._resolveAtNdc(ndcX, ndcY);
+    const hit = this._hitAtNdc(ndcX, ndcY);
+    this.lastPick = hit ? { canonicalId: hit.canonicalId, point: hit.point.clone() } : null;
+    const key = hit?.canonicalId || null;
     // Ctrl 点空处不清空已有多选（否则多选过程中手一抖就全没了）
     if (!key && opts.additive) return;
     this.select(key, opts);
@@ -1125,7 +1177,7 @@ export class Model3D {
 
   resetTransientAppearance() {
     this.setContours(false);
-    this.setXray(false);
+    this.setXray(true);
     this.setXrayOpacity(XRAY_OPACITY_DEFAULT);
     this.clearAllObjectColors();
     return this.appearanceState();
@@ -1267,6 +1319,7 @@ export class Model3D {
       this.performance.beginFrame(now);
       const deltaSeconds = (now - lastFrame) / 1000;
       lastFrame = now;
+      this.sceneAppearance.update(deltaSeconds);
       if (this.navigationMode === 'game') {
         // 二选一：OrbitControls.update() 每帧都会无条件 lookAt(target)，与游戏导航写朝向互相打架
         this.navigation.update(deltaSeconds);
@@ -1293,6 +1346,7 @@ export class Model3D {
       this.composer.render();
       // 独立透明画布：只同步主相机旋转，不进入主场景、后处理、树或 raycast。
       this.orientationGizmo.update();
+      this.onReviewFrame?.();
       this.frameDrawCalls = this.renderer.info.render.calls;   // 本帧全部 pass 合计
       this.performance.endFrame();
       frames++;
