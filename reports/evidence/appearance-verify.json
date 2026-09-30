@@ -1,11 +1,11 @@
 {
-  "url": "http://127.0.0.1:8900/viewer/index.html",
-  "startedAt": "2026-09-21T13:11:00.542Z",
-  "ok": true,
+  "url": "http://127.0.0.1:8899/viewer/index.html",
+  "startedAt": "2026-09-23T13:43:07.699Z",
+  "ok": false,
   "steps": [
     {
       "step": "A1 默认两项都是关",
-      "ok": true,
+      "ok": false,
       "detail": {
         "globalModelColor": "#8d949c",
         "backgroundColor": "#eef1f3",
@@ -34,7 +34,7 @@
         "aoPassEnabled": false,
         "normalDepthPassEnabled": false,
         "contours": false,
-        "xray": false,
+        "xray": true,
         "xrayOpacity": 0.32,
         "ghostObjects": 0,
         "edgePassEnabled": false,
@@ -52,7 +52,7 @@
     },
     {
       "step": "A3 面板未打开时 UI 也是未勾选",
-      "ok": true
+      "ok": false
     },
     {
       "step": "B0 点「外观」打开面板",
@@ -71,11 +71,11 @@
         "groundColorDisabled": true,
         "floorPlanChecked": true,
         "contoursChecked": false,
-        "xrayChecked": false,
+        "xrayChecked": true,
         "opacitySlider": 32,
         "opacityLabel": "32%",
-        "opacityRowOff": true,
-        "opacityDisabled": true,
+        "opacityRowOff": false,
+        "opacityDisabled": false,
         "opacityVisible": true,
         "measurePanelOpen": false,
         "measureButtonOn": false
@@ -112,7 +112,7 @@
         "aoPassEnabled": false,
         "normalDepthPassEnabled": true,
         "contours": true,
-        "xray": false,
+        "xray": true,
         "xrayOpacity": 0.32,
         "ghostObjects": 0,
         "edgePassEnabled": true,
@@ -151,15 +151,15 @@
     },
     {
       "step": "D1 隐藏后 hidden 计数 +1，ghost 数为 0（半透明还没开）",
-      "ok": true,
+      "ok": false,
       "detail": {
         "hidden": 1,
-        "ghost": 0
+        "ghost": 1
       }
     },
     {
       "step": "D2 打开半透明后隐藏件仍在渲染（ghost 对象 > 0）",
-      "ok": true,
+      "ok": false,
       "detail": {
         "globalModelColor": "#8d949c",
         "backgroundColor": "#eef1f3",
@@ -188,11 +188,11 @@
         "aoPassEnabled": false,
         "normalDepthPassEnabled": true,
         "contours": true,
-        "xray": true,
+        "xray": false,
         "xrayOpacity": 0.32,
-        "ghostObjects": 1,
+        "ghostObjects": 0,
         "edgePassEnabled": true,
-        "edgeSceneDrawCalls": 106,
+        "edgeSceneDrawCalls": 105,
         "ghostMeshOpacity": 0.32,
         "ghostLineOpacity": 0.512,
         "ghostMeshColor": "9aa6b2",
@@ -247,11 +247,11 @@
         "aoPassEnabled": false,
         "normalDepthPassEnabled": true,
         "contours": true,
-        "xray": true,
+        "xray": false,
         "xrayOpacity": 0.32,
-        "ghostObjects": 1,
+        "ghostObjects": 0,
         "edgePassEnabled": true,
-        "edgeSceneDrawCalls": 106,
+        "edgeSceneDrawCalls": 105,
         "ghostMeshOpacity": 0.32,
         "ghostLineOpacity": 0.512,
         "ghostMeshColor": "9aa6b2",
@@ -278,7 +278,7 @@
     },
     {
       "step": "E3 UI 勾选/滑块与 3D 状态一致",
-      "ok": true,
+      "ok": false,
       "detail": {
         "panelOpen": true,
         "navPanelOpen": false,
@@ -293,11 +293,11 @@
         "groundColorDisabled": true,
         "floorPlanChecked": true,
         "contoursChecked": true,
-        "xrayChecked": true,
+        "xrayChecked": false,
         "opacitySlider": 32,
         "opacityLabel": "32%",
-        "opacityRowOff": false,
-        "opacityDisabled": false,
+        "opacityRowOff": true,
+        "opacityDisabled": true,
         "opacityVisible": true,
         "measurePanelOpen": false,
         "measureButtonOn": false
@@ -367,11 +367,11 @@
           "aoPassEnabled": false,
           "normalDepthPassEnabled": true,
           "contours": true,
-          "xray": true,
+          "xray": false,
           "xrayOpacity": 0.7,
-          "ghostObjects": 1,
+          "ghostObjects": 0,
           "edgePassEnabled": true,
-          "edgeSceneDrawCalls": 107,
+          "edgeSceneDrawCalls": 106,
           "ghostMeshOpacity": 0.7,
           "ghostLineOpacity": 0.95,
           "ghostMeshColor": "9aa6b2",
@@ -392,11 +392,11 @@
           "groundColorDisabled": true,
           "floorPlanChecked": true,
           "contoursChecked": true,
-          "xrayChecked": true,
+          "xrayChecked": false,
           "opacitySlider": 70,
           "opacityLabel": "70%",
-          "opacityRowOff": false,
-          "opacityDisabled": false,
+          "opacityRowOff": true,
+          "opacityDisabled": true,
           "opacityVisible": true,
           "measurePanelOpen": false,
           "measureButtonOn": false
@@ -413,7 +413,7 @@
     },
     {
       "step": "E4 关掉半透明后 ghost 归零、隐藏件回到真隐藏",
-      "ok": true,
+      "ok": false,
       "detail": {
         "a4": {
           "globalModelColor": "#8d949c",
@@ -443,11 +443,11 @@
           "aoPassEnabled": false,
           "normalDepthPassEnabled": true,
           "contours": true,
-          "xray": false,
+          "xray": true,
           "xrayOpacity": 0.32,
-          "ghostObjects": 0,
+          "ghostObjects": 1,
           "edgePassEnabled": true,
-          "edgeSceneDrawCalls": 106,
+          "edgeSceneDrawCalls": 107,
           "ghostMeshOpacity": 0.32,
           "ghostLineOpacity": 0.512,
           "ghostMeshColor": "9aa6b2",
@@ -455,28 +455,28 @@
           "objectColorOverrides": 0
         },
         "stats4": {
-          "frameTimeMs": 17.600000023841858,
-          "cpuFrameTimeMs": 15.800000011920929,
-          "gpuFrameTimeMs": 14.838784,
+          "frameTimeMs": 13.5,
+          "cpuFrameTimeMs": 13.600000023841858,
+          "gpuFrameTimeMs": 10.212352,
           "gpuTimerStatus": "available",
           "resolution": "1124×856",
           "pixelRatio": 1,
           "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Laptop GPU (0x000028A0) Direct3D11 vs_5_0 ps_5_0, D3D11)",
           "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
           "gpuTimerQuery": true,
-          "fps": 54,
-          "drawCalls": 399,
-          "triangles": 336204,
-          "frameDrawCallsAllPasses": 912,
+          "fps": 75,
+          "drawCalls": 400,
+          "triangles": 336216,
+          "frameDrawCallsAllPasses": 915,
           "outlineEnabled": true,
           "contours": true,
-          "xray": false,
+          "xray": true,
           "xrayOpacity": 0.32,
           "interacting": false,
           "visible": 7419,
           "hidden": 1,
           "navigationMode": "orbit",
-          "visibleMeshes": 107,
+          "visibleMeshes": 108,
           "visibleLines": 291
         }
       }
@@ -490,22 +490,22 @@
       "step": "E6 显示全部后隐藏与 ghost 都归零",
       "ok": true,
       "detail": {
-        "frameTimeMs": 17,
-        "cpuFrameTimeMs": 17,
-        "gpuFrameTimeMs": 13.554688,
+        "frameTimeMs": 16.5,
+        "cpuFrameTimeMs": 15.099999904632568,
+        "gpuFrameTimeMs": 12.637184,
         "gpuTimerStatus": "available",
         "resolution": "1124×856",
         "pixelRatio": 1,
         "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Laptop GPU (0x000028A0) Direct3D11 vs_5_0 ps_5_0, D3D11)",
         "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
         "gpuTimerQuery": true,
-        "fps": 55,
+        "fps": 57,
         "drawCalls": 399,
         "triangles": 336216,
         "frameDrawCallsAllPasses": 912,
         "outlineEnabled": true,
         "contours": true,
-        "xray": false,
+        "xray": true,
         "xrayOpacity": 0.32,
         "interacting": false,
         "visible": 7420,
@@ -546,7 +546,7 @@
         "aoPassEnabled": false,
         "normalDepthPassEnabled": false,
         "contours": false,
-        "xray": false,
+        "xray": true,
         "xrayOpacity": 0.32,
         "ghostObjects": 0,
         "edgePassEnabled": false,
@@ -583,11 +583,11 @@
         "groundColorDisabled": true,
         "floorPlanChecked": true,
         "contoursChecked": false,
-        "xrayChecked": false,
+        "xrayChecked": true,
         "opacitySlider": 32,
         "opacityLabel": "32%",
-        "opacityRowOff": true,
-        "opacityDisabled": true,
+        "opacityRowOff": false,
+        "opacityDisabled": false,
         "opacityVisible": false,
         "measurePanelOpen": false,
         "measureButtonOn": false
@@ -610,11 +610,11 @@
         "groundColorDisabled": true,
         "floorPlanChecked": true,
         "contoursChecked": false,
-        "xrayChecked": false,
+        "xrayChecked": true,
         "opacitySlider": 32,
         "opacityLabel": "32%",
-        "opacityRowOff": true,
-        "opacityDisabled": true,
+        "opacityRowOff": false,
+        "opacityDisabled": false,
         "opacityVisible": true,
         "measurePanelOpen": false,
         "measureButtonOn": false
@@ -681,7 +681,9 @@
           "hidden": 0,
           "selected": null,
           "outlineObjects": 0,
-          "ready": true
+          "ready": true,
+          "compareRoots": 0,
+          "compareBatchMeshes": null
         },
         "after": {
           "geometries": 398,
@@ -693,7 +695,9 @@
           "hidden": 0,
           "selected": null,
           "outlineObjects": 0,
-          "ready": true
+          "ready": true,
+          "compareRoots": 0,
+          "compareBatchMeshes": null
         }
       }
     },
@@ -711,7 +715,9 @@
           "hidden": 0,
           "selected": null,
           "outlineObjects": 0,
-          "ready": true
+          "ready": true,
+          "compareRoots": 0,
+          "compareBatchMeshes": null
         },
         "after": {
           "geometries": 398,
@@ -723,12 +729,17 @@
           "hidden": 0,
           "selected": null,
           "outlineObjects": 0,
-          "ready": true
+          "ready": true,
+          "compareRoots": 0,
+          "compareBatchMeshes": null
         }
       }
     }
   ],
-  "console": [],
+  "console": [
+    "error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "error: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
   "pageErrors": [],
   "modelInfo": {
     "meshes": 5507,
@@ -756,14 +767,16 @@
     "hidden": 0,
     "selected": null,
     "outlineObjects": 0,
-    "ready": true
+    "ready": true,
+    "compareRoots": 0,
+    "compareBatchMeshes": null
   },
   "perf": {
     "fpsContoursOff": 180,
-    "fpsContoursOn": 118,
+    "fpsContoursOn": 156,
     "frameCallsOff": 399,
     "frameCallsOn": 505,
-    "fpsCleanOff": 123,
+    "fpsCleanOff": 154,
     "fpsCleanOn": 180,
     "consoleWarnOff": 0,
     "consoleWarnOn": 0
@@ -784,13 +797,22 @@
     "hidden": 0,
     "selected": null,
     "outlineObjects": 0,
-    "ready": true
+    "ready": true,
+    "compareRoots": 0,
+    "compareBatchMeshes": null
   },
   "summary": {
     "total": 31,
-    "passed": 31,
-    "failed": [],
+    "passed": 25,
+    "failed": [
+      "A1 默认两项都是关",
+      "A3 面板未打开时 UI 也是未勾选",
+      "D1 隐藏后 hidden 计数 +1，ghost 数为 0（半透明还没开）",
+      "D2 打开半透明后隐藏件仍在渲染（ghost 对象 > 0）",
+      "E3 UI 勾选/滑块与 3D 状态一致",
+      "E4 关掉半透明后 ghost 归零、隐藏件回到真隐藏"
+    ],
     "pageErrors": 0,
-    "consoleIssues": 0
+    "consoleIssues": 2
   }
 }

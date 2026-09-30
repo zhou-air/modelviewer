@@ -51,6 +51,10 @@ STATUS_IMPORTING = "importing"
 STATUS_READY = "ready"
 STATUS_FAILED = "failed"
 
+# 元数据来源：有 TXT（PDMS Data Listing）走 txt_parser，只有 RVM 时由 rvm_metadata 合成
+METADATA_SOURCE_TXT = "pdms-datalisting"
+METADATA_SOURCE_RVM = "rvm"
+
 LOCK = threading.RLock()
 
 
@@ -363,7 +367,8 @@ def scan_version(vdir: Path) -> dict:
                 "createdAt": None, "importedAt": file_mtime_iso(vdir), "error": {
                     "stage": "scan", "message": "version.json 缺失（可能是中断的导入）"},
                 "stats": {}, "assets": None, "originalRvmFilename": None,
-                "originalTxtFilename": None, "rvmBytes": None, "glbBytes": None,
+                "originalTxtFilename": None, "metadataSource": None,
+                "rvmBytes": None, "glbBytes": None,
                 "objectCount": None, "mappingRate": None}
     doc = read_json(f)
     st = doc.get("stats") or {}
@@ -377,6 +382,10 @@ def scan_version(vdir: Path) -> dict:
         "error": doc.get("error"),
         "originalRvmFilename": doc.get("originalRvmFilename"),
         "originalTxtFilename": doc.get("originalTxtFilename"),
+        # 老版本（RVM+TXT 时代）没有这个字段，按有 TXT 兜底
+        "metadataSource": doc.get("metadataSource")
+                          or (METADATA_SOURCE_TXT if doc.get("originalTxtFilename")
+                              else METADATA_SOURCE_RVM),
         "rvmBytes": st.get("rvmBytes"),
         "txtBytes": st.get("txtBytes"),
         "glbBytes": st.get("glbBytes"),
@@ -473,7 +482,9 @@ def new_version_doc(vid: str, name: str, created_at: str, *,
         "createdAt": created_at,
         "importedAt": now_iso(),
         "sourceRvm": f"source/{SOURCE_RVM}",
-        "sourceTxt": f"source/{SOURCE_TXT}",
+        "sourceTxt": f"source/{SOURCE_TXT}" if original_txt else None,
+        # 导入完成时会改写；建单时先按"有没有选 TXT"给一个值，供前端即时显示
+        "metadataSource": (METADATA_SOURCE_TXT if original_txt else METADATA_SOURCE_RVM),
         "originalRvmFilename": original_rvm,
         "originalTxtFilename": original_txt,
         "status": STATUS_IMPORTING,

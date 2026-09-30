@@ -31,6 +31,8 @@ export const NavigationDefaults = Object.freeze({
   NormalSpeedMaximum: 500.0,
   SprintMultiplierMinimum: 1.0,
   SprintMultiplierMaximum: 10.0,
+  MouseSensitivityMinimum: 0.01,
+  MouseSensitivityMaximum: 2.0,
 });
 
 export const MouseSensitivityRadiansPerPixel =
@@ -46,6 +48,7 @@ export function createDefaultSettings() {
     schemaVersion: SCHEMA_VERSION,
     normalSpeedMetersPerSecond: NavigationDefaults.NormalSpeedMetersPerSecond,
     sprintMultiplier: NavigationDefaults.SprintMultiplier,
+    mouseSensitivityDegreesPerPixel: NavigationDefaults.MouseSensitivityDegreesPerPixel,
   };
 }
 
@@ -58,11 +61,17 @@ export function validateOrDefault(value) {
     && value.normalSpeedMetersPerSecond <= NavigationDefaults.NormalSpeedMaximum
     && Number.isFinite(value.sprintMultiplier)
     && value.sprintMultiplier >= NavigationDefaults.SprintMultiplierMinimum
-    && value.sprintMultiplier <= NavigationDefaults.SprintMultiplierMaximum;
+    && value.sprintMultiplier <= NavigationDefaults.SprintMultiplierMaximum
+    && (value.mouseSensitivityDegreesPerPixel === undefined
+      || (Number.isFinite(value.mouseSensitivityDegreesPerPixel)
+        && value.mouseSensitivityDegreesPerPixel >= NavigationDefaults.MouseSensitivityMinimum
+        && value.mouseSensitivityDegreesPerPixel <= NavigationDefaults.MouseSensitivityMaximum));
   return ok ? {
     schemaVersion: value.schemaVersion,
     normalSpeedMetersPerSecond: value.normalSpeedMetersPerSecond,
     sprintMultiplier: value.sprintMultiplier,
+    mouseSensitivityDegreesPerPixel: value.mouseSensitivityDegreesPerPixel
+      ?? NavigationDefaults.MouseSensitivityDegreesPerPixel,
   } : createDefaultSettings();
 }
 
@@ -106,4 +115,5 @@ export class NavigationSettingsStore {
   /** 每帧都要读，原插件同样是 `_settingsStore.Current.NormalSpeedMetersPerSecond` */
   get normalSpeedMetersPerSecond() { return this.current.normalSpeedMetersPerSecond; }
   get sprintMultiplier() { return this.current.sprintMultiplier; }
+  get mouseSensitivityDegreesPerPixel() { return this.current.mouseSensitivityDegreesPerPixel; }
 }

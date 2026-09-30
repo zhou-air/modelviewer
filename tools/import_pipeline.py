@@ -11,6 +11,14 @@
     HTTP  ：tools/server.py 建 job → PUT 源文件 → POST /start（后台线程跑）
     CLI   ：python tools/import_pipeline.py --project qichuang --model main-site \
               --version 2026-09-25 --rvm X.rvm --txt X.txt
+    CLI 仅 RVM：去掉 --txt 即可（元数据由 RVM 合成，见下）
+
+两种元数据来源（由**源文件是否在场**决定，不是靠开关）
+    · 有 TXT（PDMS Data Listing）：metadata = txt_parser、mapping = map_objects、
+      floorplan = 设备定位工具；三条独立闸门（verify_glb / verify_metadata / verify_mapping）。
+    · 仅 RVM：metadata + mapping = rvm_metadata 合成（canonical 就是 RVM 组名），
+      跳过 floorplan；闸门 = verify_glb + verify_rvm_metadata（含逐条字节偏移回读）。
+      代价：没有 POS/DIAM/PRES/TEMP/DESC 等工程属性，也没有设备定位图。
 """
 from __future__ import annotations
 
@@ -104,6 +112,10 @@ class Job:
         self.rvm_filename = rvm_filename
         self.txt_filename = txt_filename
         self.resume = resume               # 重试：源文件已在版本目录里，不需要重新上传
+        # "有 TXT 走 txt_parser，只有 RVM 走 rvm_metadata 合成" —— 建单时先按文件名猜一个，
+        # run_job 里按**实际源文件**校准（重试路径的文件名是老版本记录的，不能当依据）
+        self.metadata_source = (S.METADATA_SOURCE_TXT if txt_filename
+                                else S.METADATA_SOURCE_RVM)
         self.status = "queued"
         self.stage = "queued"
         self.error: dict | None = None
@@ -123,6 +135,7 @@ class Job:
             "projectId": self.project_id, "modelId": self.model_id,
             "versionId": self.version_id, "versionName": self.version_name,
             "rvmFilename": self.rvm_filename, "txtFilename": self.txt_filename,
+            "metadataSource": self.metadata_source,
             "result": self.result,
             "location": f"data/projects/{self.project_id}/models/{self.model_id}"
                         f"/versions/{self.version_id}",
@@ -254,14 +267,23 @@ def create_job(*, project_id: str | None, model_id: str | None, version_name: st
 
 
 def retry_job(project_id: str, model_id: str, version_id: str) -> Job:
-    """失败版本原地重跑：源文件已在 version/source/ 里，不重新上传。"""
+    """失败版本原地重跑：源文件已在 version/source/ 里，不重新上传。
+
+    TXT 是否在场按**文件实际存在**判断，不看 version.json 里记的文件名 ——
+    仅 RVM 版本本来就没有 TXT，重试必须能识别出来并继续走合成链路。
+    """
     vdir = S.require_version(project_id, model_id, version_id)
     doc = S.read_json(vdir / "version.json")
+    src = vdir / "source"
+    has_rvm = (src / S.SOURCE_RVM).is_file()
+    has_txt = (src / S.SOURCE_TXT).is_file()
     job = create_job(project_id=project_id, model_id=model_id,
                      version_name=doc.get("name") or version_id, version_id=version_id,
                      rvm_filename=doc.get("originalRvmFilename") or "",
-                     txt_filename=doc.get("originalTxtFilename") or "", resume=True)
-    job.uploaded = {"rvm": True, "txt": True}
+                     txt_filename=(doc.get("originalTxtFilename") or "") if has_txt else "",
+                     resume=True)
+    job.uploaded = {"rvm": has_rvm, "txt": has_txt}
+    job.metadata_source = S.METADATA_SOURCE_TXT if has_txt else S.METADATA_SOURCE_RVM
     job.persist()
     start_job(job)
     return job
@@ -287,9 +309,9 @@ def save_upload(job: Job, which: str, data: bytes) -> int:
 def start_job(job: Job) -> Job:
     if job.status in ("copying", "geometry", "metadata", "mapping", "validating"):
         raise S.StoreError("job_running", "该导入任务正在执行中", 409)
-    if not job.resume and not (job.uploaded["rvm"] and job.uploaded["txt"]):
-        missing = [k.upper() for k in ("rvm", "txt") if not job.uploaded[k]]
-        raise S.StoreError("source_missing", f"还缺源文件：{', '.join(missing)}")
+    # RVM 是唯一必需项；TXT 可选（不给则元数据由 RVM 合成，只剩名字/层级/类型、无工程属性）
+    if not job.resume and not job.uploaded["rvm"]:
+        raise S.StoreError("source_missing", "还缺源文件：RVM")
     job.status = "running"
     job.stage = "queued"
     job.error = None
@@ -354,6 +376,12 @@ def run_job(job: Job) -> dict:
         job._log.append(f"[copying] 新建 Model {job.model_id}（{job.new_model_name}）")
 
     vdir = S.version_dir(job.project_id, job.model_id, job.version_id)
+
+    # 本次到底有没有 TXT？以**实际文件**为准（暂存区里刚上传的，或重试时 source/ 里既有的），
+    # 不看界面传进来的文件名 —— 仅 RVM 版本本来就没有 TXT。
+    has_txt = (staged_path(job, "txt").is_file() or (vdir / "source" / S.SOURCE_TXT).is_file())
+    job.metadata_source = (S.METADATA_SOURCE_TXT if has_txt else S.METADATA_SOURCE_RVM)
+
     fresh = not (vdir / "version.json").exists()
     if fresh:
         (vdir / "source").mkdir(parents=True, exist_ok=True)
@@ -363,7 +391,7 @@ def run_job(job: Job) -> dict:
         doc = S.new_version_doc(job.version_id, job.version_name,
                                 S.file_mtime_iso(rvm_src),
                                 original_rvm=job.rvm_filename,
-                                original_txt=job.txt_filename)
+                                original_txt=(job.txt_filename or None) if has_txt else None)
         S.write_json(vdir / "version.json", doc)
     else:
         # 重试：源文件已在位，只清理上一次的派生数据（源文件是只读的，任何情况下都不动）
@@ -377,6 +405,10 @@ def run_job(job: Job) -> dict:
         job._log.append(f"[copying] 重试：保留 source/，清理了 {n_removed} 个上一次的派生文件")
 
     for which, fixed in (("rvm", S.SOURCE_RVM), ("txt", S.SOURCE_TXT)):
+        if which == "txt" and not has_txt:
+            job._log.append("[copying] 未提供 TXT —— 元数据将由 RVM 合成"
+                            "（只有名称、层级、类型；没有工程属性与设备定位图）")
+            continue
         dst = vdir / "source" / fixed
         if not dst.exists():
             os.replace(staged_path(job, which), dst)
@@ -405,72 +437,109 @@ def run_job(job: Job) -> dict:
     stages["geometry"] = int((time.perf_counter() - t0) * 1000)
     job._done("geometry", stages["geometry"])
 
-    # ---------------- metadata（② 现有转换器）----------------
+    # ---------------- metadata（有 TXT：② 现有转换器 / 仅 RVM：合成）----------------
+    fp_stats: dict = {}
     job._enter("metadata")
     t0 = time.perf_counter()
-    p = _run([PY, "converter/txt_parser.py", "--source", txt_rel,
-              "--out", f"{rel_v}/processed/{S.METADATA}",
-              "--metamodel", f"{rel_v}/processed/{S.METAMODEL}"], job._log)
-    job._flush_log()
-    if p.returncode != 0 or not (vdir / "processed" / S.METADATA).exists():
-        return _failed(job, "metadata", "TXT → metadata 解析失败", p)
-    meta0 = S.read_json(vdir / "processed" / S.METADATA)
-    if (meta0.get("stats", {}).get("objects") or 0) < 1:
-        # 不是合法的 PDMS Data Listing（解析器不会为此报错，但 0 个对象没有意义）：
-        # 提前在这个阶段失败，别让它跑到校验阶段才暴露
-        return _failed(job, "metadata",
-                       "TXT 解析出 0 个对象 —— 该文件不是 PDMS Data Listing，或用错了文件")
+    if job.metadata_source == S.METADATA_SOURCE_TXT:
+        p = _run([PY, "converter/txt_parser.py", "--source", txt_rel,
+                  "--out", f"{rel_v}/processed/{S.METADATA}",
+                  "--metamodel", f"{rel_v}/processed/{S.METAMODEL}"], job._log)
+        job._flush_log()
+        if p.returncode != 0 or not (vdir / "processed" / S.METADATA).exists():
+            return _failed(job, "metadata", "TXT → metadata 解析失败", p)
+        meta0 = S.read_json(vdir / "processed" / S.METADATA)
+        if (meta0.get("stats", {}).get("objects") or 0) < 1:
+            # 不是合法的 PDMS Data Listing（解析器不会为此报错，但 0 个对象没有意义）：
+            # 提前在这个阶段失败，别让它跑到校验阶段才暴露
+            return _failed(job, "metadata",
+                           "TXT 解析出 0 个对象 —— 该文件不是 PDMS Data Listing，或用错了文件")
 
-    # 同一份 source/model.txt 交给既有设备定位工具。该工具内部继续复用
-    # PdmsDataListingParser + OutlineBuilder；Viewer 不维护第二套 PDMS TXT 解析逻辑。
-    floorplan_path = vdir / "processed" / S.FLOORPLAN
-    try:
-        floorplan_exe = _floorplan_tool()
-    except S.StoreError as e:
-        return _failed(job, "metadata", e.message)
-    p = _run([str(floorplan_exe), "floorplan", str(vdir / "source" / S.SOURCE_TXT),
-              str(floorplan_path)], job._log)
-    if p.returncode != 0 or not floorplan_path.exists():
-        return _failed(job, "metadata", "设备定位图 floorplan.json 导出失败", p)
-    try:
-        floorplan = S.read_json(floorplan_path)
-        fp_stats = floorplan.get("stats") or {}
-        floorplan_ok = (
-            floorplan.get("schema") == "pdms-equipment-floorplan/1"
-            and floorplan.get("units") == "mm"
-            and floorplan.get("coordinateSystem") == "PDMS_WORLD_XY_Z_UP"
-            and isinstance(floorplan.get("equipment"), list)
-            and fp_stats.get("equipment") == len(floorplan["equipment"])
-        )
-    except Exception:  # noqa: BLE001
-        floorplan, fp_stats, floorplan_ok = {}, {}, False
-    if not floorplan_ok:
-        return _failed(job, "metadata", "floorplan.json 合同校验失败")
+        # 同一份 source/model.txt 交给既有设备定位工具。该工具内部继续复用
+        # PdmsDataListingParser + OutlineBuilder；Viewer 不维护第二套 PDMS TXT 解析逻辑。
+        floorplan_path = vdir / "processed" / S.FLOORPLAN
+        try:
+            floorplan_exe = _floorplan_tool()
+        except S.StoreError as e:
+            return _failed(job, "metadata", e.message)
+        p = _run([str(floorplan_exe), "floorplan", str(vdir / "source" / S.SOURCE_TXT),
+                  str(floorplan_path)], job._log)
+        if p.returncode != 0 or not floorplan_path.exists():
+            return _failed(job, "metadata", "设备定位图 floorplan.json 导出失败", p)
+        try:
+            floorplan = S.read_json(floorplan_path)
+            fp_stats = floorplan.get("stats") or {}
+            floorplan_ok = (
+                floorplan.get("schema") == "pdms-equipment-floorplan/1"
+                and floorplan.get("units") == "mm"
+                and floorplan.get("coordinateSystem") == "PDMS_WORLD_XY_Z_UP"
+                and isinstance(floorplan.get("equipment"), list)
+                and fp_stats.get("equipment") == len(floorplan["equipment"])
+            )
+        except Exception:  # noqa: BLE001
+            floorplan, fp_stats, floorplan_ok = {}, {}, False
+        if not floorplan_ok:
+            return _failed(job, "metadata", "floorplan.json 合同校验失败")
+    else:
+        # 仅 RVM：先用 rvm_index 取「字节偏移 + 名称 + 层级」，再由 rvm_metadata 合成
+        # Viewer 契约的 metadata.json + mapping.json。canonical 就是 RVM 组名，
+        # 与 TXT 链路同构，所以 Viewer 侧加载逻辑一行都不用改。
+        p = _run([PY, "converter/rvm_index.py", "--source", rvm_rel,
+                  "--out", f"{rel_v}/processed/{S.RVM_INDEX}"], job._log)
+        job._flush_log()
+        if p.returncode != 0 or not (vdir / "processed" / S.RVM_INDEX).exists():
+            return _failed(job, "metadata", "RVM 技术索引生成失败", p)
+
+        p = _run([PY, "converter/rvm_metadata.py",
+                  "--rvm-index", f"{rel_v}/processed/{S.RVM_INDEX}",
+                  "--glb", glb_rel,
+                  "--source", rvm_rel,
+                  "--metadata", f"{rel_v}/processed/{S.METADATA}",
+                  "--mapping", f"{rel_v}/processed/{S.MAPPING}",
+                  "--evidence-dir", f"{rel_v}/reports"], job._log)
+        job._flush_log()
+        if p.returncode != 0 or not (vdir / "processed" / S.METADATA).exists() \
+                or not (vdir / "processed" / S.MAPPING).exists():
+            return _failed(job, "metadata", "仅 RVM 模式的元数据合成失败", p)
+        meta0 = S.read_json(vdir / "processed" / S.METADATA)
+        if (meta0.get("stats", {}).get("objects") or 0) < 1:
+            return _failed(job, "metadata", "RVM 里没有任何组，无法合成元数据")
+        job._log.append(
+            f"[metadata] 仅 RVM 模式：{meta0['stats']['objects']:,} 个对象由 RVM 组名合成；"
+            f"工程属性不可用（RVM 不含属性），设备定位图已跳过")
+    job._flush_log()
     stages["metadata"] = int((time.perf_counter() - t0) * 1000)
     job._done("metadata", stages["metadata"])
 
-    # ---------------- mapping（①附 rvm_index + ③ map_objects）----------------
+    # ---------------- mapping（有 TXT：①附 rvm_index + ③ map_objects / 仅 RVM：已完成）----
     job._enter("mapping")
     t0 = time.perf_counter()
-    p = _run([PY, "converter/rvm_index.py", "--source", rvm_rel,
-              "--out", f"{rel_v}/processed/{S.RVM_INDEX}"], job._log)
-    job._flush_log()
-    if p.returncode != 0 or not (vdir / "processed" / S.RVM_INDEX).exists():
-        return _failed(job, "mapping", "RVM 技术索引生成失败", p)
+    if job.metadata_source == S.METADATA_SOURCE_TXT:
+        p = _run([PY, "converter/rvm_index.py", "--source", rvm_rel,
+                  "--out", f"{rel_v}/processed/{S.RVM_INDEX}"], job._log)
+        job._flush_log()
+        if p.returncode != 0 or not (vdir / "processed" / S.RVM_INDEX).exists():
+            return _failed(job, "mapping", "RVM 技术索引生成失败", p)
 
-    p = _run([PY, "converter/map_objects.py",
-              "--meta", f"{rel_v}/processed/{S.METADATA}",
-              "--rvm", f"{rel_v}/processed/{S.RVM_INDEX}",
-              "--glb", f"{rel_v}/processed/{S.GLB}",
-              "--out", f"{rel_v}/processed/{S.MAPPING}",
-              "--evidence-dir", f"{rel_v}/reports"], job._log)
-    job._flush_log()
-    if p.returncode != 0 or not (vdir / "processed" / S.MAPPING).exists():
-        return _failed(job, "mapping", "RVM ↔ TXT 对象映射失败", p)
+        p = _run([PY, "converter/map_objects.py",
+                  "--meta", f"{rel_v}/processed/{S.METADATA}",
+                  "--rvm", f"{rel_v}/processed/{S.RVM_INDEX}",
+                  "--glb", f"{rel_v}/processed/{S.GLB}",
+                  "--out", f"{rel_v}/processed/{S.MAPPING}",
+                  "--evidence-dir", f"{rel_v}/reports"], job._log)
+        job._flush_log()
+        if p.returncode != 0 or not (vdir / "processed" / S.MAPPING).exists():
+            return _failed(job, "mapping", "RVM ↔ TXT 对象映射失败", p)
+    else:
+        # 仅 RVM 模式没有"两套元数据要对齐"这件事：canonical 就是 RVM 组名，
+        # mapping 已在 metadata 阶段由 rvm_metadata.py 随 metadata 一并产出。
+        job._log.append("[mapping] 仅 RVM 模式：canonical ↔ GLB 节点 ↔ RVM 字节偏移 "
+                        "已随 metadata 一并合成，无需再跑 map_objects（本阶段无额外工作）")
+        job._flush_log()
     stages["mapping"] = int((time.perf_counter() - t0) * 1000)
     job._done("mapping", stages["mapping"])
 
-    # ---------------- validating（三条独立闸门）----------------
+    # ---------------- validating（GLB 闸门恒跑；元数据闸门按来源选）----------------
     job._enter("validating")
     t0 = time.perf_counter()
     rep = vdir / "reports"
@@ -488,29 +557,47 @@ def run_job(job: Job) -> dict:
                               "nodes": glb_res.get("counts", {}).get("nodes"),
                               "triangles": glb_res.get("geometry", {}).get("triangles")}})
 
-    meta_json = rep / "validation.metadata.json"
-    p = _run([PY, "converter/verify_metadata.py", "--source", txt_rel,
-              "--meta", f"{rel_v}/processed/{S.METADATA}",
-              "--json", _rel(meta_json)], job._log)
-    meta_res = S.read_json(meta_json) if meta_json.exists() else {}
-    m_fails = [c["name"] for c in meta_res.get("checks", []) if not c.get("ok")]
-    checks.append({"name": f'metadata 独立校验（{len(meta_res.get("checks", []))} 项）',
-                   "ok": p.returncode == 0, "detail": {"failed": m_fails[:12],
-                                                       "failedCount": len(m_fails)}})
+    if job.metadata_source == S.METADATA_SOURCE_TXT:
+        meta_json = rep / "validation.metadata.json"
+        p = _run([PY, "converter/verify_metadata.py", "--source", txt_rel,
+                  "--meta", f"{rel_v}/processed/{S.METADATA}",
+                  "--json", _rel(meta_json)], job._log)
+        meta_res = S.read_json(meta_json) if meta_json.exists() else {}
+        m_fails = [c["name"] for c in meta_res.get("checks", []) if not c.get("ok")]
+        checks.append({"name": f'metadata 独立校验（{len(meta_res.get("checks", []))} 项）',
+                       "ok": p.returncode == 0, "detail": {"failed": m_fails[:12],
+                                                           "failedCount": len(m_fails)}})
 
-    map_json = rep / "validation.mapping.json"
-    p = _run([PY, "converter/verify_mapping.py",
-              "--mapping", f"{rel_v}/processed/{S.MAPPING}",
-              "--meta", f"{rel_v}/processed/{S.METADATA}",
-              "--rvm-index", f"{rel_v}/processed/{S.RVM_INDEX}",
-              "--glb", f"{rel_v}/processed/{S.GLB}",
-              "--rvm", rvm_rel,
-              "--json", _rel(map_json)], job._log)
-    map_res = S.read_json(map_json) if map_json.exists() else {}
-    mp_fails = [c["name"] for c in map_res.get("checks", []) if not c.get("ok")]
-    checks.append({"name": f'mapping 独立校验（{len(map_res.get("checks", []))} 项）',
-                   "ok": p.returncode == 0, "detail": {"failed": mp_fails[:12],
-                                                       "failedCount": len(mp_fails)}})
+        map_json = rep / "validation.mapping.json"
+        p = _run([PY, "converter/verify_mapping.py",
+                  "--mapping", f"{rel_v}/processed/{S.MAPPING}",
+                  "--meta", f"{rel_v}/processed/{S.METADATA}",
+                  "--rvm-index", f"{rel_v}/processed/{S.RVM_INDEX}",
+                  "--glb", f"{rel_v}/processed/{S.GLB}",
+                  "--rvm", rvm_rel,
+                  "--json", _rel(map_json)], job._log)
+        map_res = S.read_json(map_json) if map_json.exists() else {}
+        mp_fails = [c["name"] for c in map_res.get("checks", []) if not c.get("ok")]
+        checks.append({"name": f'mapping 独立校验（{len(map_res.get("checks", []))} 项）',
+                       "ok": p.returncode == 0, "detail": {"failed": mp_fails[:12],
+                                                           "failedCount": len(mp_fails)}})
+    else:
+        # 仅 RVM：一条闸门同时覆盖 metadata 与 mapping（含逐条 rvmOffset 回读 RVM 二进制）
+        rvm_json = rep / "validation.rvm-metadata.json"
+        p = _run([PY, "converter/verify_rvm_metadata.py",
+                  "--metadata", f"{rel_v}/processed/{S.METADATA}",
+                  "--mapping", f"{rel_v}/processed/{S.MAPPING}",
+                  "--rvm-index", f"{rel_v}/processed/{S.RVM_INDEX}",
+                  "--glb", glb_rel,
+                  "--rvm", rvm_rel,
+                  "--json", _rel(rvm_json)], job._log)
+        rvm_res = S.read_json(rvm_json) if rvm_json.exists() else {}
+        r_fails = [c["name"] for c in rvm_res.get("checks", []) if not c.get("ok")]
+        checks.append({"name": f'仅 RVM 合成校验（{len(rvm_res.get("checks", []))} 项，'
+                               f'含 {rvm_res.get("readbackChecked", 0):,} 条字节偏移回读）',
+                       "ok": p.returncode == 0, "detail": {"failed": r_fails[:12],
+                                                           "failedCount": len(r_fails),
+                                                           "source": S.METADATA_SOURCE_RVM}})
     job._flush_log()
 
     validation = {"schema": "pdms-import-validation/1", "at": S.now_iso(),
@@ -533,9 +620,13 @@ def run_job(job: Job) -> dict:
     doc["status"] = S.STATUS_READY
     doc["error"] = None
     doc["importedAt"] = S.now_iso()
+    doc["metadataSource"] = job.metadata_source
+    doc["sourceTxt"] = f"source/{S.SOURCE_TXT}" if has_txt else None
     doc["stats"] = {
+        "metadataSource": job.metadata_source,
         "rvmBytes": (vdir / "source" / S.SOURCE_RVM).stat().st_size,
-        "txtBytes": (vdir / "source" / S.SOURCE_TXT).stat().st_size,
+        # 仅 RVM 版本没有 TXT：如实置 null，不写 0（0 会被读成"有一份空文件"）
+        "txtBytes": ((vdir / "source" / S.SOURCE_TXT).stat().st_size if has_txt else None),
         "glbBytes": (vdir / "processed" / S.GLB).stat().st_size,
         "objectCount": meta.get("stats", {}).get("objects"),
         "namedNodes": mst.get("glbNamedNodes"),
@@ -590,7 +681,9 @@ def main() -> int:
     ap.add_argument("--version", required=True, help="Version 名称（同时用作目录名 slug）")
     ap.add_argument("--version-id", default=None)
     ap.add_argument("--rvm", type=Path, required=True)
-    ap.add_argument("--txt", type=Path, required=True)
+    ap.add_argument("--txt", type=Path, default=None,
+                    help="PDMS Data Listing（可选）。不给则只按 RVM 合成元数据："
+                         "有名称/层级/类型，没有工程属性与设备定位图")
     ap.add_argument("--create-project", action="store_true",
                     help="允许按 --new-project 自动建 Project")
     ap.add_argument("--create-model", action="store_true",
@@ -604,12 +697,13 @@ def main() -> int:
             version_name=a.version, version_id=a.version_id,
             new_project_name=a.new_project if not a.project or a.create_project else None,
             new_model_name=a.new_model if not a.model or a.create_model else None,
-            rvm_filename=a.rvm.name, txt_filename=a.txt.name)
+            rvm_filename=a.rvm.name, txt_filename=(a.txt.name if a.txt else ""))
     except S.StoreError as e:
         print(f"[拒绝] {e.message}")
         return 2
     save_upload(job, "rvm", a.rvm.read_bytes())
-    save_upload(job, "txt", a.txt.read_bytes())
+    if a.txt:
+        save_upload(job, "txt", a.txt.read_bytes())
     run_job(job)                       # CLI 模式同步执行，日志直接打到 stdout
     print(job.log_text())
     print(f"状态：{job.status}  阶段：{job.stage}")

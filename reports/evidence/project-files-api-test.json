@@ -1,0 +1,416 @@
+{
+  "suite": "Project Files isolated HTTP regression",
+  "startedAt": "2026-09-30T05:39:32.418022+00:00",
+  "ok": true,
+  "isolation": "All runtime data/config/access files are in tempfile.TemporaryDirectory",
+  "coverage": "API and filesystem only; upload picker, search/type UI, confirmations, and layout require browser verification",
+  "checks": [
+    {
+      "name": "New projects expose empty independent lists and 100 MB limit",
+      "ok": true,
+      "detail": {
+        "projects": [
+          "files-a",
+          "files-b"
+        ],
+        "maxFileBytes": 104857600
+      },
+      "durationMs": 21
+    },
+    {
+      "name": "Multiple uploads preserve names, bytes, size, timestamps, and optional relation fields",
+      "ok": true,
+      "detail": {
+        "fileNames": [
+          "设备表.xlsx",
+          "设计条件.PDF",
+          "plot.DWG",
+          "memo.docx",
+          "photo.JPEG",
+          "notes.bin"
+        ],
+        "count": 6
+      },
+      "durationMs": 215
+    },
+    {
+      "name": "File types classify case-insensitive CAD/PDF/spreadsheet/document/image/other extensions",
+      "ok": true,
+      "detail": {
+        "one.dwG": "CAD",
+        "two.DxF": "CAD",
+        "three.pDf": "PDF",
+        "four.xLsX": "Spreadsheet",
+        "five.XLS": "Spreadsheet",
+        "six.CsV": "Spreadsheet",
+        "seven.DoC": "Document",
+        "eight.DOCX": "Document",
+        "nine.PNG": "Image",
+        "ten.JPG": "Image",
+        "eleven.jPeG": "Image",
+        "twelve.GIF": "Image",
+        "thirteen.WeBP": "Image",
+        "fourteen.BMP": "Image",
+        "fifteen.TIFF": "Image",
+        "plain": "Other",
+        "unknown.custom": "Other"
+      },
+      "durationMs": 468
+    },
+    {
+      "name": "Lists default to newest upload first",
+      "ok": true,
+      "detail": {
+        "first": "最新上传.txt",
+        "count": 7,
+        "uploadTimes": [
+          "2026-09-30T05:39:33.340706+00:00",
+          "2026-09-30T05:39:32.818322+00:00",
+          "2026-09-30T05:39:32.768566+00:00",
+          "2026-09-30T05:39:32.741306+00:00",
+          "2026-09-30T05:39:32.698088+00:00",
+          "2026-09-30T05:39:32.675627+00:00",
+          "2026-09-30T05:39:32.649313+00:00"
+        ]
+      },
+      "durationMs": 52
+    },
+    {
+      "name": "Project switching isolates lists and rejects foreign file IDs",
+      "ok": true,
+      "detail": {
+        "aCount": 7,
+        "bCount": 17,
+        "crossProjectDownload": 404,
+        "crossProjectDelete": 404
+      },
+      "durationMs": 93
+    },
+    {
+      "name": "Same-name uploads receive safe numbered names without overwriting, ignoring case",
+      "ok": true,
+      "detail": {
+        "original": "设备表.xlsx",
+        "duplicates": [
+          "设备表 (1).xlsx",
+          "设备表 (2).XLSX"
+        ]
+      },
+      "durationMs": 73
+    },
+    {
+      "name": "Concurrent same-name uploads commit unique records and exact bytes",
+      "ok": true,
+      "detail": {
+        "count": 6,
+        "fileNames": [
+          "parallel (1).csv",
+          "parallel (2).csv",
+          "parallel (3).csv",
+          "parallel (4).csv",
+          "parallel (5).csv",
+          "parallel.csv"
+        ]
+      },
+      "durationMs": 212
+    },
+    {
+      "name": "Unsafe paths, Windows reserved names, control characters, and long names are safe or rejected",
+      "ok": true,
+      "detail": [
+        {
+          "input": "../../外部.xlsx",
+          "saved": ".._.._外部.xlsx"
+        },
+        {
+          "input": "C:\\temp\\恶意.docx",
+          "saved": "C__temp_恶意.docx"
+        },
+        {
+          "input": "CON.pdf",
+          "saved": "_CON.pdf"
+        },
+        {
+          "input": "LPT1.xlsx",
+          "saved": "_LPT1.xlsx"
+        },
+        {
+          "input": "ends. ",
+          "saved": "ends"
+        },
+        {
+          "input": "bad<>:\"|?*.txt",
+          "saved": "bad_______.txt"
+        },
+        {
+          "input": "control\r\nname.pdf",
+          "saved": "control__name.pdf"
+        },
+        {
+          "input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "saved": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.xlsx"
+        },
+        {
+          "input": "设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设",
+          "saved": "设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备设备.pdf"
+        },
+        {
+          "input": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+          "saved": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀.jpg"
+        }
+      ],
+      "durationMs": 274
+    },
+    {
+      "name": "Downloads return exact binary bytes, attachment disposition, Unicode name, and nosniff",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "size": 12,
+        "contentDisposition": "attachment; filename=\"download\"; filename*=UTF-8''%E8%AE%BE%E5%A4%87%E8%A1%A8.xlsx"
+      },
+      "durationMs": 20
+    },
+    {
+      "name": "Delete retains existing password protection, removes record/download, and moves bytes to trash",
+      "ok": true,
+      "detail": {
+        "passwordRequired": true,
+        "wrongPasswordDenied": true,
+        "removed": "0f49b678bf9940ad8e1f9817fab7ab80",
+        "bytesPreservedInTrash": true
+      },
+      "durationMs": 74
+    },
+    {
+      "name": "Anonymous remote clients cannot list, download, upload, or delete files",
+      "ok": true,
+      "detail": {
+        "read": 401,
+        "download": 401,
+        "upload": 401,
+        "delete": 401
+      },
+      "durationMs": 16
+    },
+    {
+      "name": "Project-code customers may read only their project, cannot write, and keep sanitized project manifests",
+      "ok": true,
+      "detail": {
+        "login": "CLIENT_PROJECT",
+        "ownProjectRead": 200,
+        "foreignProjectRead": 403,
+        "upload": 403,
+        "delete": 403
+      },
+      "durationMs": 110
+    },
+    {
+      "name": "Daily internal code retains all-project remote read-only behavior with isolated access records",
+      "ok": true,
+      "detail": {
+        "login": "INTERNAL_REMOTE",
+        "allProjectRead": 200,
+        "download": 200,
+        "upload": 403,
+        "delete": 403,
+        "dailyCodeIsolated": true
+      },
+      "durationMs": 75
+    },
+    {
+      "name": "Project file content/manifests/directories remain private through raw, encoded, slash, and traversal static requests",
+      "ok": true,
+      "detail": {
+        "variants": [
+          {
+            "path": "/data/projects/files-a/files/07ab7f7c5a2948dcada36add5add1802/content.bin",
+            "finalStatus": 403,
+            "safePublicRedirects": 0
+          },
+          {
+            "path": "/data/projects/files-a/files/07ab7f7c5a2948dcada36add5add1802/",
+            "finalStatus": 403,
+            "safePublicRedirects": 0
+          },
+          {
+            "path": "/data/projects/files-a/files/",
+            "finalStatus": 403,
+            "safePublicRedirects": 0
+          },
+          {
+            "path": "/data/projects/files-a/files/files.json",
+            "finalStatus": 403,
+            "safePublicRedirects": 0
+          },
+          {
+            "path": "/data/projects/files-a/files/07ab7f7c5a2948dcada36add5add1802/record.json",
+            "finalStatus": 403,
+            "safePublicRedirects": 0
+          },
+          {
+            "path": "/%64ata/projects/files-a/files/07ab7f7c5a2948dcada36add5add1802/content.bin",
+            "finalStatus": 403,
+            "safePublicRedirects": 0
+          },
+          {
+            "path": "/data/projects/files-a/%66iles/07ab7f7c5a2948dcada36add5add1802/content.bin",
+            "finalStatus": 403,
+            "safePublicRedirects": 0
+          },
+          {
+            "path": "/viewer/../data/projects/files-a/files/07ab7f7c5a2948dcada36add5add1802/content.bin",
+            "finalStatus": 403,
+            "safePublicRedirects": 0
+          },
+          {
+            "path": "/viewer/%2e%2e/data/projects/files-a/files/07ab7f7c5a2948dcada36add5add1802/content.bin",
+            "finalStatus": 403,
+            "safePublicRedirects": 0
+          },
+          {
+            "path": "/viewer/%2e%2e%2fdata/projects/files-a/files/07ab7f7c5a2948dcada36add5add1802/content.bin",
+            "finalStatus": 403,
+            "safePublicRedirects": 0
+          },
+          {
+            "path": "/viewer/%2e%2e%5cdata%5cprojects%5cfiles-a%5cfiles%5c07ab7f7c5a2948dcada36add5add1802%5ccontent.bin",
+            "finalStatus": 200,
+            "safePublicRedirects": 1
+          },
+          {
+            "path": "//data/projects/files-a/files/07ab7f7c5a2948dcada36add5add1802/content.bin",
+            "finalStatus": 403,
+            "safePublicRedirects": 0
+          },
+          {
+            "path": "/viewer/vendor/../../data/projects/files-a/files/07ab7f7c5a2948dcada36add5add1802/content.bin",
+            "finalStatus": 403,
+            "safePublicRedirects": 0
+          },
+          {
+            "path": "/data/projects/files-b/../files-a/files/07ab7f7c5a2948dcada36add5add1802/content.bin",
+            "finalStatus": 403,
+            "safePublicRedirects": 0
+          }
+        ],
+        "methods": [
+          "GET",
+          "HEAD"
+        ],
+        "viewerStillAccessible": true
+      },
+      "durationMs": 282
+    },
+    {
+      "name": "100 MB + 1-byte upload is rejected from headers without reading body or creating records",
+      "ok": true,
+      "detail": {
+        "contentLength": 104857601,
+        "bodyBytesSent": 0,
+        "status": 413,
+        "durationMs": 1
+      },
+      "durationMs": 31
+    },
+    {
+      "name": "Exactly 100 MB uploads and downloads successfully with streaming byte verification",
+      "ok": true,
+      "detail": {
+        "uploadBytes": 104857600,
+        "downloadBytesVerified": 104857600,
+        "memoryUse": "1 MiB reusable block; streamed upload/download",
+        "status": 200
+      },
+      "durationMs": 877
+    },
+    {
+      "name": "Malformed lengths, truncated uploads, and unsupported transfer encoding reject without partial records",
+      "ok": true,
+      "detail": [
+        {
+          "case": "non-numeric length",
+          "status": 400
+        },
+        {
+          "case": "negative length",
+          "status": 400
+        },
+        {
+          "case": "truncated body",
+          "status": 400
+        },
+        {
+          "case": "missing length",
+          "status": 411
+        },
+        {
+          "case": "unsupported chunked body",
+          "status": 400
+        }
+      ],
+      "durationMs": 55
+    },
+    {
+      "name": "Missing projects/names and invalid file IDs reject without orphan records",
+      "ok": true,
+      "detail": [
+        {
+          "path": "/api/projects/not-existing/files?name=orphan.pdf",
+          "status": 404
+        },
+        {
+          "path": "/api/projects/files-a/files",
+          "status": 400
+        },
+        {
+          "path": "/api/projects/files-a/files/../../files-b/download",
+          "status": 404
+        },
+        {
+          "path": "/api/projects/files-a/files/invalid-file-id/download",
+          "status": 404
+        }
+      ],
+      "durationMs": 22
+    },
+    {
+      "name": "Project files survive model/version reads, renames, and model deletion unchanged",
+      "ok": true,
+      "detail": {
+        "modelsCreated": 2,
+        "versionReadAndRename": true,
+        "modelDeletion": true,
+        "projectFilesUnchanged": true
+      },
+      "durationMs": 172
+    },
+    {
+      "name": "Existing import job create/raw source upload/read/delete remain functional without conversion",
+      "ok": true,
+      "detail": {
+        "jobCreate": true,
+        "rawSourceUpload": true,
+        "queuedStateRead": true,
+        "jobDelete": true,
+        "conversionExecuted": false
+      },
+      "durationMs": 71
+    },
+    {
+      "name": "Fresh HTTP server and reloaded storage retain records, ordering, bytes, and deletions",
+      "ok": true,
+      "detail": {
+        "sameProjectListsAndOrder": true,
+        "downloadBytesPreserved": true,
+        "deletedRecordStaysDeleted": true,
+        "serverRestart": true
+      },
+      "durationMs": 545
+    }
+  ],
+  "runtimeDataWasTemporary": true,
+  "finishedAt": "2026-09-30T05:39:36.940806+00:00",
+  "passed": 21,
+  "failed": 0
+}

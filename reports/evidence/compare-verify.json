@@ -1,0 +1,1255 @@
+{
+  "url": "http://127.0.0.1:8899/viewer/index.html",
+  "startedAt": "2026-09-23T13:50:41.331Z",
+  "ok": true,
+  "fixture": {
+    "before": {
+      "dir": "C:\\Users\\34084\\Desktop\\modelviewer - 副本\\data\\projects\\qichuang\\models\\hygq\\versions\\2026-09-19",
+      "exists": true,
+      "sentinel": true
+    },
+    "mode": "reused",
+    "glbMode": "reused",
+    "after": {
+      "dir": "C:\\Users\\34084\\Desktop\\modelviewer - 副本\\data\\projects\\qichuang\\models\\hygq\\versions\\2026-09-19",
+      "exists": true,
+      "sentinel": true
+    }
+  },
+  "scenarios": [
+    {
+      "no": "A1",
+      "name": "单模型模式：比对未开启、控制条隐藏、B 侧共享材质不透明",
+      "ok": true,
+      "detail": {
+        "active": false,
+        "barVisible": false,
+        "bMesh": {
+          "transparent": false,
+          "opacity": 1,
+          "depthWrite": true,
+          "color": "8d949c",
+          "uuid": "fabb762f-f4d3-4163-a6ea-134749080e4d"
+        },
+        "bLine": {
+          "transparent": false,
+          "opacity": 1,
+          "depthWrite": true,
+          "color": "4d5866",
+          "uuid": "8b205d93-ae71-40e9-a921-97b55f4470fc"
+        }
+      }
+    },
+    {
+      "no": "A2",
+      "name": "弹窗只列同项目 ready 版本，默认 B = 当前版本、A = 更早那一版",
+      "ok": true,
+      "detail": {
+        "options": [
+          "光气 / hygq / 2026-09-20",
+          "光气 / hygq / 2026-09-19"
+        ],
+        "aSel": {
+          "label": "光气 / hygq / 2026-09-19",
+          "mid": "hygq",
+          "vid": "2026-09-19"
+        },
+        "bSel": {
+          "label": "光气 / hygq / 2026-09-20",
+          "mid": "hygq",
+          "vid": "2026-09-20"
+        },
+        "groups": [
+          "hygq"
+        ]
+      }
+    },
+    {
+      "no": "B1",
+      "name": "两个版本同时载入：A 侧节点数 = 该版本 GLB 命名节点数，B 侧未被卸载",
+      "ok": true,
+      "detail": {
+        "active": true,
+        "aNodes": 18987,
+        "aMeshes": 16255,
+        "aLines": 0,
+        "aBatch": true,
+        "bNodes": 18987,
+        "bNodesExpected": 18987,
+        "batchError": null,
+        "originAligned": true
+      }
+    },
+    {
+      "no": "B2",
+      "name": "同一 Three.js 场景：A/B 两个 root 同时挂在 scene 下（同一父节点）",
+      "ok": true,
+      "detail": {
+        "sceneHasA": true,
+        "sceneHasB": true,
+        "sameParent": true,
+        "aRootName": "__COMPARE_A__",
+        "children": 9
+      }
+    },
+    {
+      "no": "B3",
+      "name": "同一坐标系：两侧同名元件的 PDMS 世界坐标逐位相等（≤1e-6 mm）",
+      "ok": true,
+      "detail": {
+        "compared": 400,
+        "worstMm": 0,
+        "worstKey": null,
+        "noGeometry": 72
+      }
+    },
+    {
+      "no": "B4",
+      "name": "原点对齐：叠加层平移量 == compareOffsetFor(oA,oB) 公式值",
+      "ok": true,
+      "detail": {
+        "originA": [
+          79.6500015258789,
+          51.925498962402344,
+          12.075000762939453
+        ],
+        "originB": [
+          79.6500015258789,
+          51.925498962402344,
+          12.075000762939453
+        ],
+        "expect": [
+          0,
+          0,
+          0
+        ],
+        "got": [
+          0,
+          0,
+          0
+        ],
+        "maxDiff": 0,
+        "originDelta": [
+          0,
+          0,
+          0
+        ],
+        "sameOriginCopy": true
+      }
+    },
+    {
+      "no": "B5",
+      "name": "B 侧元数据未受影响：树/属性仍绑当前版本、合批与命名节点数不变",
+      "ok": true,
+      "detail": {
+        "batches": 317,
+        "before": 317,
+        "namedNodes": 18987,
+        "rows": 8,
+        "version": "2026-09-20",
+        "compareRoots": 1,
+        "sameObjectStats": true,
+        "base": "/data/projects/qichuang/models/hygq/versions/2026-09-20/processed",
+        "treeInfo": "35,728 个对象 · 8 层 · 几何对应 18,984 · 点 ▸ 展开 · Ctrl+点击可多选"
+      }
+    },
+    {
+      "no": "C1",
+      "name": "A 半透明（默认 35% / depthWrite=false）· B 正常（不透明）",
+      "ok": true,
+      "detail": {
+        "aMesh": {
+          "transparent": true,
+          "opacity": 0.35,
+          "depthWrite": false,
+          "color": "8d949c",
+          "uuid": "a8445c6b-2ef5-4edb-8b00-bee5d6777a0f"
+        },
+        "aLine": {
+          "transparent": true,
+          "opacity": 0.5599999999999999,
+          "depthWrite": false,
+          "color": "4d5866",
+          "uuid": "837e85e7-c27e-4136-a9be-66fc156665ba"
+        },
+        "bMesh": {
+          "transparent": false,
+          "opacity": 1,
+          "depthWrite": true,
+          "color": "8d949c",
+          "uuid": "fabb762f-f4d3-4163-a6ea-134749080e4d"
+        },
+        "bBatch": {
+          "transparent": false,
+          "opacity": 1,
+          "depthWrite": true,
+          "color": "8d949c",
+          "uuid": "236d5fd8-454a-44d7-af45-2b979e9cb370"
+        },
+        "opacity": 0.35,
+        "side": "both"
+      }
+    },
+    {
+      "no": "C2",
+      "name": "两侧材质互不共享：A 用自己的一套实例，B 的共享材质未被改成透明",
+      "ok": true,
+      "detail": {
+        "materialsShared": false,
+        "instances": {
+          "mesh": false,
+          "line": false,
+          "sel": false,
+          "hover": false,
+          "batch": false
+        },
+        "aMeshUuid": "a8445c6b-2ef5-4edb-8b00-bee5d6777a0f",
+        "bMeshUuid": "fabb762f-f4d3-4163-a6ea-134749080e4d"
+      }
+    },
+    {
+      "no": "C3",
+      "name": "两版都在渲染：A 侧合批网格 + B 侧合批网格同时可见",
+      "ok": true,
+      "detail": {
+        "aRootVisible": true,
+        "aBatchVisible": true,
+        "bRootVisible": true,
+        "bBatchVisible": true,
+        "drawCalls": 638,
+        "aBatch": true
+      }
+    },
+    {
+      "no": "D1",
+      "name": "浮动控制条出现：A | B | A+B | 透明度 | 交换 | 退出 全部就位",
+      "ok": true,
+      "detail": {
+        "visible": true,
+        "modeA": false,
+        "modeB": false,
+        "modeAB": true,
+        "opacityLabel": "A 透明度",
+        "opacityVal": "35%",
+        "slider": 35,
+        "labelA": "A · 2026-09-19（hygq）",
+        "labelB": "B · 2026-09-20（hygq）",
+        "selection": "未选中元件 · 点击 3D 视图中的元件可识别它来自 A 还是 B",
+        "swapText": "交换 A/B",
+        "compareModeClass": true
+      }
+    },
+    {
+      "no": "D2",
+      "name": "切「A」：只剩 A（B 的 root 与合批组同时隐藏）",
+      "ok": true,
+      "detail": {
+        "aRootVisible": true,
+        "aBatchVisible": true,
+        "bRootVisible": false,
+        "bBatchVisible": false,
+        "side": "A"
+      }
+    },
+    {
+      "no": "D3",
+      "name": "切「B」：只剩 B（A 的 root 与合批组同时隐藏）",
+      "ok": true,
+      "detail": {
+        "aRootVisible": false,
+        "aBatchVisible": false,
+        "bRootVisible": true,
+        "bBatchVisible": true,
+        "side": "B"
+      }
+    },
+    {
+      "no": "D4",
+      "name": "切回「A+B」：两侧都恢复可见",
+      "ok": true,
+      "detail": {
+        "aRootVisible": true,
+        "aBatchVisible": true,
+        "bRootVisible": true,
+        "bBatchVisible": true
+      }
+    },
+    {
+      "no": "D5",
+      "name": "透明度实时调整：滑杆 70% → A 材质 opacity 0.70 且面板回显",
+      "ok": true,
+      "detail": {
+        "before": 0.35,
+        "after": 0.7,
+        "lineOpacity": 0.95,
+        "slider": 70,
+        "label": "70%"
+      }
+    },
+    {
+      "no": "D6",
+      "name": "透明度越界被夹紧（200% → 0.95，0% → 0.05）",
+      "ok": true,
+      "detail": {
+        "hi": 0.95,
+        "lo": 0.05,
+        "back": 0.35,
+        "meshOpacity": 0.35
+      }
+    },
+    {
+      "no": "E1",
+      "name": "A+B 重叠下拾取优先命中实体侧 B，且键是 B 的裸 canonical",
+      "ok": true,
+      "detail": {
+        "ndc": [
+          -0.6,
+          0
+        ],
+        "key": "BOX 1 of SUBSTRUCTURE 1 of STRUCTURE /PLATE-EL+14500-A1",
+        "side": "B",
+        "badge": "【Model B · 当前版本】BOX 1 of SUBSTRUCTURE 1 of STRUCTURE /PLATE-EL+14500-A1",
+        "propInfo": "BOX · 34 个子节点",
+        "tree": [
+          "txt:L153953"
+        ]
+      }
+    },
+    {
+      "no": "E2",
+      "name": "切「A」后同一 NDC 命中 A 侧：键带 A:: 前缀、徽标/属性面板标注来源",
+      "ok": true,
+      "detail": {
+        "key": "A::BOX 1 of SUBSTRUCTURE 1 of STRUCTURE /PLATE-EL+14500-A1",
+        "side": "A",
+        "badge": "【Model A · 2026-09-19】BOX 1 of SUBSTRUCTURE 1 of STRUCTURE /PLATE-EL+14500-A1",
+        "propsInfo": "Model A · 2026-09-19 · 仅几何",
+        "tree": [],
+        "info": {
+          "hasPrefix": true,
+          "inAMap": true,
+          "nodeResolved": true,
+          "world": {
+            "key": "A::BOX 1 of SUBSTRUCTURE 1 of STRUCTURE /PLATE-EL+14500-A1",
+            "side": "A",
+            "raw": "BOX 1 of SUBSTRUCTURE 1 of STRUCTURE /PLATE-EL+14500-A1",
+            "world": [
+              -52.45000023394823,
+              2.412499925179884,
+              55.27549912151882
+            ],
+            "origin": [
+              79.6500015258789,
+              51.925498962402344,
+              12.075000762939453
+            ],
+            "pdms": [
+              27200.001291930676,
+              -3350.000159116476,
+              14487.500688119337
+            ]
+          }
+        },
+        "barSelection": "当前选中来源：Model A（2026-09-19） · BOX 1 of SUBSTRUCTURE 1 of STRUCTURE /PLATE-EL+14500-A1 · 该侧只载入几何，属性/树/批注仍属于 B"
+      }
+    },
+    {
+      "no": "E3",
+      "name": "A 侧选中不污染模型树 / 属性不张冠李戴（A 只有几何）",
+      "ok": true,
+      "detail": {
+        "treeSelected": [],
+        "propInfo": "Model A · 2026-09-19 · 仅几何",
+        "propHead": "比对来源来源Model A（叠加显示的那一版）版本2026-09-19模型hygqcanonicalBOX 1 of SUBSTRUCTURE 1 of STRUCTURE /PLATE-EL+14500-A1A 侧只载入几何（GLB），未"
+      }
+    },
+    {
+      "no": "E4",
+      "name": "同名元件两侧可分别选中并各自高亮（选择集 A/B 并存，描边对象来自两侧）",
+      "ok": true,
+      "detail": {
+        "keyA": "A::BOX 1 of SUBSTRUCTURE 1 of STRUCTURE /PLATE-EL+14500-A1",
+        "keyB": "BOX 1 of SUBSTRUCTURE 1 of STRUCTURE /PLATE-EL+14500-A1",
+        "sides": {
+          "A": 1,
+          "B": 1
+        },
+        "canonicals": [
+          "A::BOX 1 of SUBSTRUCTURE 1 of STRUCTURE /PLATE-EL+14500-A1",
+          "BOX 1 of SUBSTRUCTURE 1 of STRUCTURE /PLATE-EL+14500-A1"
+        ],
+        "mats": {
+          "countA": 1,
+          "countB": 1,
+          "paintA": true,
+          "paintB": true,
+          "swapped": 2,
+          "outline": 2
+        }
+      }
+    },
+    {
+      "no": "E5",
+      "name": "重叠不使选择失效：同一 NDC 连续拾取结果稳定、与视图模式一致",
+      "ok": true,
+      "detail": {
+        "results": [
+          {
+            "key": "BOX 1 of SUBSTRUCTURE 1 of STRUCTURE /PLATE-EL+14500-A1",
+            "side": "B",
+            "count": 1
+          },
+          {
+            "key": "BOX 1 of SUBSTRUCTURE 1 of STRUCTURE /PLATE-EL+14500-A1",
+            "side": "B",
+            "count": 1
+          },
+          {
+            "key": "BOX 1 of SUBSTRUCTURE 1 of STRUCTURE /PLATE-EL+14500-A1",
+            "side": "B",
+            "count": 1
+          }
+        ],
+        "aView": "A",
+        "bView": "B"
+      }
+    },
+    {
+      "no": "E6",
+      "name": "A 侧对象不能新建批注（如实拒绝，不把批注记到 B 的同名对象上）",
+      "ok": true,
+      "detail": {
+        "selectedSide": "A",
+        "dialogBefore": false,
+        "dialogAfter": false,
+        "toast": "Model A（比对叠加层）只载入几何，不能在此侧新建批注；请切到 B 侧对象。"
+      }
+    },
+    {
+      "no": "F1",
+      "name": "一键交换 A/B：A 变实体、B 变半透明，滑杆标签同步",
+      "ok": true,
+      "detail": {
+        "primary": "A",
+        "aMesh": {
+          "transparent": false,
+          "opacity": 1,
+          "depthWrite": true,
+          "color": "8d949c",
+          "uuid": "a8445c6b-2ef5-4edb-8b00-bee5d6777a0f"
+        },
+        "bMesh": {
+          "transparent": true,
+          "opacity": 0.35,
+          "depthWrite": false,
+          "color": "8d949c",
+          "uuid": "fabb762f-f4d3-4163-a6ea-134749080e4d"
+        },
+        "bBatch": {
+          "transparent": true,
+          "opacity": 0.35,
+          "depthWrite": false,
+          "color": "8d949c",
+          "uuid": "236d5fd8-454a-44d7-af45-2b979e9cb370"
+        },
+        "bLine": {
+          "transparent": true,
+          "opacity": 0.35,
+          "depthWrite": false,
+          "color": "4d5866",
+          "uuid": "8b205d93-ae71-40e9-a921-97b55f4470fc"
+        },
+        "label": "B 透明度",
+        "swapText": "交换 A/B（当前 A 实体）"
+      }
+    },
+    {
+      "no": "F2",
+      "name": "交换后拾取优先级翻转：A+B 下同一 NDC 先拿 A 侧",
+      "ok": true,
+      "detail": {
+        "side": "A",
+        "key": "A::BOX 1 of SUBSTRUCTURE 1 of STRUCTURE /PLATE-EL+14500-A1"
+      }
+    },
+    {
+      "no": "F3",
+      "name": "再交换回来：B 侧共享材质逐项还原（transparent/opacity/depthWrite）",
+      "ok": true,
+      "detail": {
+        "bMesh": {
+          "transparent": false,
+          "opacity": 1,
+          "depthWrite": true,
+          "color": "8d949c",
+          "uuid": "fabb762f-f4d3-4163-a6ea-134749080e4d"
+        },
+        "baseline": {
+          "transparent": false,
+          "opacity": 1,
+          "depthWrite": true,
+          "color": "8d949c",
+          "uuid": "fabb762f-f4d3-4163-a6ea-134749080e4d"
+        },
+        "bBatch": {
+          "transparent": false,
+          "opacity": 1,
+          "depthWrite": true,
+          "color": "8d949c",
+          "uuid": "236d5fd8-454a-44d7-af45-2b979e9cb370"
+        },
+        "bLine": {
+          "transparent": false,
+          "opacity": 1,
+          "depthWrite": true,
+          "color": "4d5866",
+          "uuid": "8b205d93-ae71-40e9-a921-97b55f4470fc"
+        },
+        "aMesh": {
+          "transparent": true,
+          "opacity": 0.35,
+          "depthWrite": false,
+          "color": "8d949c",
+          "uuid": "a8445c6b-2ef5-4edb-8b00-bee5d6777a0f"
+        }
+      }
+    },
+    {
+      "no": "G1",
+      "name": "退出比对：控制条隐藏、compareMode 类移除、A 侧全部卸载",
+      "ok": true,
+      "detail": {
+        "state": {
+          "active": false,
+          "modalOpen": false,
+          "barVisible": false,
+          "a": null,
+          "b": null,
+          "options": [
+            {
+              "label": "光气 / hygq / 2026-09-20",
+              "mid": "hygq",
+              "vid": "2026-09-20"
+            },
+            {
+              "label": "光气 / hygq / 2026-09-19",
+              "mid": "hygq",
+              "vid": "2026-09-19"
+            }
+          ],
+          "opacityLabel": "A 透明度",
+          "opacitySlider": 35,
+          "selectionText": "点击元件即可识别来源（A 半透明那侧 / B 实体那侧）"
+        },
+        "bar": {
+          "visible": false,
+          "modeA": false,
+          "modeB": false,
+          "modeAB": true,
+          "opacityLabel": "A 透明度",
+          "opacityVal": "35%",
+          "slider": 35,
+          "labelA": "A · —",
+          "labelB": "B · —",
+          "selection": "点击元件即可识别来源（A 半透明那侧 / B 实体那侧）",
+          "swapText": "交换 A/B",
+          "compareModeClass": false
+        },
+        "scene": {
+          "compare": null,
+          "hasCompareRoot": false,
+          "children": 7
+        }
+      }
+    },
+    {
+      "no": "G2",
+      "name": "退出后显存/场景回到基线：几何数与 scene.children 不残留",
+      "ok": true,
+      "detail": {
+        "after": {
+          "geometries": 321,
+          "textures": 10,
+          "programs": 13,
+          "sceneChildren": 7,
+          "namedNodes": 18987,
+          "meshRefs": 18987,
+          "hidden": 0,
+          "selected": null,
+          "outlineObjects": 0,
+          "ready": true,
+          "compareRoots": 0,
+          "compareBatchMeshes": null
+        },
+        "before": {
+          "geometries": 321,
+          "textures": 3,
+          "programs": 5,
+          "sceneChildren": 7,
+          "namedNodes": 18987,
+          "meshRefs": 18987,
+          "hidden": 0,
+          "selected": null,
+          "outlineObjects": 0,
+          "ready": true,
+          "compareRoots": 0,
+          "compareBatchMeshes": null
+        }
+      }
+    },
+    {
+      "no": "G3",
+      "name": "退出后 B 侧材质与可见性完整还原、选择集里不再有 A 键",
+      "ok": true,
+      "detail": {
+        "aRootVisible": null,
+        "aBatchVisible": null,
+        "bRootVisible": true,
+        "bBatchVisible": true,
+        "bMesh": {
+          "transparent": false,
+          "opacity": 1,
+          "depthWrite": true,
+          "color": "8d949c",
+          "uuid": "fabb762f-f4d3-4163-a6ea-134749080e4d"
+        },
+        "aMesh": null,
+        "sel": {
+          "count": 0,
+          "canonicals": [],
+          "sides": {
+            "A": 0,
+            "B": 0
+          },
+          "primarySide": null,
+          "primary": null,
+          "outlineObjects": 0,
+          "swappedObjects": 0
+        }
+      }
+    },
+    {
+      "no": "G4",
+      "name": "退出后单模型功能照旧：点选 / 隐藏 / 隔离 / 改色 / 树联动 / 测量",
+      "ok": true,
+      "detail": {
+        "key": "BOX 1 of SUBSTRUCTURE 1 of STRUCTURE /PLATE-EL+14500-A1",
+        "picked": "B",
+        "hidden": 1,
+        "isolateHidden": 18979,
+        "hiddenAfterShowAll": 0,
+        "color": {
+          "okSet": true,
+          "ov": 1,
+          "after": 0
+        },
+        "treeSelected": 1,
+        "measure": {
+          "on": true,
+          "off": false
+        }
+      }
+    },
+    {
+      "no": "G5",
+      "name": "再次进入比对仍可用（卸载后能重新加载 A）",
+      "ok": true,
+      "detail": {
+        "reopened": {
+          "active": true,
+          "side": "both",
+          "primary": "B",
+          "opacity": 0.35,
+          "label": "光气 / hygq / 2026-09-19",
+          "meta": {
+            "pid": "qichuang",
+            "mid": "hygq",
+            "vid": "2026-09-19",
+            "versionName": "2026-09-19",
+            "modelName": "hygq"
+          },
+          "origin": [
+            79.6500015258789,
+            51.925498962402344,
+            12.075000762939453
+          ],
+          "originDelta": [
+            0,
+            0,
+            0
+          ],
+          "originAligned": true,
+          "rootPosition": [
+            0,
+            0,
+            0
+          ],
+          "aNodes": 18987,
+          "aMeshes": 16255,
+          "aLines": 0,
+          "aBatch": true,
+          "batchError": null,
+          "aVisible": true,
+          "bVisible": true,
+          "aOpacity": 0.35,
+          "bOpacity": 1,
+          "aTransparent": true,
+          "bTransparent": false,
+          "selectedSides": {
+            "A": 0,
+            "B": 1
+          },
+          "bMaterialSnapshot": false
+        },
+        "afterExit": false,
+        "gpu": 0
+      }
+    },
+    {
+      "no": "H1",
+      "name": "批量渲染 / 设备定位图 / 属性面板 未受影响",
+      "ok": true,
+      "detail": {
+        "batches": 317,
+        "before": 317,
+        "floorplan": true,
+        "fps": 13,
+        "drawCalls": 639
+      }
+    },
+    {
+      "no": "G6",
+      "name": "退出后 B 侧建批注入口照旧可用（打开对话框即通过，不写盘）",
+      "ok": true,
+      "detail": {
+        "key": "BOX 1 of SUBSTRUCTURE 1 of STRUCTURE /PLATE-EL+14500-A1",
+        "open": true,
+        "draft": true,
+        "text": "BOX 1 of SUBSTRUCTURE 1 of STRUCTURE /PLATE-EL+14500-A1 · 表面点击位置"
+      }
+    },
+    {
+      "no": "I1",
+      "name": "非零原点补偿：叠加层平移量 == 独立复算的 compareOffsetFor(oA,oB)",
+      "ok": true,
+      "detail": {
+        "originA": [
+          92.92500305175781,
+          -95.06949615478516,
+          5.504172325134277
+        ],
+        "originB": [
+          79.6500015258789,
+          51.925498962402344,
+          12.075000762939453
+        ],
+        "expect": [
+          13.275001525878906,
+          -6.570828437805176,
+          146.9949951171875
+        ],
+        "got": [
+          13.275001525878906,
+          -6.570828437805176,
+          146.9949951171875
+        ],
+        "delta": [
+          13.275001525878906,
+          -6.570828437805176,
+          146.9949951171875
+        ],
+        "deltaNonZero": true
+      }
+    },
+    {
+      "no": "I2",
+      "name": "非零补偿后拾取仍带侧标记（A 视图命中 A:: 键、退出后干净还原）",
+      "ok": true,
+      "detail": {
+        "ndc": [
+          -0.6,
+          0
+        ],
+        "picked": "A::FLOOR 1 of FRMWORK /ENCOSC22108-TRAIL-WSP-1-ROOF",
+        "st": false,
+        "compareRoots": 0,
+        "bVisible": true
+      }
+    }
+  ],
+  "console": [
+    "[error] Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pageErrors": [],
+  "modelInfo": {
+    "meshes": 16255,
+    "lines": 0,
+    "namedNodes": 18987,
+    "floorplan": {
+      "equipment": 290,
+      "positioned": 290,
+      "outlines": 2195,
+      "outlineSegments": 35556,
+      "labelBatches": 1,
+      "debugCenters": 0,
+      "floorY": -13.127092053024839,
+      "floorOffset": 0.0020912402130435397
+    },
+    "floorplanError": null
+  },
+  "batchBefore": {
+    "enabled": true,
+    "indexed": true,
+    "maxMeshesPerBatch": 64,
+    "sourceMeshes": 16255,
+    "spatialBatches": 317,
+    "renderMeshes": 317,
+    "stateMeshes": {
+      "solid": 317,
+      "selected": 0,
+      "hover": 0,
+      "ghost": 0
+    },
+    "recordedRanges": 16255,
+    "triangles": 501323,
+    "indices": 1503969,
+    "lastSync": {
+      "changedEntries": 16255,
+      "rebuiltBatches": 317,
+      "ms": 202.30000007152557
+    }
+  },
+  "dataStatsBefore": {
+    "objects": 35728,
+    "roots": 1,
+    "maxDepth": 7,
+    "named": 2560,
+    "anonymous": 33168,
+    "newCount": 35728,
+    "endCount": 35728,
+    "leftOnStack": 0,
+    "strayEnd": 0,
+    "continuationRecords": 0,
+    "logicalRecords": 244547,
+    "attributesMain": 131756,
+    "attributesOld": 1859,
+    "attributesTotal": 133615,
+    "attributeKeyKinds": 63,
+    "attributeKeys": {
+      "POS": 31627,
+      "LEVE": 15356,
+      "HEIG": 12102,
+      "OBST": 11810,
+      "ORI": 11686,
+      "DIAM": 9009,
+      "XLEN": 4477,
+      "YLEN": 4477,
+      "ZLEN": 4477,
+      "BUIL": 2910,
+      "SHOP": 2091,
+      "PDNAME": 1847,
+      "TEMP": 1797,
+      "PRES": 1797,
+      "TPRESS": 1797,
+      "DUTY": 1797,
+      "CATR": 1797,
+      "DESC": 1040,
+      "ROUT": 723,
+      "XBOT": 719,
+      "YBOT": 719,
+      "YTOP": 719,
+      "RINS": 705,
+      "XTOP": 679,
+      "PTSP": 660,
+      "INSC": 660,
+      "DSCO": 648,
+      "YTSH": 626,
+      "XOFF": 618,
+      "GRADE": 379,
+      "FIRE": 379,
+      "ANGL": 343,
+      "GTYP": 232,
+      "POSS": 232,
+      "POSE": 232,
+      "DRNE": 224,
+      "SPRE": 214,
+      "YBSH": 200,
+      "DRNS": 178,
+      "JLIN": 151,
+      "JUSL": 151,
+      "MEML": 151,
+      "DESP": 134,
+      "RADI": 122,
+      "YOFF": 104,
+      "PRFL": 100,
+      "PURP": 84,
+      "DELP": 84,
+      "NUMB": 81,
+      "ZDIS": 61,
+      "POSL": 61,
+      "DTOP": 58,
+      "DBOT": 58,
+      "JFRE": 31,
+      "OPDI": 31,
+      "CUTP": 31,
+      "CREF": 31,
+      "NPOS": 24,
+      "FUNC": 23,
+      "DUNION": 18,
+      "JOIE": 16,
+      "JOIS": 15,
+      "SJUS": 12
+    },
+    "types": {
+      "POINT": 12986,
+      "DISH": 5314,
+      "BOX": 4594,
+      "CYLINDER": 2918,
+      "POGON": 2464,
+      "NOZZLE": 1797,
+      "SUBSTRUCTURE": 1664,
+      "PYRAMID": 719,
+      "SLCYLINDER": 626,
+      "RTORUS": 499,
+      "SUBEQUIPMENT": 358,
+      "POHEDRON": 352,
+      "EQUIPMENT": 290,
+      "CTORUS": 224,
+      "STRUCTURE": 171,
+      "SCTN": 167,
+      "NCYLINDER": 151,
+      "STWALL": 65,
+      "PJOINT": 62,
+      "FITTING": 61,
+      "CONE": 54,
+      "PAVERT": 48,
+      "NBOX": 33,
+      "PNODE": 25,
+      "VERTEX": 24,
+      "PLOOP": 12,
+      "FRMWORK": 10,
+      "FLOOR": 10,
+      "ZONE": 7,
+      "NXTRUSION": 6,
+      "LOOP": 6,
+      "SNOUT": 4,
+      "GWALL": 2,
+      "SBFRAMEWORK": 2,
+      "DATUM": 2,
+      "SITE": 1
+    },
+    "lineClasses": {
+      "directive": 3,
+      "comment": 5,
+      "blank": 37576,
+      "command": 28,
+      "NEW": 35728,
+      "attr": 131756,
+      "END": 35728,
+      "OLD": 1864,
+      "OLD_attr": 1859
+    },
+    "oldSelectors": 1864,
+    "oldUnresolved": 0,
+    "objectsWithReferences": 1844,
+    "canonicalDuplicates": 0,
+    "canonicalDuplicateExamples": {},
+    "nameDuplicates": 0,
+    "nameDuplicateExamples": {}
+  },
+  "baseline": {
+    "aMesh": null,
+    "aLine": null,
+    "bMesh": {
+      "transparent": false,
+      "opacity": 1,
+      "depthWrite": true,
+      "color": "8d949c",
+      "uuid": "fabb762f-f4d3-4163-a6ea-134749080e4d"
+    },
+    "bBatchMesh": {
+      "transparent": false,
+      "opacity": 1,
+      "depthWrite": true,
+      "color": "8d949c",
+      "uuid": "236d5fd8-454a-44d7-af45-2b979e9cb370"
+    },
+    "bLine": {
+      "transparent": false,
+      "opacity": 1,
+      "depthWrite": true,
+      "color": "4d5866",
+      "uuid": "8b205d93-ae71-40e9-a921-97b55f4470fc"
+    },
+    "aSel": null,
+    "bSel": {
+      "transparent": false,
+      "opacity": 1,
+      "depthWrite": true,
+      "color": "d9a05a",
+      "uuid": "036738cc-1ddf-4440-897c-a76f233f46c1"
+    },
+    "sharedAB": false,
+    "aBatchMeshMat": false
+  },
+  "gpuBefore": {
+    "geometries": 321,
+    "textures": 3,
+    "programs": 5,
+    "sceneChildren": 7,
+    "namedNodes": 18987,
+    "meshRefs": 18987,
+    "hidden": 0,
+    "selected": null,
+    "outlineObjects": 0,
+    "ready": true,
+    "compareRoots": 0,
+    "compareBatchMeshes": null
+  },
+  "dialog": {
+    "a": [
+      "2026-09-20",
+      "2026-09-19"
+    ],
+    "b": [
+      "2026-09-20",
+      "2026-09-19"
+    ],
+    "aVal": "1",
+    "bVal": "0",
+    "groups": [
+      "hygq"
+    ],
+    "disabled": false
+  },
+  "start": {
+    "active": true,
+    "side": "both",
+    "primary": "B",
+    "opacity": 0.35,
+    "label": "光气 / hygq / 2026-09-19",
+    "meta": {
+      "pid": "qichuang",
+      "mid": "hygq",
+      "vid": "2026-09-19",
+      "versionName": "2026-09-19",
+      "modelName": "hygq"
+    },
+    "origin": [
+      79.6500015258789,
+      51.925498962402344,
+      12.075000762939453
+    ],
+    "originDelta": [
+      0,
+      0,
+      0
+    ],
+    "originAligned": true,
+    "rootPosition": [
+      0,
+      0,
+      0
+    ],
+    "aNodes": 18987,
+    "aMeshes": 16255,
+    "aLines": 0,
+    "aBatch": true,
+    "batchError": null,
+    "aVisible": true,
+    "bVisible": true,
+    "aOpacity": 0.35,
+    "bOpacity": 1,
+    "aTransparent": true,
+    "bTransparent": false,
+    "selectedSides": {
+      "A": 0,
+      "B": 0
+    },
+    "bMaterialSnapshot": false
+  },
+  "bSideMeta": {
+    "meta": {
+      "stats": {
+        "objects": 35728,
+        "roots": 1,
+        "maxDepth": 7,
+        "named": 2560,
+        "anonymous": 33168,
+        "newCount": 35728,
+        "endCount": 35728,
+        "leftOnStack": 0,
+        "strayEnd": 0,
+        "continuationRecords": 0,
+        "logicalRecords": 244547,
+        "attributesMain": 131756,
+        "attributesOld": 1859,
+        "attributesTotal": 133615,
+        "attributeKeyKinds": 63,
+        "attributeKeys": {
+          "POS": 31627,
+          "LEVE": 15356,
+          "HEIG": 12102,
+          "OBST": 11810,
+          "ORI": 11686,
+          "DIAM": 9009,
+          "XLEN": 4477,
+          "YLEN": 4477,
+          "ZLEN": 4477,
+          "BUIL": 2910,
+          "SHOP": 2091,
+          "PDNAME": 1847,
+          "TEMP": 1797,
+          "PRES": 1797,
+          "TPRESS": 1797,
+          "DUTY": 1797,
+          "CATR": 1797,
+          "DESC": 1040,
+          "ROUT": 723,
+          "XBOT": 719,
+          "YBOT": 719,
+          "YTOP": 719,
+          "RINS": 705,
+          "XTOP": 679,
+          "PTSP": 660,
+          "INSC": 660,
+          "DSCO": 648,
+          "YTSH": 626,
+          "XOFF": 618,
+          "GRADE": 379,
+          "FIRE": 379,
+          "ANGL": 343,
+          "GTYP": 232,
+          "POSS": 232,
+          "POSE": 232,
+          "DRNE": 224,
+          "SPRE": 214,
+          "YBSH": 200,
+          "DRNS": 178,
+          "JLIN": 151,
+          "JUSL": 151,
+          "MEML": 151,
+          "DESP": 134,
+          "RADI": 122,
+          "YOFF": 104,
+          "PRFL": 100,
+          "PURP": 84,
+          "DELP": 84,
+          "NUMB": 81,
+          "ZDIS": 61,
+          "POSL": 61,
+          "DTOP": 58,
+          "DBOT": 58,
+          "JFRE": 31,
+          "OPDI": 31,
+          "CUTP": 31,
+          "CREF": 31,
+          "NPOS": 24,
+          "FUNC": 23,
+          "DUNION": 18,
+          "JOIE": 16,
+          "JOIS": 15,
+          "SJUS": 12
+        },
+        "types": {
+          "POINT": 12986,
+          "DISH": 5314,
+          "BOX": 4594,
+          "CYLINDER": 2918,
+          "POGON": 2464,
+          "NOZZLE": 1797,
+          "SUBSTRUCTURE": 1664,
+          "PYRAMID": 719,
+          "SLCYLINDER": 626,
+          "RTORUS": 499,
+          "SUBEQUIPMENT": 358,
+          "POHEDRON": 352,
+          "EQUIPMENT": 290,
+          "CTORUS": 224,
+          "STRUCTURE": 171,
+          "SCTN": 167,
+          "NCYLINDER": 151,
+          "STWALL": 65,
+          "PJOINT": 62,
+          "FITTING": 61,
+          "CONE": 54,
+          "PAVERT": 48,
+          "NBOX": 33,
+          "PNODE": 25,
+          "VERTEX": 24,
+          "PLOOP": 12,
+          "FRMWORK": 10,
+          "FLOOR": 10,
+          "ZONE": 7,
+          "NXTRUSION": 6,
+          "LOOP": 6,
+          "SNOUT": 4,
+          "GWALL": 2,
+          "SBFRAMEWORK": 2,
+          "DATUM": 2,
+          "SITE": 1
+        },
+        "lineClasses": {
+          "directive": 3,
+          "comment": 5,
+          "blank": 37576,
+          "command": 28,
+          "NEW": 35728,
+          "attr": 131756,
+          "END": 35728,
+          "OLD": 1864,
+          "OLD_attr": 1859
+        },
+        "oldSelectors": 1864,
+        "oldUnresolved": 0,
+        "objectsWithReferences": 1844,
+        "canonicalDuplicates": 0,
+        "canonicalDuplicateExamples": {},
+        "nameDuplicates": 0,
+        "nameDuplicateExamples": {}
+      },
+      "base": "/data/projects/qichuang/models/hygq/versions/2026-09-20/processed",
+      "treeInfo": "35,728 个对象 · 8 层 · 几何对应 18,984 · 点 ▸ 展开 · Ctrl+点击可多选"
+    },
+    "sameStats": true
+  },
+  "hitNdc": [
+    -0.6,
+    0
+  ],
+  "originNonZero": {
+    "originA": [
+      92.92500305175781,
+      -95.06949615478516,
+      5.504172325134277
+    ],
+    "originB": [
+      79.6500015258789,
+      51.925498962402344,
+      12.075000762939453
+    ],
+    "expect": [
+      13.275001525878906,
+      -6.570828437805176,
+      146.9949951171875
+    ],
+    "got": [
+      13.275001525878906,
+      -6.570828437805176,
+      146.9949951171875
+    ],
+    "delta": [
+      13.275001525878906,
+      -6.570828437805176,
+      146.9949951171875
+    ],
+    "deltaNonZero": true
+  },
+  "pageErrorCount": 0,
+  "consoleErrors": 1,
+  "summary": {
+    "total": 34,
+    "passed": 34,
+    "failed": []
+  }
+}

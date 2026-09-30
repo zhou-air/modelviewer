@@ -1,0 +1,163 @@
+{
+  "url": "http://127.0.0.1:8899/viewer/index.html",
+  "startedAt": "2026-09-24T08:02:58.418Z",
+  "ok": true,
+  "target": {
+    "pid": "tmp-rvm-only-test",
+    "mid": "main-site",
+    "vid": "2026-09-24"
+  },
+  "steps": [
+    {
+      "step": "A1 版本出现在启动层且 ready",
+      "ok": true,
+      "detail": {
+        "status": "ready",
+        "metadataSource": "rvm",
+        "objectCount": 7420,
+        "rvmBytes": 4505600,
+        "txtBytes": null,
+        "assets": [
+          "glb",
+          "metadata",
+          "rvmIndex",
+          "mapping"
+        ]
+      }
+    },
+    {
+      "step": "A2 版本带 metadataSource=rvm、txtBytes=null、产物无 floorplan/metamodel",
+      "ok": true,
+      "detail": {
+        "status": "ready",
+        "metadataSource": "rvm",
+        "objectCount": 7420,
+        "rvmBytes": 4505600,
+        "txtBytes": null,
+        "assets": [
+          "glb",
+          "metadata",
+          "rvmIndex",
+          "mapping"
+        ]
+      }
+    },
+    {
+      "step": "A3 版本行显示「仅RVM」标记",
+      "ok": true,
+      "detail": {
+        "rendered": true,
+        "badge": true,
+        "text": "2026-09-24仅RVM"
+      }
+    },
+    {
+      "step": "B1 合成 metadata 加载成功",
+      "ok": true,
+      "detail": {
+        "metaSource": "rvm",
+        "objects": 7420,
+        "maxDepth": 8,
+        "matched": 7420,
+        "rvmGroups": 7420,
+        "geomOfSize": 7420,
+        "roots": 1,
+        "floorplanLoaded": false
+      }
+    },
+    {
+      "step": "B2 对象数 / 映射数闭合（objects==matched==rvmGroups==7420）",
+      "ok": true,
+      "detail": {
+        "objects": 7420,
+        "matched": 7420,
+        "rvmGroups": 7420
+      }
+    },
+    {
+      "step": "B3 metadataSource=rvm 传到前端",
+      "ok": true
+    },
+    {
+      "step": "B4 无 floorplan（仅 RVM 模式预期）",
+      "ok": true
+    },
+    {
+      "step": "C1 模型树渲染出行",
+      "ok": true,
+      "detail": {
+        "treeRows": 16
+      }
+    },
+    {
+      "step": "C2 树统计行文案含对象数",
+      "ok": true,
+      "detail": {
+        "treeInfo": "7,420 个对象 · 9 层 · 几何对应 7,420 · 点 ▸ 展开 · Ctrl+点击可多选"
+      }
+    },
+    {
+      "step": "D0 找到可选中（有几何）的树行",
+      "ok": true,
+      "detail": {
+        "id": "rvm:cntb:228",
+        "canonical": "/ENCOSC23059-QICHUANG-SITE"
+      }
+    },
+    {
+      "step": "D1 点击树行后 3D 选择集非空",
+      "ok": true,
+      "detail": {
+        "modelSelected": "/ENCOSC23059-QICHUANG-SITE",
+        "treeSelectedCount": 1,
+        "outlineCount": 105
+      }
+    },
+    {
+      "step": "D2 属性面板给出「仅 RVM」说明（不是空白）",
+      "ok": true,
+      "detail": {
+        "hasRvmNote": true,
+        "head": "概览类型—（RVM 只有匿名对象带类型前缀）canonical/ENCOSC23059-QICHUANG-SITE原始名称/ENCOSC23059-QICHUANG-SITE层级深度1父节点（根）子节点数15原文行—（RVM 无原文行）几何对应GLB 节点序号7927RVM 字节偏移228对象锚定 idrvm:cntb"
+      }
+    },
+    {
+      "step": "D3 属性面板原文行显示为「—（RVM 无原文行）」而不是 null",
+      "ok": true,
+      "detail": {
+        "hasDash": true
+      }
+    },
+    {
+      "step": "E1 隐藏选中可用",
+      "ok": true,
+      "detail": {
+        "hidden": 1
+      }
+    },
+    {
+      "step": "E2 显示全部可用",
+      "ok": true
+    },
+    {
+      "step": "F1 无 floorplan 时给出明确文案（不是报错）",
+      "ok": true,
+      "detail": {
+        "fpText": null
+      }
+    },
+    {
+      "step": "G1 无 pageerror",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "step": "G2 无 console error",
+      "ok": true,
+      "detail": []
+    }
+  ],
+  "console": [],
+  "pageErrors": [],
+  "finishedAt": "2026-09-24T08:03:01.670Z"
+}

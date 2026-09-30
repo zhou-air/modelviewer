@@ -6,6 +6,7 @@
 
 import { api, uploadSource, ApiError } from './api.js';
 import { access } from './access.js';
+import { ProjectFiles } from './projectFiles.js';
 
 const LS_RECENT = 'pdmsviewer.recent.v1';
 const LS_LAST = 'pdmsviewer.lastopened.v1';
@@ -51,6 +52,10 @@ export class AssetManager {
     this.recent = readLS(LS_RECENT, []);
     this._cache = new Map();                 // versionKey → 后端健康检查用
     this._els();
+    this.projectFiles = new ProjectFiles({
+      root: document.getElementById('projectFilesCard'),
+      deleteFile: (pid, file) => this.deleteProjectFileFlow(pid, file),
+    });
     this._bind();
   }
 
@@ -84,7 +89,10 @@ export class AssetManager {
       }
     }, true);
     addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') { this.menuEl.classList.remove('on'); }
+      if (e.key === 'Escape') {
+        this.menuEl.classList.remove('on');
+        if (this.modalEl.classList.contains('on')) this.closeModal();
+      }
     });
   }
 
@@ -96,6 +104,7 @@ export class AssetManager {
       this.data = d;
       this._banner(null);
       this._syncSelection();
+      this.projectFiles.setProject(this.getProject(this.sel.projectId), { force: true });
       this.render();
     } catch (e) {
       this.bannerEl.classList.add('on');
@@ -197,7 +206,10 @@ export class AssetManager {
                     data-kind="version" data-pid="${esc(p.id)}" data-mid="${esc(m.id)}"
                     data-vid="${esc(v.id)}" title="${esc(v.originalRvmFilename || v.name)}">
                 <span class="dot"></span>
-                <span class="nm">${esc(v.name)}</span>
+                <span class="nm">${esc(v.name)}${
+                  (v.status === 'ready' && v.metadataSource === 'rvm')
+                    ? '<span class="rvm-only" title="仅 RVM 导入：只有名称、层级、类型，没有工程属性与设备定位图">仅RVM</span>'
+                    : ''}</span>
                 <span class="meta">${v.status === 'ready'
                   ? `RVM ${fmtBytes(v.rvmBytes)} · GLB ${fmtBytes(v.glbBytes)}`
                   : esc(this._statusText(v))}</span>
@@ -278,6 +290,7 @@ export class AssetManager {
       + (v && v.status === 'failed' ? '<button id="selRetry">查看错误</button>' : '')
       + '</div>';
     this.selectorEl.innerHTML = html;
+    this.projectFiles.setProject(p);
   }
 
   renderRecent() {
@@ -348,6 +361,7 @@ export class AssetManager {
     if (id === 'selProject') {
       this.sel.projectId = e.target.value;
       this.sel.modelId = this.getProject(this.sel.projectId)?.models[0]?.id || null;
+      this.sel.versionId = this.getModel(this.sel.projectId, this.sel.modelId)?.versions[0]?.id || null;
       this.render();
     } else if (id === 'selModel') {
       this.sel.modelId = e.target.value;
@@ -378,6 +392,8 @@ export class AssetManager {
     const p = this.getProject(pid);
     const m = this.getModel(pid, mid);
     const ctx = { project: p, model: m, version: v };
+    this.sel = { projectId: pid, modelId: mid, versionId: vid };
+    this.render();
     this._pushRecent(ctx);
     writeLS(LS_LAST, { projectId: pid, modelId: mid, versionId: vid, at: new Date().toISOString() });
     this.hide();
@@ -600,6 +616,37 @@ export class AssetManager {
     this.toast(`已移入回收站：${res.trashedTo || res.removed || ''}`);
   }
 
+  /** 项目资料沿用模型资产的二次确认与服务器删除密码策略。 */
+  async deleteProjectFileFlow(pid, file) {
+    const ok = await this.confirmDlg({
+      title: `删除文件「${file.fileName}」？`,
+      lines: [`项目：${this.getProject(pid)?.name || pid}`, '删除后项目文件列表中将不再显示此文件。'],
+      okLabel: 'Delete', danger: true,
+    });
+    if (!ok) return false;
+    if (access.perms.deleteRequiresPassword) {
+      for (;;) {
+        const password = await this.promptDlg({
+          title: '需要删除密码', label: '删除密码', type: 'password',
+          hint: '删除密码由服务器统一配置（config/access.env），前端不保存。',
+        });
+        if (password === null) return false;
+        try { await api.deleteProjectFile(pid, file.id, password); break; }
+        catch (error) {
+          if (error.code === 'delete_password_invalid' || error.code === 'delete_password_required') {
+            this.toast('删除密码不正确，请重试', 'err');
+            continue;
+          }
+          throw error;
+        }
+      }
+    } else {
+      await api.deleteProjectFile(pid, file.id, null);
+    }
+    this.toast(`已删除项目文件：${file.fileName}`);
+    return true;
+  }
+
   /** 项目客户访问码管理：查看 / 复制 / 重新生成 / 启用 / 禁用（仅内网） */
   async accessCodeFlow(pid) {
     if (!access.isInternal) return this.toast('只有公司内网可以管理客户访问码', 'err');
@@ -695,6 +742,7 @@ export class AssetManager {
     const v = this.getVersion(pid, mid, vid);
     const p = this.getProject(pid);
     const m = this.getModel(pid, mid);
+    const rvmOnly = v.metadataSource === 'rvm';
     const rows = [
       ['路径', `${p.name} / ${m.name} / ${v.name}`],
       ['Project ID / Model ID / Version ID', `${pid} / ${mid} / ${vid}`],
@@ -702,9 +750,11 @@ export class AssetManager {
       ['导入时间', fmtTime(v.importedAt)],
       ['源文件时间', fmtTime(v.createdAt)],
       ['原始 RVM 文件', v.originalRvmFilename || '—'],
-      ['原始 TXT 文件', v.originalTxtFilename || '—'],
+      ['原始 TXT 文件', v.originalTxtFilename || (rvmOnly ? '未提供（仅 RVM 模式）' : '—')],
+      ['元数据来源', rvmOnly ? 'RVM 组名合成 · 无工程属性、无设备定位图'
+        : 'PDMS Data Listing（含工程属性与设备定位图）'],
       ['RVM / TXT / GLB', `${fmtBytes(v.rvmBytes)} / ${fmtBytes(v.txtBytes)} / ${fmtBytes(v.glbBytes)}`],
-      ['对象数（TXT）', v.objectCount ? v.objectCount.toLocaleString() : '—'],
+      [rvmOnly ? '对象数（RVM 组）' : '对象数（TXT）', v.objectCount ? v.objectCount.toLocaleString() : '—'],
       ['已映射几何组', v.mappedObjects ? v.mappedObjects.toLocaleString() : '—'],
       ['几何对应率', v.mappingRate === null || v.mappingRate === undefined ? '—'
         : `${(v.mappingRate * 100).toFixed(2)}%`],
@@ -884,7 +934,8 @@ export class AssetManager {
       throw new ApiError('model_required', '请选择 Model（或新建一个）');
     }
     if (!out.rvmFile) throw new ApiError('rvm_required', '请选择 RVM 文件');
-    if (!out.txtFile) throw new ApiError('txt_required', '请选择 TXT 数据清单文件');
+    // TXT 可选：不选就走"仅 RVM"链路 —— 元数据由 RVM 组名合成，代价是工程属性与设备定位图。
+    // 这里不拦，只在提示区明确说出来（见 _impHintTxtOptional）。
     return out;
   }
 
@@ -908,13 +959,18 @@ export class AssetManager {
         newProjectName: form.newProjectName, newModelName: form.newModelName,
         newProjectId: form.newProjectId, newModelId: form.newModelId,
         versionName: form.versionName,
-        rvmFilename: form.rvmFile.name, txtFilename: form.txtFile.name,
+        rvmFilename: form.rvmFile.name, txtFilename: form.txtFile ? form.txtFile.name : '',
       });
       this.job = job;
       await uploadSource(job.jobId, 'rvm', form.rvmFile, (l, t) =>
         this._renderImportStages(null, `上传 RVM ${fmtBytes(l)} / ${fmtBytes(t)}`, job));
-      await uploadSource(job.jobId, 'txt', form.txtFile, (l, t) =>
-        this._renderImportStages(null, `上传 TXT ${fmtBytes(l)} / ${fmtBytes(t)}`, job));
+      if (form.txtFile) {
+        await uploadSource(job.jobId, 'txt', form.txtFile, (l, t) =>
+          this._renderImportStages(null, `上传 TXT ${fmtBytes(l)} / ${fmtBytes(t)}`, job));
+      } else {
+        this._renderImportStages(null, '未选择 TXT —— 本次按「仅 RVM」导入，'
+          + '元数据只有名称、层级、类型，没有工程属性与设备定位图', job);
+      }
       await api.importStart(job.jobId);
       await this._pollJob(job.jobId);
     } catch (e) {
@@ -1010,6 +1066,7 @@ export class AssetManager {
   // ------------------------------------------------------------- 通用弹窗
 
   _modalShell(html, { wide } = {}) {
+    this.closeModal();
     this.modalEl.classList.add('on');
     this.modalEl.querySelector('.modal-box').classList.toggle('wide', !!wide);
     this.modalEl.querySelector('.modal-body').innerHTML = html;
@@ -1018,11 +1075,15 @@ export class AssetManager {
 
   closeModal() {
     this.modalEl.classList.remove('on');
+    const cancel = this._modalCancel;
+    this._modalCancel = null;
+    cancel?.();
   }
 
   modalDlg({ title, body, actions = [], okLabel = '确定', wide }) {
     return new Promise((resolve) => {
       const box = this._modalShell(body, { wide });
+      this._modalCancel = () => resolve(false);
       box.querySelector('.modal-title').textContent = title;
       const acts = box.querySelector('.modal-acts');
       acts.innerHTML = '';
@@ -1035,7 +1096,7 @@ export class AssetManager {
       const ok = document.createElement('button');
       ok.className = 'primary';
       ok.textContent = okLabel;
-      ok.onclick = () => { this.closeModal(); resolve(true); };
+      ok.onclick = () => { resolve(true); this.closeModal(); };
       acts.appendChild(ok);
       box.querySelector('.modal-x').onclick = () => { this.closeModal(); resolve(false); };
     });
@@ -1045,6 +1106,7 @@ export class AssetManager {
     const body = `<ul class="cfm">${lines.map((l) => `<li>${esc(l)}</li>`).join('')}</ul>`;
     return new Promise((resolve) => {
       const box = this._modalShell(body, {});
+      this._modalCancel = () => resolve(false);
       box.querySelector('.modal-title').textContent = title;
       const acts = box.querySelector('.modal-acts');
       acts.innerHTML = '';
@@ -1054,7 +1116,7 @@ export class AssetManager {
       const ok = document.createElement('button');
       ok.className = danger ? 'danger' : 'primary';
       ok.textContent = okLabel;
-      ok.onclick = () => { this.closeModal(); resolve(true); };
+      ok.onclick = () => { resolve(true); this.closeModal(); };
       acts.append(cancel, ok);
       box.querySelector('.modal-x').onclick = () => { this.closeModal(); resolve(false); };
     });
@@ -1066,6 +1128,7 @@ export class AssetManager {
       + (hint ? `<div class="mut small">${esc(hint)}</div>` : '');
     return new Promise((resolve) => {
       const box = this._modalShell(body, {});
+      this._modalCancel = () => resolve(null);
       box.querySelector('.modal-title').textContent = title;
       const acts = box.querySelector('.modal-acts');
       acts.innerHTML = '';
@@ -1077,8 +1140,8 @@ export class AssetManager {
       ok.textContent = '确定';
       const submit = () => {
         const v = box.querySelector('#dlgInput').value;
-        this.closeModal();
         resolve(v);
+        this.closeModal();
       };
       ok.onclick = submit;
       acts.append(cancel, ok);
@@ -1102,6 +1165,7 @@ export class AssetManager {
 
   show(canResume = false) {
     this.root.classList.add('on');
+    this.projectFiles.setProject(this.getProject(this.sel.projectId));
     document.getElementById('pmClose').classList.toggle('hidden', !canResume);
   }
 
@@ -1143,7 +1207,13 @@ export function bindImportModal(am) {
     if (e.target.id === 'modal') am.closeModal();
   });
   el('impRvm').addEventListener('change', () => impEcho(el('impRvm'), 'impRvmName'));
-  el('impTxt').addEventListener('change', () => impEcho(el('impTxt'), 'impTxtName'));
+  // TXT 是可选项：选了/没选都要让用户当场知道这次会走哪条链路、缺什么
+  el('impTxt').addEventListener('change', () => {
+    impEcho(el('impTxt'), 'impTxtName');
+    am._impHint(el('impTxt').files[0]
+      ? '本次按 <b>RVM + TXT</b> 导入：有完整工程属性与设备定位图。'
+      : '本次按 <b>仅 RVM</b> 导入：只有名称 / 层级 / 类型，<b>没有工程属性与设备定位图</b>。');
+  });
   // "版本已存在"等业务错误由后端返回，页面上只在提示区显示，不静默失败。
 }
 

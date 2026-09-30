@@ -219,6 +219,7 @@ export class NavigationInputSource {
     this.capture = new PointerCapture(canvas);
     this._options = options;
     this._attached = false;
+    this._global = false;         // 全局（window/document）监听是否在位，见 detachGlobal()
     this._hasFocus = typeof document.hasFocus === 'function' ? document.hasFocus() : true;
     this._bound = {};
   }
@@ -226,16 +227,14 @@ export class NavigationInputSource {
   get hasFocus() { return this._hasFocus; }
   get isCaptured() { return this.capture.isCaptured; }
   get isAttached() { return this._attached; }
+  /** 全局（window/document 级）监听是否在位。分屏比对靠它把"键盘归属"从一侧移到另一侧。 */
+  get isGlobalAttached() { return !!this._global; }
 
-  /** 导航模式是否开启（由 EngineeringNavigation 注入的 getter） */
-  _isActive() { return !!(this._options.isActive && this._options.isActive()); }
-
-  /** 导航是否处于暂停（失焦） */
-  _isPaused() { return !!(this._options.isPaused && this._options.isPaused()); }
-
-  attach() {
-    if (this._attached) return;
+  /** 事件处理器只建一次：attach / attachGlobal 共用同一批函数引用，
+   *  否则 detach 时移除的会是另一批闭包，监听器永远摘不掉。 */
+  _handlers() {
     const b = this._bound;
+    if (b.keydown) return b;
     b.keydown = (e) => this._onKeyDown(e);
     b.keyup = (e) => this._onKeyUp(e);
     b.mousemove = (e) => this._onMouseMove(e);
@@ -247,7 +246,18 @@ export class NavigationInputSource {
     b.visibilitychange = () => { if (document.hidden) this._onBlur(); else this._onFocus(); };
     b.pointerlockchange = () => this._onPointerLockChange();
     b.pointerlockerror = () => { this.capture.lastError = 'pointerlockerror'; this._options.onCaptureChanged?.(); };
+    return b;
+  }
 
+  /** 导航模式是否开启（由 EngineeringNavigation 注入的 getter） */
+  _isActive() { return !!(this._options.isActive && this._options.isActive()); }
+
+  /** 导航是否处于暂停（失焦） */
+  _isPaused() { return !!(this._options.isPaused && this._options.isPaused()); }
+
+  attach() {
+    if (this._attached) return;
+    const b = this._handlers();
     window.addEventListener('keydown', b.keydown);
     window.addEventListener('keyup', b.keyup);
     document.addEventListener('mousemove', b.mousemove);
@@ -260,6 +270,43 @@ export class NavigationInputSource {
     document.addEventListener('pointerlockchange', b.pointerlockchange);
     document.addEventListener('pointerlockerror', b.pointerlockerror);
     this._attached = true;
+    this._global = true;
+  }
+
+  /** 只摘掉 window / document 级的**全局**监听，canvas 自己的监听（滚轮 / 点击 / 右键菜单）保留。
+   *
+   *  分屏同步比对用：非活动侧不得抢键盘（F8 的模式切换）与鼠标增量（mousemove 是 document 级），
+   *  但**滚轮必须留着** —— 用户完全可能直接把滚轮滚在"另一侧"上，那一侧应当立即响应，
+   *  再由同步层把结果带给对面；否则非活动侧就成了"滚了没反应"的死区。
+   *  与之配套：`attachGlobal()` 只装回全局部分，`detach()` 才是全套摘除。 */
+  detachGlobal() {
+    if (!this._attached || !this._global) return;
+    const b = this._bound;
+    window.removeEventListener('keydown', b.keydown);
+    window.removeEventListener('keyup', b.keyup);
+    document.removeEventListener('mousemove', b.mousemove);
+    window.removeEventListener('blur', b.blur);
+    window.removeEventListener('focus', b.focus);
+    document.removeEventListener('visibilitychange', b.visibilitychange);
+    document.removeEventListener('pointerlockchange', b.pointerlockchange);
+    document.removeEventListener('pointerlockerror', b.pointerlockerror);
+    this._global = false;
+  }
+
+  /** 只装回全局监听（canvas 那些还在，不会重复注册）。从未 attach 过则整体装上。 */
+  attachGlobal() {
+    if (!this._attached) { this.attach(); return; }
+    if (this._global) return;
+    const b = this._handlers();
+    window.addEventListener('keydown', b.keydown);
+    window.addEventListener('keyup', b.keyup);
+    document.addEventListener('mousemove', b.mousemove);
+    window.addEventListener('blur', b.blur);
+    window.addEventListener('focus', b.focus);
+    document.addEventListener('visibilitychange', b.visibilitychange);
+    document.addEventListener('pointerlockchange', b.pointerlockchange);
+    document.addEventListener('pointerlockerror', b.pointerlockerror);
+    this._global = true;
   }
 
   detach() {
@@ -277,6 +324,7 @@ export class NavigationInputSource {
     document.removeEventListener('pointerlockchange', b.pointerlockchange);
     document.removeEventListener('pointerlockerror', b.pointerlockerror);
     this._attached = false;
+    this._global = false;
   }
 
   reset() { this.input.reset(); }

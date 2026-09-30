@@ -1,0 +1,952 @@
+{
+  "url": "http://127.0.0.1:8899/viewer/index.html",
+  "startedAt": "2026-09-23T14:54:34.706Z",
+  "ok": true,
+  "fixture": {
+    "existed": true,
+    "info": {
+      "fresh": false,
+      "modes": {},
+      "version": {
+        "schema": "pdms-model-asset/1",
+        "id": "2026-09-18",
+        "name": "2026-09-18",
+        "createdAt": "2026-09-23T14:32:24.790Z",
+        "importedAt": "2026-09-23T14:32:24.790Z",
+        "sourceRvm": "source/model.rvm",
+        "sourceTxt": "source/model.txt",
+        "originalRvmFilename": "HYGQ-SITE-2026-09-18.RVM",
+        "originalTxtFilename": "HYGQ-SITE-2026-09-18.txt",
+        "status": "ready",
+        "error": null,
+        "assets": {
+          "glb": "processed/model.glb",
+          "metadata": "processed/metadata.json",
+          "metamodel": "processed/metadata.metamodel.json",
+          "rvmIndex": "processed/rvm-node-index.json",
+          "mapping": "processed/mapping.json"
+        },
+        "stats": {
+          "rvmBytes": 6512000,
+          "txtBytes": 3093656,
+          "glbBytes": 36058420,
+          "objectCount": 35728,
+          "namedNodes": 18987,
+          "rvmGroups": 18984,
+          "mappedObjects": 18984,
+          "mappingRate": 1,
+          "triangles": 501323,
+          "meshes": 16255,
+          "lines": 0,
+          "durationMs": 20504,
+          "converterVersion": "pdms-import-pipeline/1 · rvmparser/2f7025971a95 · tolerance 0.02 m"
+        },
+        "history": [
+          {
+            "at": "2026-09-20T09:23:46+08:00",
+            "status": "importing"
+          },
+          {
+            "at": "2026-09-20T09:24:06+08:00",
+            "status": "ready"
+          }
+        ]
+      }
+    },
+    "after": {
+      "dir": "C:\\Users\\34084\\Desktop\\modelviewer - 副本\\data\\projects\\qichuang\\models\\hygq\\versions\\2026-09-18",
+      "exists": false,
+      "sentinel": false
+    }
+  },
+  "scenarios": [
+    {
+      "no": "A1",
+      "name": "普通查看模式：canvas 在 #paneA 内、#paneB 与分隔线不可见、控制条隐藏",
+      "ok": true,
+      "detail": {
+        "cvParent": "paneA",
+        "paneBParent": "center",
+        "paneBDisplay": "none",
+        "dividerDisplay": "none",
+        "splitModeClass": false,
+        "ctlVisible": false,
+        "canvasB": false
+      }
+    },
+    {
+      "no": "A2",
+      "name": "单模型布局未被破坏：#paneA 宽度 = #center 宽度（±2px）",
+      "ok": true,
+      "detail": {
+        "center": 1124,
+        "pane": 1124,
+        "canvas": 1124,
+        "canvasH": 856,
+        "centerH": 856
+      }
+    },
+    {
+      "no": "A3",
+      "name": "按钮可用：分屏 / 重叠比对入口都已启用",
+      "ok": true,
+      "detail": {
+        "hide": true,
+        "isolate": true,
+        "showAll": true,
+        "compare": false,
+        "split": false
+      }
+    },
+    {
+      "no": "A4",
+      "name": "单模型基线：选中 / 隐藏 / 测量 / 树 均可用",
+      "ok": true,
+      "detail": {
+        "ndc": [
+          -0.6,
+          0
+        ],
+        "selCount": 1,
+        "hidden": true,
+        "hiddenCount": 1,
+        "measEnabled": true,
+        "treeRows": 74,
+        "showAllHid": 0,
+        "outline": 1
+      }
+    },
+    {
+      "no": "B0",
+      "name": "分屏弹窗：只列同项目 ready 版本，默认左 = 更早那版、右 = 当前版本",
+      "ok": true,
+      "detail": {
+        "options": [
+          "光气 / hygq / 2026-09-20",
+          "光气 / hygq / 2026-09-18"
+        ],
+        "aSel": {
+          "label": "光气 / hygq / 2026-09-18",
+          "mid": "hygq",
+          "vid": "2026-09-18"
+        },
+        "bSel": {
+          "label": "光气 / hygq / 2026-09-20",
+          "mid": "hygq",
+          "vid": "2026-09-20"
+        },
+        "iA": 1,
+        "iB": 0
+      }
+    },
+    {
+      "no": "B1",
+      "name": "左右两个独立 Viewer：各占半屏、右视口模型就绪",
+      "ok": true,
+      "detail": {
+        "active": true,
+        "bReady": true,
+        "bNodes": 18987,
+        "paneAWidth": 562,
+        "paneBWidth": 562,
+        "half": true,
+        "modeA": "game",
+        "modeB": "game",
+        "aVersion": "2026-09-18",
+        "bVersion": "2026-09-20"
+      }
+    },
+    {
+      "no": "B2",
+      "name": "两个视口是各自独立的 renderer / scene（不是同一个场景叠加）",
+      "ok": true,
+      "detail": {
+        "diffRenderer": true,
+        "diffScene": true,
+        "diffCanvas": true,
+        "diffCamera": true,
+        "bCanvasInPane": true,
+        "aChildren": 7,
+        "bChildren": 6,
+        "aHasB": false,
+        "bHasA": false
+      }
+    },
+    {
+      "no": "B3",
+      "name": "控制条与版本标签：A/B 版本名正确、按钮状态正确",
+      "ok": true,
+      "detail": {
+        "tagA": "A2026-09-18",
+        "tagB": "B2026-09-20",
+        "syncText": "同步视角 ON",
+        "swapText": "交换左右",
+        "btnSplitOn": true,
+        "a": "2026-09-18",
+        "b": "2026-09-20"
+      }
+    },
+    {
+      "no": "B4",
+      "name": "两侧节点规模与各自 GLB 一致（右视口没有被当成叠加层复用）",
+      "ok": true,
+      "detail": {
+        "a": 18987,
+        "b": 18987
+      }
+    },
+    {
+      "no": "C1",
+      "name": "启动即对齐：两侧 position / quaternion / target / fov 严格一致（1e-9，此刻无阻尼残差）",
+      "ok": true,
+      "detail": {
+        "position": 2.842170943040401e-14,
+        "quaternion": 0,
+        "target": 2.842170943040401e-14,
+        "fov": 0,
+        "near": 0,
+        "far": 0
+      }
+    },
+    {
+      "no": "C2",
+      "name": "拖左侧旋转 → 右侧实时跟随（且右侧确实动过，不是本来就一样）",
+      "ok": true,
+      "detail": {
+        "maxDiff": 2.842170943040401e-14,
+        "poseB_moved": true,
+        "modeA": "orbit",
+        "modeB": "orbit"
+      }
+    },
+    {
+      "no": "C3",
+      "name": "拖右侧旋转 → 左侧实时跟随（同步是双向的）",
+      "ok": true,
+      "detail": {
+        "maxDiff": 0,
+        "poseA_moved": true
+      }
+    },
+    {
+      "no": "C4",
+      "name": "Orbit 滚轮缩放（相机距离）同步：两侧距离相同且确实拉近了",
+      "ok": true,
+      "detail": {
+        "distBefore": 210.1212,
+        "distA": 185.7833,
+        "distB": 185.7833,
+        "maxDiff": 0
+      }
+    },
+    {
+      "no": "C4b",
+      "name": "Game 滚轮改 FOV（Zoom）同步：两侧 fov 相同且确实变小",
+      "ok": true,
+      "detail": {
+        "fovBefore": 50,
+        "fovA": 44.06167630624396,
+        "fovB": 44.06167630624396,
+        "maxDiff": 0
+      }
+    },
+    {
+      "no": "C5",
+      "name": "静止 40 帧：无抖动、无来回拉锯（两侧位姿漂移 < 1 mm 且全程对齐）",
+      "ok": true,
+      "detail": {
+        "maxDrift": 0.000025709963310305284,
+        "maxDelta": 0.00009042780258994298,
+        "driftPerStep": [
+          0,
+          0.0000126,
+          0.0000191,
+          0.0000224,
+          0.0000242,
+          0.000025,
+          0.0000255,
+          0.0000257
+        ]
+      }
+    },
+    {
+      "no": "C6",
+      "name": "导航模式同步：切 Game → 两侧都进 Game；切回 Orbit → 两侧都回 Orbit",
+      "ok": true,
+      "detail": {
+        "toGame": null,
+        "game": {
+          "a": "game",
+          "b": "game"
+        },
+        "orbit": {
+          "a": "orbit",
+          "b": "orbit"
+        }
+      }
+    },
+    {
+      "no": "C7",
+      "name": "游戏导航下按 W 前进 → 两侧仍严格同步（键盘只驱动活动侧，另一侧跟随）",
+      "ok": true,
+      "detail": {
+        "pointerLocked": true,
+        "activeSide": "A",
+        "movedA": 2.2734,
+        "movedB": 2.2734,
+        "maxDiff": 4.263256414560601e-14,
+        "poseA": [
+          -36.602,
+          157.234,
+          89.291
+        ]
+      }
+    },
+    {
+      "no": "C8",
+      "name": "导航模式同步后再切回 Orbit，两侧位姿仍一致",
+      "ok": true,
+      "detail": {
+        "modeA": "orbit",
+        "modeB": "orbit",
+        "maxDiff": 6.780334160794155e-8
+      }
+    },
+    {
+      "no": "D0",
+      "name": "准备：在主 Viewer 上选中一个元件（供 D1 定位）",
+      "ok": true,
+      "detail": {
+        "ndc": [
+          -0.6,
+          0
+        ],
+        "key": "FLOOR 1 of FRMWORK /floor",
+        "selCount": 1
+      }
+    },
+    {
+      "no": "D1",
+      "name": "同步定位：Fit 到选中元件后两侧仍在同一空间位置与朝向",
+      "ok": true,
+      "detail": {
+        "key": "FLOOR 1 of FRMWORK /floor",
+        "moved": true,
+        "before": [
+          -36.602,
+          157.2344,
+          89.2905
+        ],
+        "after": [
+          148.7864,
+          101.4813,
+          115.6619
+        ],
+        "maxDiff": 1.490707290940918e-8
+      }
+    },
+    {
+      "no": "D2",
+      "name": "同一空间坐标系：两侧模型 origin 相同（叠加位置不需要补偿）",
+      "ok": true,
+      "detail": {
+        "aOrigin": [
+          79.6500015258789,
+          51.925498962402344,
+          12.075000762939453
+        ],
+        "bOrigin": [
+          79.6500015258789,
+          51.925498962402344,
+          12.075000762939453
+        ],
+        "aRootPos": [
+          0,
+          0,
+          0
+        ],
+        "bRootPos": [
+          0,
+          0,
+          0
+        ],
+        "aBox": [
+          5.48708612768678e-7,
+          -1.8940773038877978e-7,
+          7.437774911522865e-7
+        ],
+        "aNodes": 18987,
+        "bNodes": 18987
+      }
+    },
+    {
+      "no": "E1",
+      "name": "选中状态互不污染：左视口选中不影响右视口",
+      "ok": true,
+      "detail": {
+        "aSel": 1,
+        "aKey": "FLOOR 1 of FRMWORK /floor",
+        "bSel": 0,
+        "bHidden": 0,
+        "bOutline": 0,
+        "sameObjectAllowed": true
+      }
+    },
+    {
+      "no": "E2",
+      "name": "显隐互不污染：隐藏/隔离只作用于发起的那一侧",
+      "ok": true,
+      "detail": {
+        "hid": true,
+        "aHidden": 1,
+        "bHidden": 0,
+        "bGhost": 0,
+        "aHiddenAfter": 0,
+        "bHiddenAfter": 0
+      }
+    },
+    {
+      "no": "E3",
+      "name": "点右侧元件 → 控制条标明来源为 Model B 及其版本名",
+      "ok": true,
+      "detail": {
+        "ndc": [
+          -0.5,
+          0
+        ],
+        "key": "FLOOR 1 of FRMWORK /floor",
+        "text": "当前选中来源：Model B（2026-09-20） · FLOOR 1 of FRMWORK /floor　右视口",
+        "activeSide": "B",
+        "ui": "当前选中来源：Model B（2026-09-20） · FLOOR 1 of FRMWORK /floor　右视口",
+        "tagAActive": false,
+        "tagBActive": true
+      }
+    },
+    {
+      "no": "E4",
+      "name": "点右侧元件不会把主 Viewer 的选中/树带偏",
+      "ok": true,
+      "detail": {
+        "sel": {
+          "count": 1,
+          "canonicals": [
+            "FLOOR 1 of FRMWORK /floor"
+          ],
+          "sides": {
+            "A": 0,
+            "B": 1
+          },
+          "primarySide": "B",
+          "primary": "FLOOR 1 of FRMWORK /floor",
+          "outlineObjects": 1,
+          "swappedObjects": 1
+        },
+        "treeSelected": [
+          "txt:L390"
+        ],
+        "props": "FLOOR · 7 个子节点"
+      }
+    },
+    {
+      "no": "E5",
+      "name": "活动侧归属：点过右侧后，键盘归右视口（左侧 inputSuppressed）",
+      "ok": true,
+      "detail": {
+        "a": true,
+        "b": false
+      }
+    },
+    {
+      "no": "F1",
+      "name": "关掉「同步视角」→ 拖左侧，右侧保持不动",
+      "ok": true,
+      "detail": {
+        "syncEnabled": false,
+        "movedA": 177.72906914948868,
+        "movedB": 0,
+        "delta": {
+          "position": 179.70252086238114,
+          "quaternion": 0.4536689807871693,
+          "target": 0,
+          "fov": 0,
+          "near": 0,
+          "far": 0
+        }
+      }
+    },
+    {
+      "no": "F2",
+      "name": "重新打开「同步视角」→ 立即以活动侧为准对齐",
+      "ok": true,
+      "detail": {
+        "delta": {
+          "position": 0,
+          "quaternion": 0,
+          "target": 0,
+          "fov": 0,
+          "near": 0,
+          "far": 0
+        },
+        "syncText": "同步视角 ON"
+      }
+    },
+    {
+      "no": "G1",
+      "name": "交换左右（真实点击按钮）：两个视口的屏幕位置对调，标签与版本不变",
+      "ok": true,
+      "detail": {
+        "before": {
+          "a": 316,
+          "b": 878
+        },
+        "after": {
+          "a": 878,
+          "b": 316,
+          "swappedClass": true
+        },
+        "swapped": true,
+        "tagA": "A2026-09-18",
+        "tagB": "B2026-09-20",
+        "maxDiff": 2.842170943040401e-14
+      }
+    },
+    {
+      "no": "G2",
+      "name": "交换后相机同步依旧：拖右侧（现在在左）仍带动另一侧",
+      "ok": true,
+      "detail": {
+        "delta": {
+          "position": 2.842170943040401e-14,
+          "quaternion": 2.7755575615628914e-17,
+          "target": 0,
+          "fov": 0,
+          "near": 0,
+          "far": 0
+        }
+      }
+    },
+    {
+      "no": "G3",
+      "name": "交换态下底部工具条仍在最上层：canvas 不遮挡、按钮可点（历史 bug 回归）",
+      "ok": true,
+      "detail": {
+        "swapped": true,
+        "zIndex": "5",
+        "order": "0",
+        "rect": [
+          412,
+          845,
+          933,
+          45
+        ],
+        "left": {
+          "top": "selName",
+          "toolbarIdx": 4,
+          "paneIdx": 6,
+          "stack": [
+            "selName",
+            "selBadge",
+            "navOrbit",
+            "navseg",
+            "toolbar"
+          ]
+        },
+        "center": {
+          "top": "btnSplit",
+          "toolbarIdx": 1,
+          "paneIdx": 4,
+          "stack": [
+            "btnSplit",
+            "toolbar",
+            "splitDivider",
+            "cv",
+            "paneA"
+          ]
+        },
+        "right": {
+          "top": "btnShowAll",
+          "toolbarIdx": 1,
+          "paneIdx": 3,
+          "stack": [
+            "btnShowAll",
+            "toolbar",
+            "cv",
+            "paneA",
+            "center"
+          ]
+        },
+        "dividerZ": "1"
+      }
+    },
+    {
+      "no": "G4",
+      "name": "再点击一次即还原",
+      "ok": true,
+      "detail": {
+        "a": 316,
+        "bb": 878,
+        "swappedClass": false
+      }
+    },
+    {
+      "no": "H1",
+      "name": "拖动分隔线：左右宽度按比例变化，两侧相机仍同步",
+      "ok": true,
+      "detail": {
+        "ratio": 0.68,
+        "paneAWidth": 764,
+        "paneBWidth": 360,
+        "dividerLeft": "68%",
+        "maxDiff": 0.00001083365479104259
+      }
+    },
+    {
+      "no": "I0",
+      "name": "（诊断）退出前：两侧导航模式 / 输入源归属快照",
+      "ok": true,
+      "detail": {
+        "activeSide": "B",
+        "modeA": "orbit",
+        "activeA": false,
+        "pausedA": false,
+        "capturedA": false,
+        "attachedA": true,
+        "globalA": false,
+        "modeB": "orbit",
+        "activeB": false,
+        "attachedB": true,
+        "globalB": true,
+        "suppressed": {
+          "a": true,
+          "b": false
+        }
+      }
+    },
+    {
+      "no": "I1",
+      "name": "退出：第二 Viewer 与 canvas 一起销毁，监听不留残余",
+      "ok": true,
+      "detail": {
+        "active": false,
+        "viewerBAlive": false,
+        "gpuAlive": false,
+        "canvasB": false
+      }
+    },
+    {
+      "no": "I2",
+      "name": "退出后布局还原：单模型全宽、控制条隐藏、分隔线消失",
+      "ok": true,
+      "detail": {
+        "center": 1124,
+        "pane": 1124,
+        "paneBDisplay": "none",
+        "dividerDisplay": "none",
+        "paneAFlex": "",
+        "ui": {
+          "splitMode": false,
+          "ctl": false,
+          "btn": false
+        }
+      }
+    },
+    {
+      "no": "I3",
+      "name": "主 Viewer 版本未变（A 就是当前版本时不该被换掉）",
+      "ok": true,
+      "detail": {
+        "title": {
+          "project": "光气",
+          "model": "hygq",
+          "version": "2026-09-20",
+          "tab": "光气 / hygq / 2026-09-20 — PDMS Viewer"
+        },
+        "versionId": "2026-09-20"
+      }
+    },
+    {
+      "no": "I4",
+      "name": "单模型功能回归：选中 / 隐藏 / 显示全部 / 测量 / 树 / 属性 / 批注面板",
+      "ok": true,
+      "detail": {
+        "ndc": [
+          -0.6,
+          0
+        ],
+        "selCount": 1,
+        "outline": 1,
+        "measOn": true,
+        "measPending": true,
+        "hid": 1,
+        "hidAfter": 0,
+        "treeRows": 74,
+        "propInfo": "BOX · 34 个子节点",
+        "issuePanel": true,
+        "pointerLock": true,
+        "nav": "game",
+        "buttons": {
+          "hide": false,
+          "isolate": false,
+          "showAll": true,
+          "compare": false,
+          "split": false
+        }
+      }
+    },
+    {
+      "no": "I5",
+      "name": "可以再次进入分屏（第二 viewer 可重建，canvas 每次新建）",
+      "ok": true,
+      "detail": {
+        "reopened": true,
+        "canvasB": true,
+        "maxDiff": 2.842170943040401e-14,
+        "closedAlive": false
+      }
+    },
+    {
+      "no": "I6",
+      "name": "两轮进出后显存不持续增长（主 Viewer 的 geometries 回到基线量级）",
+      "ok": true,
+      "detail": {
+        "before": 321,
+        "after": 321,
+        "beforeTextures": 3,
+        "afterTextures": 3
+      }
+    },
+    {
+      "no": "J1",
+      "name": "分屏时左视口换成别的版本 → 退出后自动回到进入分屏前那一版",
+      "ok": true,
+      "detail": {
+        "before": "2026-09-20",
+        "during": "2026-09-18",
+        "after": "2026-09-20",
+        "splitActive": true
+      }
+    },
+    {
+      "no": "K1",
+      "name": "全程无未捕获异常",
+      "ok": true,
+      "detail": {
+        "pageErrors": []
+      }
+    },
+    {
+      "no": "K2",
+      "name": "无异常资源请求（warning 与已知的 /issues 404 不计）",
+      "ok": true,
+      "detail": {
+        "unexpected": [],
+        "badResponses": [
+          "404 http://127.0.0.1:8899/api/versions/qichuang/hygq/2026-09-20/issues",
+          "404 http://127.0.0.1:8899/api/versions/qichuang/hygq/2026-09-18/issues",
+          "404 http://127.0.0.1:8899/api/versions/qichuang/hygq/2026-09-20/issues",
+          "404 http://127.0.0.1:8899/api/versions/qichuang/hygq/2026-09-18/issues",
+          "404 http://127.0.0.1:8899/api/versions/qichuang/hygq/2026-09-18/issues",
+          "404 http://127.0.0.1:8899/api/versions/qichuang/hygq/2026-09-18/issues"
+        ],
+        "consoleErrors": 6,
+        "console": [
+          "[error] Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "[error] Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "[error] Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "[error] Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "[error] Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "[error] Failed to load resource: the server responded with a status of 404 (Not Found)"
+        ]
+      }
+    }
+  ],
+  "console": [
+    "[error] Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "[error] Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "[error] Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "[error] Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "[error] Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "[error] Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pageErrors": [],
+  "modelInfo": {
+    "meshes": 16255,
+    "lines": 0,
+    "namedNodes": 18987,
+    "floorplan": {
+      "equipment": 290,
+      "positioned": 290,
+      "outlines": 2195,
+      "outlineSegments": 35556,
+      "labelBatches": 1,
+      "debugCenters": 0,
+      "floorY": -13.127092053024839,
+      "floorOffset": 0.0020912402130435397
+    },
+    "floorplanError": null
+  },
+  "gpuBefore": {
+    "geometries": 321,
+    "textures": 3,
+    "programs": 5,
+    "sceneChildren": 7,
+    "namedNodes": 18987,
+    "meshRefs": 18987,
+    "hidden": 0,
+    "selected": null,
+    "outlineObjects": 0,
+    "ready": true,
+    "compareRoots": 0,
+    "compareBatchMeshes": null,
+    "splitViewerAlive": false,
+    "splitGeometries": null,
+    "splitNodes": null
+  },
+  "dialog": {
+    "a": [
+      "2026-09-20",
+      "2026-09-18"
+    ],
+    "bVal": "0",
+    "aVal": "1",
+    "disabled": false,
+    "modalOpen": true
+  },
+  "start": {
+    "active": true,
+    "modalOpen": false,
+    "syncEnabled": true,
+    "syncText": "同步视角 ON",
+    "swapped": false,
+    "swapText": "交换左右",
+    "ratio": 0.5,
+    "activeSide": "A",
+    "splitModeClass": true,
+    "ctlVisible": true,
+    "paneAWidth": 562,
+    "paneBWidth": 562,
+    "paneBVisible": true,
+    "viewerBAlive": true,
+    "bReady": true,
+    "bNodes": 18987,
+    "bFps": null,
+    "poseA": {
+      "position": [
+        130.726459148735,
+        99.86048901894574,
+        130.72645934380387
+      ],
+      "target": [
+        5.48708612768678e-7,
+        -1.8940772861242294e-7,
+        7.437774627305771e-7
+      ],
+      "quaternion": [
+        -0.22644488917865632,
+        0.37101053583103955,
+        0.09379654422787197,
+        0.895698667386605
+      ],
+      "up": [
+        0,
+        1,
+        0
+      ],
+      "fov": 50,
+      "near": 0.042024245983070536,
+      "far": 3021.4547589842323,
+      "mode": "game"
+    },
+    "poseB": {
+      "position": [
+        130.726459148735,
+        99.86048901894574,
+        130.72645934380384
+      ],
+      "target": [
+        5.48708612768678e-7,
+        -1.8940772861242294e-7,
+        7.437774343088677e-7
+      ],
+      "quaternion": [
+        -0.22644488917865632,
+        0.37101053583103955,
+        0.09379654422787197,
+        0.895698667386605
+      ],
+      "up": [
+        0,
+        1,
+        0
+      ],
+      "fov": 50,
+      "near": 0.042024245983070536,
+      "far": 3021.4547589842323,
+      "mode": "game"
+    },
+    "modeA": "game",
+    "modeB": "game",
+    "a": {
+      "pid": "qichuang",
+      "mid": "hygq",
+      "vid": "2026-09-18",
+      "versionName": "2026-09-18",
+      "modelName": "hygq"
+    },
+    "b": {
+      "pid": "qichuang",
+      "mid": "hygq",
+      "vid": "2026-09-20",
+      "versionName": "2026-09-20",
+      "modelName": "hygq"
+    },
+    "tagA": "A2026-09-18",
+    "tagB": "B2026-09-20",
+    "selectionText": "点击任一侧的元件即可识别它属于哪个模型版本",
+    "selectionA": null,
+    "selectionB": null,
+    "inputSuppressed": {
+      "a": false,
+      "b": true
+    },
+    "options": [
+      {
+        "label": "光气 / hygq / 2026-09-20",
+        "mid": "hygq",
+        "vid": "2026-09-20"
+      },
+      {
+        "label": "光气 / hygq / 2026-09-18",
+        "mid": "hygq",
+        "vid": "2026-09-18"
+      }
+    ]
+  },
+  "gpuDuring": {
+    "geometries": 322,
+    "textures": 10,
+    "programs": 12,
+    "sceneChildren": 7,
+    "namedNodes": 18987,
+    "meshRefs": 18987,
+    "hidden": 0,
+    "selected": "FLOOR 1 of FRMWORK /floor",
+    "outlineObjects": 1,
+    "ready": true,
+    "compareRoots": 0,
+    "compareBatchMeshes": null,
+    "splitViewerAlive": true,
+    "splitGeometries": 318,
+    "splitNodes": 18987
+  },
+  "badResponses": [
+    "404 http://127.0.0.1:8899/api/versions/qichuang/hygq/2026-09-20/issues",
+    "404 http://127.0.0.1:8899/api/versions/qichuang/hygq/2026-09-18/issues",
+    "404 http://127.0.0.1:8899/api/versions/qichuang/hygq/2026-09-20/issues",
+    "404 http://127.0.0.1:8899/api/versions/qichuang/hygq/2026-09-18/issues",
+    "404 http://127.0.0.1:8899/api/versions/qichuang/hygq/2026-09-18/issues",
+    "404 http://127.0.0.1:8899/api/versions/qichuang/hygq/2026-09-18/issues"
+  ],
+  "passed": 43,
+  "total": 43
+}

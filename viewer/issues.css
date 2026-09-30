@@ -22,3 +22,31 @@
 #issueText { width:100%; box-sizing:border-box; min-height:120px; margin:12px 0; resize:vertical; }
 #issueDraftObject, #issueDraftError { font-size:12px; overflow-wrap:anywhere; }
 #issueDraftError { color:#b42318; }
+
+/* ---- 中英双语：两段文案都在 DOM 里，由面板 class 决定可见性（切换不重建列表） ---- */
+.issue-row .zh, .issue-row .en, #issueDetailText .zh, #issueDetailText .en { display:inline; }
+#issueDetailText .zh, #issueDetailText .en { display:block; }
+#issueDetailText b { margin-right:6px; }
+#issuePanel.lang-zh .en { display:none; }
+#issuePanel.lang-en .zh { display:none; }
+#issuePanel.lang-both .en { color:#475467; }
+/* 未翻译不是空白：English / 中英对照模式下显式标出来，避免误判成已翻译 */
+#issuePanel.lang-en .en:empty::after, #issuePanel.lang-both .en:empty::after {
+  content:'（未翻译）'; color:#98a2b3; font-style:italic;
+}
+#issuePanel.lang-both .issue-row .en { display:block; }
+#issuePanel.lang-both #issueDetailText .en { margin-top:4px; padding-left:8px; border-left:2px solid #cbd5e1; }
+
+.issue-lang, .issue-transfer { display:flex; gap:6px; padding:0 10px 10px; }
+.issue-lang button { flex:1; }
+.issue-lang button[aria-pressed="true"] { border-color:#2563eb; background:#eaf1ff; font-weight:600; }
+.issue-transfer button { flex:1; }
+
+#issueImportDialog { width:min(560px,90vw); border:1px solid #cbd5e1; border-radius:10px; padding:20px; }
+#issueImportDialog::backdrop { background:#0005; }
+#issueImportDialog .hint { font-size:12px; color:#475467; margin:6px 0 12px; line-height:1.6; }
+#issueImportText { width:100%; box-sizing:border-box; min-height:160px; margin:0 0 12px; resize:vertical;
+  font-family:ui-monospace,Consolas,monospace; font-size:12px; white-space:pre; }
+#issueImportError { color:#b42318; font-size:12px; overflow-wrap:anywhere; }
+#issueImportResult { color:#067647; font-size:12px; overflow-wrap:anywhere; }
+#issueImportDialog .issue-actions { padding:10px 0 0; }

@@ -3,7 +3,7 @@
     {
       "step": "每日码：可生成且格式 XXXX-XXXX",
       "ok": true,
-      "detail": "M8D9-43JB"
+      "detail": "29RG-VWBB"
     },
     {
       "step": "Case 8 前置：昨日码不再被信任（文件日期过期即重新生成）",
@@ -13,7 +13,7 @@
     {
       "step": "Case 8：旧码不能建立新 Session，今日码可用",
       "ok": true,
-      "detail": "9XST-33D7"
+      "detail": "YDNC-QG56"
     },
     {
       "step": "防伪造：TRUST_LOOPBACK=1 时无 TRUSTED_PROXIES 则忽略 X-Forwarded-For",
@@ -26,7 +26,7 @@
       "detail": null
     },
     {
-      "step": "后端启动（127.0.0.1:55191）",
+      "step": "后端启动（127.0.0.1:64142）",
       "ok": true,
       "detail": null
     },
@@ -39,8 +39,8 @@
       "step": "Case 2 内网：全部项目 + 今日内部码",
       "ok": true,
       "detail": {
-        "projects": 1,
-        "code": "9XST-33D7"
+        "projects": 3,
+        "code": "YDNC-QG56"
       }
     },
     {
@@ -55,7 +55,7 @@
       "step": "Case 4 内部码 → INTERNAL_REMOTE 全项目只读",
       "ok": true,
       "detail": {
-        "projects": 1,
+        "projects": 3,
         "create": 403,
         "delete": 403
       }
@@ -71,7 +71,7 @@
       "detail": {
         "role": "CLIENT_PROJECT",
         "visible": [
-          "access-test-20260919"
+          "access-test-20260924"
         ]
       }
     },
@@ -112,7 +112,7 @@
       "step": "Case 11 内网密码正确 → 删除成功且从列表消失",
       "ok": true,
       "detail": {
-        "trashedTo": "/data/trash/20260919-141435-project-access-test-20260919",
+        "trashedTo": "/data/trash/20260924-152006-project-access-test-20260924",
         "gone": true
       }
     },
@@ -144,5 +144,5 @@
     }
   ],
   "ok": true,
-  "base": "http://127.0.0.1:55191"
+  "base": "http://127.0.0.1:64142"
 }

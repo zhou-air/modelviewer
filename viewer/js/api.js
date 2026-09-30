@@ -37,6 +37,8 @@ export const api = {
   issues: (p, m, v) => call('GET', `/versions/${p}/${m}/${v}/issues`),
   createIssue: (p, m, v, body) => call('POST', `/versions/${p}/${m}/${v}/issues`, body),
   updateIssue: (p, m, v, id, body) => call('PATCH', `/versions/${p}/${m}/${v}/issues/${id}`, body),
+  issueTranslations: (p, m, v, items) =>
+    call('POST', `/versions/${p}/${m}/${v}/issues/translations`, { items }),
   health: () => call("GET", "/health"),
   // ---- 访问权限 ----
   accessStatus: () => call("GET", "/access/status"),
@@ -48,6 +50,12 @@ export const api = {
   // ---- 资产管理 ----
   projects: () => call("GET", "/projects"),
   project: (pid) => call("GET", `/projects/${pid}`),
+  projectFiles: (pid) => call("GET", `/projects/${encodeURIComponent(pid)}/files`),
+  deleteProjectFile: (pid, fid, password) =>
+    call("DELETE", `/projects/${encodeURIComponent(pid)}/files/${encodeURIComponent(fid)}`,
+      undefined, delHeaders(password)),
+  projectFileDownloadUrl: (pid, fid) =>
+    `/api/projects/${encodeURIComponent(pid)}/files/${encodeURIComponent(fid)}/download`,
   createProject: (name, id, description = "") =>
     call("POST", "/projects", { name, id, description }),
   updateProject: (pid, patch) => call("PATCH", `/projects/${pid}`, patch),
@@ -92,6 +100,28 @@ export function uploadSource(jobId, which, file, onProgress) {
         payload?.error?.message || `HTTP ${xhr.status}`));
     };
     xhr.onerror = () => reject(new ApiError("upload_failed", "上传失败（网络或后端中断）"));
+    xhr.send(file);
+  });
+}
+
+/** 项目资料上传：目标项目与原始文件名在选择文件时确定，不读取后续界面选择。 */
+export function uploadProjectFile(projectId, file, onProgress) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', `/api/projects/${encodeURIComponent(projectId)}/files?name=${encodeURIComponent(file.name)}`);
+    xhr.setRequestHeader('Content-Type', 'application/octet-stream');
+    xhr.upload.onprogress = (e) => {
+      if (e.lengthComputable) onProgress?.(e.loaded, e.total);
+    };
+    xhr.onload = () => {
+      let payload = null;
+      try { payload = JSON.parse(xhr.responseText); } catch { /* 非 JSON 错误页 */ }
+      if (xhr.status >= 200 && xhr.status < 300 && payload?.ok) resolve(payload.data);
+      else reject(new ApiError(payload?.error?.code || 'upload_failed',
+        payload?.error?.message || `HTTP ${xhr.status}`));
+    };
+    xhr.onerror = () => reject(new ApiError('upload_failed', '上传失败（网络或后端中断）'));
+    xhr.onabort = () => reject(new ApiError('upload_aborted', '上传已取消'));
     xhr.send(file);
   });
 }

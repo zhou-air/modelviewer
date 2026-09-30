@@ -31,6 +31,7 @@ import issue_store as I
 import asset_store as S            # noqa: E402
 import import_pipeline as P        # noqa: E402
 import access_control as AC        # noqa: E402  访问权限层（内网识别 / Session / 权限判定）
+import project_file_store as F    # noqa: E402
 
 ROOT = S.ROOT
 
@@ -103,6 +104,44 @@ def api_delete_project(req, pid: str) -> dict:
     return S.delete_project(pid)
 
 
+def api_project_files(req, pid: str) -> dict:
+    return F.list_files(pid)
+
+
+def api_project_file_upload(req, pid: str) -> dict:
+    length = req.project_file_upload_length()
+    previous_timeout = req.connection.gettimeout()
+    req.connection.settimeout(30)  # Bound stalled/truncated upload connections.
+    try:
+        return F.upload(pid, req.query.get("name", ""), req.rfile, length)
+    finally:
+        req.connection.settimeout(previous_timeout)
+
+
+def api_project_file_delete(req, pid: str, fid: str) -> dict:
+    return F.delete_file(pid, fid)
+
+
+def api_project_file_download(req, pid: str, fid: str) -> None:
+    from urllib.parse import quote
+
+    record, stream = F.open_download(pid, fid)
+    with stream:
+        try:
+            req.send_response(200)
+            req.send_header("Content-Type", "application/octet-stream")
+            req.send_header("Content-Length", str(record["size"]))
+            req.send_header("X-Content-Type-Options", "nosniff")
+            req.send_header("Content-Disposition", "attachment; filename=\"download\"; filename*=UTF-8''"
+                            + quote(record["fileName"], safe=""))
+            req.end_headers()
+            shutil.copyfileobj(stream, req.wfile, 1 << 20)
+        except OSError:
+            # Once attachment headers are sent, a disconnected client must not
+            # receive a JSON error appended to the binary download.
+            req.close_connection = True
+
+
 def api_create_model(req, pid: str) -> dict:
     b = req.body_json()
     return S.create_model(pid, b.get("name", ""), b.get("id"), b.get("description", ""))
@@ -131,6 +170,11 @@ def api_issue_create(req, pid, mid, vid):
 
 def api_issue_update(req, pid, mid, vid, iid):
     return I.update(pid, mid, vid, iid, req.body_json())
+
+
+def api_issue_translations(req, pid, mid, vid):
+    """批量写入英文批注：按序号匹配，只写 commentEn，不改中文原文。"""
+    return I.apply_translations(pid, mid, vid, req.body_json())
 
 
 def api_version_log(req, pid: str, mid: str, vid: str) -> dict:
@@ -291,6 +335,7 @@ ROUTES: list[tuple[str, re.Pattern, object, tuple[str, ...]]] = [
     ("GET", re.compile(r"^/versions/(?P<pid>[^/]+)/(?P<mid>[^/]+)/(?P<vid>[^/]+)/issues$"), api_issues, ("pid", "mid", "vid")),
     ("POST", re.compile(r"^/versions/(?P<pid>[^/]+)/(?P<mid>[^/]+)/(?P<vid>[^/]+)/issues$"), api_issue_create, ("pid", "mid", "vid")),
     ("PATCH", re.compile(r"^/versions/(?P<pid>[^/]+)/(?P<mid>[^/]+)/(?P<vid>[^/]+)/issues/(?P<iid>[^/]+)$"), api_issue_update, ("pid", "mid", "vid", "iid")),
+    ("POST", re.compile(r"^/versions/(?P<pid>[^/]+)/(?P<mid>[^/]+)/(?P<vid>[^/]+)/issues/translations$"), api_issue_translations, ("pid", "mid", "vid")),
     ("GET",    re.compile(r"^/health$"), api_health, ()),
     ("GET",    re.compile(r"^/suggest-id$"), api_suggest_id, ()),
     ("GET",    re.compile(r"^/access/status$"), api_access_status, ()),
@@ -301,6 +346,10 @@ ROUTES: list[tuple[str, re.Pattern, object, tuple[str, ...]]] = [
     ("POST",   re.compile(r"^/projects/(?P<pid>[^/]+)/access-code$"), api_project_access_post, ("pid",)),
     ("GET",    re.compile(r"^/projects$"), api_projects, ()),
     ("POST",   re.compile(r"^/projects$"), api_create_project, ()),
+    ("GET",    re.compile(r"^/projects/(?P<pid>[^/]+)/files$"), api_project_files, ("pid",)),
+    ("POST",   re.compile(r"^/projects/(?P<pid>[^/]+)/files$"), api_project_file_upload, ("pid",)),
+    ("GET",    re.compile(r"^/projects/(?P<pid>[^/]+)/files/(?P<fid>[^/]+)/download$"), api_project_file_download, ("pid", "fid")),
+    ("DELETE", re.compile(r"^/projects/(?P<pid>[^/]+)/files/(?P<fid>[^/]+)$"), api_project_file_delete, ("pid", "fid")),
     ("GET",    re.compile(r"^/projects/(?P<pid>[^/]+)$"), api_project, ("pid",)),
     ("PATCH",  re.compile(r"^/projects/(?P<pid>[^/]+)$"), api_patch_project, ("pid",)),
     ("DELETE", re.compile(r"^/projects/(?P<pid>[^/]+)$"), api_delete_project, ("pid",)),
@@ -355,6 +404,20 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
     def body_raw(self) -> bytes:
         return getattr(self, "_raw", b"")
+
+    def project_file_upload_length(self) -> int:
+        if self.headers.get("Transfer-Encoding"):
+            raise ApiError(400, "unsupported_transfer_encoding", "文件上传必须提供 Content-Length")
+        values = self.headers.get_all("Content-Length", [])
+        if not values:
+            raise ApiError(411, "content_length_required", "文件上传必须提供 Content-Length")
+        if len(values) != 1 or not re.fullmatch(r"[0-9]+", values[0].strip()):
+            raise ApiError(400, "invalid_content_length", "上传长度无效")
+        value = values[0].strip()
+        # Avoid parsing an unbounded integer from a malformed request.
+        if len(value) > 12 or int(value) > F.MAX_FILE_BYTES:
+            raise ApiError(413, "file_too_large", "单个文件不能超过 100 MB")
+        return int(value)
 
     def body_json(self) -> dict:
         raw = self.body_raw()
@@ -429,14 +492,23 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
     # ---- 静态文件守卫（模型文件同样执行项目权限检查；白名单之外一律拒绝） ----
     def _guard_static(self, path: str, ctx: dict) -> None:
-        if path.startswith("/viewer"):
+        # Apply permissions to the exact decoded/canonical path that the static
+        # server will read. Raw URL prefixes allow encoded traversal or symlinks
+        # to bypass the project check and expose private uploaded files.
+        served = Path(self.translate_path(path)).resolve()
+        try:
+            parts = served.relative_to(ROOT.resolve()).parts
+        except ValueError:
+            raise AC.AccessError(403, "static_forbidden", "该路径不提供静态访问")
+        if parts and parts[0].casefold() == "viewer":
             return                              # Viewer 自身与 three.js：所有人可见
-        if path.startswith("/data/projects/"):
-            parts = path.split("/")
-            if len(parts) >= 4:
+        if len(parts) >= 3 and tuple(part.casefold() for part in parts[:2]) == ("data", "projects"):
+            if len(parts) >= 4 and parts[3].casefold() == "files":
+                raise AC.AccessError(403, "static_forbidden", "项目文件只能通过下载接口访问")
+            if len(parts) >= 3:
                 if ctx["role"] == "ANONYMOUS":
                     raise AC.AccessError(401, "auth_required", "请先输入访问码")
-                AC.require_view_project(ctx, parts[3])
+                AC.require_view_project(ctx, parts[2])
             return
         # 其余一切（/data/trash、/data/access、/config（含删除密码）、/tools、
         # /converter、/reports、/scratch…）一律不通过 HTTP 暴露
@@ -446,7 +518,9 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     def _dispatch(self, method: str) -> None:
         from urllib.parse import urlparse
         path = urlparse(self.path).path
-        if method in ("POST", "PUT", "PATCH"):
+        project_file_upload = (method == "POST"
+                               and re.fullmatch(r"/api/projects/[^/]+/files", path) is not None)
+        if method in ("POST", "PUT", "PATCH") and not project_file_upload:
             self._raw = self._read_body()
         else:
             self._raw = b""
@@ -479,16 +553,28 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 kwargs = {n: mo.group(n) for n in names}
                 try:
                     self._authorize(method, rest, self.access)   # 集中权限守卫
-                    with S.LOCK:                     # 请求级串行：扫描与增删不会互相踩
-                        data = fn(self, **kwargs)
+                    if fn is api_project_file_download:
+                        fn(self, **kwargs)           # Stream outside the global lock.
+                        return
+                    if fn is api_project_file_upload:
+                        data = fn(self, **kwargs)    # Validate/receive before store lock.
+                    else:
+                        with S.LOCK:                 # 请求级串行：扫描与增删不会互相踩
+                            data = fn(self, **kwargs)
                     self._json(200, {"ok": True, "data": data})
                 except (S.StoreError, ApiError, AC.AccessError) as e:
+                    if project_file_upload:
+                        self.close_connection = True  # Do not reinterpret unread body as another request.
                     self._json(e.http, {"ok": False, "error": {"code": e.code,
                                                                "message": e.message}})
                 except FileNotFoundError as e:
+                    if project_file_upload:
+                        self.close_connection = True
                     self._json(404, {"ok": False, "error": {"code": "not_found",
                                                             "message": str(e)}})
                 except Exception as e:  # noqa: BLE001
+                    if project_file_upload:
+                        self.close_connection = True
                     traceback.print_exc()
                     self._json(500, {"ok": False, "error": {"code": "internal",
                                                             "message": repr(e)}})
@@ -616,7 +702,7 @@ def main() -> int:
         print("  仅监听 127.0.0.1，模型数据不出本机")
     else:
         print(f"  监听 {a.host}:{port}，同一局域网内的设备可通过上面的局域网地址访问")
-    print(f"  访问权限: 内网网段 [{', '.join(str(n) for n in AC.CONFIG.internal_ranges)}] · "
+    print(f"  访问权限: 内网判定 [{AC.CONFIG.describe_internal_ranges()}] · "
           f"信任loopback {'是' if AC.CONFIG.trust_loopback else '否'} · "
           f"可信代理 {len(AC.CONFIG.trusted_proxies)} 条 · "
           f"Session {AC.CONFIG.session_ttl_hours:g} h · "
@@ -627,7 +713,11 @@ def main() -> int:
     if a.host == "127.0.0.1" and not AC.CONFIG.trust_loopback:
         print("  [警告] 当前只监听 127.0.0.1 且不信任 loopback —— 局域网设备将无法访问。")
         print("         请改用 start-lan.bat 启动（0.0.0.0）。")
-    if a.host != "127.0.0.1" and not AC.CONFIG.trusted_proxies:
+    if a.host != "127.0.0.1" and AC.CONFIG.internal_auto:
+        print("  [提示] 内网判定=auto：本机所在局域网内的任何设备都能直接进入（无需访问码）。")
+        print("         要只看本网段，请在 config/access.env 里把 INTERNAL_NETWORK_RANGES")
+        print("         改成具体网段（如 192.168.5.0/24）后重启。")
+    elif a.host != "127.0.0.1" and not AC.CONFIG.trusted_proxies:
         print("  [提示] 对外部署时请在 config/access.env 里收紧 INTERNAL_NETWORK_RANGES，"
               "并在反向代理场景配置 TRUSTED_PROXIES。")
     print()

@@ -1,0 +1,14 @@
+{
+  "results": [
+    {
+      "name": "找到 3 个可拾取对象",
+      "ok": true,
+      "detail": [
+        "STWALL 22 of FRMWORK /W-SHOP-1-WALL",
+        "CYLINDER 1 of EQUIPMENT /T1081",
+        "FLOOR 1 of FRMWORK /W-SHOP-1-FLOOR"
+      ]
+    }
+  ],
+  "errors": []
+}

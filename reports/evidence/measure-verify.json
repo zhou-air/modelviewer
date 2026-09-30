@@ -2,24 +2,24 @@
   "url": "http://127.0.0.1:8899/viewer/index.html",
   "target": {
     "pid": "qichuang",
-    "mid": "site",
-    "vid": "2026-09-19"
+    "mid": "hygq",
+    "vid": "2026-09-20"
   },
-  "startedAt": "2026-09-21T03:49:55.462Z",
-  "ok": true,
+  "startedAt": "2026-09-23T13:47:18.131Z",
+  "ok": false,
   "scenarios": [
     {
       "no": "A0",
       "name": "模型就绪 · 批量渲染开启 · 取到 rvmparser-origin",
       "ok": true,
       "detail": {
-        "namedNodes": 7423,
-        "batches": 105,
-        "renderMeshes": 105,
+        "namedNodes": 18987,
+        "batches": 317,
+        "renderMeshes": 317,
         "origin": [
-          -20.039997100830078,
-          64.97950744628906,
-          9.803499221801758
+          79.6500015258789,
+          51.925498962402344,
+          12.075000762939453
         ]
       }
     },
@@ -47,7 +47,7 @@
           "cy": 428
         },
         "axes": "PDMS 世界坐标（Z 向上）",
-        "glyph": "+"
+        "glyph": "⊕"
       }
     },
     {
@@ -57,7 +57,7 @@
       "detail": {
         "mode": "game",
         "captured": true,
-        "movedMeters": 2.554
+        "movedMeters": 2.524
       }
     },
     {
@@ -65,18 +65,18 @@
       "name": "挑到可用于精确对准的元件（含真实表面点与外法线）",
       "ok": true,
       "detail": {
-        "canonical": "/QICHUANG-LANDING-3300",
-        "meshes": 57,
-        "scanned": 6255
+        "canonical": "SUBSTRUCTURE 17 of STRUCTURE /LADER-V090101",
+        "meshes": 14,
+        "scanned": 18626
       }
     },
     {
       "no": "B1",
       "name": "准星命中：canonicalId 解析正确（faceIndex→canonicalId 归属该元件）",
-      "ok": true,
+      "ok": false,
       "detail": {
-        "aim": "DISH 2 of SUBSTRUCTURE 10 of STRUCTURE /QICHUANG-LANDING-3300",
-        "target": "/QICHUANG-LANDING-3300"
+        "aim": "RTORUS 1 of SUBSTRUCTURE 7 of STRUCTURE /LADER-V090101",
+        "target": "SUBSTRUCTURE 17 of STRUCTURE /LADER-V090101"
       }
     },
     {
@@ -85,16 +85,16 @@
       "ok": true,
       "detail": {
         "hitPoint": [
-          36.3639984114249,
-          -5.456499067815715,
-          60.04150764620864
+          -75.79943018695693,
+          -3.270500448590614,
+          -13.078251639118907
         ],
         "probePoint": [
-          36.36399841225542,
-          -5.437498993822361,
-          60.04150764620864
+          -75.79942831888911,
+          -3.270500448590614,
+          -13.078255645203175
         ],
-        "errMeters": 0.019
+        "errMeters": 0
       }
     },
     {
@@ -103,15 +103,15 @@
       "ok": true,
       "detail": {
         "point": [
-          36.3639984114249,
-          -5.456499067815715,
-          60.04150764620864
+          -75.79943018695693,
+          -3.270500448590614,
+          -13.078251639118907
         ],
-        "canonicalId": "DISH 2 of SUBSTRUCTURE 10 of STRUCTURE /QICHUANG-LANDING-3300",
+        "canonicalId": "RTORUS 1 of SUBSTRUCTURE 7 of STRUCTURE /LADER-V090101",
         "bboxCenter": [
-          36.36399841499328,
-          -5.418498992919909,
-          60.022507720875346
+          -75.42918959900337,
+          -3.3030004501342813,
+          -13.374540061641468
         ]
       }
     },
@@ -121,14 +121,14 @@
       "ok": true,
       "detail": {
         "ref": [
-          36.36399841499328,
-          -5.418498992919909,
-          60.022507720875346
+          -75.42918959900337,
+          -3.3030004501342813,
+          -13.374540061641468
         ],
         "state": [
-          36.36399841499328,
-          -5.418498992919909,
-          60.022507720875346
+          -75.42918959900337,
+          -3.3030004501342813,
+          -13.374540061641468
         ],
         "err": 0
       }
@@ -150,16 +150,16 @@
       "detail": {
         "pending": {
           "kind": "surface",
-          "canonicalId": "DISH 2 of SUBSTRUCTURE 10 of STRUCTURE /QICHUANG-LANDING-3300",
+          "canonicalId": "RTORUS 1 of SUBSTRUCTURE 7 of STRUCTURE /LADER-V090101",
           "point": [
-            36.3639984114249,
-            -5.456499067815715,
-            60.04150764620864
+            -75.79943018695693,
+            -3.270500448590614,
+            -13.078251639118907
           ],
           "hitPoint": [
-            36.3639984114249,
-            -5.456499067815715,
-            60.04150764620864
+            -75.79943018695693,
+            -3.270500448590614,
+            -13.078251639118907
           ],
           "hasBox": true
         }
@@ -177,14 +177,13 @@
     {
       "no": "C3",
       "name": "A 已记录 + 准星移动 → 实时预览线与预览距离（与现算一致）",
-      "ok": true,
+      "ok": false,
       "detail": {
         "degenerateWhenOnA": true,
-        "previewVisible": true,
-        "previewMm": 350.654491479579,
-        "expectedMm": 350.654491479579,
-        "label": "350.7 mm",
-        "labels": 2
+        "previewVisible": false,
+        "expectedMm": 0.005653314052328456,
+        "label": null,
+        "labels": 1
       }
     },
     {
@@ -205,9 +204,9 @@
       "name": "distanceMm == hypot(ΔX, ΔY, ΔZ)（坐标映射自洽，旋转不变量）",
       "ok": true,
       "detail": {
-        "distanceMm": 2356.52721894108,
-        "hypot": 2356.5272189410794,
-        "diff": 4.547473508864641e-13
+        "distanceMm": 475.31165816698035,
+        "hypot": 475.31165816698183,
+        "diff": -1.4779288903810084e-12
       }
     },
     {
@@ -215,9 +214,9 @@
       "name": "distanceMm == 世界空间距离(米) × 1000（不是基于屏幕像素）",
       "ok": true,
       "detail": {
-        "distanceMm": 2356.52721894108,
-        "worldMeters": 2.3565272189410797,
-        "stateWorldM": 2.3565272189410797
+        "distanceMm": 475.31165816698035,
+        "worldMeters": 0.4753116581669804,
+        "stateWorldM": 0.47531165816698034
       }
     },
     {
@@ -226,24 +225,24 @@
       "ok": true,
       "detail": {
         "state": [
-          -409.00039506748,
-          -2319.999769562855,
-          -59.500249353461186
+          370.24058795355995,
+          296.28842252256436,
+          -32.50000154366717
         ],
         "recomputed": [
-          -409.00039506748,
-          -2319.999769562855,
-          -59.500249353461186
+          370.24058795355995,
+          296.28842252256436,
+          -32.50000154366717
         ],
         "aPdms": [
-          16324.001310594824,
-          4937.999800080419,
-          4347.000153986043
+          3850.571338921981,
+          65003.75060152125,
+          8804.50031434884
         ],
         "bPdms": [
-          15915.000915527344,
-          2618.000030517564,
-          4287.499904632582
+          4220.811926875541,
+          65300.039024043814,
+          8772.000312805172
         ],
         "axes": "PDMS_WORLD_Z_UP"
       }
@@ -253,9 +252,9 @@
       "name": "ΔZ = 高差 · Horizontal Distance = XY 平面距离",
       "ok": true,
       "detail": {
-        "horizontalMm": 2355.7759345780432,
-        "verticalMm": -59.500249353461186,
-        "zDiffMm": -59.500249353461186
+        "horizontalMm": 474.1992432397034,
+        "verticalMm": -32.50000154366717,
+        "zDiffMm": -32.50000154366717
       }
     },
     {
@@ -265,23 +264,23 @@
       "detail": {
         "r1": {
           "axes": "PDMS_WORLD_Z_UP",
-          "distanceMm": 41.018787651654335,
-          "distanceWorldM": 0.041018787651654336,
-          "dxMm": 32.909378175552774,
-          "dyMm": 0,
-          "dzMm": 24.484970257484747,
-          "verticalMm": 24.484970257484747,
-          "horizontalMm": 32.909378175552774
+          "distanceMm": 0.0044417003152016805,
+          "distanceWorldM": 0.000004441700315201681,
+          "dxMm": 0.0019435481135587906,
+          "dyMm": 0.003993818951130379,
+          "dzMm": 0.00002706656596274115,
+          "verticalMm": 0.00002706656596274115,
+          "horizontalMm": 0.004441617845349383
         },
         "r2": {
           "axes": "PDMS_WORLD_Z_UP",
-          "distanceMm": 41.018787651654335,
-          "distanceWorldM": 0.041018787651654336,
-          "dxMm": 32.909378175552774,
-          "dyMm": 0,
-          "dzMm": 24.484970257484747,
-          "verticalMm": 24.484970257484747,
-          "horizontalMm": 32.909378175552774
+          "distanceMm": 0.0044417003152016805,
+          "distanceWorldM": 0.000004441700315201681,
+          "dxMm": 0.0019435481135587906,
+          "dyMm": 0.003993818951130379,
+          "dzMm": 0.00002706656596274115,
+          "verticalMm": 0.00002706656596274115,
+          "horizontalMm": 0.004441617845349383
         }
       }
     },
@@ -302,8 +301,8 @@
       "name": "测量对象不进入模型树（树行数不因测量变化）",
       "ok": true,
       "detail": {
-        "before": 16,
-        "after": 16
+        "before": 8,
+        "after": 8
       }
     },
     {
@@ -311,12 +310,12 @@
       "name": "隐藏/隔离不影响测量显示（测量视觉仍可见、数量不变）",
       "ok": true,
       "detail": {
-        "hiddenCount": 7420,
+        "hiddenCount": 18985,
         "before": {
           "visible": true,
           "markers": 3,
           "segments": 1,
-          "components": 2,
+          "components": 0,
           "preview": false,
           "capacity": {
             "points": 1024,
@@ -328,7 +327,7 @@
           "visible": true,
           "markers": 3,
           "segments": 1,
-          "components": 2,
+          "components": 0,
           "preview": false,
           "capacity": {
             "points": 1024,
@@ -352,8 +351,8 @@
       "name": "Orbit 模式下同样可测：射线仍从屏幕中心发出（鼠标点在哪都取中心点）",
       "ok": true,
       "detail": {
-        "aimCanonical": "DISH 2 of SUBSTRUCTURE 10 of STRUCTURE /QICHUANG-LANDING-3300",
-        "pendingCanonical": "DISH 2 of SUBSTRUCTURE 10 of STRUCTURE /QICHUANG-LANDING-3300",
+        "aimCanonical": "RTORUS 1 of SUBSTRUCTURE 7 of STRUCTURE /LADER-V090101",
+        "pendingCanonical": "RTORUS 1 of SUBSTRUCTURE 7 of STRUCTURE /LADER-V090101",
         "samePoint": 0,
         "orbit": "orbit"
       }
@@ -417,24 +416,16 @@
     {
       "no": "H1",
       "name": "XYZ 分量默认开启，辅助线数与\"非零方向数\"一致",
-      "ok": true,
+      "ok": false,
       "detail": {
         "showComponents": true,
-        "legs": [
-          "X",
-          "Y",
-          "Z"
-        ],
-        "expectAxes": [
-          "X",
-          "Y",
-          "Z"
-        ],
-        "drawn": 3,
+        "legs": [],
+        "expectAxes": [],
+        "drawn": 0,
         "result": {
-          "dx": 30.091715358550573,
-          "dy": -12.538206884172723,
-          "dz": 35.29973245223118
+          "dx": 0.0019065228680119617,
+          "dy": 0.003984568167652469,
+          "dz": 0.00002706656596274115
         }
       }
     },
@@ -442,59 +433,15 @@
       "no": "H2",
       "name": "辅助线方向 = 模型坐标系轴向（世界空间，与相机无关）",
       "ok": true,
-      "detail": [
-        {
-          "axis": "X",
-          "mm": 30.091715358550573,
-          "unitDot": 1,
-          "offAxisMeters": 0,
-          "aligned": true
-        },
-        {
-          "axis": "Y",
-          "mm": -12.538206884172723,
-          "unitDot": -1,
-          "offAxisMeters": 0,
-          "aligned": true
-        },
-        {
-          "axis": "Z",
-          "mm": 35.29973245223118,
-          "unitDot": 1,
-          "offAxisMeters": 0,
-          "aligned": true
-        }
-      ]
+      "detail": []
     },
     {
       "no": "H3",
       "name": "辅助线长度与世界空间 |Δ| 一致，且阶梯首尾相接（末端 = P2）",
-      "ok": true,
       "detail": {
-        "rows": [
-          {
-            "axis": "X",
-            "lenMm": 30.091715358551596,
-            "expectMm": 30.091715358550573,
-            "diff": 1.0231815394945443e-12
-          },
-          {
-            "axis": "Y",
-            "lenMm": 12.538206884173064,
-            "expectMm": 12.538206884172723,
-            "diff": 3.410605131648481e-13
-          },
-          {
-            "axis": "Z",
-            "lenMm": 35.2997324522315,
-            "expectMm": 35.29973245223118,
-            "diff": 3.197442310920451e-13
-          }
-        ],
-        "headAtA": true,
-        "tailAtB": true,
+        "rows": [],
         "chainOk": true,
-        "tailGap": 0
+        "tailGap": null
       }
     },
     {
@@ -502,20 +449,12 @@
       "name": "各向标签=轴向+绝对值（负号只留在数据里，界面不显示）",
       "ok": true,
       "detail": {
-        "texts": [
-          "X  30.1 mm",
-          "Y  12.5 mm",
-          "Z  35.3 mm"
-        ],
-        "legs": [
-          "X",
-          "Y",
-          "Z"
-        ],
+        "texts": [],
+        "legs": [],
         "signed": {
-          "dx": 30.091715358550573,
-          "dy": -12.538206884172723,
-          "dz": 35.29973245223118
+          "dx": 0.0019065228680119617,
+          "dy": 0.003984568167652469,
+          "dz": 0.00002706656596274115
         }
       }
     },
@@ -526,7 +465,7 @@
       "detail": {
         "offComponents": 0,
         "resultUnchanged": true,
-        "restoredComponents": 3,
+        "restoredComponents": 0,
         "uiChecked": true
       }
     },
@@ -555,8 +494,8 @@
       "name": "挑到一个\"元数据里有名称\"的对象用于命名验证",
       "ok": true,
       "detail": {
-        "canonical": "/PG-10306-300-M2G/B2",
-        "name": "/PG-10306-300-M2G/B2"
+        "canonical": "/P090301A",
+        "name": "/P090301A"
       }
     },
     {
@@ -576,12 +515,12 @@
     {
       "no": "I2",
       "name": "对象中心点直接用元数据名称/位号（V1011A 这类）",
-      "ok": true,
+      "ok": false,
       "detail": {
-        "expectName": "/PG-10306-300-M2G/B2",
-        "displayName": "/PG-10306-300-M2G/B2",
-        "canonicalId": "/PG-10306-300-M2G/B2",
-        "hitCanonical": "/PG-10306-300-M2G/B2"
+        "expectName": "/P090301A",
+        "displayName": "/P090301A-N2",
+        "canonicalId": "/P090301A-N2",
+        "hitCanonical": "/P090301A"
       }
     },
     {
@@ -591,7 +530,7 @@
       "detail": {
         "displayName": "P1",
         "kind": "center",
-        "canonicalId": "/PG-10306-300-M2G/B2"
+        "canonicalId": "/P090301A-N2"
       }
     },
     {
@@ -601,9 +540,9 @@
       "detail": {
         "probeNull": null,
         "mapped": {
-          "id": "txt:L769",
-          "name": "/PG-10306-300-M2G/B2",
-          "resolved": "/PG-10306-300-M2G/B2"
+          "id": "txt:L73929",
+          "name": "/P090301A",
+          "resolved": "/P090301A"
         }
       }
     },
@@ -615,20 +554,20 @@
         "record": {
           "from": "P1",
           "to": "P2",
-          "direct": 41,
-          "dx": 26,
-          "dy": -17,
-          "dz": 27,
-          "horizontal": 31,
+          "direct": 0,
+          "dx": 0,
+          "dy": 0,
+          "dz": 0,
+          "horizontal": 0,
           "aWorld": [
-            36.36399822016718,
-            -5.456498957394147,
-            60.04150764620864
+            -75.79943018695693,
+            -3.270500448590614,
+            -13.078251639118907
           ],
           "bWorld": [
-            36.38975723260478,
-            -5.429219372957008,
-            60.05806688793935
+            -75.79942825859354,
+            -3.270500421524048,
+            -13.078255598470665
           ],
           "axes": "PDMS_WORLD_Z_UP"
         },
@@ -649,7 +588,7 @@
         "numericOk": true,
         "signOk": true,
         "lineCount": 2,
-        "text": "From\tTo\tDirect(mm)\tX(mm)\tY(mm)\tZ(mm)\tHorizontal(mm)\nP1\tP2\t41\t26\t-17\t27\t31"
+        "text": "From\tTo\tDirect(mm)\tX(mm)\tY(mm)\tZ(mm)\tHorizontal(mm)\nP1\tP2\t0\t0\t0\t0\t0"
       }
     },
     {
@@ -658,7 +597,7 @@
       "ok": true,
       "detail": {
         "same": true,
-        "clipboard": "From\tTo\tDirect(mm)\tX(mm)\tY(mm)\tZ(mm)\tHorizontal(mm)\r\nP1\tP2\t41\t26\t-17\t27\t31",
+        "clipboard": "From\tTo\tDirect(mm)\tX(mm)\tY(mm)\tZ(mm)\tHorizontal(mm)\r\nP1\tP2\t0\t0\t0\t0\t0",
         "toast": "已复制 1 条测量结果（TAB 分隔），可直接粘贴进 Excel",
         "expectHead": "From\tTo\tDirect(mm)\tX(mm)\tY(mm)\tZ(mm)\tHorizontal(mm)"
       }
@@ -689,8 +628,8 @@
         "pointToCenterPx": 0,
         "reticleToCenterPx": 0,
         "screen": {
-          "x": 878,
-          "y": 472
+          "x": 878.000000000087,
+          "y": 472.00000000000273
         },
         "center": {
           "x": 878,
@@ -759,7 +698,7 @@
       "ok": true,
       "detail": {
         "distanceToShownAim": 0,
-        "distanceFromFreshRay": 0.0428,
+        "distanceFromFreshRay": 0.0383,
         "recordedIsShown": true,
         "freshDiffersEnough": true
       }
@@ -780,11 +719,11 @@
       "ok": true,
       "detail": {
         "worldUnchanged": true,
-        "projectedMovedPx": 16907.9,
+        "projectedMovedPx": 16908,
         "world": [
-          36.36399841225542,
-          -5.437499045495204,
-          59.97808868524485
+          -75.85690547826704,
+          -3.270500448590614,
+          -13.105056520758835
         ]
       }
     },
@@ -922,20 +861,20 @@
         "record": {
           "from": "P1",
           "to": "P2",
-          "direct": 47,
-          "dx": 31,
-          "dy": -10,
-          "dz": 34,
-          "horizontal": 32,
+          "direct": 0,
+          "dx": 0,
+          "dy": 0,
+          "dz": 0,
+          "horizontal": 0,
           "aWorld": [
-            36.3639984114249,
-            -5.456499067815715,
-            60.04150764620864
+            -75.79943018695693,
+            -3.270500448590614,
+            -13.078251639118907
           ],
           "bWorld": [
-            36.39461437842621,
-            -5.422191010625447,
-            60.05171296833993
+            -75.79942828114892,
+            -3.270500421524048,
+            -13.078255625537226
           ],
           "axes": "PDMS_WORLD_Z_UP"
         },
@@ -962,10 +901,10 @@
       "name": "关闭测量后 Orbit 左键点选恢复（选择集 = 1）",
       "ok": true,
       "detail": {
-        "clicked": "ELBOW 1 of BRANCH /WG-10401-400-L1G/B1",
-        "rayHit": "ELBOW 1 of BRANCH /WG-10401-400-L1G/B1",
+        "clicked": "/HYGQ",
+        "rayHit": "CYLINDER 1 of EQUIPMENT 25 of ZONE /tankarea-equipment",
         "selected": [
-          "ELBOW 1 of BRANCH /WG-10401-400-L1G/B1"
+          "CYLINDER 1 of EQUIPMENT 25 of ZONE /tankarea-equipment"
         ]
       }
     },
@@ -974,8 +913,8 @@
       "name": "预选中仍工作：测量开启时 hover 直接沿用准星命中结果",
       "ok": true,
       "detail": {
-        "hover": "DISH 2 of SUBSTRUCTURE 10 of STRUCTURE /QICHUANG-LANDING-3300",
-        "aim": "DISH 2 of SUBSTRUCTURE 10 of STRUCTURE /QICHUANG-LANDING-3300",
+        "hover": "RTORUS 1 of SUBSTRUCTURE 7 of STRUCTURE /LADER-V090101",
+        "aim": "RTORUS 1 of SUBSTRUCTURE 7 of STRUCTURE /LADER-V090101",
         "enabled": true
       }
     },
@@ -986,9 +925,9 @@
       "detail": {
         "floorplanAvailable": true,
         "floorplanVisible": true,
-        "fps": 90,
-        "drawCalls": 39,
-        "allPasses": 122
+        "fps": 82,
+        "drawCalls": 45,
+        "allPasses": 97
       }
     },
     {
@@ -1009,21 +948,24 @@
       }
     }
   ],
-  "console": [],
+  "console": [
+    "[error] Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "[error] Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
   "pageErrors": [],
   "modelInfo": {
-    "meshes": 5507,
-    "lines": 289,
-    "namedNodes": 7423,
+    "meshes": 16255,
+    "lines": 0,
+    "namedNodes": 18987,
     "floorplan": {
-      "equipment": 98,
-      "positioned": 98,
-      "outlines": 608,
-      "outlineSegments": 8778,
+      "equipment": 290,
+      "positioned": 290,
+      "outlines": 2195,
+      "outlineSegments": 35556,
       "labelBatches": 1,
       "debugCenters": 0,
-      "floorY": -12.80591046975783,
-      "floorOffset": 0.0024107881155389006
+      "floorY": -13.127092053024839,
+      "floorOffset": 0.0020912402130435397
     },
     "floorplanError": null
   },
@@ -1031,55 +973,55 @@
     "enabled": true,
     "indexed": true,
     "maxMeshesPerBatch": 64,
-    "sourceMeshes": 5507,
-    "spatialBatches": 105,
-    "renderMeshes": 105,
+    "sourceMeshes": 16255,
+    "spatialBatches": 317,
+    "renderMeshes": 317,
     "stateMeshes": {
-      "solid": 105,
+      "solid": 317,
       "selected": 0,
       "hover": 0,
       "ghost": 0
     },
-    "recordedRanges": 5507,
-    "triangles": 335824,
-    "indices": 1007472,
+    "recordedRanges": 16255,
+    "triangles": 501323,
+    "indices": 1503969,
     "lastSync": {
-      "changedEntries": 5507,
-      "rebuiltBatches": 105,
-      "ms": 92.5
+      "changedEntries": 16255,
+      "rebuiltBatches": 317,
+      "ms": 189.90000009536743
     }
   },
   "origin": [
-    -20.039997100830078,
-    64.97950744628906,
-    9.803499221801758
+    79.6500015258789,
+    51.925498962402344,
+    12.075000762939453
   ],
   "probe": {
-    "canonical": "/QICHUANG-LANDING-3300",
+    "canonical": "SUBSTRUCTURE 17 of STRUCTURE /LADER-V090101",
     "point": [
-      36.36399841225542,
-      -5.437498993822361,
-      60.04150764620864
+      -75.79942831888911,
+      -3.270500448590614,
+      -13.078255645203175
     ],
     "normal": [
-      -4.371138828673788e-8,
-      -0.9999999999999991,
-      -4.814824632276186e-32
+      -0.42261826900419935,
+      2.0124075376096155e-16,
+      0.9063077836496244
     ],
     "box": {
       "min": [
-        35.139997069956735,
-        -6.5134994512773,
-        59.05750759947115
+        -76.41991966962814,
+        -3.870500299090058,
+        -14.208877972647318
       ],
       "max": [
-        36.43999713170342,
-        -5.380498991115006,
-        60.31750765931794
+        -75.41075092340179,
+        -3.270500448590614,
+        -13.064514013931333
       ]
     },
-    "meshes": 57,
-    "scanned": 6255
+    "meshes": 14,
+    "scanned": 18626
   },
   "b1": {
     "enabled": true,
@@ -1087,23 +1029,23 @@
     "revision": 1,
     "axes": "PDMS_WORLD_Z_UP",
     "origin": [
-      -20.039997100830078,
-      64.97950744628906,
-      9.803499221801758
+      79.6500015258789,
+      51.925498962402344,
+      12.075000762939453
     ],
     "aim": {
-      "canonicalId": "DISH 2 of SUBSTRUCTURE 10 of STRUCTURE /QICHUANG-LANDING-3300",
+      "canonicalId": "RTORUS 1 of SUBSTRUCTURE 7 of STRUCTURE /LADER-V090101",
       "point": [
-        36.3639984114249,
-        -5.456499067815715,
-        60.04150764620864
+        -75.79943018695693,
+        -3.270500448590614,
+        -13.078251639118907
       ],
       "bboxCenter": [
-        36.36399841499328,
-        -5.418498992919909,
-        60.022507720875346
+        -75.42918959900337,
+        -3.3030004501342813,
+        -13.374540061641468
       ],
-      "distanceWorldM": 0.13099992600664578
+      "distanceWorldM": 0.14999557977506303
     },
     "pending": null,
     "pendingResult": null,
@@ -1143,42 +1085,42 @@
     "revision": 1,
     "axes": "PDMS_WORLD_Z_UP",
     "origin": [
-      -20.039997100830078,
-      64.97950744628906,
-      9.803499221801758
+      79.6500015258789,
+      51.925498962402344,
+      12.075000762939453
     ],
     "aim": {
-      "canonicalId": "DISH 2 of SUBSTRUCTURE 10 of STRUCTURE /QICHUANG-LANDING-3300",
+      "canonicalId": "RTORUS 1 of SUBSTRUCTURE 7 of STRUCTURE /LADER-V090101",
       "point": [
-        36.3639984114249,
-        -5.456499067815715,
-        60.04150764620864
+        -75.79943018695693,
+        -3.270500448590614,
+        -13.078251639118907
       ],
       "bboxCenter": [
-        36.36399841499328,
-        -5.418498992919909,
-        60.022507720875346
+        -75.42918959900337,
+        -3.3030004501342813,
+        -13.374540061641468
       ],
-      "distanceWorldM": 0.13099992600664578
+      "distanceWorldM": 0.14999557977506303
     },
     "pending": {
       "kind": "surface",
       "displayName": "P1",
-      "canonicalId": "DISH 2 of SUBSTRUCTURE 10 of STRUCTURE /QICHUANG-LANDING-3300",
+      "canonicalId": "RTORUS 1 of SUBSTRUCTURE 7 of STRUCTURE /LADER-V090101",
       "point": [
-        36.3639984114249,
-        -5.456499067815715,
-        60.04150764620864
+        -75.79943018695693,
+        -3.270500448590614,
+        -13.078251639118907
       ],
       "hitPoint": [
-        36.3639984114249,
-        -5.456499067815715,
-        60.04150764620864
+        -75.79943018695693,
+        -3.270500448590614,
+        -13.078251639118907
       ],
       "bboxCenter": [
-        36.36399841499328,
-        -5.418498992919909,
-        60.022507720875346
+        -75.42918959900337,
+        -3.3030004501342813,
+        -13.374540061641468
       ]
     },
     "pendingResult": null,
@@ -1221,74 +1163,74 @@
     "lineObjectsRegistered": true
   },
   "measurement1": {
-    "id": "M1-muapilrz",
+    "id": "M1-mue5qkgw",
     "a": {
       "kind": "surface",
       "displayName": "P1",
-      "canonicalId": "DISH 2 of SUBSTRUCTURE 10 of STRUCTURE /QICHUANG-LANDING-3300",
+      "canonicalId": "RTORUS 1 of SUBSTRUCTURE 7 of STRUCTURE /LADER-V090101",
       "point": [
-        36.3639984114249,
-        -5.456499067815715,
-        60.04150764620864
+        -75.79943018695693,
+        -3.270500448590614,
+        -13.078251639118907
       ],
       "hitPoint": [
-        36.3639984114249,
-        -5.456499067815715,
-        60.04150764620864
+        -75.79943018695693,
+        -3.270500448590614,
+        -13.078251639118907
       ],
       "bboxCenter": [
-        36.36399841499328,
-        -5.418498992919909,
-        60.022507720875346
+        -75.42918959900337,
+        -3.3030004501342813,
+        -13.374540061641468
       ]
     },
     "b": {
       "kind": "center",
       "displayName": "P2",
-      "canonicalId": "BOX 1 of SUBSTRUCTURE 1 of STRUCTURE /QICHUANG-FLOOR-PLATE-4300",
+      "canonicalId": "RTORUS 1 of SUBSTRUCTURE 7 of STRUCTURE /LADER-V090101",
       "point": [
-        35.95499801635742,
-        -5.515999317169176,
-        62.3615074157715
+        -75.42918959900337,
+        -3.3030004501342813,
+        -13.374540061641468
       ],
       "hitPoint": [
-        36.60666542857625,
-        -5.528499126434326,
-        60.28417466650721
+        -75.79942477546403,
+        -3.270500448590614,
+        -13.078250003360843
       ],
       "bboxCenter": [
-        35.95499801635742,
-        -5.515999317169176,
-        62.3615074157715
+        -75.42918959900337,
+        -3.3030004501342813,
+        -13.374540061641468
       ]
     },
     "result": {
       "axes": "PDMS_WORLD_Z_UP",
-      "distanceMm": 2356.52721894108,
-      "distanceWorldM": 2.3565272189410797,
-      "dxMm": -409.00039506748,
-      "dyMm": -2319.999769562855,
-      "dzMm": -59.500249353461186,
-      "verticalMm": -59.500249353461186,
-      "horizontalMm": 2355.7759345780432
+      "distanceMm": 475.31165816698035,
+      "distanceWorldM": 0.47531165816698034,
+      "dxMm": 370.24058795355995,
+      "dyMm": 296.28842252256436,
+      "dzMm": -32.50000154366717,
+      "verticalMm": -32.50000154366717,
+      "horizontalMm": 474.1992432397034
     },
     "record": {
       "from": "P1",
       "to": "P2",
-      "direct": 2357,
-      "dx": -409,
-      "dy": -2320,
-      "dz": -60,
-      "horizontal": 2356,
+      "direct": 475,
+      "dx": 370,
+      "dy": 296,
+      "dz": -33,
+      "horizontal": 474,
       "aWorld": [
-        36.3639984114249,
-        -5.456499067815715,
-        60.04150764620864
+        -75.79943018695693,
+        -3.270500448590614,
+        -13.078251639118907
       ],
       "bWorld": [
-        35.95499801635742,
-        -5.515999317169176,
-        62.3615074157715
+        -75.42918959900337,
+        -3.3030004501342813,
+        -13.374540061641468
       ],
       "axes": "PDMS_WORLD_Z_UP"
     },
@@ -1301,147 +1243,143 @@
   "repeat": {
     "r1": {
       "axes": "PDMS_WORLD_Z_UP",
-      "distanceMm": 41.018787651654335,
-      "distanceWorldM": 0.041018787651654336,
-      "dxMm": 32.909378175552774,
-      "dyMm": 0,
-      "dzMm": 24.484970257484747,
-      "verticalMm": 24.484970257484747,
-      "horizontalMm": 32.909378175552774
+      "distanceMm": 0.0044417003152016805,
+      "distanceWorldM": 0.000004441700315201681,
+      "dxMm": 0.0019435481135587906,
+      "dyMm": 0.003993818951130379,
+      "dzMm": 0.00002706656596274115,
+      "verticalMm": 0.00002706656596274115,
+      "horizontalMm": 0.004441617845349383
     },
     "r2": {
       "axes": "PDMS_WORLD_Z_UP",
-      "distanceMm": 41.018787651654335,
-      "distanceWorldM": 0.041018787651654336,
-      "dxMm": 32.909378175552774,
-      "dyMm": 0,
-      "dzMm": 24.484970257484747,
-      "verticalMm": 24.484970257484747,
-      "horizontalMm": 32.909378175552774
+      "distanceMm": 0.0044417003152016805,
+      "distanceWorldM": 0.000004441700315201681,
+      "dxMm": 0.0019435481135587906,
+      "dyMm": 0.003993818951130379,
+      "dzMm": 0.00002706656596274115,
+      "verticalMm": 0.00002706656596274115,
+      "horizontalMm": 0.004441617845349383
     },
     "s": true
   },
   "xyzMeasurement": {
-    "id": "M1-muapiqi4",
+    "id": "M1-mue5qpdf",
     "a": {
       "kind": "surface",
       "displayName": "P1",
-      "canonicalId": "DISH 2 of SUBSTRUCTURE 10 of STRUCTURE /QICHUANG-LANDING-3300",
+      "canonicalId": "RTORUS 1 of SUBSTRUCTURE 7 of STRUCTURE /LADER-V090101",
       "point": [
-        36.36399839325451,
-        -5.456499057325144,
-        60.04150764620864
+        -75.79943018695693,
+        -3.270500448590614,
+        -13.078251639118907
       ],
       "hitPoint": [
-        36.36399839325451,
-        -5.456499057325144,
-        60.04150764620864
+        -75.79943018695693,
+        -3.270500448590614,
+        -13.078251639118907
       ],
       "bboxCenter": [
-        36.36399841499328,
-        -5.418498992919909,
-        60.022507720875346
+        -75.42918959900337,
+        -3.3030004501342813,
+        -13.374540061641468
       ]
     },
     "b": {
       "kind": "surface",
       "displayName": "P2",
-      "canonicalId": "DISH 1 of SUBSTRUCTURE 10 of STRUCTURE /QICHUANG-LANDING-3300",
+      "canonicalId": "RTORUS 1 of SUBSTRUCTURE 7 of STRUCTURE /LADER-V090101",
       "point": [
-        36.394090108613064,
-        -5.421199324872912,
-        60.054045853092816
+        -75.79942828043406,
+        -3.270500421524048,
+        -13.078255623687074
       ],
       "hitPoint": [
-        36.394090108613064,
-        -5.421199324872912,
-        60.054045853092816
+        -75.79942828043406,
+        -3.270500421524048,
+        -13.078255623687074
       ],
       "bboxCenter": [
-        36.36399841117859,
-        -5.418498992919909,
-        60.06050772101921
+        -75.42918959900337,
+        -3.3030004501342813,
+        -13.374540061641468
       ]
     },
     "result": {
       "axes": "PDMS_WORLD_Z_UP",
-      "distanceMm": 48.04986031498469,
-      "distanceWorldM": 0.04804986031498469,
-      "dxMm": 30.091715358550573,
-      "dyMm": -12.538206884172723,
-      "dzMm": 35.29973245223118,
-      "verticalMm": 35.29973245223118,
-      "horizontalMm": 32.59935528642161
+      "distanceMm": 0.004417278067343328,
+      "distanceWorldM": 0.000004417278067343328,
+      "dxMm": 0.0019065228680119617,
+      "dyMm": 0.003984568167652469,
+      "dzMm": 0.00002706656596274115,
+      "verticalMm": 0.00002706656596274115,
+      "horizontalMm": 0.004417195142725971
     },
     "record": {
       "from": "P1",
       "to": "P2",
-      "direct": 48,
-      "dx": 30,
-      "dy": -13,
-      "dz": 35,
-      "horizontal": 33,
+      "direct": 0,
+      "dx": 0,
+      "dy": 0,
+      "dz": 0,
+      "horizontal": 0,
       "aWorld": [
-        36.36399839325451,
-        -5.456499057325144,
-        60.04150764620864
+        -75.79943018695693,
+        -3.270500448590614,
+        -13.078251639118907
       ],
       "bWorld": [
-        36.394090108613064,
-        -5.421199324872912,
-        60.054045853092816
+        -75.79942828043406,
+        -3.270500421524048,
+        -13.078255623687074
       ],
       "axes": "PDMS_WORLD_Z_UP"
     },
-    "legs": [
-      "X",
-      "Y",
-      "Z"
-    ]
+    "legs": []
   },
   "namedTarget": {
-    "canonical": "/PG-10306-300-M2G/B2",
-    "name": "/PG-10306-300-M2G/B2"
+    "canonical": "/P090301A",
+    "name": "/P090301A"
   },
   "record": {
     "from": "P1",
     "to": "P2",
-    "direct": 41,
-    "dx": 26,
-    "dy": -17,
-    "dz": 27,
-    "horizontal": 31,
+    "direct": 0,
+    "dx": 0,
+    "dy": 0,
+    "dz": 0,
+    "horizontal": 0,
     "aWorld": [
-      36.36399822016718,
-      -5.456498957394147,
-      60.04150764620864
+      -75.79943018695693,
+      -3.270500448590614,
+      -13.078251639118907
     ],
     "bWorld": [
-      36.38975723260478,
-      -5.429219372957008,
-      60.05806688793935
+      -75.79942825859354,
+      -3.270500421524048,
+      -13.078255598470665
     ],
     "axes": "PDMS_WORLD_Z_UP"
   },
-  "clipboardText": "From\tTo\tDirect(mm)\tX(mm)\tY(mm)\tZ(mm)\tHorizontal(mm)\nP1\tP2\t41\t26\t-17\t27\t31",
+  "clipboardText": "From\tTo\tDirect(mm)\tX(mm)\tY(mm)\tZ(mm)\tHorizontal(mm)\nP1\tP2\t0\t0\t0\t0\t0",
   "undoCheck": {
     "done": {
       "from": "P1",
       "to": "P2",
-      "direct": 43,
-      "dx": 30,
-      "dy": -11,
-      "dz": 29,
-      "horizontal": 32,
+      "direct": 0,
+      "dx": 0,
+      "dy": 0,
+      "dz": 0,
+      "horizontal": 0,
       "aWorld": [
-        36.3639984114249,
-        -5.456499067815715,
-        60.04150764620864
+        -75.79943018695693,
+        -3.270500448590614,
+        -13.078251639118907
       ],
       "bWorld": [
-        36.39442163450298,
-        -5.427818877594982,
-        60.052570636182786
+        -75.79942826277431,
+        -3.270500421524048,
+        -13.078255616190734
       ],
       "axes": "PDMS_WORLD_Z_UP"
     },
@@ -1449,29 +1387,35 @@
     "redone": {
       "from": "P1",
       "to": "P2",
-      "direct": 38,
-      "dx": 27,
-      "dy": -12,
-      "dz": 24,
-      "horizontal": 29,
+      "direct": 0,
+      "dx": 0,
+      "dy": 0,
+      "dz": 0,
+      "horizontal": 0,
       "aWorld": [
-        36.3639984114249,
-        -5.456499067815715,
-        60.04150764620864
+        -75.79943018695693,
+        -3.270500448590614,
+        -13.078251639118907
       ],
       "bWorld": [
-        36.39058624343651,
-        -5.432385949338667,
-        60.053778952969495
+        -75.79942823521229,
+        -3.270500421524048,
+        -13.07825559540433
       ],
       "axes": "PDMS_WORLD_Z_UP"
     }
   },
   "pageErrorCount": 0,
-  "consoleErrors": 0,
+  "consoleErrors": 2,
   "summary": {
     "total": 64,
-    "passed": 64,
-    "failed": []
+    "passed": 59,
+    "failed": [
+      "B1",
+      "C3",
+      "H1",
+      "H3",
+      "I2"
+    ]
   }
 }

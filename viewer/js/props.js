@@ -39,29 +39,49 @@ export class PropsPanel {
     this.host.innerHTML = '<div class="empty">点击 3D 对象或左侧树节点。</div>';
   }
 
+  /** 比对模式下选中 Model A（叠加的旧版本）时显示：
+   *  如实说明"来源 = A、本侧只载入几何"，而不是拿 B 的同名元数据顶上去。 */
+  showCompareSource(meta, canonical) {
+    const label = meta?.versionName || meta?.label || '（未命名版本）';
+    this.infoEl.textContent = `Model A · ${label} · 仅几何`;
+    this.host.innerHTML = '<div class="sec">比对来源</div>'
+      + table([
+        ["来源", "<b>Model A</b>（叠加显示的那一版）"],
+        ["版本", esc(label)],
+        ["模型", esc(meta?.modelName || "—")],
+        ["canonical", `<b>${esc(canonical)}</b>`],
+      ])
+      + '<div class="empty">A 侧只载入几何（GLB），未加载该版本的元数据：'
+      + '属性、模型树、批注、测量命名仍严格属于当前打开的版本（B）。</div>';
+  }
+
   show(txtId) {
     const d = this.data;
     const o = d.objectOf(txtId);
     if (!o) { this.clear(); return; }
 
+    // 仅 RVM 导入的版本：没有 TXT，属性、原文行号、类型（有名对象）本来就取不到
+    const rvmOnly = d.meta?.metadataSource === "rvm";
     const pair = d.geomOf.get(o.canonical);
     const rvm = pair ? d.rvmByOffset.get(pair.rvmOffset) : null;
 
-    this.infoEl.textContent = `${o.type} · ${o.children.length} 个子节点`
+    this.infoEl.textContent = `${o.type || "类型未知"} · ${o.children.length} 个子节点`
       + (pair ? "" : " · RVM 未导出几何");
 
     let html = "";
 
     // ---- 概览 ----
     html += '<div class="sec">概览</div>';
+    const noType = o.type ? esc(o.type) : '—（RVM 只有匿名对象带类型前缀）';
     const ov = [
-      ["类型", esc(o.type)],
+      ["类型", noType],
       ["canonical", `<b>${esc(o.canonical)}</b>`],
       ["原始名称", o.name ? esc(o.name) : "（匿名对象）"],
       ["层级深度", String(o.depth)],
       ["父节点", o.parent ? esc(d.objectOf(o.parent).canonical) : "（根）"],
       ["子节点数", String(o.children.length)],
-      ["原文行", `${o.line} – ${o.lineEnd}`],
+      ["原文行", (o.line === null || o.line === undefined)
+        ? '—（RVM 无原文行）' : `${o.line} – ${o.lineEnd}`],
     ];
     html += table(ov);
 
@@ -71,7 +91,7 @@ export class PropsPanel {
       const rows = [
         ["GLB 节点序号", String(pair.glbNodeIndex)],
         ["RVM 字节偏移", `<b>${pair.rvmOffset}</b>`],
-        ["TXT 行锚定 id", esc(pair.txtId)],
+        [rvmOnly ? "对象锚定 id" : "TXT 行锚定 id", esc(pair.txtId)],
         ["匹配通道", esc(pair.channel)],
       ];
       html += table(rows);
@@ -96,6 +116,11 @@ export class PropsPanel {
     html += `<div class="sec">PDMS 属性（${pdmsKeys.length}）</div>`;
     if (pdmsKeys.length) {
       html += table(pdmsKeys.map((k) => [k, fmt(o.props[k])]));
+    } else if (rvmOnly) {
+      // 必须说清"为什么空"：这不是丢数据，是这条导入链路本来就没有属性源
+      html += '<div class="cap">该版本按<b>仅 RVM</b>导入，RVM 文件本身不含工程属性'
+        + '（POS / 管径 / 压力 / 温度 / 描述 / 保温等只存在于 PDMS Data Listing）。'
+        + '如需属性，请带 <code>.txt</code> 重新导入一个版本 —— 两个版本会并存，可直接比对。</div>';
     } else {
       html += '<div class="cap">无</div>';
     }

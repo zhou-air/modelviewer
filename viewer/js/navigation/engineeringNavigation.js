@@ -258,7 +258,8 @@ export class EngineeringNavigation {
     const delta = this.input.consumeMouseDelta();
     const orientationChanged = Math.abs(delta.x) > CameraMath.EPSILON || Math.abs(delta.y) > CameraMath.EPSILON;
     if (orientationChanged) {
-      CameraMath.applyMouseLook(this.frame, delta.x, delta.y, MouseSensitivityRadiansPerPixel);
+      CameraMath.applyMouseLook(this.frame, delta.x, delta.y,
+        this.settings.mouseSensitivityDegreesPerPixel * Math.PI / 180);
     }
 
     // ---- 移动

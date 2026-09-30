@@ -1,7 +1,7 @@
 {
   "phase": "game-pick-multiselect",
-  "url": "http://127.0.0.1:8900/viewer/index.html",
-  "startedAt": "2026-09-21T13:10:11.274Z",
+  "url": "http://127.0.0.1:8899/viewer/index.html",
+  "startedAt": "2026-09-23T13:39:19.569Z",
   "scenarios": [
     {
       "no": "C1",
@@ -110,6 +110,7 @@
         "menu": {
           "open": true,
           "actions": [
+            "add-issue",
             "color-open",
             "color-preset",
             "color-preset",
@@ -134,6 +135,11 @@
         "state": {
           "count": 0,
           "canonicals": [],
+          "sides": {
+            "A": 0,
+            "B": 0
+          },
+          "primarySide": null,
           "primary": null,
           "outlineObjects": 0,
           "swappedObjects": 1
@@ -195,6 +201,11 @@
           "canonicals": [
             "ELBOW 1 of BRANCH /PL-10604-65-M1E/B2"
           ],
+          "sides": {
+            "A": 0,
+            "B": 1
+          },
+          "primarySide": "B",
           "primary": "ELBOW 1 of BRANCH /PL-10604-65-M1E/B2",
           "outlineObjects": 1,
           "swappedObjects": 1
@@ -205,6 +216,11 @@
             "ELBOW 1 of BRANCH /PL-10604-65-M1E/B2",
             "ELBOW 1 of BRANCH /PW-10201-100-M1B/B3"
           ],
+          "sides": {
+            "A": 0,
+            "B": 2
+          },
+          "primarySide": "B",
           "primary": "ELBOW 1 of BRANCH /PW-10201-100-M1B/B3",
           "outlineObjects": 2,
           "swappedObjects": 2
@@ -223,6 +239,11 @@
           "canonicals": [
             "ELBOW 1 of BRANCH /PW-10201-100-M1B/B3"
           ],
+          "sides": {
+            "A": 0,
+            "B": 1
+          },
+          "primarySide": "B",
           "primary": "ELBOW 1 of BRANCH /PW-10201-100-M1B/B3",
           "outlineObjects": 1,
           "swappedObjects": 1
@@ -240,6 +261,11 @@
           "canonicals": [
             "ELBOW 1 of BRANCH /PL-10604-65-M1E/B2"
           ],
+          "sides": {
+            "A": 0,
+            "B": 1
+          },
+          "primarySide": "B",
           "primary": "ELBOW 1 of BRANCH /PL-10604-65-M1E/B2",
           "outlineObjects": 1,
           "swappedObjects": 1
@@ -262,6 +288,11 @@
             "/ENCOSC23059-QICHUANG-SITE",
             "/QICHUANG-MAIN-PIPE"
           ],
+          "sides": {
+            "A": 0,
+            "B": 2
+          },
+          "primarySide": "B",
           "primary": "/QICHUANG-MAIN-PIPE",
           "outlineObjects": 105,
           "swappedObjects": 5796
@@ -278,9 +309,9 @@
           "enabled": true,
           "canonical": "ELBOW 1 of BRANCH /PL-10604-65-M1E/B2",
           "meshes": 1,
-          "emissiveIntensity": 0.2168,
-          "meshColor": "b3c7d8",
-          "lineColor": "869dae",
+          "emissiveIntensity": 0.0007,
+          "meshColor": "a4bacd",
+          "lineColor": "6b7f90",
           "blinkHz": 0.3,
           "emissivePeak": 0.85,
           "peakSharpness": 2.2,
@@ -293,40 +324,40 @@
         "windowMs": 4666.666666666667,
         "sampleCount": 32,
         "emissiveSamples": [
-          0.2432,
-          0.3939,
-          0.5665,
-          0.7211,
-          0.8236,
-          0.8479,
-          0.7848,
-          0.6586,
-          0.4921,
-          0.3101,
-          0.1698,
-          0.0737,
-          0.0257,
-          0.0047,
-          0.0002,
+          0.0005,
           0,
-          0.0002,
-          0.0038,
-          0.0218,
-          0.066,
-          0.1549,
-          0.29,
-          0.448,
-          0.6244,
-          0.7565,
-          0.8391,
-          0.8379,
-          0.7544,
-          0.6196,
-          0.4551,
-          0.2957,
-          0.1572
+          0.0001,
+          0.0027,
+          0.0165,
+          0.0564,
+          0.1344,
+          0.2545,
+          0.4103,
+          0.5792,
+          0.7296,
+          0.8295,
+          0.8461,
+          0.7824,
+          0.6604,
+          0.4992,
+          0.3317,
+          0.1869,
+          0.0891,
+          0.0323,
+          0.0074,
+          0.0007,
+          0,
+          0,
+          0.002,
+          0.0131,
+          0.048,
+          0.1209,
+          0.2347,
+          0.3872,
+          0.5565,
+          0.7066
         ],
-        "span": 0.848
+        "span": 0.846
       }
     },
     {
@@ -337,9 +368,9 @@
         "enabled": false,
         "canonical": null,
         "meshes": 0,
-        "emissiveIntensity": 0.0597,
-        "meshColor": "a8bed0",
-        "lineColor": "738899",
+        "emissiveIntensity": 0.8229,
+        "meshColor": "d5e6f4",
+        "lineColor": "bad7ec",
         "blinkHz": 0.3,
         "emissivePeak": 0.85,
         "peakSharpness": 2.2,
@@ -358,6 +389,11 @@
           "canonicals": [
             "ELBOW 1 of BRANCH /PW-10201-100-M1B/B3"
           ],
+          "sides": {
+            "A": 0,
+            "B": 1
+          },
+          "primarySide": "B",
           "primary": "ELBOW 1 of BRANCH /PW-10201-100-M1B/B3",
           "outlineObjects": 1,
           "swappedObjects": 2
@@ -379,6 +415,11 @@
           "canonicals": [
             "ELBOW 1 of BRANCH /PW-10201-100-M1B/B3"
           ],
+          "sides": {
+            "A": 0,
+            "B": 1
+          },
+          "primarySide": "B",
           "primary": "ELBOW 1 of BRANCH /PW-10201-100-M1B/B3",
           "outlineObjects": 1,
           "swappedObjects": 2
@@ -389,6 +430,11 @@
             "ELBOW 1 of BRANCH /PW-10201-100-M1B/B3",
             "ELBOW 1 of BRANCH /PL-10604-65-M1E/B2"
           ],
+          "sides": {
+            "A": 0,
+            "B": 2
+          },
+          "primarySide": "B",
           "primary": "ELBOW 1 of BRANCH /PL-10604-65-M1E/B2",
           "outlineObjects": 2,
           "swappedObjects": 2
@@ -406,6 +452,11 @@
             "ELBOW 1 of BRANCH /PW-10201-100-M1B/B3",
             "ELBOW 1 of BRANCH /PL-10604-65-M1E/B2"
           ],
+          "sides": {
+            "A": 0,
+            "B": 2
+          },
+          "primarySide": "B",
           "primary": "ELBOW 1 of BRANCH /PL-10604-65-M1E/B2",
           "outlineObjects": 0,
           "swappedObjects": 2
@@ -422,9 +473,9 @@
         "enabled": false,
         "canonical": null,
         "meshes": 0,
-        "emissiveIntensity": 0.0056,
-        "meshColor": "a4bacd",
-        "lineColor": "6c8091",
+        "emissiveIntensity": 0.8448,
+        "meshColor": "d6e7f5",
+        "lineColor": "bcd9ee",
         "blinkHz": 0.3,
         "emissivePeak": 0.85,
         "peakSharpness": 2.2,
@@ -432,11 +483,13 @@
       }
     }
   ],
-  "console": [],
+  "console": [
+    "[error] Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
   "pageErrors": [],
   "ok": true,
   "launcherTotals": {
-    "projects": 2,
+    "projects": 3,
     "models": 3,
     "versions": 3
   },
@@ -449,5 +502,5 @@
     "ELBOW 1 of BRANCH /PL-10604-65-M1E/B2",
     "ELBOW 1 of BRANCH /PW-10201-100-M1B/B3"
   ],
-  "finishedAt": "2026-09-21T13:10:35.494Z"
+  "finishedAt": "2026-09-23T13:39:42.374Z"
 }

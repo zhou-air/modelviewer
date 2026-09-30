@@ -103,6 +103,14 @@ export const access = {
       const n = el(id);
       if (n) n.classList.toggle('hidden', !internal);
     }
+    // 批注翻译导入是写操作：只读身份禁用（后端 POST 同样要求内网）
+    const importIssue = el('btnIssueImport');
+    if (importIssue) {
+      importIssue.disabled = !internal;
+      importIssue.title = internal
+        ? '从 Excel 复制「序号 + 英文批注」两列后导入，按序号回填英文批注'
+        : '当前身份为只读，不能导入翻译';
+    }
 
     // 非内网身份：退出访问
     if (this.role !== 'INTERNAL_NETWORK') {

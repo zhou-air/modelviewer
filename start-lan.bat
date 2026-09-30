@@ -7,8 +7,11 @@ echo   PDMS Model Asset Manager - LAN launcher (accessible on the LAN)
 echo ====================================================================
 echo.
 
+rem ---- Python: the portable runtime shipped in this package comes first,
+rem ---- so the target machine does NOT need Python installed at all.
 set "PY="
-where python >nul 2>nul && set "PY=python"
+if exist "%~dp0runtime\python\python.exe" set "PY=%~dp0runtime\python\python.exe"
+if not defined PY where python >nul 2>nul && set "PY=python"
 if not defined PY where py >nul 2>nul && set "PY=py"
 if not defined PY if exist "%LOCALAPPDATA%\Programs\Python\Python312\python.exe" set "PY=%LOCALAPPDATA%\Programs\Python\Python312\python.exe"
 if not defined PY if exist "%LOCALAPPDATA%\Programs\Python\Python313\python.exe" set "PY=%LOCALAPPDATA%\Programs\Python\Python313\python.exe"
@@ -32,7 +35,11 @@ exit /b 0
 
 :nopython
 echo   [ERROR] No Python interpreter found.
-echo   Install Python 3, or add its folder to PATH.
+echo.
+echo   This package ships its own interpreter at runtime\python\python.exe.
+echo   If that folder is missing, re-extract the archive - do not delete runtime\.
+echo   Or install Python 3 from https://www.python.org/downloads/ and tick
+echo   "Add python.exe to PATH" during setup.
 echo.
 pause
 exit /b 1

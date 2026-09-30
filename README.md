@@ -6,14 +6,36 @@
 并且按 **Project / Model / Version** 三层管理起来（导入、自动转换、版本迭代、切换查看）。
 不依赖 Navisworks、不依赖 Autodesk APS、不上传任何数据到云端。
 
-当前进度：**Phase 8 完成**（三层数据链路 + 可交互 Viewer + 性能基准 + 模型资产管理器，均已实测）；**Phase 9 完成**（内外网访问权限体系：内网直进 / 每日内部码 / 项目访问码 / 删除密码，20 项权限实测全过）。
+当前进度：**Phase 8 完成**（三层数据链路 + 可交互 Viewer + 性能基准 + 模型资产管理器，均已实测）；**Phase 9 完成**（内外网访问权限体系：内网直进 / 每日内部码 / 项目访问码 / 删除密码，21 项权限实测全过）；**安装包分发改造完成**（内网判定默认 `auto`，解压即用，不用按现场网段改配置；包内自带 Python 运行时，目标机无需预装 Python）。
 
 ## 怎么运行
+
+### 拿到安装包（解压即用，不需要改任何配置）
+
+| 想干什么 | 怎么做 |
+|---|---|
+| 自己在这台电脑上看 | 解压后双击 **`start.bat`** |
+| 让同一局域网 / 同一 Wi-Fi 的人一起看 | 双击 **`start-lan.bat`**，把它打印出来的局域网地址发给对方 —— **对方不需要任何访问码** |
+| 给不在同一网络的人看 | 双击 **`share.bat`** 开公网临时隧道。⚠ 开之前先把 `config/access.env` 里的 `TRUST_LOOPBACK` 改成 `0` 再启动，否则拿到隧道链接的人等于拥有内网完整权限。这种走公网的访问需要访问码（今日内部码 / 项目访问码） |
+
+内网判定默认 `auto`：任何**私有地址**（`192.168.x` / `10.x` / `172.16-31.x` / 链路本地）都算内网，
+所以换到任何局域网、任何路由器网段都不用改配置，装完直接用。
+要收紧成只放自己网段，把 `config/access.env` 里的 `INTERNAL_NETWORK_RANGES` 改成显式 CIDR
+（例如 `192.168.5.0/24`）后重启后端即可，行为回到原来的严格隔离。
+
+**目标电脑不需要预装 Python**：包里 `runtime\python\` 是自带的 Python 3.13 运行时
+（Python 官方 embeddable 免安装版，许可证随包在 `runtime\python\LICENSE.txt`），
+三个启动脚本都优先用它，找不到才回退到系统 Python。整个 `runtime\` 目录不要删、不要少文件。
+
+删除项目 / 模型 / 版本需要输入**删除密码**，默认写在 `config/access.env` 的 `DELETE_PASSWORD`，
+随包分发，建议改成自己的口令。
+
+### 本机启动
 
 双击项目根目录的 **`start.bat`**。
 
 它会启动本地后端（`http://127.0.0.1:8765/viewer/index.html`）并自动打开浏览器。
-localhost 由后端判定为**公司内网（INTERNAL_NETWORK）**，直接进入内部项目管理器，无需输入访问码。
+localhost 由后端判定为**内网（INTERNAL_NETWORK）**，直接进入内部项目管理器，无需输入访问码。
 首次进入看到的是 **Model Selector**：
 
 ```
@@ -31,6 +53,12 @@ Projects                     Project  [ 启创项目 ▼ ]
 
 选好 Project → Model → Version，点 `Open Model` 进查看器。需要新版本就点 `Import Model`：
 选好目标 Project / Model、填版本名，再选本机的 `.rvm` 与 `.txt`，剩下的全部自动完成。
+
+首页右侧的 **Project Files** 存放当前项目的资料。点 `Upload File` 可一次选择多个文件，
+单文件最大 **100 MB（104,857,600 字节）**；文件名搜索和 Type 分类可组合使用，最新上传排在最前。
+同名文件自动加 `(1)`、`(2)` 等后缀，下载直接执行，删除沿用确认和删除密码，并移入回收站。
+文件跟随 Project 切换，与 Model / Version 选择无关；只读身份可查看和下载其有权访问的项目文件。
+用法、存储与验证记录见 [Project Files 说明](reports/project-files.md)。
 
 Viewer 会同时加载由现有 **PDMS 设备定位工具**从同一份 TXT 导出的 `floorplan.json`。
 工具条“设备定位图”默认开启；底图只读、不可选择，不进入模型树，也不受隐藏/隔离影响。
@@ -52,14 +80,14 @@ Viewer 会同时加载由现有 **PDMS 设备定位工具**从同一份 TXT 导�
 外网只有一个输入框，服务器自动区分两种码；验证失败统一返回"访问码无效或已失效"。
 权限判定集中在 `tools/access_control.py`（PermissionService），API 与静态模型文件都走同一套守卫。
 
-### 配置（`config/access.env`，已 gitignore，可用同名环境变量覆盖）
+### 配置（`config/access.env`，随包分发；可用同名环境变量覆盖）
 
 | 键 | 说明 | 默认 |
 |---|---|---|
-| `INTERNAL_NETWORK_RANGES` | 内网网段 / 公网出口 IP，逗号分隔 CIDR | loopback + 常用内网段 |
+| `INTERNAL_NETWORK_RANGES` | 内网判定。`auto` = 任何私有地址（`10/8`、`172.16/12`、`192.168/16`、链路本地）都算内网，**换任何局域网都不用改配置**；也可以填显式 CIDR 列表只放本网段 / 固定公网出口 IP（逗号分隔） | `auto` |
 | `TRUST_LOOPBACK` | 是否把 localhost/127.0.0.1 当内网。**cloudflared 隧道 / 本机反代场景必须设 0**（隧道回源流量从 127.0.0.1 进来）；设 0 后本机请改用局域网地址访问，并用 `start-lan.bat` 启动 | 1 |
 | `TRUSTED_PROXIES` | 可信反向代理；只有来自它的 `X-Forwarded-For` 才被信任（保持为空可防伪造） | 空（忽略 XFF） |
-| `DELETE_PASSWORD` | 删除密码；留空则首次运行自动生成并写回 | 自动生成 |
+| `DELETE_PASSWORD` | 删除密码（随包分发，建议改成自己的口令）；留空则首次运行自动生成、写入本文件并在启动窗口打印 | `123456` |
 | `SESSION_TTL_HOURS` | Session 有效期（与每日码滚动无关） | 24 |
 | `SECURE_COOKIES` | HTTPS 部署时设 1 | 0 |
 
@@ -79,13 +107,15 @@ Viewer 会同时加载由现有 **PDMS 设备定位工具**从同一份 TXT 导�
 | 场景 | 方法 |
 |---|---|
 | 本机 | `start.bat`（127.0.0.1，直接进内网模式） |
-| 局域网 | `start-lan.bat`（0.0.0.0，手机/iPad 同 Wi-Fi 访问打印出来的局域网地址；手机将按其 IP 判定身份，默认内网段含 192.168.0.0/16） |
+| 局域网 | `start-lan.bat`（0.0.0.0，手机/iPad 同 Wi-Fi 访问打印出来的局域网地址；`auto` 模式下局域网内任何设备按其 IP 都被判为内网，直接可用） |
+| 给别人用（不在同一网络） | `share.bat` 开公网临时隧道，**先设 `TRUST_LOOPBACK=0`**，来客凭今日内部码 / 项目访问码进入 |
 | 云服务器 | `python tools/server.py --port 8765 --host 0.0.0.0`，收紧 `INTERNAL_NETWORK_RANGES` 为公司出口 IP，配 `TRUSTED_PROXIES`，HTTPS 下开 `SECURE_COOKIES=1`；不要把密码写进仓库 |
 
 ### 权限测试
 
 ```bash
-python scratch/access-test.py      # 20 项：Case 1–12 全覆盖 + 防伪造 + 统一口径
+python scratch/access-test.py             # 21 项：Case 1–12 全覆盖 + 防伪造 + 统一口径
+python scratch/portable-runtime-check.py  #  6 项：随包运行时（目标机没装 Python 也能跑）
 ```
 
 
@@ -134,10 +164,13 @@ PORT=8899 NODE_PATH=<node-workspace>/node_modules node scratch/appearance-color-
 ## 目录
 
 ```
-├─ start.bat                     唯一入口：起后端 + 开浏览器
+├─ start.bat                     唯一入口：起后端 + 开浏览器（优先用随包运行时，无需装 Python）
 ├─ start-lan.bat                 局域网入口：0.0.0.0 监听，手机/iPad 同 Wi-Fi 访问
+├─ runtime/
+│  └─ python/                    随包自带的 Python 3.13 运行时（Python 官方 embeddable 免安装版）
+│                                目标电脑不需要预装 Python；许可证见 runtime/python/LICENSE.txt
 ├─ config/
-│  ├─ access.env                 访问权限配置（含删除密码，不进 Git，首次运行自动生成）
+│  ├─ access.env                 访问权限配置（含删除密码；随包分发，可自行修改）
 │  └─ access.env.example         配置说明模板
 ├─ tools/
 │  ├─ server.py                  本地后端：/api/* + 静态服务 + 权限守卫（只用标准库）

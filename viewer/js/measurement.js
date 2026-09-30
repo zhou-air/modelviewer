@@ -766,7 +766,10 @@ export class MeasurementController {
   _bboxCenter(canonicalId) {
     if (!canonicalId) return null;
     if (this._bboxCache.has(canonicalId)) return this._bboxCache.get(canonicalId);
-    const node = this.model.nodeByCanonical.get(canonicalId);
+    // nodeOfKey：比对模式下 A 侧对象的键带 `A::` 前缀，必须走宿主的双侧解析；
+    // 单模型模式下它就是 nodeByCanonical.get（行为不变）。
+    const node = this.model.nodeOfKey ? this.model.nodeOfKey(canonicalId)
+      : this.model.nodeByCanonical.get(canonicalId);
     let center = null;
     if (node) {
       const box = new THREE.Box3().setFromObject(node);

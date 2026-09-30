@@ -14,6 +14,9 @@ import { ModelTree } from './js/tree.js';
 import { PropsPanel } from './js/props.js';
 import { AssetManager, bindImportModal } from './js/assetManager.js';
 import { access } from './js/access.js';
+import { CompareController, versionsOfProject } from './js/compare.js';
+import { SplitCompareController } from './js/splitCompare.js';
+import { copyText } from './js/clipboard.js';
 import { fmtMm, MeasureGlyph } from './js/measurement.js';
 import { CameraMath, CameraFrame, CrosshairVisibility } from './js/navigation/engineeringNavigation.js';
 import { InputState, NavigationKey, normalizeWheelEvent } from './js/navigation/inputState.js';
@@ -211,6 +214,8 @@ function backToLauncher() {
 
 let issues = null, issueContextPoint = null;
 let model = null, tree = null, props = null, data = null;
+let compareUI = null;                    // 模型重叠比对的界面控制层（见 js/compare.js）
+let splitUI = null;                      // 分屏同步比对的界面控制层（见 js/splitCompare.js）
 loadEnvironmentTextureOptions();
 const gameCtxMenu = el('gameCtxMenu');
 const gameColorSubmenu = el('gameColorSubmenu');
@@ -277,22 +282,33 @@ function ensureViewer() {
       viewer.selected = canonical;                   // 主选中（最后加入的那个），单值语义保持
       const canonicals = model.selectedCanonicals;
       viewer.selectedCanonicals = canonicals;
+      // 比对模式下选择键带侧别：A 侧键统一是 `A::<canonical>`，B 侧仍是裸 canonical。
+      const side = canonical ? model.sideOfKey(canonical) : null;
+      const raw = canonical ? model.rawCanonical(canonical) : null;
+      viewer.selectedSide = side;
       // 树与 3D 共用同一份选择集：Ctrl 多选无论从哪一侧发起，两侧高亮都一致。
       // 不加这一步的话，3D 侧 Ctrl 多选或"点空处清空"都会让树停留在旧状态。
-      const ids = canonicals.map((c) => data?.idOf(c)).filter(Boolean);
-      const txtId = canonical && data ? data.idOf(canonical) : null;
+      // A 侧（叠加层）只有几何、没有元数据，因此不进树、不套用 B 的属性面板。
+      const ids = side === 'A' ? [] : canonicals.map((c) => data?.idOf(c)).filter(Boolean);
+      const txtId = canonical && side !== 'A' && data ? data.idOf(raw) : null;
       tree?.setSelection(ids, { primary: txtId, scroll: !opts.additive });
       if (canonical) {
         // txtId 可能为空（GLB 有节点、TXT 没这个对象）：属性面板清空，但徽标仍显示 canonical
-        if (txtId) props.show(txtId); else props.clear();
+        if (side === 'A') props.showCompareSource(compareUI?.a, raw);
+        else if (txtId) props.show(txtId); else props.clear();
         el('selBadge').classList.add('on');
-        el('selName').textContent = canonicals.length > 1
-          ? `${canonical}（共 ${canonicals.length} 个对象 · Ctrl+点击增删）`
-          : canonical;
+        const tag = side === 'A'
+          ? `【Model A · ${compareUI?.a?.versionName || '比对叠加层'}】`
+          : (compareUI?.active ? '【Model B · 当前版本】' : '');
+        el('selName').textContent = tag + (canonicals.length > 1
+          ? `${raw}（共 ${canonicals.length} 个对象 · Ctrl+点击增删）`
+          : raw);
       } else {
         props.clear();
         el('selBadge').classList.remove('on');
       }
+      compareUI?.setSelection(canonical);
+      splitUI?.setSelectionA(canonical);        // 分屏模式：左视口选中 → 控制条标明来源版本
       refreshButtons();
     },
     onReady: (info) => {
@@ -305,6 +321,8 @@ function ensureViewer() {
       // 这里补一次回显，不然面板会停在加载前的默认文案上
       syncMeasurePanel();
       syncAppearanceInputs();
+      // 换版本后比对层已被 unload 清掉，界面同步一次（避免浮条停在上一版的状态）
+      compareUI?.syncChrome();
     },
     onNavigationState: (state) => applyNavigationState(state),
     onMeasurementChange: (state) => syncMeasurePanel(state),
@@ -317,8 +335,30 @@ function ensureViewer() {
       return name ? String(name).trim() : null;
     },
   });
-  issues = new IssueController(model);
+  issues = new IssueController(model, { toast: (text, kind) => am.toast(text, kind) });
   viewer.issues = issues;
+  // 模型重叠比对：入口（工具条「模型比对」）+ 浮动控制条（A | B | A+B | 透明度 | 交换 | 退出）。
+  // 版本清单来自已经加载过的项目树（AssetManager），不额外打后端；B 若不等于当前版本会先切主模型。
+  compareUI = new CompareController(model, {
+    getCurrent: () => viewer.current,
+    listVersions: () => versionsOfProject(am.data?.projects || [], viewer.current?.projectId),
+    openMain: (pid, mid, vid) => am.openVersion(pid, mid, vid),
+    toast: (text, kind) => am.toast(text, kind),
+    exitSplit: () => splitUI?.exit({ silent: true }),     // 两种比对互斥（延迟求值，此处 splitUI 尚未建）
+  });
+  viewer.compareUI = compareUI;
+  // 分屏同步比对：入口（工具条「分屏比对」）+ 浮动控制条（A/B 版本 | 同步视角 | 交换左右 | 退出）。
+  // 左视口复用主 Model3D（加载 A），右视口由控制层现场创建第二个 Model3D（加载 B），退出时销毁。
+  splitUI = new SplitCompareController(model, {
+    getCurrent: () => viewer.current,
+    listVersions: () => versionsOfProject(am.data?.projects || [], viewer.current?.projectId),
+    openMain: (pid, mid, vid) => am.openVersion(pid, mid, vid),
+    restoreMain: (pid, mid, vid) => am.openVersion(pid, mid, vid),
+    getAppearance: () => appearanceSettings.current,
+    toast: (text, kind) => am.toast(text, kind),
+    exitCompare: () => compareUI?.exit({ silent: true }),
+  });
+  viewer.splitUI = splitUI;
   el('cv').addEventListener('contextmenu', (e) => {
     if (model.navigationMode !== 'orbit') return;
     e.preventDefault();
@@ -346,10 +386,15 @@ function ensureViewer() {
 }
 
 function refreshButtons() {
-  const has3d = !!viewer.selected;
-  el('btnHide').disabled = !has3d;
-  el('btnIsolate').disabled = !has3d;
+  // 显隐/隔离只作用于实体侧（B）：只在"选择集里确有 B 侧对象"时可用，
+  // 免得在比对模式下选中 A 侧对象后按了没反应。
+  const canonicals = model?.selectedCanonicals || [];
+  const hasB = canonicals.some((key) => !model.sideOfKey || model.sideOfKey(key) === 'B');
+  el('btnHide').disabled = !viewer.selected || !hasB;
+  el('btnIsolate').disabled = !viewer.selected || !hasB;
   el('btnShowAll').disabled = !model || model.hiddenCount === 0;
+  el('btnCompare').disabled = !viewer.ready;
+  el('btnSplit').disabled = !viewer.ready;
 }
 
 function bindToolbar() {
@@ -375,6 +420,7 @@ function bindToolbar() {
   el('nsReset').onclick = () => { model.navigationSettings.reset(); syncNavSettingsInputs(); };
   el('nsSpeed').addEventListener('change', applyNavSettingsFromInputs);
   el('nsSprint').addEventListener('change', applyNavSettingsFromInputs);
+  el('nsSensitivity').addEventListener('change', applyNavSettingsFromInputs);
 
   el('btnAppearance').onclick = () => {
     el('appearance').classList.toggle('on');
@@ -554,10 +600,7 @@ const measureRowHtml = (r, live) => `<div class="kv2">
       <span class="k">Horizontal Distance</span><span class="v">${fmtMm(r.horizontalMm)}</span>
     </div>`;
 
-/** 复制测量结果到剪贴板。
- *  上下文：本机 localhost 是安全上下文可用 Clipboard API，但局域网 http://192.168.x.x 不是，
- *  `navigator.clipboard` 会是 undefined —— 所以失败时退化到 textarea + execCommand('copy')，
- *  两者都失败才给明确提示（不静默失败）。 */
+/** 复制测量结果到剪贴板。剪贴板通道与批注导出共用 viewer/js/clipboard.js。 */
 async function copyMeasurements() {
   if (!model) return false;
   const text = model.measurementClipboardText();
@@ -565,26 +608,7 @@ async function copyMeasurements() {
     am.toast('还没有测量结果可复制', 'err');
     return false;
   }
-  let via = null;
-  try {
-    if (navigator.clipboard?.writeText) {
-      await navigator.clipboard.writeText(text);
-      via = 'clipboard';
-    }
-  } catch (e) { via = null; }
-  if (!via) {
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    ta.setAttribute('readonly', '');
-    ta.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0';
-    document.body.appendChild(ta);
-    ta.select();
-    ta.setSelectionRange(0, text.length);
-    let ok = false;
-    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
-    ta.remove();
-    via = ok ? 'execCommand' : null;
-  }
+  const via = await copyText(text);
   if (!via) {
     am.toast('复制失败：浏览器拒绝了剪贴板写入。请用 https 或 localhost 打开本页，或手动从面板抄录。', 'err');
     return false;
@@ -715,12 +739,20 @@ function syncFloorPlanInputs() {
   el('apFloorPlanRow').classList.toggle('off', !s.available);
 }
 
+let lastHintMode = null;
+let hintTimeout = null;
 function applyNavigationState(s) {
   viewer.nav = s;
   el('navOrbit').classList.toggle('on', s.mode === 'orbit');
   el('navGame').classList.toggle('on', s.mode === 'game');
   el('crosshair').classList.toggle('on', !!s.crosshair);
   el('hint').innerHTML = s.mode === 'game' ? GAME_HINT : ORBIT_HINT;
+  if (lastHintMode !== null && lastHintMode !== s.mode) {
+    clearTimeout(hintTimeout);
+    el('hint').classList.add('on');
+    hintTimeout = setTimeout(() => el('hint').classList.remove('on'), 5000);
+  }
+  lastHintMode = s.mode;
   const prompt = !s.failure && s.mode === 'game' && !s.captured;
   el('navPrompt').classList.toggle('on', prompt);
   el('navPrompt').innerHTML = s.failure
@@ -734,6 +766,7 @@ function syncNavSettingsInputs() {
   const s = model.navigationSettings.current;
   el('nsSpeed').value = s.normalSpeedMetersPerSecond;
   el('nsSprint').value = s.sprintMultiplier;
+  el('nsSensitivity').value = s.mouseSensitivityDegreesPerPixel;
 }
 
 function applyNavSettingsFromInputs() {
@@ -741,6 +774,7 @@ function applyNavSettingsFromInputs() {
     schemaVersion: 1,
     normalSpeedMetersPerSecond: Number(el('nsSpeed').value),
     sprintMultiplier: Number(el('nsSprint').value),
+    mouseSensitivityDegreesPerPixel: Number(el('nsSensitivity').value),
   });
   syncNavSettingsInputs();
 }
@@ -769,6 +803,11 @@ async function openVersion(ctx) {
   };
   el('viewerRoot').classList.remove('hidden');
   ensureViewer();
+  // 换版本前先拆掉比对叠加层（静默）：A 侧几何与材质必须随上一版一起释放，否则显存泄漏，
+  // 且 B 侧共享材质如果还停在"临时透明"态会被新模型继承。
+  if (compareUI?.active) compareUI.exit({ silent: true });
+  // 分屏比对的右视口同样必须先销毁：它持有独立的 renderer / 场景，跟着旧版本换掉会一起泄漏
+  if (splitUI?.active) splitUI.exit({ silent: true, keepRestore: true });
   issues.clear();
   closeGameContextMenu();
   model.setNavigationMode('orbit');                  // 换模型前退出游戏导航
@@ -1014,9 +1053,140 @@ viewer.measureUi = () => ({
   listText: (el('measureList').innerText || '').slice(0, 600),
   nowText: (el('measureNow').innerText || '').slice(0, 400),
 });
+
+// 批注双语导出 / 导入：走 IssueController 的生产入口，测试脚本不自己重实现解析与匹配
+viewer.issueClipboardText = () => issues.clipboardText();
+viewer.copyIssues = () => issues.exportComments();
+viewer.setIssueDisplayMode = (mode) => issues.setDisplayMode(mode);
+viewer.issueImportFromText = (text) => issues.importFromText(text);
+viewer.issueParseImportText = (text) => issues.parseImportText(text);
+viewer.issueUi = () => ({
+  panelOpen: !el('issuePanel').classList.contains('hidden'),
+  displayMode: issues.displayMode,
+  panelClass: el('issuePanel').className,
+  langPressed: {
+    zh: el('issueLangZh').getAttribute('aria-pressed'),
+    en: el('issueLangEn').getAttribute('aria-pressed'),
+    both: el('issueLangBoth').getAttribute('aria-pressed'),
+  },
+  // innerText 反映 CSS 实际可见性：中文/English 模式下能直接看出切换是否生效
+  listText: (el('issueList').innerText || '').slice(0, 800),
+  rowCount: el('issueList').querySelectorAll('.issue-row').length,
+  rowNumbers: [...el('issueList').querySelectorAll('.issue-row strong')].map((s) => s.textContent.trim()),
+  detailText: (el('issueDetailText').innerText || '').slice(0, 400),
+  markerTitles: issues.markers.map((m) => m.button.title),
+  message: el('issueMessage').textContent,
+  exportDisabled: el('btnIssueExport').disabled,
+  importDisabled: el('btnIssueImport').disabled,
+  importDialogOpen: el('issueImportDialog').open,
+  importText: el('issueImportText').value,
+  importError: el('issueImportError').textContent,
+  importResult: el('issueImportResult').textContent,
+  toast: el('toast').classList.contains('on') ? (el('toast').innerText || '') : null,
+});
 viewer.fit = (c) => model.fit(c);
 viewer.enableBatchRendering = (options) => model.enableBatchRendering(options);
 viewer.disableBatchRendering = () => model.disableBatchRendering();
+// ---- 模型重叠比对：全部走生产路径（浮动控制条上的按钮绑的是同一批方法）
+viewer.compareState = () => compareUI ? compareUI.state() : { active: false };
+viewer.openCompareDialog = () => compareUI?.open();
+viewer.closeCompareDialog = () => compareUI?.close();
+/** 直接按 项目/模型/版本 指定 A、B 启动比对（等价于弹窗里选两项后点「开始比对」）。 */
+viewer.startCompare = async (a, b) => {
+  if (!compareUI) return null;
+  compareUI.open();
+  const opts = compareUI._options;
+  const iA = opts.findIndex((v) => v.mid === a.mid && v.vid === a.vid);
+  const iB = opts.findIndex((v) => v.mid === b.mid && v.vid === b.vid);
+  if (iA < 0 || iB < 0) { compareUI.close(); return null; }
+  compareUI.selA.value = String(iA);
+  compareUI.selB.value = String(iB);
+  return compareUI.start();
+};
+viewer.exitCompare = () => { compareUI?.exit(); return model.compareState(); };
+// ---- 分屏同步比对：全部走生产路径（控制条按钮绑的是同一批方法）
+viewer.splitState = () => (splitUI ? splitUI.state() : { active: false });
+viewer.splitPoseDelta = () => splitUI?.poseDelta() || null;
+viewer.openSplitDialog = () => splitUI?.open();
+viewer.closeSplitDialog = () => splitUI?.close();
+/** 直接按 项目/模型/版本 指定 A、B 启动分屏（等价于弹窗里选两项后点「开始分屏比对」）。 */
+viewer.startSplit = async (a, b) => {
+  if (!splitUI) return null;
+  splitUI.open();
+  const opts = splitUI._options;
+  const iA = opts.findIndex((v) => v.mid === a.mid && v.vid === a.vid);
+  const iB = opts.findIndex((v) => v.mid === b.mid && v.vid === b.vid);
+  if (iA < 0 || iB < 0) { splitUI.close(); return null; }
+  splitUI.selA.value = String(iA);
+  splitUI.selB.value = String(iB);
+  return splitUI.start();
+};
+viewer.exitSplit = () => splitUI?.exit();
+viewer.setSplitSync = (v) => splitUI?.setSync(v);
+viewer.swapSplit = () => splitUI?.swap();
+viewer.splitFocus = () => splitUI?.focusSelected();
+viewer.splitUi = () => ({
+  ctlVisible: el('splitCtl').classList.contains('on'),
+  splitModeClass: el('center').classList.contains('splitMode'),
+  swappedClass: el('center').classList.contains('swapped'),
+  paneAWidth: el('paneA').clientWidth, paneBWidth: el('paneB').clientWidth,
+  paneBVisible: el('paneB').offsetParent !== null,
+  dividerLeft: el('splitDivider').style.left,
+  dividerCursor: getComputedStyle(el('splitDivider')).cursor,
+  tagA: el('splitTagA').textContent, tagB: el('splitTagB').textContent,
+  tagAActive: el('splitTagA').classList.contains('on'),
+  tagBActive: el('splitTagB').classList.contains('on'),
+  syncText: el('splitSync').textContent,
+  swapText: el('splitSwap').textContent,
+  selection: el('splitSel').textContent,
+  crosshairB: el('crosshairB').classList.contains('on'),
+  btnSplitOn: el('btnSplit').classList.contains('on'),
+  modalOpen: el('splitModal').classList.contains('on'),
+  canvasB: !!document.getElementById('cvB'),
+  glContexts: { a: !!el('cv').getContext, b: !!document.getElementById('cvB') },
+  hintText: el('hint').textContent,
+});
+viewer.setCompareSide = (s) => { const r = compareUI?.setSide(s); return r; };
+viewer.setCompareOpacity = (v) => { const r = model.setCompareOpacity(v); compareUI?.syncChrome(); return r; };
+viewer.swapCompare = () => { const r = compareUI?.swap(); return r; };
+viewer.compareBar = () => ({
+  visible: el('compareBar').classList.contains('on'),
+  modeA: el('cmpModeA').classList.contains('on'),
+  modeB: el('cmpModeB').classList.contains('on'),
+  modeAB: el('cmpModeAB').classList.contains('on'),
+  opacityLabel: el('cmpOpacityLabel').textContent,
+  opacityVal: el('cmpOpacityVal').textContent,
+  slider: Number(el('cmpOpacity').value),
+  labelA: el('cmpLabelA').textContent,
+  labelB: el('cmpLabelB').textContent,
+  selection: el('cmpSel').textContent,
+  swapText: el('cmpSwap').textContent,
+  compareModeClass: el('center').classList.contains('compareMode'),
+  splitModeClass: el('center').classList.contains('splitMode'),
+});
+viewer.selectedSource = () => ({
+  key: viewer.selected,
+  side: viewer.selectedSide || null,
+  badge: el('selName').textContent,
+  propsInfo: el('propInfo').textContent,
+  treeSelected: tree ? [...tree.selectedIds] : [],
+});
+/** 选择键 → 该键对应节点子树的世界坐标（比对对齐/同坐标系断言用） */
+viewer.compareNodeWorld = (key) => {
+  const node = model.nodeOfKey(key);
+  if (!node) return null;
+  const box = new THREE.Box3().setFromObject(node);
+  if (box.isEmpty()) return null;
+  const c = box.getCenter(new THREE.Vector3());
+  const o = model.modelOrigin;
+  return {
+    key, side: model.sideOfKey(key), raw: model.rawCanonical(key),
+    world: c.toArray(),
+    origin: o ? [...o] : null,
+    // 与测距同一套换算：PDMS X=(x+oX)*1000, Y=(-z+oY)*1000, Z=(y+oZ)*1000
+    pdms: o ? [(c.x + o[0]) * 1000, (-c.z + o[1]) * 1000, (c.y + o[2]) * 1000] : null,
+  };
+};
 viewer.batchRenderingState = () => model.batchRendering?.stats() || { enabled: false };
 viewer.batchRenderingManifest = () => model.batchRendering?.manifest() || null;
 viewer.openModel = async (pid, mid, vid) => { await am.openVersion(pid, mid, vid); return viewer.current; };
@@ -1060,7 +1230,8 @@ viewer.navCore = {
 };
 viewer.buttonState = () => ({
   hide: el('btnHide').disabled, isolate: el('btnIsolate').disabled,
-  showAll: el('btnShowAll').disabled,
+  showAll: el('btnShowAll').disabled, compare: el('btnCompare').disabled,
+  split: el('btnSplit').disabled,
 });
 viewer.treeState = () => ({
   selectedId: tree?.selectedId ?? null,
@@ -1106,9 +1277,15 @@ viewer.gpuInfo = () => ({
   selected: model.selected,
   outlineObjects: model.outline.selectedObjects.length,
   ready: model.ready,
+  compareRoots: model.compare ? 1 : 0,
+  compareBatchMeshes: model.compare?.batch?.stats().renderMeshes ?? null,
+  // 分屏右视口还在不在（退出后必须归 false）以及它自己那份显存计数
+  splitViewerAlive: !!splitUI?.viewerB,
+  splitGeometries: splitUI?.viewerB?.renderer.info.memory.geometries ?? null,
+  splitNodes: splitUI?.viewerB?.nodeByCanonical.size ?? null,
 });
 viewer.projectCanonical = (canonical) => {
-  const node = model.nodeByCanonical.get(canonical);
+  const node = model.nodeOfKey(canonical);      // 双侧通用（A:: 前缀的比对对象也能投影）
   if (!node) return null;
   const box = new THREE.Box3().setFromObject(node);
   if (box.isEmpty()) return null;

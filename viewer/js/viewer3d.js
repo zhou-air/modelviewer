@@ -98,6 +98,34 @@ const HOVER_LINE_DIM = new THREE.Color(0x6b7f90);
 const HOVER_LINE_PEAK = new THREE.Color(0xbcd9ee);
 const HOVER_POLL_MS = 60;                         // 准星射线节流（≈16 Hz，足够跟手且不占帧预算）
 
+// ---- 模型重叠比对（Overlay Compare）
+// 主模型（this.root）= B 侧；叠加层（this.compare.root）= A 侧。
+// A 侧的对象在**选择集/拾取结果**里统一用 `A::<canonical>` 作为键，B 侧仍用裸 canonical，
+// 因此现有选择/树/属性/批注/测距的全部口径在单模型模式下**一个字节都没变**。
+const COMPARE_PREFIX = 'A::';
+const COMPARE_OPACITY_DEFAULT = 0.35;    // A（旧版）默认不透明度
+const COMPARE_OPACITY_MIN = 0.05;
+const COMPARE_OPACITY_MAX = 0.95;
+
+/** A/B 两版 GLB 的原点差 → 叠加层需要施加的**GLB 空间**平移。
+ *
+ *  RVM→GLB 的换算（见 measurement.js 顶部与 test 里的硬断言）：
+ *      PDMS X = ( glb.x + oX ) * 1000
+ *      PDMS Y = ( -glb.z + oY ) * 1000
+ *      PDMS Z = ( glb.y + oZ ) * 1000
+ *  rvmparser 是把 RVM 坐标整体减去自己的包围盒中心（= origin）后写进 GLB 的，
+ *  因此 `glb + origin` 才回到 RVM（= PDMS 世界）坐标。两个版本的包围盒不同 → origin 不同 →
+ *  **同名元件的 GLB 顶点值天然不同**；不做补偿就会整体错开 (oA-oB)。
+ *  要让 A 的显示位置落到 B 的同一坐标系（同 RVM 坐标），需要平移：
+ *      shift = glbB - glbA = ( oA.x-oB.x , oA.z-oB.z , oB.y-oA.y )
+ *  任一 origin 缺失时返回 0 并由调用方如实标注（不假装对齐）。
+ */
+export function compareOffsetFor(originA, originB) {
+  const ok = (o) => Array.isArray(o) && o.length === 3 && o.every((v) => Number.isFinite(v));
+  if (!ok(originA) || !ok(originB)) return [0, 0, 0];
+  return [originA[0] - originB[0], originA[2] - originB[2], originB[1] - originA[1]];
+}
+
 export class Model3D {
   constructor(canvas, { onSelect, onReady, onNavigationState, onMeasurementChange,
                         onGameContextMenu, resolvePointName, appearance = null } = {}) {
@@ -118,6 +146,10 @@ export class Model3D {
     this._hoverCamSig = null;             // 上次预选中射线时的相机位姿签名（静止时省掉重复射线）
     this._hoverDirty = true;              // 场景/选择变化后强制重算一次预选中
     this.ready = false;
+    this._disposed = false;               // dispose() 之后渲染循环自停（rAF 递归没有外部句柄）
+    this.inputSuppressed = false;         // 分屏比对：非活动侧不响应 F / F8 这类**全局**快捷键
+    this.compare = null;                  // 叠加比对层（A 侧）；非比对模式下恒为 null
+    this._bMaterialSnapshot = null;       // 交换 A/B 时 B 侧共享材质的快照（用于逐项还原）
     this.modelOrigin = null;              // GLB asset.extras['rvmparser-origin']：坐标回映射要用
     this.floorPlanGroup = null;           // 与模型 root 平级：不进入树/拾取/显隐/隔离
     this.floorPlanVisible = true;         // 设备定位图默认开启；换版本保留用户当前开关
@@ -244,7 +276,9 @@ export class Model3D {
       canvas,
       worldUp: this.camera.up,                 // 宿主向上轴：本模型 PDMS Z-up 已转为 glTF Y-up
       settings: this.navigationSettings,
-      onRequestModeToggle: () => this.toggleNavigationMode(),   // F8（模式切换的唯一键盘入口）
+      // F8（模式切换的唯一键盘入口）。分屏比对下两套导航层都在监听 window：
+      // 谁在"活动侧"由 inputSuppressed 裁决，避免一次 F8 把两侧一起切换。
+      onRequestModeToggle: () => { if (!this.inputSuppressed) this.toggleNavigationMode(); },
       // 准星拾取：已捕获时左键选中屏幕中心的对象，点空处清空选中。
       onRequestCenterPick: (opts) => { if (this.ready && this.root) this._pickAtCenter(opts); },
       onRequestSelectionMenu: (point) => {
@@ -261,8 +295,10 @@ export class Model3D {
       labelRoot: overlayParent ? overlayParent.querySelector('#measureLabels') : null,
       reticle: overlayParent ? overlayParent.querySelector('#measureReticle') : null,
       onChange: (state) => this.onMeasurementChange?.(state),
-      // 对象中心点命名复用既有的 canonicalId → metadata 映射（由装配层注入，本层不认识元数据）
-      resolveName: (canonicalId) => this.resolvePointName?.(canonicalId) ?? null,
+      // 对象中心点命名复用既有的 canonicalId → metadata 映射（由装配层注入，本层不认识元数据）。
+      // 比对模式下 A 侧的对象键带 `A::` 前缀：元数据只属于当前版本（B），
+      // 所以 A 侧一律返回 null，由测量层如实退回 P 编号，不拿 B 的名字张冠李戴。
+      resolveName: (key) => this.sideOfKey(key) === 'A' ? null : (this.resolvePointName?.(key) ?? null),
     });
     this.orientationGizmo = new OrientationGizmo({
       mainCamera: this.camera,
@@ -307,12 +343,17 @@ export class Model3D {
       // CTRL（⌘）按住 = 多选：把该对象加入/移出选择集，而不是重置为单选
       this._pick(e, { additive: e.ctrlKey || e.metaKey });
     });
-    new ResizeObserver(() => this.resize()).observe(el.parentElement);
-    addEventListener('keydown', (e) => {
+    // 监听器与观察者都留引用：分屏比对退出时要能把第二个 Viewer 连监听一起销毁
+    // （rAF 递归停不掉、ResizeObserver 会一直盯着已移除的容器）。
+    this._resizeObserver = new ResizeObserver(() => this.resize());
+    this._resizeObserver.observe(el.parentElement);
+    this._onWindowKeyDown = (e) => {
+      if (this.inputSuppressed) return;      // 分屏非活动侧：F 不成对执行（另一侧已同步过去）
       // 输入框里打字不触发复位（树搜索 / 导航设置数字框）
       if (e.target && e.target.closest && e.target.closest('input, textarea, select')) return;
       if (keyBindings.has('navigation.fit', e.code)) this.fit(this.selectedCanonicals);
-    });
+    };
+    addEventListener('keydown', this._onWindowKeyDown);
   }
 
   // ------------------------------------------------ 导航模式（Orbit | Game）
@@ -396,6 +437,9 @@ export class Model3D {
    *  没有这一步就没法安全地"切换模型"——旧的 BufferGeometry 与显存缓冲不会自己消失，
    *  连续切换几十次就会把显存吃满。渲染器 / 后期处理 / 导航控制器保持常驻，不重建。 */
   unload() {
+    // 叠加比对层先拆：它已把 B 侧共享材质改成"透明态"（交换时），必须在 B 被释放前还原，
+    // 否则下一次 load() 复用旧属性的假设就不成立（材质本来就是每次 load 新建，但显示状态要干净）。
+    this._disposeOverlay();
     this.batchRendering?.dispose();
     this.batchRendering = null;
     this.sceneAppearance?.syncGround(null);
@@ -458,6 +502,315 @@ export class Model3D {
     this.ready = false;
     this.canvas.style.cursor = "default";
     this.onSelect?.(null);                // 让树/属性面板同步清空
+  }
+
+  // ------------------------------------------------ 模型重叠比对（Overlay Compare）
+  /** 键 → 侧别。A 侧统一带 `A::` 前缀；其它一律按 B（主模型）处理。 */
+  sideOfKey(key) {
+    return (typeof key === 'string' && key.startsWith(COMPARE_PREFIX)) ? 'A' : 'B';
+  }
+
+  /** 选择键 → 裸 canonical（去掉 A 前缀）。B 侧原样返回。 */
+  rawCanonical(key) {
+    return this.sideOfKey(key) === 'A' ? String(key).slice(COMPARE_PREFIX.length) : key;
+  }
+
+  /** 选择键 → Object3D（两侧通用）。测距/包围盒等按 canonical 找节点的代码改走这里。 */
+  nodeOfKey(key) {
+    if (this.sideOfKey(key) === 'A') return this.compare?.nodeByCanonical.get(this.rawCanonical(key)) || null;
+    return this.nodeByCanonical.get(key) || null;
+  }
+
+  _sideMeshes(key) {
+    if (this.sideOfKey(key) === 'A') return this.compare?.meshByCanonical.get(this.rawCanonical(key)) || [];
+    return this.meshByCanonical.get(key) || [];
+  }
+
+  /** 加载叠加比对模型（A 侧：旧版本）。B 侧 = 当前已加载的主模型，本方法不动它。
+   *
+   *  材质策略：A 侧**自带一套材质实例**（透明网格 / 透明线 / 选中 / 预选中），
+   *  绝不把 `this.meshMat` 之类的主模型共享材质改成 transparent —— 那会永久污染单模型查看。
+   *  B 侧只有在"交换 A/B"时才会被临时改成透明，且有明确的快照-还原（见 `_setComparePrimary`）。 */
+  async loadOverlay(url, { label = 'Model A', meta = null, onProgress = null } = {}) {
+    if (!this.root) throw new Error('主模型尚未加载，无法加载比对模型');
+    this._disposeOverlay();
+    const loader = new GLTFLoader();
+    const gltf = await new Promise((res, rej) =>
+      loader.load(url, res, onProgress, (e) => rej(new Error(e?.message || '比对模型 GLB 加载失败'))));
+
+    const root = gltf.scene;
+    const origin = gltf.parser?.json?.asset?.extras?.['rvmparser-origin'];
+    const originA = Array.isArray(origin) && origin.length === 3
+      && origin.every((v) => typeof v === 'number' && Number.isFinite(v)) ? origin : null;
+    const offset = compareOffsetFor(originA, this.modelOrigin);
+    root.position.set(offset[0], offset[1], offset[2]);
+    root.name = '__COMPARE_A__';
+
+    const opacity = COMPARE_OPACITY_DEFAULT;
+    const meshMat = new THREE.MeshStandardMaterial({
+      color: this.globalModelColor, roughness: 0.82, metalness: 0,
+      transparent: true, opacity, depthWrite: false,
+    });
+    const lineMat = new THREE.LineBasicMaterial({
+      color: LINE_COLOR, transparent: true, opacity: Math.min(opacity * 1.6, COMPARE_OPACITY_MAX),
+      depthWrite: false,
+    });
+    // 选中/预选中一律**不透明**：A 侧的橡皮糖色要一眼可辨，被它挡住的 B 侧本来也就在件后面。
+    const selMeshMat = new THREE.MeshStandardMaterial({
+      color: 0xd9a05a, emissive: 0x6b3d08, emissiveIntensity: 1.0, roughness: 0.55, metalness: 0,
+    });
+    const selLineMat = new THREE.LineBasicMaterial({ color: 0xc8791a });
+    const hoverMeshMat = new THREE.MeshStandardMaterial({
+      color: HOVER_MESH_PEAK.clone(), emissive: 0x2f7fd0,
+      emissiveIntensity: HOVER_EMISSIVE_PEAK, roughness: 0.5, metalness: 0,
+    });
+    const hoverLineMat = new THREE.LineBasicMaterial({ color: HOVER_LINE_PEAK.clone() });
+
+    const nodeByCanonical = new Map();
+    const meshByCanonical = new Map();
+    const lineObjects = [];
+    let meshes = 0, lines = 0;
+    root.traverse((o) => {
+      if (o.isMesh) { o.material = meshMat; meshes++; }
+      else if (o.isLineSegments || o.isLine || o.isLineLoop) {
+        o.material = lineMat; lines++; lineObjects.push(o);
+      }
+    });
+    root.traverse((o) => {
+      const gltfName = o.userData && o.userData.name;
+      if (!gltfName) return;
+      nodeByCanonical.set(gltfName, o);
+      const ms = [];
+      o.traverse((c) => { if (c.isMesh || c.isLineSegments || c.isLine) ms.push(c); });
+      meshByCanonical.set(gltfName, ms);
+    });
+
+    const compare = {
+      root, label, meta, origin: originA, offset, opacity,
+      side: 'both', primary: 'B',       // primary = 实体显示的那一侧（交换后为 'A'）
+      nodeByCanonical, meshByCanonical, lineObjects,
+      meshMat, lineMat, selMeshMat, selLineMat, hoverMeshMat, hoverLineMat, batch: null,
+      counts: { meshes, lines, nodes: nodeByCanonical.size },
+      batchError: null,
+    };
+
+    this.scene.add(root);
+    this.compare = compare;
+    // 合批：A 侧同样走 BatchRenderingManager，否则 16k 个源 mesh 会每帧发 16k 次 draw call，
+    // 且每次准星射线要在源几何上打全量（实测主模型批量合批把单次射线从数十毫秒压到 0.2 ms）。
+    // 用一个只实现 BatchRenderingManager 所需接口的适配器包一层，主模型的 _state/_material 逻辑
+    // 一行都不用改（见 batchRendering.js 顶部对 model 的依赖面）。
+    const adapter = {
+      root, scene: this.scene, meshMat, batchMeshMat: null, lineMat,
+      selMeshMat, hoverMeshMat, ghostMeshMat: null, xray: false,
+      parentNamed: (o) => this.parentNamed(o),
+      _inHiddenChain: () => false,      // A 侧没有隐藏集：显隐/隔离只作用于实体侧（B）
+      _objectColorForObject: () => null, // 单件改色只作用于实体侧（B）
+    };
+    try {
+      compare.batch = new BatchRenderingManager(adapter);
+      compare.batch.build();
+    } catch (e) {
+      // 合批可能建到一半才抛（合批组已经 add 进 scene）——必须先 dispose 把它摘掉，
+      // 否则会在场景里留下一个"半成品合批组"，绘制量和拾取都说不清。
+      compare.batchError = e?.message || String(e);
+      try { compare.batch?.dispose(); } catch { /* 忽略 */ }
+      try {
+        if (compare.batch?.group?.parent) compare.batch.group.parent.remove(compare.batch.group);
+      } catch { /* 忽略 */ }
+      compare.batch = null;
+      console.warn('[viewer] 比对模型合批失败，退回逐 mesh 渲染：', compare.batchError);
+    }
+    for (const line of lineObjects) this.lineObjects.push(line);   // 轮廓线法线趟要摘掉它们
+    this._applyCompareVisibility();
+    this._applyHighlight();
+    this.batchRendering?.sync();
+    this.compare.batch?.sync();
+    this._syncOutline();
+    this._hoverDirty = true;
+    return this.compareState();
+  }
+
+  /** 拆掉叠加层并把两侧显示状态完整还原（退出比对 / 换模型都走这里）。 */
+  _disposeOverlay() {
+    const c = this.compare;
+    this.compare = null;
+    // A 侧的选择键必须先出选择集，否则会留下一批指向已释放节点的键
+    for (const key of [...this.selection]) {
+      if (this.sideOfKey(key) === 'A') this.selection.delete(key);
+    }
+    if (this.selected && this.sideOfKey(this.selected) === 'A') this.selected = this._lastSelected();
+    if (this.hover && this.sideOfKey(this.hover) === 'A') this.hover = null;
+    if (!c) { this._hoverDirty = true; return; }
+
+    c.batch?.dispose();
+    for (const line of c.lineObjects) {
+      const i = this.lineObjects.indexOf(line);
+      if (i >= 0) this.lineObjects.splice(i, 1);
+    }
+    this.scene.remove(c.root);
+    const geos = new Set(), mats = new Set();
+    c.root.traverse((o) => {
+      if (o.geometry) geos.add(o.geometry);
+      const ms = Array.isArray(o.material) ? o.material : (o.material ? [o.material] : []);
+      for (const m of ms) mats.add(m);
+    });
+    for (const g of geos) g.dispose();
+    for (const m of [...mats, c.meshMat, c.lineMat, c.selMeshMat, c.selLineMat,
+                     c.hoverMeshMat, c.hoverLineMat]) m?.dispose();
+
+    this._restoreBMaterialSnapshot();   // 交换过就把 B 侧材质属性放回去
+    if (this.root) this.root.visible = true;
+    if (this.batchRendering?.group) this.batchRendering.group.visible = true;
+    this._applyVisibility();            // 重画材质 + 重算描边对象
+    this._hoverDirty = true;
+  }
+
+  /** B 侧共享材质的快照（只在"交换 A/B"时需要临时把主模型变透明）。 */
+  _snapshotBMaterial() {
+    const ents = [this.meshMat, this.batchMeshMat, this.lineMat].filter(Boolean);
+    return ents.map((m) => ({ m, transparent: m.transparent, opacity: m.opacity, depthWrite: m.depthWrite }));
+  }
+
+  _restoreBMaterialSnapshot() {
+    const snap = this._bMaterialSnapshot;
+    this._bMaterialSnapshot = null;
+    if (!snap) return;
+    for (const s of snap) {
+      s.m.transparent = s.transparent;
+      s.m.opacity = s.opacity;
+      s.m.depthWrite = s.depthWrite;
+      s.m.needsUpdate = true;
+    }
+  }
+
+  /** 哪一侧显示为"实体"（另一侧半透明）。交换 A/B = 换这个。
+   *
+   *  ⚠️ B 侧的网格/线材质是**全模型共享**的三个实例（meshMat / batchMeshMat / lineMat），
+   *     所以"把 B 变透明"只能改这三个实例的属性，并且必须**先快照、后还原**。
+   *     还原点：换回 primary=B、退出比对、换主模型（unload）。 */
+  _setComparePrimary(side) {
+    const c = this.compare;
+    if (!c || (side !== 'A' && side !== 'B')) return null;
+    const bIsGhost = side === 'A';          // B 变透明 ⇔ A 变实体
+    const aGhost = !bIsGhost;
+    const o = c.opacity;
+    const lineO = Math.min(o * 1.6, COMPARE_OPACITY_MAX);
+
+    if (this._bMaterialSnapshot) {          // 先无条件还原上一轮的 B 侧
+      this._restoreBMaterialSnapshot();
+    }
+    c.primary = side;
+
+    c.meshMat.transparent = aGhost;
+    c.meshMat.opacity = aGhost ? o : 1;
+    c.meshMat.depthWrite = !aGhost;
+    c.meshMat.needsUpdate = true;
+    c.lineMat.transparent = aGhost;
+    c.lineMat.opacity = aGhost ? lineO : 1;
+    c.lineMat.depthWrite = !aGhost;
+    c.lineMat.needsUpdate = true;
+
+    if (bIsGhost) {
+      this._bMaterialSnapshot = this._snapshotBMaterial();
+      for (const s of this._bMaterialSnapshot) {
+        s.m.transparent = true; s.m.opacity = o; s.m.depthWrite = false;
+        s.m.needsUpdate = true;
+      }
+    }
+    this._hoverDirty = true;
+    return c.primary;
+  }
+
+  swapCompareSides() {
+    if (!this.compare) return null;
+    return this._setComparePrimary(this.compare.primary === 'A' ? 'B' : 'A');
+  }
+
+  _applyCompareVisibility() {
+    const c = this.compare;
+    if (!c) return;
+    const showA = c.side !== 'B';
+    const showB = c.side !== 'A';
+    c.root.visible = showA;
+    if (c.batch?.group) c.batch.group.visible = showA;
+    if (this.root) this.root.visible = showB;
+    if (this.batchRendering?.group) this.batchRendering.group.visible = showB;
+  }
+
+  /** 显示模式：'A' 只看旧版 / 'B' 只看新版 / 'both' 叠加。 */
+  setCompareSide(side) {
+    if (!this.compare || !['A', 'B', 'both'].includes(side)) return null;
+    this.compare.side = side;
+    this._applyCompareVisibility();
+    this._hoverDirty = true;
+    this._setHover(null);              // 视图切换后旧预选中可能已不可见
+    return side;
+  }
+
+  /** 透明那侧的不透明度（默认作用在 A；交换后作用在 B）。 */
+  setCompareOpacity(value) {
+    const c = this.compare;
+    if (!c) return null;
+    const v = Number(value);
+    const o = Number.isFinite(v)
+      ? Math.min(Math.max(v, COMPARE_OPACITY_MIN), COMPARE_OPACITY_MAX)
+      : COMPARE_OPACITY_DEFAULT;
+    c.opacity = o;
+    const lineO = Math.min(o * 1.6, COMPARE_OPACITY_MAX);
+    if (c.primary === 'A') {                // B 是透明那侧
+      if (this.meshMat) { this.meshMat.opacity = o; this.meshMat.needsUpdate = true; }
+      if (this.batchMeshMat) { this.batchMeshMat.opacity = o; this.batchMeshMat.needsUpdate = true; }
+      if (this.lineMat) { this.lineMat.opacity = lineO; this.lineMat.needsUpdate = true; }
+    } else {
+      c.meshMat.opacity = o;
+      c.meshMat.needsUpdate = true;
+      c.lineMat.opacity = lineO;
+      c.lineMat.needsUpdate = true;
+    }
+    return o;
+  }
+
+  compareActive() { return !!this.compare; }
+
+  /** 退出比对：卸载 A 侧并把两侧材质/可见性/选择集还原到单模型状态。返回退出后的状态投影。 */
+  exitCompare() {
+    if (!this.compare) return this.compareState();
+    this._disposeOverlay();
+    return this.compareState();
+  }
+
+  /** 供界面 / 实测读取的比对状态投影。 */
+  compareState() {
+    const c = this.compare;
+    if (!c) return { active: false };
+    const sides = { A: 0, B: 0 };
+    for (const key of this.selection) sides[this.sideOfKey(key)]++;
+    return {
+      active: true,
+      side: c.side,
+      primary: c.primary,
+      opacity: +c.opacity.toFixed(3),
+      label: c.label,
+      meta: c.meta,
+      origin: c.origin ? [...c.origin] : null,
+      originDelta: [...c.offset],
+      originAligned: !!(c.origin && this.modelOrigin),
+      rootPosition: c.root.position.toArray(),
+      aNodes: c.counts.nodes,
+      aMeshes: c.counts.meshes,
+      aLines: c.counts.lines,
+      aBatch: !!c.batch?.enabled,
+      batchError: c.batchError,
+      aVisible: c.root.visible,
+      bVisible: !!this.root?.visible,
+      aOpacity: (c.primary === 'A' ? 1 : +c.meshMat.opacity.toFixed(3)),
+      bOpacity: (c.primary === 'B' ? 1 : (this.meshMat ? +this.meshMat.opacity.toFixed(3) : null)),
+      aTransparent: c.meshMat.transparent,
+      bTransparent: this.meshMat ? this.meshMat.transparent : null,
+      selectedSides: sides,
+      bMaterialSnapshot: !!this._bMaterialSnapshot,
+    };
   }
 
   async load(url, onProgress, { floorplan = null } = {}) {
@@ -629,18 +982,28 @@ export class Model3D {
       });
     }
 
-    const paint = (canonical, meshMat, lineMat) => {
-      for (const m of (this.meshByCanonical.get(canonical) || [])) {
-        if (this._ghost.has(m)) continue;      // ghost 优先：隐藏件不该被高亮成实心色
-        if (!this._swapped.has(m)) this._swapped.set(m, m.material);
-        const isLine = m.isLineSegments || m.isLine || m.isLineLoop;
-        m.material = isLine ? lineMat : meshMat;
-      }
-    };
-    for (const c of this.selection) paint(c, this.selMeshMat, this.selLineMat);
+    for (const key of this.selection) this._paintKey(key, 'select');
     // 已选中的对象不再叠加预选中（选中态优先，否则点下去颜色会跳一下）
-    if (this.hover && !this.selection.has(this.hover)) {
-      paint(this.hover, this.hoverMeshMat, this.hoverLineMat);
+    if (this.hover && !this.selection.has(this.hover)) this._paintKey(this.hover, 'hover');
+  }
+
+  /** 给一个**选择键**上高亮材质。A 侧键走叠加层自己的材质实例，B 侧键走主模型材质。
+   *  这是"两个模型重叠时选择不串味"的关键：键不同 → 材质台账不同 → 互不覆盖。 */
+  _paintKey(key, kind = 'select') {
+    const isA = this.sideOfKey(key) === 'A';
+    const meshes = this._sideMeshes(key);
+    if (!meshes.length) return;
+    const meshMat = isA
+      ? (kind === 'hover' ? this.compare?.hoverMeshMat : this.compare?.selMeshMat)
+      : (kind === 'hover' ? this.hoverMeshMat : this.selMeshMat);
+    const lineMat = isA
+      ? (kind === 'hover' ? this.compare?.hoverLineMat : this.compare?.selLineMat)
+      : (kind === 'hover' ? this.hoverLineMat : this.selLineMat);
+    for (const m of meshes) {
+      if (this._ghost.has(m)) continue;        // ghost 优先：隐藏件不该被高亮成实心色
+      if (!this._swapped.has(m)) this._swapped.set(m, m.material);
+      const isLine = m.isLineSegments || m.isLine || m.isLineLoop;
+      m.material = isLine ? lineMat : meshMat;
     }
   }
 
@@ -655,21 +1018,28 @@ export class Model3D {
     for (let n = obj; n; n = n.parent) {
       const k = n.userData && n.userData.name;
       if (k && this.hiddenCanonicals.has(k)) return true;
-      if (n === this.root) break;
+      if (n === this.root || n === this.compare?.root) break;
     }
     return false;
   }
 
-  /** 描边对象 = 选择集里所有可见网格（父子同选时同一 mesh 只留一份） */
+  /** 描边对象 = 选择集里所有可见网格（父子同选时同一 mesh 只留一份）
+   *  比对模式下叠加层（A）的选中件也要描边：两侧各自用自己那一份合批台账。 */
   _syncOutline() {
-    if (this.batchRendering?.enabled) {
-      this.outline.selectedObjects = this.batchRendering.selectedRenderObjects();
-      return;
-    }
     const objs = [];
-    for (const c of this.selection) {
-      for (const m of (this.meshByCanonical.get(c) || [])) {
-        if (this._solidInScene(m)) objs.push(m);
+    for (const side of ['B', 'A']) {
+      const isA = side === 'A';
+      const mgr = isA ? this.compare?.batch : this.batchRendering;
+      if (mgr?.enabled) {
+        const any = [...this.selection].some((k) => this.sideOfKey(k) === side);
+        if (any) objs.push(...mgr.selectedRenderObjects());
+        continue;
+      }
+      for (const key of this.selection) {
+        if (this.sideOfKey(key) !== side) continue;
+        for (const m of this._sideMeshes(key)) {
+          if (this._solidInScene(m)) objs.push(m);
+        }
       }
     }
     this.outline.selectedObjects = [...new Set(objs)];
@@ -679,7 +1049,7 @@ export class Model3D {
   _visibleInScene(obj) {
     for (let n = obj; n; n = n.parent) {
       if (n.visible === false) return false;
-      if (n === this.root) break;
+      if (n === this.root || n === this.compare?.root) break;
     }
     return true;
   }
@@ -727,22 +1097,53 @@ export class Model3D {
   _hitAtNdc(ndcX, ndcY) {
     if (!this.root) return null;
     this.raycaster.setFromCamera(this._ndc.set(ndcX, ndcY), this.camera);
-    if (this.batchRendering?.enabled) {
-      const batchHits = this.raycaster.intersectObject(this.batchRendering.group, true);
-      for (const hit of batchHits) {
-        const canonicalId = this.batchRendering.resolveHit(hit);
-        if (canonicalId && this.meshByCanonical.has(canonicalId)) {
+    if (!this.compare) {
+      const hit = this._hitSide('B');
+      return hit ? { canonicalId: hit.canonicalId, side: 'B', rawCanonical: hit.canonicalId,
+        point: hit.point, distance: hit.distance, object: hit.object } : null;
+    }
+    // 比对模式：实体侧优先（默认 B），命中空档再试透明侧 ——
+    // 这样"两版都有"的元件点下去拿到的是实体版；"只在旧版有"（被删掉的件）自然落到 A，
+    // 正好就是比对时最想看的东西。要单独点 A 侧的件，切到「A」视图即可。
+    const order = this.compare.primary === 'A' ? ['A', 'B'] : ['B', 'A'];
+    const pickable = this.compare.side === 'both'
+      ? order : (this.compare.side === 'A' ? ['A'] : ['B']);
+    for (const side of pickable) {
+      const hit = this._hitSide(side);
+      if (!hit) continue;
+      const key = side === 'A' ? COMPARE_PREFIX + hit.canonicalId : hit.canonicalId;
+      return { canonicalId: key, side, rawCanonical: hit.canonicalId,
+        point: hit.point, distance: hit.distance, object: hit.object };
+    }
+    return null;
+  }
+
+  /** 单侧射线：'B' = 主模型，'A' = 叠加层。批次解析与可见性口径两侧一致。 */
+  _hitSide(side) {
+    const isA = side === 'A';
+    const root = isA ? this.compare?.root : this.root;
+    if (!root) return null;
+    const meshes = isA ? this.compare.meshByCanonical : this.meshByCanonical;
+    const mgr = isA ? this.compare?.batch : this.batchRendering;
+    if (mgr?.enabled) {
+      const hits = this.raycaster.intersectObject(mgr.group, true);
+      for (const hit of hits) {
+        const canonicalId = mgr.resolveHit(hit);
+        if (canonicalId && meshes.has(canonicalId)) {
           return { canonicalId, point: hit.point, distance: hit.distance, object: hit.object };
         }
       }
       return null;
     }
-    const hits = this.raycaster.intersectObject(this.root, true);
+    const hits = this.raycaster.intersectObject(root, true);
     for (const h of hits) {
-      if (!this._solidInScene(h.object)) continue;
+      // A 侧没有隐藏集，_inHiddenChain 恒 false；两侧共用同一条可见性判定，
+      // 保证"切到 A 视图 / 单模型视图"时拾取结果与渲染一致。
+      if (!this._visibleInScene(h.object)) continue;
+      if (this._inHiddenChain(h.object)) continue;
       const named = this.parentNamed(h.object);
       const key = named && named.userData && named.userData.name;
-      if (key && this.meshByCanonical.has(key)) {
+      if (key && meshes.has(key)) {
         return { canonicalId: key, point: h.point, distance: h.distance, object: h.object };
       }
     }
@@ -761,6 +1162,68 @@ export class Model3D {
     if (!node) return null;
     const box = new THREE.Box3().setFromObject(node);
     return box.isEmpty() ? null : { position: box.getCenter(new THREE.Vector3()).toArray(), source: 'object-center' };
+  }
+
+  // ------------------------------------------------ 相机位姿读写（分屏同步比对用）
+  /** 当前相机位姿快照（纯值，不含内部引用）。
+   *
+   *  ⚠️ Game 模式下 `controls.target` 不属于相机（它是 Orbit 的旋转中心，Game 期间已冻结），
+   *     所以此时按"视线正前方 _orbitDistance 处"反算一个等效 target：
+   *     与 `captureReviewCamera` 同一口径，这样把位姿交给另一侧时两侧的 lookAt 结果一致。
+   */
+  cameraPose() {
+    const c = this.camera;
+    const target = this.navigationMode === 'game'
+      ? c.position.clone().addScaledVector(c.getWorldDirection(new THREE.Vector3()), this._orbitDistance || 10)
+      : this.controls.target.clone();
+    return {
+      position: c.position.toArray(), target: target.toArray(),
+      quaternion: c.quaternion.toArray(), up: c.up.toArray(),
+      fov: c.fov, near: c.near, far: c.far,
+      mode: this.navigationMode,
+    };
+  }
+
+  /** 位姿指纹：同步层用它判断"这一侧到底动没动"，避免每帧无脑互写。
+   *  4 位小数 ≈ 0.1 mm 量级（模型单位是米），远小于肉眼可辨的视角差，够用来去抖。 */
+  cameraPoseSignature() {
+    const p = this.cameraPose();
+    const f = (n) => (Math.abs(n) < 5e-5 ? 0 : n).toFixed(4);
+    return [...p.position, ...p.quaternion, p.fov, p.near, p.far, ...p.target].map(f).join(',');
+  }
+
+  /** 把另一侧的位姿原样落到本相机上（同步比对的核心写入点）。
+   *
+   *  与 `restoreReviewCamera` 同源（都关掉轨道阻尼再硬写），但**不动鼠标捕获**——
+   *  同步每秒可能发生几十次，不能顺手把用户的 Pointer Lock 释放掉。
+   *  写入后 Navigation 的基准帧必须重建，否则 Game 模式下下一次转动视角会瞬移回旧方向。
+   */
+  applyCameraPose(pose) {
+    if (!pose || !Array.isArray(pose.position)) return null;
+    const c = this.camera;
+    const damping = this.controls.enableDamping;
+    this.controls.enableDamping = false;
+    this.controls.update();                    // 冲掉上一帧残留的轨道惯性，否则会"拖着"视角不跟随
+    c.position.fromArray(pose.position);
+    c.up.fromArray(pose.up);
+    this.controls.target.fromArray(pose.target);
+    if (pose.fov !== c.fov || pose.near !== c.near || pose.far !== c.far) {
+      c.fov = pose.fov; c.near = pose.near; c.far = pose.far;
+      c.updateProjectionMatrix();              // 裁剪面也要跟随：否则对面看得见的东西这一侧会被裁掉
+    }
+    const dist = c.position.distanceTo(this.controls.target);
+    // 只在越界时放宽轨道距离上下限：正常情况不动它，免得污染单模型模式下的滚轮手感。
+    if (dist > this.controls.maxDistance) this.controls.maxDistance = dist * 1.05;
+    if (dist < this.controls.minDistance) this.controls.minDistance = Math.max(dist * 0.95, 1e-4);
+    this.controls.update();
+    // controls.update() 会用 lookAt(target) 重算朝向；这里再钉一次完整四元数，
+    // 保证俯仰与另一侧逐位相同（两侧 position/target 相同，所以两者自洽，不会互相打架）。
+    c.quaternion.fromArray(pose.quaternion);
+    this.controls.enableDamping = damping;
+    this._orbitDistance = dist;
+    if (this.navigationMode === 'game') this.navigation.rebase();
+    this._hoverDirty = true;                   // 相机被外部改过 → 准星预选中要重算
+    return this.cameraPose();
   }
 
   captureReviewCamera() {
@@ -846,6 +1309,7 @@ export class Model3D {
     }
     this._applyHighlight();
     this.batchRendering?.sync();
+    this.compare?.batch?.sync();
     this._syncOutline();
     this._hoverDirty = true;                 // 选中会改材质，预选中需要重算一遍
     this.canvas.style.cursor = this.selected ? 'pointer' : 'default';
@@ -903,6 +1367,7 @@ export class Model3D {
     this.hover = canonical;
     this._applyHighlight();
     this.batchRendering?.sync();
+    this.compare?.batch?.sync();
     this.onHover?.(canonical);
   }
 
@@ -937,9 +1402,13 @@ export class Model3D {
   }
 
   selectionState() {
+    const sides = { A: 0, B: 0 };
+    for (const key of this.selection) sides[this.sideOfKey(key)]++;
     return {
       count: this.selection.size,
       canonicals: this.selectedCanonicals,
+      sides,
+      primarySide: this.selected ? this.sideOfKey(this.selected) : null,
       primary: this.selected,
       outlineObjects: this.outline.selectedObjects.length,
       swappedObjects: this._swapped.size,
@@ -953,7 +1422,7 @@ export class Model3D {
     const list = typeof target === 'string' ? [target]
       : (target && typeof target[Symbol.iterator] === 'function' ? [...target] : []);
     for (const canonical of list) {
-      const node = this.nodeByCanonical.get(canonical);
+      const node = this.nodeOfKey(canonical);      // 双侧通用：选中的 A 侧件也能 Fit
       if (!node) continue;
       const b = new THREE.Box3().setFromObject(node);
       if (b.isEmpty()) continue;
@@ -1037,6 +1506,7 @@ export class Model3D {
     }
     this._applyHighlight();
     this.batchRendering?.sync();
+    this.compare?.batch?.sync();          // A 侧同样按材质台账重算（选中/预选中在 A 侧也要生效）
     this._syncOutline();
   }
 
@@ -1127,6 +1597,11 @@ export class Model3D {
     this.globalModelColor.set(color);
     this.meshMat?.color.set(color);
     this.batchMeshMat?.color.set(color);
+    // 比对层的 A 侧跟着同色（它是叠加层自己的材质实例，不共享主模型材质，改它不会影响单模型模式）
+    this.compare?.meshMat?.color.set(color);
+    if (this.compare?.lineMat) {
+      this.compare.lineMat.color.set(color === `#${new THREE.Color(MODEL_COLOR).getHexString()}` ? LINE_COLOR : color);
+    }
     // 默认线色继续保留原 Viewer 的深色；用户真正选择其他模型色时，普通模型线跟随。
     if (this.lineMat) this.lineMat.color.set(color === `#${new THREE.Color(MODEL_COLOR).getHexString()}` ? LINE_COLOR : color);
     return `#${this.globalModelColor.getHexString()}`;
@@ -1310,10 +1785,41 @@ export class Model3D {
   /** 复制到 Excel 的 TSV 文本（不含表头外的单位文字，数值列保持纯数字） */
   measurementClipboardText() { return this.measurement.clipboardText(); }
 
+  // ------------------------------------------------ 生命周期（一次性 Viewer 用）
+  /** 彻底释放本 Viewer：拆模型、停渲染循环、解绑监听、销毁渲染器与 WebGL 上下文。
+   *
+   *  只给"用完即扔"的实例用（分屏比对的第二视口）。主 Viewer 常驻，不调用本方法。
+   *  ⚠️ 主动丢上下文会让这张 canvas 永久失效（同一 canvas 再 getContext 拿到的是已丢失的
+   *     上下文），所以调用方必须连 canvas 元素一起换新——这条约定写在 splitCompare.js 里。
+   */
+  dispose() {
+    if (this._disposed) return;
+    this._disposed = true;
+    this.unload();
+    this._resizeObserver?.disconnect();
+    this._resizeObserver = null;
+    if (this._onWindowKeyDown) {
+      removeEventListener('keydown', this._onWindowKeyDown);
+      this._onWindowKeyDown = null;
+    }
+    this.onStats = null;
+    this.onReviewFrame = null;
+    this.onBeforeRender = null;
+    this.navigation?.dispose();
+    this.measurement?.dispose();
+    this.orientationGizmo?.dispose();
+    this.lighting?.dispose();
+    this.sceneAppearance?.dispose();
+    this.composer?.dispose();
+    this.renderer?.dispose();
+    try { this.renderer?.forceContextLoss(); } catch { /* 上下文已丢失：忽略 */ }
+  }
+
   // ------------------------------------------------ 渲染循环
   _loop() {
     let frames = 0, last = performance.now(), lastFrame = performance.now();
     const tick = () => {
+      if (this._disposed) return;          // dispose 之后自停（rAF 递归没有外部句柄可取消）
       requestAnimationFrame(tick);
       const now = performance.now();
       this.performance.beginFrame(now);
@@ -1328,6 +1834,9 @@ export class Model3D {
       } else {
         this.controls.update();
       }
+      // 分屏同步比对：本帧的相机更新已跑完、还没开始渲染 —— 在此把两侧视角对齐，
+      // 保证同一个 rAF 帧里两个视口用的是同一套位姿（放在渲染之后就会差一帧，看起来"跟手慢"）。
+      this.onBeforeRender?.();
       // 测距：准星射线 + 预览线 + 标签投影。必须在相机更新之后、渲染之前（与现实一致），
       // 并且在 _updateHover 之前（预选中要复用它的命中结果）。
       this.measurement.update(now);

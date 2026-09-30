@@ -1,0 +1,165 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "Project Files starts empty on selected project",
+      "ok": true
+    },
+    {
+      "name": "Desktop panel uses right side without overflowing page",
+      "ok": true,
+      "detail": {
+        "right": true,
+        "within": true,
+        "overflow": false
+      }
+    },
+    {
+      "name": "Multi-file upload persists every selected file",
+      "ok": true
+    },
+    {
+      "name": "Duplicate Chinese names are retained with suffix",
+      "ok": true
+    },
+    {
+      "name": "All six categories inferred from extensions",
+      "ok": true
+    },
+    {
+      "name": "Optional future model/version fields remain null",
+      "ok": true
+    },
+    {
+      "name": "Newest uploaded time first in actual table",
+      "ok": true
+    },
+    {
+      "name": "Name, type, size, time, download and delete columns displayed",
+      "ok": true
+    },
+    {
+      "name": "Type and case-insensitive filename search combine",
+      "ok": true
+    },
+    {
+      "name": "No matches has clear empty state",
+      "ok": true
+    },
+    {
+      "name": "Search does not search file contents",
+      "ok": true
+    },
+    {
+      "name": "Model/version selection preserves files without reloading",
+      "ok": true
+    },
+    {
+      "name": "Tree project switch immediately isolates files",
+      "ok": true
+    },
+    {
+      "name": "Same filename in another project keeps original name",
+      "ok": true
+    },
+    {
+      "name": "Returning to project restores only its own records",
+      "ok": true
+    },
+    {
+      "name": "Explicit refresh reloads persisted records",
+      "ok": true
+    },
+    {
+      "name": "Page reload preserves file records and sorting",
+      "ok": true
+    },
+    {
+      "name": "Download executes directly with Unicode safe name and original bytes",
+      "ok": true
+    },
+    {
+      "name": "Download leaves launcher open",
+      "ok": true
+    },
+    {
+      "name": "Cancel confirmation keeps file",
+      "ok": true
+    },
+    {
+      "name": "Backdrop cancellation releases delete action",
+      "ok": true
+    },
+    {
+      "name": "Wrong delete password prompts retry and keeps file",
+      "ok": true
+    },
+    {
+      "name": "Confirmed deletion removes only the chosen duplicate",
+      "ok": true
+    },
+    {
+      "name": "Deletion survives page refresh",
+      "ok": true
+    },
+    {
+      "name": "Deleted file download is no longer available",
+      "ok": true
+    },
+    {
+      "name": "Deleting in A does not affect B",
+      "ok": true
+    },
+    {
+      "name": "Delayed previous-project list cannot overwrite current project",
+      "ok": true
+    },
+    {
+      "name": "Switching project during multi-upload cannot move files to B",
+      "ok": true
+    },
+    {
+      "name": "Both queued files finish in original selected project",
+      "ok": true
+    },
+    {
+      "name": "Partial upload failure retains success and names the failed file",
+      "ok": true
+    },
+    {
+      "name": "Narrower desktop layout keeps panel reachable",
+      "ok": true
+    },
+    {
+      "name": "Existing ready model still opens through selector",
+      "ok": true
+    },
+    {
+      "name": "Returning from Viewer preserves current project files",
+      "ok": true
+    },
+    {
+      "name": "Existing model import dialog still opens",
+      "ok": true
+    },
+    {
+      "name": "Client read-only UI shows files and download, hides mutations",
+      "ok": true
+    },
+    {
+      "name": "Client selector only contains authorized project",
+      "ok": true
+    },
+    {
+      "name": "Client cannot fetch another project files",
+      "ok": true
+    },
+    {
+      "name": "Browser reports no uncaught page errors",
+      "ok": true,
+      "detail": []
+    }
+  ],
+  "pageErrors": [],
+  "fixtureCleaned": true
+}

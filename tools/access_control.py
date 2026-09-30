@@ -8,6 +8,13 @@
 
 不引入：账号系统 / RBAC / OAuth / 数据库。Session 是进程内存字典，重启即失效
 （与导入 job 同策略），模型数据本身不受影响。
+
+安装包分发策略（2026-09-24）：
+  * INTERNAL_NETWORK_RANGES 默认 `auto` —— 任何私有地址都算内网，换到任何局域网
+    （10.x / 172.16-31.x / 192.168.x）都不用改配置，装完即用。
+  * 环回地址（127.0.0.1 / ::1）不在 auto 集合里，单独由 TRUST_LOOPBACK 控制：
+    隧道/反代场景把它设 0，就能把"隧道回源从 127.0.0.1 进来"的流量挡在内网之外。
+  * 要收紧（只放自己网段）时，把该键改成显式 CIDR 列表即可，行为与收紧前一致。
 """
 from __future__ import annotations
 
@@ -34,6 +41,18 @@ SESSION_COOKIE = "mv_session"
 CODE_ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789"
 
 ROLES = ("INTERNAL_NETWORK", "INTERNAL_REMOTE", "CLIENT_PROJECT", "ANONYMOUS")
+
+# INTERNAL_NETWORK_RANGES=auto 时使用的集合：任何私有网段都算内网。
+# 覆盖绝大多数现场（家用路由 192.168.x、企业网 10.x、园区网 172.16-31.x），
+# 所以安装包解压后不用按现场网段改配置。
+# 注意：环回地址**故意不在这里** —— 它由 TRUST_LOOPBACK 单独控制，
+# 这样隧道回源流量（源地址是 127.0.0.1）才能被 TRUST_LOOPBACK=0 挡住。
+AUTO_INTERNAL_CIDRS = (
+    "10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16",   # RFC1918 私有网
+    "169.254.0.0/16", "fe80::/10",                     # 链路本地 / APIPA
+    "fc00::/7",                                        # IPv6 唯一本地地址 ULA
+)
+AUTO_KEYWORDS = ("auto", "private", "lan")
 
 
 class AccessError(Exception):
@@ -103,9 +122,13 @@ class _Config:
         def get(key: str, default: str = "") -> str:
             return os.environ.get(key, f.get(key, default))
 
-        self.internal_ranges = _parse_ranges(get(
-            "INTERNAL_NETWORK_RANGES",
-            "127.0.0.0/8,::1/128,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"))
+        # 内网判定：
+        #   auto（默认，留空同义）= 任何私有地址都算内网，装完即用，无需按现场网段配置；
+        #   显式 CIDR 列表 = 只把列出的网段当内网（需要收紧时用）。
+        raw_ranges = (get("INTERNAL_NETWORK_RANGES", "") or "").strip()
+        self.internal_auto = (not raw_ranges) or raw_ranges.lower() in AUTO_KEYWORDS
+        self.internal_ranges = _parse_ranges(
+            ",".join(AUTO_INTERNAL_CIDRS) if self.internal_auto else raw_ranges)
         self.trusted_proxies = _parse_ranges(get("TRUSTED_PROXIES", ""))
         # TRUST_LOOPBACK=1：localhost/127.0.0.1 恒为内网（本机开发默认）。
         # 通过 cloudflared 隧道 / 同机反向代理暴露公网时必须设为 0 ——
@@ -115,7 +138,8 @@ class _Config:
         self.secure_cookies = get("SECURE_COOKIES", "0") in ("1", "true", "yes")
         self.delete_password = get("DELETE_PASSWORD", "")
         if not self.delete_password:
-            # 首次运行：自动生成并写回 config/access.env，避免空密码裸奔
+            # 未配置删除密码：自动生成一个随机码并写回 config/access.env。
+            # 生成值同时打印到启动窗口，否则使用者打不开文件就不知道密码。
             self.delete_password = _generate_code(10)
             try:
                 CONFIG_FILE.parent.mkdir(parents=True, exist_ok=True)
@@ -123,14 +147,23 @@ class _Config:
                     CONFIG_FILE.write_text(
                         "# 访问权限配置（本文件含敏感信息，不要提交 Git）\n"
                         f"DELETE_PASSWORD={self.delete_password}\n"
-                        "# INTERNAL_NETWORK_RANGES=10.0.0.0/8,192.168.0.0/16,203.0.113.10/32\n"
+                        "# auto = 任何私有网段都算内网；收紧时改成 CIDR 列表，如 192.168.5.0/24\n"
+                        "INTERNAL_NETWORK_RANGES=auto\n"
+                        "# TRUST_LOOPBACK=1\n"
                         "# TRUSTED_PROXIES=127.0.0.1\n"
                         "# SESSION_TTL_HOURS=24\n"
                         "# SECURE_COOKIES=0\n",
                         encoding="utf-8")
-                    print(f"  [access] 已生成删除密码并写入 {CONFIG_FILE.name}（请自行修改）")
+                    print(f"  [access] 未配置删除密码，已自动生成：{self.delete_password}"
+                          f"（已写入 {CONFIG_FILE.name}，请自行修改）")
             except OSError:
                 pass
+
+    def describe_internal_ranges(self) -> str:
+        """启动横幅用：把内网判定说成人话。"""
+        if self.internal_auto:
+            return "auto — 任何私有地址（192.168.x / 10.x / 172.16-31.x）+ 链路本地"
+        return ", ".join(str(n) for n in self.internal_ranges) or "（无，只有显式放行的地址）"
 
     def is_internal_ip(self, ip: str) -> bool:
         try:

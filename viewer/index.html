@@ -41,9 +41,69 @@
            border-right: 1px solid var(--border); display: flex; flex-direction: column; }
   #right { width: 320px; min-width: 320px; background: var(--panel);
            border-left: 1px solid var(--border); display: flex; flex-direction: column; }
-  #center { flex: 1; position: relative; background: var(--bg); min-width: 0; }
+  #center { flex: 1; position: relative; background: var(--bg); min-width: 0;
+            display: flex; }
   #viewerRoot { display: flex; flex-direction: column; height: 100%; }
   #viewerRoot > #layout { flex: 1; min-height: 0; }
+
+  /* ---------- 左右分屏（Split Compare） ---------- */
+  /* 两个 3D 视口等分 #center：未分屏时 #paneA 独占（#paneB 与分隔线 display:none），
+     布局与改造前的单个 #center 完全一致。分隔线用 absolute 覆盖、不占 flex 空间，
+     因此两个 pane 的 50% 正好铺满，不会因为分隔条宽度而溢出。 */
+  .pane3d { position: relative; flex: 1 1 0; min-width: 0; overflow: hidden; }
+  #cv, #cvB { display: block; width: 100%; height: 100%; }
+  #paneB { display: none; }
+  #center.splitMode #paneB { display: block; }
+  /* 交换左右只改绘制顺序，不动 DOM、不重载模型（两侧相机本就同步，交换对视角无影响）。 */
+  #center.swapped #paneA { order: 3; }
+  #center.swapped #paneB { order: 1; }
+  /* 层次（都在 #center 的层叠上下文内）：pane(auto) < 分隔线(1) < 罗盘(2) < pane 标签(3)
+     < 浮层(5) < 分隔线之上不需要更高的东西。分隔线只压住 canvas，不压浮层 ——
+     否则它会挡住底部工具条中间那几个按钮的点击。 */
+  #splitDivider { display: none; position: absolute; top: 0; bottom: 0; width: 11px;
+                  transform: translateX(-50%); z-index: 1; cursor: col-resize;
+                  touch-action: none; }
+  #center.splitMode #splitDivider { display: block; }
+  #splitDivider::after { content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 2px;
+                         transform: translateX(-50%); background: #b8c0c7; }
+  #splitDivider:hover::after, #splitDivider.dragging::after { background: var(--accent); width: 3px; }
+  /* 每个 pane 左上角的版本标签：分屏时告诉用户"这一侧是哪一版"（点击穿透，不挡取点） */
+  .pane-tag { display: none; position: absolute; top: 8px; left: 8px; z-index: 3;
+              background: rgba(255,255,255,.9); border: 1px solid var(--border);
+              border-radius: 6px; padding: 3px 8px; font-size: 11.5px; color: var(--muted);
+              max-width: calc(100% - 24px); overflow: hidden; text-overflow: ellipsis;
+              white-space: nowrap; pointer-events: none; }
+  #center.splitMode .pane-tag { display: block; }
+  .pane-tag b { font-weight: 600; margin-right: 4px; color: var(--text); }
+  .pane-tag.a b { color: #97651a; }
+  .pane-tag.b b { color: var(--accent); }
+  /* 分屏控制条：与重叠比对控制条同一个位置（两者互斥，不会同时出现） */
+  #splitCtl { display: none; bottom: 62px; left: 50%; transform: translateX(-50%);
+              flex-direction: column; gap: 6px; padding: 8px 10px; align-items: stretch; }
+  #splitCtl.on { display: flex; }
+  .splitMode #navPrompt { bottom: 122px; }
+  /* 长提示（操作说明 / 导航提示）在分屏时收敛到"左视口"那一半：
+     横跨分隔线会把文字从中间割开，两侧都读不成句。交换左右时跟着视口一起走。 */
+  #center.splitMode #hint, #center.splitMode #navPrompt {
+    left: 25%; max-width: calc(50% - 26px); }
+  #center.splitMode.swapped #hint, #center.splitMode.swapped #navPrompt { left: 75%; }
+  /* 收敛后行数变多，压在视口上方会更挡模型 —— 压小字号、降低对比，悬停时恢复。 */
+  #center.splitMode #hint { font-size: 11px; line-height: 1.35; padding: 4px 8px;
+                            opacity: .78; transition: opacity .15s; }
+  #center.splitMode #hint:hover { opacity: 1; }
+  #splitCtl .sc-row { display: flex; align-items: center; gap: 8px; justify-content: center; }
+  #splitCtl .sc-tag { font-size: 11.5px; color: var(--muted); max-width: 240px;
+                      overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #splitCtl .sc-tag b { color: var(--text); font-weight: 600; }
+  #splitCtl .sc-tag.a b { color: #97651a; }
+  #splitCtl .sc-tag.b b { color: var(--accent); }
+  #splitCtl .sc-sel { font-size: 11.5px; color: var(--muted); text-align: center;
+                      word-break: break-all; }
+  #splitCtl .sc-sel b { color: var(--text); }
+  #splitCtl .sc-sel .side-a { color: #97651a; font-weight: 600; }
+  #splitCtl .sc-sel .side-b { color: var(--accent); font-weight: 600; }
+  #splitCtl button.on { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+  #splitCtl button.on:hover { color: var(--accent); }
 
   #topbar { display: flex; align-items: center; gap: 10px; padding: 7px 12px;
             background: #fff; border-bottom: 1px solid var(--border); }
@@ -89,21 +149,28 @@
   #tree .mark { font-size: 10px; color: #b9bfc5; margin-left: 3px; }
 
   /* ---------- 3D ---------- */
-  #cv { display: block; width: 100%; height: 100%; }
   .orientation-gizmo { position: absolute; top: 10px; right: 10px; width: 94px; height: 94px;
                        z-index: 2; pointer-events: auto; user-select: none; cursor: pointer;
                        filter: drop-shadow(0 1px 1px rgba(20,30,40,.10)); }
   .overlay { position: absolute; background: var(--panel);
              border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; }
+  /* ⚠️ 浮在 3D 视口之上的层必须给正 z-index，不能靠 DOM 顺序。
+     原因：#center 是 flex 容器、两个 pane 是 flex item，而 **flex item 的绘制顺序按
+     order-modified document order** —— 「交换左右」正是靠 order 换位。z-index:auto 的
+     overlay 与 pane 同属"定位元素、z-index:auto"那一档，一旦 pane 的 order 变大就会
+     排到 overlay 之后绘制，把浮层整条盖住（实测：点「交换左右」后底部工具条消失）。
+     给一个正 z-index 就把它抬到独立档位，与 order 完全解耦。 */
+  .overlay, #status { z-index: 5; }
   #stats { display: none; top: 10px; right: 10px; width: 390px; max-width: calc(100% - 20px);
            font-variant-numeric: tabular-nums; font-size: 12px; }
   #stats div { display: flex; justify-content: space-between; }
   #stats .k { color: var(--muted); }
   #stats .wide { gap: 12px; }
   #stats .wide span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: right; }
-  #hint { top: 10px; left: 50%; transform: translateX(-50%); color: var(--muted);
+  #hint { display: none; top: 10px; left: 50%; transform: translateX(-50%); color: var(--muted);
           width: max-content; max-width: calc(100% - 24px); padding: 5px 10px;
           line-height: 1.25; text-align: center; }
+  #hint.on { display: block; }
   #hint b { color: var(--text); font-weight: 500; }
   #toolbar { bottom: 10px; left: 50%; transform: translateX(-50%);
              display: flex; gap: 6px; padding: 7px 9px; }
@@ -117,13 +184,13 @@
   #selBadge .n { font-weight: 500; word-break: break-all; }
 
   /* ---------- 工程导航 ---------- */
-  #crosshair { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+  #crosshair, #crosshairB { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
                display: none; pointer-events: none; }
-  #crosshair.on { display: block; }
+  #crosshair.on, #crosshairB.on { display: block; }
   /* svg 必须 block：inline 的 SVG 会坐在文本基线上，把 25px 的盒撑到 ~28px，
      于是 translate(-50%,-50%) 按盒高算中心，准星整体偏上 1.5px——
      表现为"测量准星与导航准星没对准"。 */
-  #crosshair svg { display: block; }
+  #crosshair svg, #crosshairB svg { display: block; }
   #navPrompt { position: absolute; left: 50%; bottom: 58px; transform: translateX(-50%);
                display: none; background: rgba(28,95,168,.94); color: #fff;
                border-color: transparent; pointer-events: none; max-width: 560px; }
@@ -134,6 +201,34 @@
   .navseg button + button { border-left: 1px solid var(--border); }
   .navseg button.on { background: var(--accent); color: #fff; }
   .navseg button.on:hover { color: #fff; }
+  /* ---------- 模型重叠比对（Overlay Compare） ---------- */
+  /* 控制条贴在工具条上方：工具条（隐藏/隔离/复位…）在比对模式下同样可用，不占用它的位置。
+     比对模式下 navPrompt 上移，避免与浮条重叠。 */
+  #compareBar { display: none; bottom: 62px; left: 50%; transform: translateX(-50%);
+                flex-direction: column; gap: 6px; padding: 8px 10px; align-items: stretch; }
+  #compareBar.on { display: flex; }
+  .compareMode #navPrompt { bottom: 122px; }
+  #compareBar .cmp-row { display: flex; align-items: center; gap: 8px; justify-content: center; }
+  #compareBar .cmp-tag { font-size: 11.5px; color: var(--muted); max-width: 250px;
+                         overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #compareBar .cmp-tag b { color: var(--text); font-weight: 600; }
+  #compareBar .cmp-tag.a b { color: #97651a; }
+  #compareBar .cmp-op { display: inline-flex; align-items: center; gap: 6px;
+                        color: var(--muted); font-size: 12px; }
+  #compareBar input[type=range] { width: 116px; padding: 0; border: 0; background: none;
+                                  vertical-align: middle; accent-color: var(--accent); cursor: pointer; }
+  #compareBar .val { display: inline-block; min-width: 34px; text-align: right; color: var(--muted);
+                     font-size: 11px; font-variant-numeric: tabular-nums; }
+  #compareBar .cmp-sel { font-size: 11.5px; color: var(--muted); text-align: center;
+                         word-break: break-all; }
+  #compareBar .cmp-sel b { color: var(--text); }
+  #compareBar .cmp-sel .side-a { color: #97651a; font-weight: 600; }
+  #compareBar .cmp-sel .side-b { color: var(--accent); font-weight: 600; }
+  #cmpSelA, #cmpSelB, #splitSelA, #splitSelB {
+                      width: 100%; padding: 4px 6px; border: 1px solid var(--border);
+                      border-radius: 6px; background: #fff; color: var(--text); font: inherit; }
+  #cmpMsg, #splitMsg { margin-top: 10px; color: var(--muted); line-height: 1.7; min-height: 18px; }
+  #cmpMsg.err, #splitMsg.err { color: var(--danger); }
   #navSettings, #appearance, #keyBindingsPanel { display: none; right: 10px; bottom: 10px; width: 268px; }
   #keyBindingsPanel { top: 10px; bottom: auto; width: 320px; max-height: calc(100% - 20px); overflow: auto; }
   #navSettings.on, #appearance.on, #keyBindingsPanel.on { display: block; }
@@ -285,6 +380,10 @@
   .pm-row .tw { width: 12px; text-align: center; color: var(--muted); font-size: 11px; user-select: none; }
   .pm-row .nm { font-weight: 500; }
   .pm-row .meta { color: var(--muted); font-size: 11px; margin-left: auto; white-space: nowrap; }
+  /* 仅 RVM 版本标记：这类版本没有工程属性与设备定位图，列表里先让用户看出来 */
+  .pm-row .rvm-only { margin-left: 6px; padding: 0 5px; border-radius: 4px; font-size: 10px;
+                      font-weight: 500; color: #8a5a00; background: #fdf3d8;
+                      border: 1px solid #f0dcae; vertical-align: 1px; }
   .pm-row .acts { display: none; gap: 4px; }
   .pm-row:hover .acts, .pm-row.sel .acts { display: flex; }
   /* Version 行的 Open 是主操作，常显；其余操作（⋯）仍只在悬停/选中时出现 */
@@ -306,10 +405,55 @@
   .st-ready .nm { color: var(--text); }
   .pm-empty { padding: 24px 12px; text-align: center; font-size: 14px; font-weight: 500; line-height: 2; }
 
-  .lmain { flex: 1; overflow: auto; padding: 18px 20px; }
+  .lmain { flex: 1; min-width: 0; overflow: auto; padding: 18px 20px; }
+  .launcher-grid { display: grid; grid-template-columns: minmax(320px, .85fr) minmax(520px, 1.15fr);
+                   align-items: start; gap: 20px; }
+  .launcher-models { min-width: 0; }
   .card { background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
           padding: 16px 18px; margin-bottom: 16px; max-width: 760px; }
   .card h3 { margin: 0 0 12px; font-size: 14px; }
+  #projectFilesCard { min-width: 0; max-width: none; padding: 16px; }
+  .pf-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 12px; }
+  .pf-head h3 { margin: 0; white-space: nowrap; }
+  .pf-head > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pf-toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+  #projectFilesSearch { flex: 1 1 160px; min-width: 120px; width: auto; }
+  #projectFilesType { flex: 0 0 132px; width: 132px; }
+  .pf-table-wrap { overflow: auto; max-height: min(62vh, 620px); border: 1px solid var(--border);
+                   border-radius: 6px; background: rgba(255,255,255,.35); }
+  .pf-table { border-collapse: separate; border-spacing: 0; width: 100%; min-width: 615px;
+              text-align: left; font-size: 12px; }
+  .pf-table th { position: sticky; top: 0; z-index: 1; padding: 9px 8px; background: #f5f7f9;
+                 border-bottom: 1px solid var(--border); color: var(--muted); font-weight: 600;
+                 white-space: nowrap; }
+  .pf-table td { padding: 9px 8px; border-bottom: 1px solid #e8ecef; vertical-align: middle; }
+  .pf-table tbody tr:last-child td { border-bottom: 0; }
+  .pf-table tbody tr:hover { background: #f2f6fa; }
+  .pf-table .pf-name { min-width: 140px; max-width: 260px; overflow-wrap: anywhere; }
+  .pf-size, .pf-time { white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .pf-table button, .pf-download { padding: 3px 7px; font-size: 11px; }
+  .pf-download { display: inline-block; border: 1px solid var(--border); border-radius: 6px;
+                  background: #fff; color: var(--text); text-decoration: none; white-space: nowrap; }
+  .pf-download:hover { border-color: var(--accent); color: var(--accent); }
+  .pf-table .pf-empty { color: var(--muted); text-align: center; padding: 28px 12px; }
+  .pf-status { padding: 8px 10px; margin-bottom: 10px; border: 1px solid var(--border);
+               border-radius: 6px; background: #fff; line-height: 1.6; overflow-wrap: anywhere; }
+  .pf-failures { color: var(--danger); margin: 6px 0 0; padding-left: 18px; max-height: 120px; overflow: auto; }
+  .pf-error { color: var(--danger); }
+  .pf-count { padding-top: 9px; }
+  @media (max-width: 1300px) {
+    .launcher-grid { grid-template-columns: minmax(0, 1fr); }
+    #projectFilesCard { max-width: 760px; }
+  }
+  @media (max-width: 760px) {
+    #launcher header { flex-wrap: wrap; }
+    #launcher header .sub { display: none; }
+    #pmPanel { width: 240px; min-width: 240px; }
+    .lmain { padding: 12px; }
+    .card { padding: 12px; }
+    .sel-grid { grid-template-columns: 64px minmax(0, 1fr); }
+    #pmHead .small { display: none; }
+  }
   .sel-grid { display: grid; grid-template-columns: 92px 1fr; gap: 8px 10px; align-items: center; }
   .sel-grid label { color: var(--muted); }
   select, input[type=text] { font: inherit; padding: 5px 8px; border: 1px solid var(--border);
@@ -378,6 +522,9 @@
   .file-field { display: flex; align-items: center; gap: 10px; }
   .file-field input[type=file] { flex: 1; font: inherit; }
   .file-name { color: var(--muted); font-size: 12px; min-width: 200px; }
+  .imp-grid .lab .opt { margin-left: 6px; padding: 0 5px; border-radius: 4px; font-size: 10px;
+                        color: #8a5a00; background: #fdf3d8; border: 1px solid #f0dcae; }
+  .imp-grid .opt-note { grid-column: 2; color: var(--muted); font-size: 12px; line-height: 1.75; }
   #impHint { margin-top: 12px; color: var(--muted); line-height: 1.8; }
   #impHint.err { color: var(--danger); }
   #impProgress { display: none; margin-top: 10px; border: 1px solid var(--border);
@@ -489,6 +636,8 @@
       <div id="pmTree"></div>
     </aside>
     <main class="lmain">
+      <div class="launcher-grid">
+      <div class="launcher-models">
       <div class="card hidden" id="internalCodeCard"></div>
       <div class="card" id="selectorCard"></div>
       <div class="card">
@@ -498,8 +647,13 @@
       <div class="note">
         选择 Project → Model → Version 后点 <code>Open Model</code> 进入查看器。<br>
         需要新版本时点 <code>Import Model</code>：选好 Project / Model / 版本名，再选本机的
-        <code>.rvm</code> 与 <code>.txt</code>，导入会自动完成 RVM → GLB、TXT → 元数据、对象映射与独立校验。<br>
+        <code>.rvm</code>，导入会自动完成 RVM → GLB、元数据、对象映射与独立校验。<br>
+        <code>.txt</code>（PDMS Data Listing）<b>可选</b>：给了就有完整工程属性与设备定位图；
+        不给则按<b>仅 RVM 模式</b>导入，只有名称 / 层级 / 类型，没有属性。<br>
         所有文件只保存在本机 <code>data/projects/</code>，不上传任何服务器；历史版本不会被覆盖。
+      </div>
+      </div>
+      <section class="card" id="projectFilesCard" aria-label="Project Files"></section>
       </div>
     </main>
   </div>
@@ -537,49 +691,76 @@
     </div>
 
     <div id="center">
-      <canvas id="cv"></canvas>
+      <!-- 左视口：原来的 #cv 与它自己的准星 / 测量层（测量标签必须留在 canvas 的父容器内，
+           Model3D 是按 canvas.parentElement 去找 #measureLabels / #measureReticle 的）。 -->
+      <div id="paneA" class="pane3d">
+        <canvas id="cv"></canvas>
+        <div class="pane-tag a" id="splitTagA">A · —</div>
+        <div id="crosshair" aria-hidden="true">
+          <svg width="25" height="25" viewBox="0 0 25 25" shape-rendering="crispEdges">
+            <g stroke="rgba(0,0,0,.9)" stroke-width="3">
+              <line x1="12.5" y1="0.5" x2="12.5" y2="9.5"/>
+              <line x1="12.5" y1="15.5" x2="12.5" y2="24.5"/>
+              <line x1="0.5" y1="12.5" x2="9.5" y2="12.5"/>
+              <line x1="15.5" y1="12.5" x2="24.5" y2="12.5"/>
+            </g>
+            <g stroke="#ffffff" stroke-width="1">
+              <line x1="12.5" y1="0.5" x2="12.5" y2="9.5"/>
+              <line x1="12.5" y1="15.5" x2="12.5" y2="24.5"/>
+              <line x1="0.5" y1="12.5" x2="9.5" y2="12.5"/>
+              <line x1="15.5" y1="12.5" x2="24.5" y2="12.5"/>
+            </g>
+          </svg>
+        </div>
+        <div id="measureReticle" aria-hidden="true" data-state="miss">
+          <!-- 12×12 viewBox：所有图形都以 (6,6) 为几何中心，所以它与屏幕中心/导航准星严格同心。
+               +  未命中   ⊕  表面点   ◎  对象中心   ●  已记录点 -->
+          <svg width="12" height="12" viewBox="0 0 12 12">
+            <g data-shape="miss" fill="none" stroke="currentColor" stroke-width="1.3"
+               stroke-linecap="round">
+              <line x1="6" y1="1.4" x2="6" y2="10.6"/>
+              <line x1="1.4" y1="6" x2="10.6" y2="6"/>
+            </g>
+            <g data-shape="surface" fill="none" stroke="currentColor" stroke-width="1.3"
+               stroke-linecap="round">
+              <circle cx="6" cy="6" r="2.9"/>
+              <line x1="6" y1="0.9" x2="6" y2="11.1"/>
+              <line x1="0.9" y1="6" x2="11.1" y2="6"/>
+            </g>
+            <g data-shape="center" fill="none" stroke="currentColor" stroke-width="1.3">
+              <circle cx="6" cy="6" r="3.4"/>
+              <circle cx="6" cy="6" r="1.4"/>
+            </g>
+            <g data-shape="recorded" fill="currentColor">
+              <circle cx="6" cy="6" r="1.9"/>
+            </g>
+          </svg>
+        </div>
+        <div id="measureLabels" aria-hidden="true"></div>
+      </div>
+      <!-- 拖动分隔线调整左右宽度（只在分屏时出现；不占 flex 空间，见上方 CSS） -->
+      <div id="splitDivider" title="拖动调整左右宽度"></div>
+      <!-- 右视口：分屏比对时由 splitCompare.js 现场创建第二个 Model3D 与 canvas 元素 -->
+      <div id="paneB" class="pane3d">
+        <div class="pane-tag b" id="splitTagB">B · —</div>
+        <div id="crosshairB" aria-hidden="true">
+          <svg width="25" height="25" viewBox="0 0 25 25" shape-rendering="crispEdges">
+            <g stroke="rgba(0,0,0,.9)" stroke-width="3">
+              <line x1="12.5" y1="0.5" x2="12.5" y2="9.5"/>
+              <line x1="12.5" y1="15.5" x2="12.5" y2="24.5"/>
+              <line x1="0.5" y1="12.5" x2="9.5" y2="12.5"/>
+              <line x1="15.5" y1="12.5" x2="24.5" y2="12.5"/>
+            </g>
+            <g stroke="#ffffff" stroke-width="1">
+              <line x1="12.5" y1="0.5" x2="12.5" y2="9.5"/>
+              <line x1="12.5" y1="15.5" x2="12.5" y2="24.5"/>
+              <line x1="0.5" y1="12.5" x2="9.5" y2="12.5"/>
+              <line x1="15.5" y1="12.5" x2="24.5" y2="12.5"/>
+            </g>
+          </svg>
+        </div>
+      </div>
       <div id="hint" class="overlay"></div>
-      <div id="crosshair" aria-hidden="true">
-        <svg width="25" height="25" viewBox="0 0 25 25" shape-rendering="crispEdges">
-          <g stroke="rgba(0,0,0,.9)" stroke-width="3">
-            <line x1="12.5" y1="0.5" x2="12.5" y2="9.5"/>
-            <line x1="12.5" y1="15.5" x2="12.5" y2="24.5"/>
-            <line x1="0.5" y1="12.5" x2="9.5" y2="12.5"/>
-            <line x1="15.5" y1="12.5" x2="24.5" y2="12.5"/>
-          </g>
-          <g stroke="#ffffff" stroke-width="1">
-            <line x1="12.5" y1="0.5" x2="12.5" y2="9.5"/>
-            <line x1="12.5" y1="15.5" x2="12.5" y2="24.5"/>
-            <line x1="0.5" y1="12.5" x2="9.5" y2="12.5"/>
-            <line x1="15.5" y1="12.5" x2="24.5" y2="12.5"/>
-          </g>
-        </svg>
-      </div>
-      <div id="measureReticle" aria-hidden="true" data-state="miss">
-        <!-- 12×12 viewBox：所有图形都以 (6,6) 为几何中心，所以它与屏幕中心/导航准星严格同心。
-             +  未命中   ⊕  表面点   ◎  对象中心   ●  已记录点 -->
-        <svg width="12" height="12" viewBox="0 0 12 12">
-          <g data-shape="miss" fill="none" stroke="currentColor" stroke-width="1.3"
-             stroke-linecap="round">
-            <line x1="6" y1="1.4" x2="6" y2="10.6"/>
-            <line x1="1.4" y1="6" x2="10.6" y2="6"/>
-          </g>
-          <g data-shape="surface" fill="none" stroke="currentColor" stroke-width="1.3"
-             stroke-linecap="round">
-            <circle cx="6" cy="6" r="2.9"/>
-            <line x1="6" y1="0.9" x2="6" y2="11.1"/>
-            <line x1="0.9" y1="6" x2="11.1" y2="6"/>
-          </g>
-          <g data-shape="center" fill="none" stroke="currentColor" stroke-width="1.3">
-            <circle cx="6" cy="6" r="3.4"/>
-            <circle cx="6" cy="6" r="1.4"/>
-          </g>
-          <g data-shape="recorded" fill="currentColor">
-            <circle cx="6" cy="6" r="1.9"/>
-          </g>
-        </svg>
-      </div>
-      <div id="measureLabels" aria-hidden="true"></div>
       <div id="stats" class="overlay">
         <div><span class="k">FPS</span><span id="sFps">—</span></div>
         <div><span class="k">Frame Time</span><span id="sFrame">—</span></div>
@@ -603,6 +784,8 @@
         <button id="btnNavSettings" title="普通速度 / 加速倍率">导航设置</button>
         <button id="btnAppearance" title="元件轮廓线 / 隐藏件半透明（默认关闭）">外观</button>
         <button id="btnMeasure" title="游戏式测距：准星取点，左键取表面点 / C 取对象中心点（Esc 取消 · Delete 删上一条）">测量</button>
+        <button id="btnCompare" title="模型比对：把本项目的两个版本叠在同一坐标系里（A 旧版半透明 · B 新版正常）">模型比对</button>
+        <button id="btnSplit" title="分屏比对：左右两个视口分别显示旧版 / 新版，导航视角实时同步">分屏比对</button>
         <button id="btnFloorPlan" class="ptoggle on" title="显示 / 隐藏只读设备定位底图">设备定位图</button>
         <button id="btnFit">复位视角 (F)</button>
         <button id="btnHide">隐藏选中</button>
@@ -610,18 +793,53 @@
         <button id="btnShowAll">显示全部</button>
       </div>
       <div id="navPrompt" class="overlay"></div>
+      <div id="compareBar" class="overlay">
+        <div class="cmp-row">
+          <span class="cmp-tag a" id="cmpLabelA">A · —</span>
+          <span class="cmp-tag" id="cmpLabelB">B · —</span>
+        </div>
+        <div class="cmp-row">
+          <div class="navseg" role="group" aria-label="Compare view">
+            <button id="cmpModeA" title="只显示 Model A（旧版本）">A</button>
+            <button id="cmpModeB" title="只显示 Model B（新版本）">B</button>
+            <button id="cmpModeAB" class="on" title="两个版本叠加显示">A+B</button>
+          </div>
+          <label class="cmp-op" for="cmpOpacity"><span id="cmpOpacityLabel">A 透明度</span>
+            <input id="cmpOpacity" type="range" min="5" max="95" step="1" value="35">
+            <span class="val" id="cmpOpacityVal">35%</span>
+          </label>
+          <button id="cmpSwap" title="交换 A/B：把实体显示 / 半透明显示的角色对调">交换 A/B</button>
+          <button id="cmpExit">退出比对</button>
+        </div>
+        <div class="cmp-sel" id="cmpSel">点击元件即可识别来源（A 半透明那侧 / B 实体那侧）</div>
+      </div>
+      <div id="splitCtl" class="overlay">
+        <div class="sc-row">
+          <span class="sc-tag a" id="splitTagLabelA">A · —</span>
+          <span class="sc-tag b" id="splitTagLabelB">B · —</span>
+        </div>
+        <div class="sc-row">
+          <button id="splitSync" class="on" title="视角同步开关：任意一侧导航时，另一侧实时跟随">同步视角 ON</button>
+          <button id="splitSwap" title="交换左右：只调换两个视口的显示位置与标签，不重载模型">交换左右</button>
+          <button id="splitFocus" title="两侧同时移动到当前选中对象（未选中则整体适配）">定位到选中</button>
+          <button id="splitExit">退出比对</button>
+        </div>
+        <div class="sc-sel" id="splitSel">点击任一侧的元件即可识别它属于哪个模型版本</div>
+      </div>
       <div id="navSettings" class="overlay">
         <h3>Navigation Settings</h3>
         <div class="row"><label for="nsSpeed">普通速度（m/s）</label>
           <input id="nsSpeed" type="number" step="0.1" min="0.1" max="500"></div>
         <div class="row"><label for="nsSprint">加速倍率（双击 W）</label>
           <input id="nsSprint" type="number" step="0.1" min="1" max="10"></div>
+        <div class="row"><label for="nsSensitivity">Game 视角灵敏度（°/像素）</label>
+          <input id="nsSensitivity" type="number" step="0.01" min="0.01" max="2"></div>
         <div class="acts">
           <button id="nsReset">恢复默认</button>
           <button id="nsClose">关闭</button>
         </div>
         <div class="hint">对应原插件 settings.json，本版保存在 localStorage。
-          普通速度 0.1–500 m/s、加速倍率 1–10，越界或非法时自动回落到默认值（5 / 3）。</div>
+          普通速度 0.1–500 m/s、加速倍率 1–10、视角灵敏度 0.01–2 °/像素；非法设置回落到默认值（5 / 3 / 0.12）。</div>
       </div>
       <div id="keyBindingsPanel" class="overlay">
         <h3>控制 / 键位设置</h3><div id="keyBindingsRows"></div>
@@ -722,6 +940,15 @@
     <aside id="issuePanel" class="hidden" aria-label="Issue 批注">
       <div class="issue-head"><strong>Issue 批注</strong><button id="issueCollapse" title="折叠批注面板">收起</button></div>
       <div class="issue-actions"><button id="issuePrev">上一个</button><button id="issueNext">下一个</button><button id="issueLocate" disabled>定位问题</button><button id="issueToggleMarkers" aria-pressed="false" title="显示或隐藏模型中的全部批注标记">隐藏所有批注</button><button id="issueReload">重新加载</button></div>
+      <div class="issue-lang" role="group" aria-label="批注显示语言">
+        <button id="issueLangZh" aria-pressed="true" title="只显示中文批注">中文</button>
+        <button id="issueLangEn" aria-pressed="false" title="只显示英文批注">English</button>
+        <button id="issueLangBoth" aria-pressed="false" title="中英对照显示">中英对照</button>
+      </div>
+      <div class="issue-transfer">
+        <button id="btnIssueExport" title="把「序号 + 中文批注」复制到剪贴板（TAB 分隔，可直接粘贴到 Excel）">导出批注</button>
+        <button id="btnIssueImport" title="从 Excel 复制「序号 + 英文批注」两列后导入，按序号回填英文批注">导入翻译</button>
+      </div>
       <div id="issueMessage" role="status"></div><div id="issueList"></div>
       <div id="issueDetail" class="hidden"><div id="issueDetailText"></div><label>状态 <select id="issueStatus"><option value="open">待修改</option><option value="review">已修改待复核</option><option value="closed">已关闭</option><option value="wontfix">无需修改</option></select></label></div>
     </aside>
@@ -733,6 +960,61 @@
       <div class="pane-body" id="props"><div class="empty">点击 3D 对象或左侧树节点。</div></div>
     </div>
 
+  </div>
+</div>
+
+<!-- ==================== 分屏比对：选择两个版本 ==================== -->
+<div id="splitModal" class="modal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-title">分屏比对 · 选择两个版本</span>
+      <button class="modal-x" id="splitClose">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="imp-grid">
+        <div class="lab">Model A（左 · 旧）</div>
+        <div><select id="splitSelA"></select></div>
+        <div class="lab">Model B（右 · 新）</div>
+        <div><select id="splitSelB"></select></div>
+      </div>
+      <div id="splitMsg" class="mut small">
+        左右各一个<b>独立 3D 视口</b>，共用同一空间坐标系：任意一侧导航（Orbit / Game），
+        另一侧实时跟随 —— 相机位置、朝向、目标点、FOV 全部同步。<br>
+        两侧的选中 / 隐藏 / 高亮互不影响；只列同一项目下状态为 ready 的版本。<br>
+        退出时销毁右侧视口，并恢复进入分屏前正在看的那一版。
+      </div>
+    </div>
+    <div class="modal-acts">
+      <button id="splitCancel">取消</button>
+      <button id="splitStart" class="primary">开始分屏比对</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 模型比对：选择两个版本 ==================== -->
+<div id="cmpModal" class="modal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-title">模型比对 · 选择两个版本</span>
+      <button class="modal-x" id="cmpClose">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="imp-grid">
+        <div class="lab">Model A（旧）</div>
+        <div><select id="cmpSelA"></select></div>
+        <div class="lab">Model B（新）</div>
+        <div><select id="cmpSelB"></select></div>
+      </div>
+      <div id="cmpMsg" class="mut small">
+        两个版本会同时载入<b>同一个 Three.js 场景、同一坐标系</b>：B 正常显示，A 半透明叠加。<br>
+        只列同一项目下状态为 ready 的版本；B 默认取当前打开的版本，A 取它前面更早的那一版。<br>
+        第一版只做重叠显示，不自动做几何差异分析 / 节点匹配。
+      </div>
+    </div>
+    <div class="modal-acts">
+      <button id="cmpCancel">取消</button>
+      <button id="cmpStart" class="primary">开始比对</button>
+    </div>
   </div>
 </div>
 
@@ -774,10 +1056,17 @@
           <span class="file-name" id="impRvmName">未选择文件</span>
         </div>
 
-        <div class="lab">TXT</div>
+        <div class="lab">TXT<span class="opt">可选</span></div>
         <div class="file-field">
           <input id="impTxt" type="file" accept=".txt,.dat">
           <span class="file-name" id="impTxtName">未选择文件</span>
+        </div>
+
+        <div class="lab"></div>
+        <div class="opt-note">
+          不选 TXT 也能导入（<b>仅 RVM 模式</b>）：模型树、拾取、测距、批注与比对都正常，
+          数据源是 RVM 自带的组名与层级；<b>但没有 PDMS 工程属性</b>（位号 / 管径 / 压力 / 温度 /
+          描述 / 保温等），也<b>没有设备定位图</b>。这两种来源的版本可以共存、可互相比对。
         </div>
       </div>
 
@@ -809,6 +1098,8 @@
 </div>
 
 <dialog id="issueDialog"><form id="issueForm"><h3>添加批注</h3><div id="issueDraftObject"></div><textarea id="issueText" maxlength="4000" required aria-label="批注文字" placeholder="请输入修改意见…"></textarea><div id="issueDraftError" role="alert"></div><div class="issue-actions"><button type="submit" id="issueSave">保存批注</button><button type="button" id="issueCancel">取消</button></div></form></dialog>
+
+<dialog id="issueImportDialog"><form id="issueImportForm"><h3>导入英文批注</h3><p class="hint">从 Excel 复制「序号 + 英文批注」两列，粘贴到下面（TAB 分隔）。按序号匹配对应批注，只写入英文，不会覆盖中文原文。</p><textarea id="issueImportText" aria-label="粘贴翻译数据" placeholder="序号&#9;英文批注&#10;001&#9;Pump discharge piping obstructs the maintenance space."></textarea><div id="issueImportError" role="alert"></div><div id="issueImportResult" role="status"></div><div class="issue-actions"><button type="button" id="issueImportRead" title="从剪贴板读入（仅 https / localhost 可用）">读取剪贴板</button><button type="submit" id="issueImportApply">导入</button><button type="button" id="issueImportCancel">取消</button></div></form></dialog>
 <div id="ctxMenu"></div>
 <div id="gameCtxMenu" role="menu" aria-label="已选模型操作">
   <button type="button" data-action="add-issue">添加批注</button>

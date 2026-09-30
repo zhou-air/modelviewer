@@ -12,11 +12,15 @@ echo   the models. The link dies when this window is closed.
 echo.
 
 rem ---- [1/4] locate Python ------------------------------------------------
+rem the portable runtime shipped in this package comes first, so the target
+rem machine does NOT need Python installed at all.
 set "PY="
-where python >nul 2>nul && set "PY=python"
+if exist "%~dp0runtime\python\python.exe" set "PY=%~dp0runtime\python\python.exe"
+if not defined PY where python >nul 2>nul && set "PY=python"
 if not defined PY where py >nul 2>nul && set "PY=py"
 if not defined PY if exist "%LOCALAPPDATA%\Programs\Python\Python312\python.exe" set "PY=%LOCALAPPDATA%\Programs\Python\Python312\python.exe"
 if not defined PY if exist "%LOCALAPPDATA%\Programs\Python\Python313\python.exe" set "PY=%LOCALAPPDATA%\Programs\Python\Python313\python.exe"
+if not defined PY if exist "%USERPROFILE%\.workbuddy\binaries\python\versions\3.13.12\python.exe" set "PY=%USERPROFILE%\.workbuddy\binaries\python\versions\3.13.12\python.exe"
 if not defined PY goto nopython
 echo   [1/4] Python: %PY%
 
@@ -117,6 +121,10 @@ exit /b 1
 
 :nopython
 echo   [ERROR] No Python interpreter found.
+echo   This package ships its own interpreter at runtime\python\python.exe -
+echo   if that folder is missing, re-extract the archive (do not delete runtime\).
+echo   Or install Python 3 from https://www.python.org/downloads/ and tick
+echo   "Add python.exe to PATH" during setup.
 pause
 exit /b 1
 
