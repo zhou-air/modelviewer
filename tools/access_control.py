@@ -12,8 +12,8 @@
 安装包分发策略（2026-09-24）：
   * INTERNAL_NETWORK_RANGES 默认 `auto` —— 任何私有地址都算内网，换到任何局域网
     （10.x / 172.16-31.x / 192.168.x）都不用改配置，装完即用。
-  * 环回地址（127.0.0.1 / ::1）不在 auto 集合里，单独由 TRUST_LOOPBACK 控制：
-    隧道/反代场景把它设 0，就能把"隧道回源从 127.0.0.1 进来"的流量挡在内网之外。
+  * 管理入口的环回地址（127.0.0.1 / ::1）单独由 TRUST_LOOPBACK 控制。
+    隧道/反代使用独立 public_entry，所有来源始终要求访问码，不影响本机免登录。
   * 要收紧（只放自己网段）时，把该键改成显式 CIDR 列表即可，行为与收紧前一致。
 """
 from __future__ import annotations
@@ -79,7 +79,8 @@ def normalize_code(text: str) -> str:
 def code_matches(input_code: str, stored: str) -> bool:
     if not stored:
         return False
-    return hmac.compare_digest(normalize_code(input_code), normalize_code(stored))
+    return hmac.compare_digest(normalize_code(input_code).encode("utf-8"),
+                               normalize_code(stored).encode("utf-8"))
 
 
 def hash_code(code: str) -> str:
@@ -107,8 +108,7 @@ def _parse_ranges(text: str) -> list:
         if not part:
             continue
         try:
-            nets.append(ipaddress.ip_network(part if "/" in part else part + "/32",
-                                             strict=False))
+            nets.append(ipaddress.ip_network(part, strict=False))
         except ValueError:
             print(f"  [access] 忽略非法网段配置: {part!r}")
     return nets
@@ -131,8 +131,7 @@ class _Config:
             ",".join(AUTO_INTERNAL_CIDRS) if self.internal_auto else raw_ranges)
         self.trusted_proxies = _parse_ranges(get("TRUSTED_PROXIES", ""))
         # TRUST_LOOPBACK=1：localhost/127.0.0.1 恒为内网（本机开发默认）。
-        # 通过 cloudflared 隧道 / 同机反向代理暴露公网时必须设为 0 ——
-        # 隧道回源流量从 127.0.0.1 进来，若信任 loopback 会把外网全放进内网。
+        # 公网代理连接独立 public_entry，其权限不受本项影响。
         self.trust_loopback = get("TRUST_LOOPBACK", "1") in ("1", "true", "yes")
         self.session_ttl_hours = float(get("SESSION_TTL_HOURS", "24") or 24)
         self.secure_cookies = get("SECURE_COOKIES", "0") in ("1", "true", "yes")
@@ -171,7 +170,7 @@ class _Config:
         except ValueError:
             return False
         if addr.is_loopback:
-            return self.trust_loopback       # 可配置；隧道/同机反代场景必须关闭
+            return self.trust_loopback       # 仅管理入口使用
         return any(addr in n for n in self.internal_ranges)
 
     def is_trusted_proxy(self, ip: str) -> bool:
@@ -246,9 +245,17 @@ def set_external_access(pid: str, *, enabled: bool | None = None,
                 ea["code"] = _generate_code(8)
                 ea["codeHash"] = hash_code(ea["code"])
         ea["updatedAt"] = S.now_iso()
+        # A code rotation/disable revokes issued sessions, not just future logins.
+        if regenerate or enabled is False:
+            ea["sessionVersion"] = secrets.token_hex(16)
         doc["externalAccess"] = ea
         doc["updatedAt"] = S.now_iso()
         S.write_json(f, doc)
+        if regenerate or enabled is False:
+            with _SESS_LOCK:
+                for token in [t for t, s in _SESSIONS.items()
+                              if s.get("projectId") == pid]:
+                    _SESSIONS.pop(token, None)
         return {"enabled": bool(ea.get("enabled")),
                 "code": ea.get("code") if ea.get("enabled") else None,
                 "updatedAt": ea["updatedAt"]}
@@ -287,11 +294,23 @@ def create_session(role: str, project_id: str | None) -> tuple[str, int]:
     """创建 Session，返回 (token, max_age 秒)。有效期独立于每日码滚动。"""
     token = secrets.token_urlsafe(32)
     ttl = int(CONFIG.session_ttl_hours * 3600)
-    with _SESS_LOCK:
-        _SESS_LRU()
-        _SESSIONS[token] = {"role": role, "projectId": project_id,
-                            "createdAt": S.now_iso(),
-                            "expiresAt": datetime.now().astimezone().timestamp() + ttl}
+    with S.LOCK:
+        access_version = None
+        if role == "CLIENT_PROJECT":
+            _, doc = _project_manifest(project_id)
+            ea = doc.get("externalAccess") or {}
+            if not ea.get("enabled"):
+                raise AccessError(401, "invalid_code", "访问码无效或已失效")
+            access_version = ea.get("sessionVersion") or ea.get("codeHash")
+        with _SESS_LOCK:
+            _SESS_LRU()
+            # Bound memory even when a valid shared code is repeatedly submitted.
+            if len(_SESSIONS) >= 4096:
+                raise AccessError(429, "session_limit", "当前访问会话过多，请稍后重试")
+            _SESSIONS[token] = {"role": role, "projectId": project_id,
+                                "accessVersion": access_version,
+                                "createdAt": S.now_iso(),
+                                "expiresAt": datetime.now().astimezone().timestamp() + ttl}
     return token, ttl
 
 
@@ -312,7 +331,22 @@ def get_session(token: str) -> dict | None:
         if s["expiresAt"] < datetime.now().astimezone().timestamp():
             _SESSIONS.pop(token, None)
             return None
-        return dict(s)
+        result = dict(s)
+    if result["role"] == "CLIENT_PROJECT":
+        # Also fail closed after project removal or an external manifest change.
+        # Never acquire the store lock while holding _SESS_LOCK.
+        with S.LOCK:
+            try:
+                _, doc = _project_manifest(result["projectId"])
+                ea = doc.get("externalAccess") or {}
+                valid = bool(ea.get("enabled")) and result.get("accessVersion") == (
+                    ea.get("sessionVersion") or ea.get("codeHash"))
+            except (S.StoreError, OSError, ValueError):
+                valid = False
+        if not valid:
+            drop_session(token)
+            return None
+    return result
 
 
 def drop_session(token: str) -> None:
@@ -322,22 +356,49 @@ def drop_session(token: str) -> None:
 
 # ------------------------------------------------------------------ AccessContext 与权限判定
 
+def client_address(client_ip: str, forwarded_for: str | None,
+                   *, public_entry: bool = False) -> str | None:
+    """Walk from the verified socket peer toward the first untrusted hop."""
+    def trusted(ip):
+        if CONFIG.is_trusted_proxy(ip):
+            return True
+        try:
+            # The strict listener is the local tunnel/proxy target. This trust
+            # is used only for rate limits, never to assign an internal role.
+            return public_entry and ipaddress.ip_address(ip).is_loopback
+        except ValueError:
+            return False
+
+    if not trusted(client_ip):
+        return client_ip
+    if not forwarded_for:
+        return None  # A trusted proxy without a client address is not an admin.
+    chain = [part.strip() for part in forwarded_for.split(",")]
+    if len(chain) > 32:
+        return None
+    current = client_ip
+    for candidate in reversed(chain):
+        if not trusted(current):
+            break
+        try:
+            current = str(ipaddress.ip_address(candidate))
+        except ValueError:
+            return None
+    return current if not trusted(current) else None
+
+
 def resolve_access(client_ip: str, forwarded_for: str | None,
-                   session_token: str | None) -> dict:
+                   session_token: str | None, *, public_entry: bool = False) -> dict:
     """服务器端判定访问身份。顺序：有效 Session 优先（外部员工/客户），
     否则按来源 IP 判内网（含 trusted proxy 处理），否则 ANONYMOUS。"""
+    real_ip = client_address(client_ip, forwarded_for, public_entry=public_entry)
     sess = get_session(session_token)
     if sess:
         return {"role": sess["role"], "projectId": sess["projectId"],
-                "ip": client_ip, "sessionId": session_token}
-    real_ip = client_ip
-    if forwarded_for and CONFIG.is_trusted_proxy(client_ip):
-        # 只信任来自 trusted proxy 的 XFF；取最左侧第一个非信任代理的地址
-        for candidate in [c.strip() for c in forwarded_for.split(",")]:
-            if candidate and not CONFIG.is_trusted_proxy(candidate):
-                real_ip = candidate
-                break
-    if CONFIG.is_internal_ip(real_ip):
+                "ip": real_ip, "sessionId": session_token}
+    # The public listener never grants management rights by source IP, including
+    # loopback tunnel traffic. Both listeners share the same store/session locks.
+    if not public_entry and real_ip and CONFIG.is_internal_ip(real_ip):
         return {"role": "INTERNAL_NETWORK", "projectId": None,
                 "ip": real_ip, "sessionId": None}
     return {"role": "ANONYMOUS", "projectId": None, "ip": real_ip, "sessionId": None}
@@ -384,7 +445,8 @@ def require_delete_password(ctx: dict, supplied: str | None) -> None:
     if not supplied_norm:
         raise AccessError(403, "delete_password_required",
                           "删除是危险操作，请输入删除密码（X-Delete-Password）")
-    if not (supplied_norm and hmac.compare_digest(supplied_norm, expected_norm)):
+    if not (supplied_norm and hmac.compare_digest(supplied_norm.encode("utf-8"),
+                                                 expected_norm.encode("utf-8"))):
         raise AccessError(403, "delete_password_invalid", "删除密码不正确")
 
 

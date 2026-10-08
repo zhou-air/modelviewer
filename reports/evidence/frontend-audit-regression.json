@@ -1,0 +1,263 @@
+{
+  "ok": true,
+  "error": null,
+  "passed": 16,
+  "coverage": "Isolated synthetic fixtures; not full production-model benchmarks",
+  "results": [
+    {
+      "name": "actual viewer loads an indexed GLB fixture",
+      "ok": true
+    },
+    {
+      "name": "mapping aliases preserve tree, raycast and provenance",
+      "ok": true,
+      "detail": {
+        "selected": "TXT_B_0",
+        "tree": "i0",
+        "hit": "TXT_B_0",
+        "source": "SOURCE_B_0",
+        "indexed": true
+      }
+    },
+    {
+      "name": "slow metadata cannot replace the newer version or issue context",
+      "ok": true,
+      "detail": {
+        "current": "B",
+        "base": "/fixtures/B",
+        "root": "TXT_B_ROOT",
+        "issues": "B",
+        "ready": true
+      }
+    },
+    {
+      "name": "late GLB response is discarded and leaves only the current scene",
+      "ok": true,
+      "detail": {
+        "current": "C",
+        "roots": [
+          "TXT_C_ROOT"
+        ]
+      }
+    },
+    {
+      "name": "stored markup remains literal text in load errors",
+      "ok": true,
+      "detail": {
+        "executed": false,
+        "images": 0,
+        "text": "失败元数据加载失败：/fixtures/XSS/metadata.json → HTTP 404版本 <img src=\"bad-audit-image\" onerror=\"window.auditXssExecuted=1\"> 的 processed/ 产物缺失或不完整。请用左下角「切换模型」返回，重新导入该版本。"
+      }
+    },
+    {
+      "name": "launcher pauses rendering and resume restarts it without unloading",
+      "ok": true,
+      "detail": {
+        "pausedFrame": 224
+      }
+    },
+    {
+      "name": "indexed batches preserve selection, ancestor, hide, isolate and ghost semantics with bounded caching",
+      "ok": true,
+      "detail": {
+        "count": 256,
+        "hover": {
+          "changedEntries": 1,
+          "scannedEntries": 1,
+          "rebuiltBatches": 1,
+          "ms": 0.4000000059604645
+        },
+        "moved": {
+          "changedEntries": 2,
+          "scannedEntries": 2,
+          "rebuiltBatches": 1,
+          "ms": 0.09999999403953552
+        },
+        "selected": {
+          "changedEntries": 1,
+          "scannedEntries": 1,
+          "rebuiltBatches": 1,
+          "ms": 0
+        },
+        "ancestor": {
+          "changedEntries": 256,
+          "scannedEntries": 256,
+          "rebuiltBatches": 4,
+          "ms": 0.7000000178813934
+        },
+        "ghost": true,
+        "ghostPick": null,
+        "removed": true,
+        "isolated": [
+          "TXT_B_0"
+        ],
+        "stats": {
+          "enabled": true,
+          "indexed": true,
+          "maxMeshesPerBatch": 64,
+          "sourceMeshes": 256,
+          "spatialBatches": 4,
+          "renderMeshes": 4,
+          "stateMeshes": {
+            "solid": 4,
+            "selected": 0,
+            "hover": 0,
+            "ghost": 0
+          },
+          "recordedRanges": 256,
+          "triangles": 3072,
+          "indices": 9216,
+          "lastSync": {
+            "changedEntries": 1,
+            "scannedEntries": 1,
+            "rebuiltBatches": 1,
+            "ms": 0.19999998807907104
+          },
+          "cachedGeometryBytes": 100352,
+          "maxCachedGeometryBytes": 33554432,
+          "geometryCacheHits": 1280
+        }
+      }
+    },
+    {
+      "name": "cache-disabled fallback preserves indexed batches",
+      "ok": true,
+      "detail": {
+        "changedEntries": 1,
+        "scannedEntries": 1,
+        "rebuiltBatches": 1,
+        "ms": 0.5
+      }
+    },
+    {
+      "name": "geometry cache preserves parent/child object colors across hover and resets",
+      "ok": true,
+      "detail": {
+        "parent": {
+          "rgb": [
+            1,
+            0,
+            0
+          ],
+          "mix": 1
+        },
+        "child": {
+          "rgb": [
+            0,
+            1,
+            0
+          ],
+          "mix": 1
+        },
+        "afterHover": {
+          "rgb": [
+            0,
+            1,
+            0
+          ],
+          "mix": 1
+        },
+        "inherited": {
+          "rgb": [
+            1,
+            0,
+            0
+          ],
+          "mix": 1
+        },
+        "cleared": {
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "mix": 0
+        }
+      }
+    },
+    {
+      "name": "aborted GLTF results release geometry, material and texture",
+      "ok": true,
+      "detail": {
+        "name": "AbortError",
+        "disposed": 3
+      }
+    },
+    {
+      "name": "closing overlay dialog cancels a pending model",
+      "ok": true
+    },
+    {
+      "name": "closing split dialog releases its pending viewer",
+      "ok": true,
+      "detail": {
+        "active": false,
+        "canvases": 0
+      }
+    },
+    {
+      "name": "split opens through a main-version change and restores its original model",
+      "ok": true,
+      "detail": {
+        "active": true,
+        "main": "A",
+        "rightReady": true
+      }
+    },
+    {
+      "name": "overlay opens through a main-version change and is removed on the next model",
+      "ok": true,
+      "detail": {
+        "active": true,
+        "main": "C"
+      }
+    },
+    {
+      "name": "upload failures and cancellation release reservations without deleting running jobs",
+      "ok": true,
+      "detail": [
+        {
+          "case": "upload failure",
+          "starts": 0,
+          "deletes": 1,
+          "uploads": 1
+        },
+        {
+          "case": "cancel during upload",
+          "starts": 0,
+          "deletes": 1,
+          "before": 0,
+          "uploads": 1
+        },
+        {
+          "case": "cancel before create response",
+          "starts": 0,
+          "deletes": 1,
+          "uploads": 0
+        },
+        {
+          "case": "lost start response",
+          "starts": 1,
+          "deletes": 0
+        },
+        {
+          "case": "queued transitions to running",
+          "retained": true,
+          "deletes": 1
+        },
+        {
+          "case": "busy cleanup has explicit retry",
+          "initial": false,
+          "attempts": 3,
+          "deletes": 4,
+          "pending": false,
+          "button": false
+        }
+      ]
+    },
+    {
+      "name": "no uncaught browser errors and no write requests",
+      "ok": true
+    }
+  ]
+}

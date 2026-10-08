@@ -1,13 +1,13 @@
 """③ 映射层 —— 建立 RVM(几何) ↔ TXT(元数据) 的对象对应关系。
 
 产物：data/processed/mapping.json
-  · pairs：以 canonical 名为主键，附 GLB 节点序号 + RVM 字节偏移（技术 id）+ TXT 对象 id
+  · pairs：以 TXT canonical 为主键，sourceName 保留 GLB/RVM 原名，txtId 是 TXT 对象 id
   · stats：匹配率与未匹配统计
   · unmatched：双端未匹配清单，按可查证的原因分类，**不猜**
 
 匹配通道（逐级回退，可查证性由高到低）
   1) 名称：canonical 名与 RVM/GLB 节点名完全相同
-  2) 归一化名称：合并重复斜杠、压缩空白、大小写不敏感后相同
+  2) 归一化名称：合并重复斜杠、压缩空白后相同（仍区分大小写）
   3) 结构：（类型 + 同类型序号 + 父对象）递归重建名字后相同
   4) 坐标：TXT 的 POS/HPOS 落在 RVM 组的世界包围盒内
   —— 第 4 通道**只用于校验已匹配的边**，不作为独立配对依据（最弱，且易假阳）。
@@ -70,18 +70,128 @@ def load_glb_index(path: Path) -> dict:
     for i, n in enumerate(nodes):
         for c in n.get("children") or []:
             parent[c] = i
-    named = {}
+    named_all = defaultdict(list)
     for i, n in enumerate(nodes):
         nm = n.get("name")
         if nm:
-            named.setdefault(nm, i)          # 名字唯一，重复时保留首个
+            named_all[nm].append(i)
+    # Ambiguous source names cannot identify one object in the viewer.
+    named = {name: indices[0] for name, indices in named_all.items() if len(indices) == 1}
     return {
         "nodeCount": len(nodes),
         "named": named,
+        "namedAll": dict(named_all),
         "parent": parent,
         "hasMesh": [("mesh" in n) for n in nodes],
         "nodes": nodes,
     }
+
+
+def _unique_index(items, key):
+    grouped = defaultdict(list)
+    for item in items:
+        grouped[key(item)].append(item)
+    return {k: values[0] for k, values in grouped.items() if len(values) == 1}
+
+
+def _synthetic_identity(name: str):
+    """Only synthetic names carry verifiable type/sibling-ordinal evidence."""
+    match = re.match(r"^([A-Za-z][A-Za-z0-9_]*)\s+([1-9][0-9]*)\s+of\s+.+$", name)
+    return (match[1], int(match[2])) if match else None
+
+
+def _named_parent(glb: dict, node_index: int):
+    parent = glb["parent"].get(node_index)
+    seen = {node_index}
+    while parent is not None and parent not in seen:
+        seen.add(parent)
+        name = glb["nodes"][parent].get("name")
+        if name:
+            return name
+        parent = glb["parent"].get(parent)
+    return None
+
+
+def build_pairs(txt: dict, groups: list[dict], glb: dict) -> dict:
+    """One-to-one edges, keyed by TXT canonical; retain source identity separately.
+
+    Exact matches take precedence. Fallbacks require unique evidence on both
+    sides, and never assign an already matched TXT object to another node.
+    """
+    txt_unique = _unique_index(txt, lambda oid: txt[oid]["canonical"])
+    rvm_by_name = _unique_index(groups, lambda group: group["name"])
+    rvm_by_id = _unique_index(groups, lambda group: group["id"])
+    rvm_by_offset = _unique_index(groups, lambda group: group["offset"])
+    sources = {name: index for name, index in glb["named"].items()
+               if name in rvm_by_name
+               and rvm_by_id.get(rvm_by_name[name]["id"]) is rvm_by_name[name]
+               and rvm_by_offset.get(rvm_by_name[name]["offset"]) is rvm_by_name[name]}
+    pairs, by_source, used_txt = {}, {}, set()
+
+    def add(name, oid, channel):
+        canonical = txt[oid]["canonical"]
+        if oid in used_txt or txt_unique.get(canonical) != oid:
+            return
+        group = rvm_by_name[name]
+        pair = {"sourceName": name, "glbNodeIndex": sources[name],
+                "rvmOffset": group["offset"], "rvmId": group["id"],
+                "txtId": oid, "channel": channel}
+        pairs[canonical] = pair
+        by_source[name] = pair
+        used_txt.add(oid)
+
+    for name in sources:
+        oid = txt_unique.get(name)
+        if oid is not None:
+            add(name, oid, "name")
+
+    txt_norm, source_norm = defaultdict(list), defaultdict(list)
+    for oid, obj in txt.items():
+        txt_norm[norm_name(obj["canonical"])].append(oid)
+    for name in glb["namedAll"]:
+        source_norm[norm_name(name)].extend(glb["namedAll"][name])
+    for name in sources:
+        if name in by_source:
+            continue
+        key = norm_name(name)
+        candidates = txt_norm.get(key, [])
+        if len(candidates) == 1 and len(source_norm[key]) == 1:
+            add(name, candidates[0], "normalized")
+
+    # Parent aliases can themselves have been normalized or structurally matched.
+    # Repeat to a fixed point, so input ordering does not decide eligibility.
+    txt_children = defaultdict(list)
+    for oid, obj in txt.items():
+        identity = _synthetic_identity(obj["canonical"])
+        if identity and identity[0] == obj["type"]:
+            txt_children[(obj["parent"], identity)].append(oid)
+    source_children = defaultdict(list)
+    for group in groups:
+        identity = _synthetic_identity(group["name"])
+        if identity:
+            source_children[(group.get("parentId"), identity)].append(group)
+    pending = set(sources) - set(by_source)
+    while pending:
+        added = []
+        for name in sorted(pending):
+            group = rvm_by_name[name]
+            identity = _synthetic_identity(name)
+            parent = rvm_by_id.get(group.get("parentId"))
+            if not identity or not parent:
+                continue
+            parent_pair = by_source.get(parent["name"])
+            if not parent_pair or _named_parent(glb, sources[name]) != parent["name"]:
+                continue
+            candidates = txt_children.get((parent_pair["txtId"], identity), [])
+            siblings = source_children[(group.get("parentId"), identity)]
+            if len(candidates) == 1 and len(siblings) == 1:
+                add(name, candidates[0], "structure")
+                if name in by_source:
+                    added.append(name)
+        if not added:
+            break
+        pending.difference_update(added)
+    return pairs
 
 
 def parse_enu(value: str):
@@ -120,80 +230,17 @@ def main() -> int:
     glb = load_glb_index(a.glb)
 
     txt = meta["objects"]                                   # id -> object
-    txt_by_canonical = {o["canonical"]: oid for oid, o in txt.items()}
-    rvm_by_name = {g["name"]: g for g in rvm["groups"]}
-
-    # ---------------- 通道 1：名称 ----------------
-    pairs: dict[str, dict] = {}
-    chan = Counter()
-    for name, node_idx in glb["named"].items():
-        oid = txt_by_canonical.get(name)
-        g = rvm_by_name.get(name)
-        if oid is None:
-            continue                                        # RVM 有、TXT 没有 → 单独处理
-        pairs[name] = {
-            "glbNodeIndex": node_idx,
-            "rvmOffset": g["offset"] if g else None,
-            "rvmId": g["id"] if g else None,
-            "txtId": oid,
-            "channel": "name",
-        }
-        chan["name"] += 1
-
-    # ---------------- 通道 2：归一化名称 ----------------
-    txt_norm = defaultdict(list)
-    for oid, o in txt.items():
-        txt_norm[norm_name(o["canonical"])].append(oid)
-    rvm_norm = defaultdict(list)
-    for g in rvm["groups"]:
-        rvm_norm[norm_name(g["name"])].append(g)
-    tn = set(txt_norm)
-    for name, node_idx in glb["named"].items():
-        if name in pairs:
-            continue
-        key = norm_name(name)
-        cands = txt_norm.get(key) or []
-        if len(cands) == 1:
-            g = rvm_by_name.get(name)
-            pairs[cands[0]] = {
-                "glbNodeIndex": node_idx,
-                "rvmOffset": g["offset"] if g else None,
-                "rvmId": g["id"] if g else None,
-                "txtId": cands[0], "channel": "normalized",
-            }
-            chan["normalized"] += 1
-
-    # ---------------- 通道 3：结构（类型 + 序号 + 父）----------------
-    # 只有在通道 1/2 都没配上的 RVM 组才尝试；父必须已配对，否则跳过（不猜）
-    unmatched_rvm = [g for g in rvm["groups"] if g["name"] not in glb["named"]]
-    by_parent = defaultdict(list)
-    for oid, o in txt.items():
-        by_parent[o["parent"]].append(oid)
-    for name, node_idx in glb["named"].items():
-        if name in pairs or name in txt_by_canonical:
-            continue
-        # 名字对不上时按结构重建：需要先知道该组在 TXT 中的父与序号，这无法从名字反推，
-        # 因此这里只在"RVM 组的父已配对"且"TXT 侧存在唯一同类型同序号候选"时才接受。
-        g = rvm_by_name.get(name)
-        if g is None or not g["parentId"]:
-            continue
-        parent_name = next((x["name"] for x in rvm["groups"] if x["id"] == g["parentId"]), None)
-        p_oid = pairs.get(parent_name, {}).get("txtId") if parent_name else None
-        if p_oid is None:
-            continue
-        same = [c for c in by_parent[p_oid] if txt[c]["type"] == _type_of_name(name)]
-        idxs = [c for c in same if c not in {v["txtId"] for v in pairs.values()}]
-        if len(idxs) == 1:
-            c = idxs[0]
-            pairs[c] = {"glbNodeIndex": node_idx, "rvmOffset": g["offset"],
-                        "rvmId": g["id"], "txtId": c, "channel": "structure"}
-            chan["structure"] += 1
+    rvm_by_name = _unique_index(rvm["groups"], lambda group: group["name"])
+    pairs = build_pairs(txt, rvm["groups"], glb)
+    chan = Counter(pair["channel"] for pair in pairs.values())
 
     # ---------------- 未匹配 ----------------
     matched_txt = {v["txtId"] for v in pairs.values()}
     txt_only = [oid for oid in txt if oid not in matched_txt]
-    matched_glb_names = set(pairs)
-    glb_only_names = [n for n in glb["named"] if n not in matched_glb_names]
+    matched_glb_indices = {pair["glbNodeIndex"] for pair in pairs.values()}
+    glb_only = [(name, index) for name, indices in glb["namedAll"].items()
+                for index in indices if index not in matched_glb_indices]
+    glb_named_count = sum(map(len, glb["namedAll"].values()))
 
     # 未匹配的分类：只能用可查证的事实（类型在 RVM 里出不出现、数量差多少），不臆断原因
     rvm_type_count = Counter(_type_of_name(g["name"]) for g in rvm["groups"])
@@ -215,6 +262,7 @@ def main() -> int:
     # ---------------- 校验：父链一致性 ----------------
     parent_ok = parent_bad = 0
     parent_bad_samples = []
+    pairs_by_source = {pair["sourceName"]: pair for pair in pairs.values()}
     for name, p in pairs.items():
         o = txt[p["txtId"]]
         txt_parent_can = txt[o["parent"]]["canonical"] if o["parent"] else None
@@ -226,7 +274,8 @@ def main() -> int:
             pidx = glb["parent"].get(pidx)
             glb_parent_name = glb["nodes"][pidx].get("name") if pidx is not None else None
         # RVM 里 SITE 的父是技术节点 /MDBs（TXT 无此对象）；这种情况算一致
-        if glb_parent_name == txt_parent_can or (txt_parent_can is None
+        parent_pair = pairs_by_source.get(glb_parent_name)
+        if (parent_pair and parent_pair["txtId"] == o["parent"]) or glb_parent_name == txt_parent_can or (txt_parent_can is None
                                                  and glb_parent_name == "/MDBs"):
             parent_ok += 1
         else:
@@ -264,7 +313,7 @@ def main() -> int:
             if len(coord["unparsedSamples"]) < 8:
                 coord["unparsedSamples"].append({"name": name, "value": val})
             continue
-        g = rvm_by_name.get(name)
+        g = rvm_by_name.get(p["sourceName"])
         bb = g.get("bboxWorldM") if g else None
         if not bb or not g["directGeometryCount"] or child_of_rvm.get(g["id"], 0):
             continue                                  # 只查叶子组（包围盒紧密）
@@ -312,15 +361,15 @@ def main() -> int:
     stats = {
         "rvmGroups": len(rvm["groups"]),
         "glbNodes": glb["nodeCount"],
-        "glbNamedNodes": len(glb["named"]),
+        "glbNamedNodes": glb_named_count,
         "txtObjects": len(txt),
         "matched": len(pairs),
-        "matchRateOfGlbNamed": round(len(pairs) / max(1, len(glb["named"])) * 100, 3),
+        "matchRateOfGlbNamed": round(len(pairs) / max(1, glb_named_count) * 100, 3),
         "matchRateOfRvm": round(len(pairs) / max(1, len(rvm["groups"])) * 100, 3),
         "matchRateOfTxt": round(len(pairs) / max(1, len(txt)) * 100, 3),
         "byChannel": dict(chan),
         "unmatchedTxt": len(txt_only),
-        "unmatchedGlbNamed": len(glb_only_names),
+        "unmatchedGlbNamed": len(glb_only),
         "pairsWithRvmOffset": sum(1 for v in pairs.values() if v["rvmOffset"] is not None),
     }
     out = {
@@ -336,16 +385,16 @@ def main() -> int:
             "txtOnly": [
                 {"txtId": o, "canonical": txt[o]["canonical"], "type": txt[o]["type"],
                  "reason": ("该类型在 RVM 中完全不出现" if rvm_type_count.get(txt[o]["type"], 0) == 0
-                            else "RVM 中该类型存在但本实例无对应组（需逐对象确认）")}
+                            else "未建立唯一且可校验的几何对应（需逐对象确认）")}
                 for o in txt_only
             ],
             "glbNamedOnly": [
-                {"name": n, "glbNodeIndex": glb["named"][n],
+                {"name": n, "glbNodeIndex": index,
                  "reason": ("技术节点（非 PDMS 设计对象）"
                             if (n.startswith("/MDBs") or n.endswith(".rvm")
                                 or "rvmparser" in n)
-                            else "RVM 有该组但 TXT 无同名对象（需逐对象确认）")}
-                for n in glb_only_names
+                            else "未建立唯一且可校验的 TXT 对应（需逐对象确认）")}
+                for n, index in glb_only
             ],
             "txtOnlyByType": type_table,
         },

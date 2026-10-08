@@ -121,6 +121,12 @@ export class InputState {
     return this._delta;
   }
 
+  /** 结束视角拖动只丢弃鼠标增量，键盘移动仍可继续。 */
+  clearMouseDelta() {
+    this._mouseDeltaX = 0;
+    this._mouseDeltaY = 0;
+  }
+
   /** 对应 `GetAxes(out forward, out right, out up)` */
   getAxes() {
     this._axes.forward = this._axis(NavigationKey.Forward, NavigationKey.Backward);
@@ -133,8 +139,7 @@ export class InputState {
     this._pressed.clear();
     this._lastForwardPressMilliseconds = null;
     this.isSprinting = false;
-    this._mouseDeltaX = 0;
-    this._mouseDeltaY = 0;
+    this.clearMouseDelta();
   }
 
   _axis(positive, negative) {
@@ -222,10 +227,12 @@ export class NavigationInputSource {
     this._global = false;         // 全局（window/document）监听是否在位，见 detachGlobal()
     this._hasFocus = typeof document.hasFocus === 'function' ? document.hasFocus() : true;
     this._bound = {};
+    this._drag = null;
+    this._clickSuppressed = new Map();
   }
 
   get hasFocus() { return this._hasFocus; }
-  get isCaptured() { return this.capture.isCaptured; }
+  get isCaptured() { return this._isThirdPerson() ? !!this._drag : this.capture.isCaptured; }
   get isAttached() { return this._attached; }
   /** 全局（window/document 级）监听是否在位。分屏比对靠它把"键盘归属"从一侧移到另一侧。 */
   get isGlobalAttached() { return !!this._global; }
@@ -240,12 +247,19 @@ export class NavigationInputSource {
     b.mousemove = (e) => this._onMouseMove(e);
     b.wheel = (e) => this._onWheel(e);
     b.pointerdown = (e) => this._onPointerDown(e);
+    b.pointermove = (e) => this._onPointerMove(e);
+    b.pointerup = (e) => this._onPointerUp(e);
+    b.pointercancel = (e) => this._onPointerCancel(e);
+    b.lostpointercapture = (e) => this._onPointerCancel(e);
     b.contextmenu = (e) => this._onContextMenu(e);
     b.blur = () => this._onBlur();
     b.focus = () => this._onFocus();
     b.visibilitychange = () => { if (document.hidden) this._onBlur(); else this._onFocus(); };
     b.pointerlockchange = () => this._onPointerLockChange();
-    b.pointerlockerror = () => { this.capture.lastError = 'pointerlockerror'; this._options.onCaptureChanged?.(); };
+    b.pointerlockerror = () => {
+      this.capture.lastError = 'pointerlockerror';
+      this._options.onCaptureChanged?.({ captured: this.capture.isCaptured });
+    };
     return b;
   }
 
@@ -254,6 +268,8 @@ export class NavigationInputSource {
 
   /** 导航是否处于暂停（失焦） */
   _isPaused() { return !!(this._options.isPaused && this._options.isPaused()); }
+  _isThirdPerson() { return this._options.getMode?.() === 'thirdPerson'; }
+  _isInputEnabled() { return this._options.isInputEnabled?.() !== false; }
 
   attach() {
     if (this._attached) return;
@@ -263,6 +279,10 @@ export class NavigationInputSource {
     document.addEventListener('mousemove', b.mousemove);
     this.canvas.addEventListener('wheel', b.wheel, { passive: false });
     this.canvas.addEventListener('pointerdown', b.pointerdown);
+    this.canvas.addEventListener('pointermove', b.pointermove);
+    this.canvas.addEventListener('pointerup', b.pointerup);
+    this.canvas.addEventListener('pointercancel', b.pointercancel);
+    this.canvas.addEventListener('lostpointercapture', b.lostpointercapture);
     this.canvas.addEventListener('contextmenu', b.contextmenu);
     window.addEventListener('blur', b.blur);
     window.addEventListener('focus', b.focus);
@@ -281,6 +301,7 @@ export class NavigationInputSource {
    *  与之配套：`attachGlobal()` 只装回全局部分，`detach()` 才是全套摘除。 */
   detachGlobal() {
     if (!this._attached || !this._global) return;
+    this.releaseCapture();
     const b = this._bound;
     window.removeEventListener('keydown', b.keydown);
     window.removeEventListener('keyup', b.keyup);
@@ -297,6 +318,8 @@ export class NavigationInputSource {
   attachGlobal() {
     if (!this._attached) { this.attach(); return; }
     if (this._global) return;
+    this.input.reset();
+    this._hasFocus = typeof document.hasFocus === 'function' ? document.hasFocus() : true;
     const b = this._handlers();
     window.addEventListener('keydown', b.keydown);
     window.addEventListener('keyup', b.keyup);
@@ -311,12 +334,17 @@ export class NavigationInputSource {
 
   detach() {
     if (!this._attached) return;
+    this.releaseCapture();
     const b = this._bound;
     window.removeEventListener('keydown', b.keydown);
     window.removeEventListener('keyup', b.keyup);
     document.removeEventListener('mousemove', b.mousemove);
     this.canvas.removeEventListener('wheel', b.wheel);
     this.canvas.removeEventListener('pointerdown', b.pointerdown);
+    this.canvas.removeEventListener('pointermove', b.pointermove);
+    this.canvas.removeEventListener('pointerup', b.pointerup);
+    this.canvas.removeEventListener('pointercancel', b.pointercancel);
+    this.canvas.removeEventListener('lostpointercapture', b.lostpointercapture);
     this.canvas.removeEventListener('contextmenu', b.contextmenu);
     window.removeEventListener('blur', b.blur);
     window.removeEventListener('focus', b.focus);
@@ -331,16 +359,47 @@ export class NavigationInputSource {
 
   /** 用户手势里请求捕获（点击 canvas） */
   requestCapture() { return this.capture.request(); }
-  releaseCapture() { this.capture.release(); }
+  releaseCapture() {
+    this._endDrag(true);
+    this.input.reset();
+    this.capture.release();
+  }
+
+  /** pointerup 的宿主拾取监听仍能读取；同一 pointerId 下次按下才开始新分类。 */
+  isClickSuppressed(pointerId) {
+    return this._drag?.pointerId === pointerId
+      ? this._drag.dragged
+      : !!this._clickSuppressed.get(pointerId);
+  }
+
+  _endDrag(cancelled = false) {
+    const drag = this._drag;
+    if (!drag) return;
+    // 先保存分类并清活动状态，releasePointerCapture 触发的丢失事件不能覆盖分类。
+    this._clickSuppressed.set(drag.pointerId, drag.dragged || cancelled);
+    if (this._clickSuppressed.size > 32) {
+      this._clickSuppressed.delete(this._clickSuppressed.keys().next().value);
+    }
+    this._drag = null;
+    if (!cancelled) this._options.onDragEnded?.();
+    this.input.clearMouseDelta();
+    try {
+      if (this.canvas.hasPointerCapture?.(drag.pointerId)) {
+        this.canvas.releasePointerCapture(drag.pointerId);
+      }
+    } catch { /* 指针可能已被浏览器释放。 */ }
+    this._options.onCaptureChanged?.({ captured: false, dragging: true, intentional: true });
+  }
 
   // ------------------------------------------------------------------ 事件
   _onKeyDown(e) {
+    if (!this._global || !this._hasFocus) { this.input.reset(); return; }
     // 设置面板的数字框里打字时不驱动相机（Web 才有的输入框，原插件无此情形）
-    if (isEditableTarget(e.target)) return;
+    if (isEditableTarget(e.target)) { this.input.reset(); return; }
 
     if (keyBindings.has('navigation.toggle', e.code) || (!e.code && e.key === 'F8')) {
       e.preventDefault();
-      this._options.onToggleNavigation?.();
+      if (!e.repeat) this._options.onToggleNavigation?.();
       return;
     }
 
@@ -360,21 +419,24 @@ export class NavigationInputSource {
     // 与原件一致：只有"导航开启且已捕获"时才消费导航输入。
     // 未捕获时不得记录按键——否则捕获前按下的 W/Shift（如 Shift+点击树）会在
     // 捕获瞬间一起生效，表现为"自动移动"。
-    if (this._isActive() && this.isCaptured) {
+    if (this._isActive() && !this._isPaused() && this._isInputEnabled()
+      && (this._isThirdPerson() || this.isCaptured)) {
       e.preventDefault();
       this.input.keyDown(key, Math.round(performance.now()));
     }
   }
 
   _onKeyUp(e) {
-    if (isEditableTarget(e.target)) return;
     const key = navigationKeyOf(e);
     if (!key) return;
     // 松开永远处理，避免残留按键（原件对 modifier 自愈的处理目的相同）
-    if (this._isActive()) this.input.keyUp(key);
+    this.input.keyUp(key);
   }
 
   _onMouseMove(e) {
+    if (!this._isActive()) { this.releaseCapture(); return; }
+    if (!this._global || !this._hasFocus || this._isPaused() || !this._isInputEnabled()) return;
+    if (this._isThirdPerson()) return;
     // 对应 MouseCapture.TryGetDelta：未捕获时不产生任何视角增量
     if (!this._isActive() || !this.isCaptured) return;
     // 钳制单事件增量：Pointer Lock 刚建立的首个 mousemove 可能带出巨大的伪
@@ -386,16 +448,66 @@ export class NavigationInputSource {
     if (dx !== 0 || dy !== 0) this.input.addMouseDelta(dx, dy);
   }
 
+  _onPointerMove(e) {
+    if (!this._isActive() || !this._isThirdPerson() || !this._global
+      || !this._hasFocus || this._isPaused() || !this._isInputEnabled()) return;
+    const drag = this._drag;
+    if (!drag || drag.pointerId !== e.pointerId) return;
+    if (typeof e.buttons === 'number' && !(e.buttons & 1)) { this._endDrag(true); return; }
+    const dx = e.clientX - drag.lastX;
+    const dy = e.clientY - drag.lastY;
+    drag.lastX = e.clientX;
+    drag.lastY = e.clientY;
+    if (!Number.isFinite(dx) || !Number.isFinite(dy)) return;
+    const distance = Math.hypot(dx, dy);
+    drag.distance += distance;
+    if (!drag.dragged) {
+      if (drag.distance <= 4) return;
+      drag.dragged = true;
+      // 不回放阈值内的晃动；越过阈值的这一帧只消费超出的部分。
+      const portion = distance > 0 ? Math.min(1, (drag.distance - 4) / distance) : 0;
+      this.input.addMouseDelta(dx * portion, dy * portion);
+    } else {
+      this.input.addMouseDelta(dx, dy);
+    }
+  }
+
   _onWheel(e) {
     // Orbit 模式下完全放行给 OrbitControls（controls.enabled=false 时它会自行忽略）
     // 暂停中也不接收（原插件 Wheel() 的条件就是 IsActive && !IsPaused）
-    if (!this._isActive() || this._isPaused()) return;
+    if (!this._isActive() || this._isPaused() || !this._isInputEnabled()) return;
     e.preventDefault();
     this._options.onWheel?.(normalizeWheelEvent(e));
   }
 
   _onPointerDown(e) {
-    if (!this._isActive()) return;
+    if (!this._isActive()) { this.input.reset(); return; }
+    if (this._isThirdPerson()) {
+      if (e.button === 2) {
+        this._options.onSelectionMenuRequested?.({ clientX: e.clientX, clientY: e.clientY });
+        return;
+      }
+      if (e.button !== 0 || !this._global || !this._isInputEnabled()) return;
+      this._options.onCaptureRequested?.();
+      if (this._isPaused()) return;
+      this._endDrag(true);
+      this._clickSuppressed.delete(e.pointerId);
+      this.input.clearMouseDelta();
+      try {
+        this.canvas.setPointerCapture(e.pointerId);
+      } catch (error) {
+        this._clickSuppressed.set(e.pointerId, true);
+        this._options.onCaptureFailed?.(String(error?.message || error));
+        return;
+      }
+      this._drag = {
+        pointerId: e.pointerId, lastX: e.clientX, lastY: e.clientY,
+        distance: 0, dragged: false,
+      };
+      e.preventDefault();
+      this._options.onCaptureChanged?.({ captured: true, dragging: true });
+      return;
+    }
     // 游戏导航 + 已捕获：右键 = 打开已选对象的显隐 / 隔离菜单。
     // 菜单需要普通鼠标操作，因此先释放 Pointer Lock。
     if (e.pointerType === 'mouse' && e.button === 2) {
@@ -415,8 +527,20 @@ export class NavigationInputSource {
     }
     this._options.onCaptureRequested?.();
     this.requestCapture().then((ok) => {
+      if (!this._isActive() || this._isThirdPerson() || this._isPaused()) {
+        this.capture.release();
+        return;
+      }
       if (!ok) this._options.onCaptureFailed?.(this.capture.lastError || '');
     });
+  }
+
+  _onPointerUp(e) {
+    if (this._drag?.pointerId === e.pointerId) this._endDrag();
+  }
+
+  _onPointerCancel(e) {
+    if (this._drag?.pointerId === e.pointerId) this._endDrag(true);
   }
 
   _onContextMenu(e) {
@@ -425,7 +549,7 @@ export class NavigationInputSource {
   }
 
   _onPointerLockChange() {
-    const captured = this.isCaptured;
+    const captured = this.capture.isCaptured;
     // 自己发起的释放（切换模式/暂停）不算"用户按了 Esc"
     const intentional = captured ? false : this.capture.consumeIntentionalExit();
     this._options.onCaptureChanged?.({ captured, intentional });
@@ -434,8 +558,7 @@ export class NavigationInputSource {
   _onBlur() {
     this._hasFocus = false;
     // 窗口失焦：清空所有按键状态、停止相机移动（原件 Pause('focus')）
-    this.input.reset();
-    this.capture.release();
+    this.releaseCapture();
     this._options.onFocusLost?.();
   }
 

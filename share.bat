@@ -8,7 +8,7 @@ echo ====================================================================
 echo.
 echo   WARNING: this exposes the local server to the internet via a
 echo   temporary trycloudflare.com URL. Anyone with the link can browse
-echo   the models. The link dies when this window is closed.
+echo   the login page. A valid access code is required to read models.
 echo.
 
 rem ---- [1/4] locate Python ------------------------------------------------
@@ -31,13 +31,16 @@ set "SERVER_STARTED_HERE=0"
 netstat -ano | findstr /c:":8765 " | findstr /c:"LISTENING" >nul 2>nul
 if errorlevel 1 (
   echo   [2/4] starting local backend on 127.0.0.1:8765 ...
-  start "modelviewer-server" /min cmd /c ""%PY%" -u "tools\server.py" --port 8765"
+  start "modelviewer-server" /min cmd /c ""%PY%" -u "tools\server.py" --port 8765 --host 0.0.0.0 --public-port 8766 --no-browser"
   set "SERVER_STARTED_HERE=1"
   rem give the server a moment to bind
   ping -n 3 127.0.0.1 >nul
 ) else (
-  echo   [2/4] backend already running on port 8765, reusing it.
+  echo   [2/4] listener found on port 8765; verifying identity and public isolation.
 )
+
+"%PY%" "tools\share_preflight.py" --local-port 8765 --public-port 8766
+if errorlevel 1 goto unsafe_backend
 
 rem ---- [3/4] locate or download cloudflared -------------------------------
 set "CFD_EXE=%~dp0tools\bin\cloudflared.exe"
@@ -62,7 +65,7 @@ set "TUNNEL_LOG=%TEMP%\modelviewer-tunnel.log"
 if exist "%TUNNEL_LOG%" del "%TUNNEL_LOG%" >nul 2>nul
 
 echo   [4/4] opening Cloudflare quick tunnel ...
-start "modelviewer-tunnel" /b cmd /c ""!CFD!" tunnel --url http://127.0.0.1:8765 --no-autoupdate > "%TUNNEL_LOG%" 2>&1"
+start "modelviewer-tunnel" /b cmd /c ""!CFD!" tunnel --url http://127.0.0.1:8766 --no-autoupdate > "%TUNNEL_LOG%" 2>&1"
 
 set "URL="
 set /a WAIT=0
@@ -116,6 +119,12 @@ echo   [ERROR] Failed to download cloudflared.exe.
 echo   Download manually from:
 echo     https://github.com/cloudflare/cloudflared/releases/latest
 echo   and save it as: %CFD_EXE%
+pause
+exit /b 1
+
+:unsafe_backend
+echo   [ERROR] No tunnel was opened. Close the old server, then run this
+echo   workspace's start-lan.bat and try share.bat again.
 pause
 exit /b 1
 

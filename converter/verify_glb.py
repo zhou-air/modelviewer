@@ -69,9 +69,7 @@ def analyze(path: Path) -> dict:
 
     depth_of = {}
     order = []
-    roots = [i for i in range(len(nodes)) if not any(
-        i in (n.get("children") or []) for n in nodes)]
-    # 更稳的根判定
+    # One pass over the child edges; avoid rescanning every node for every root.
     has_parent = set()
     for n in nodes:
         for c in n.get("children") or []:

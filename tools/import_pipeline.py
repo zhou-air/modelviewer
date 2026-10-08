@@ -23,14 +23,19 @@
 from __future__ import annotations
 
 import argparse
+import copy
+import io
 import hashlib
 import json
 import os
+import signal
 import shutil
 import subprocess
 import sys
+import tempfile
 import threading
 import time
+from functools import wraps
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -43,6 +48,18 @@ PY = sys.executable
 TOLERANCE = 0.02
 
 STAGES = ["queued", "copying", "geometry", "metadata", "mapping", "validating", "ready"]
+MAX_RUNNING_IMPORTS = 2
+MAX_PENDING_IMPORTS = 32
+CONVERSION_TIMEOUT_SECONDS = 30 * 60
+MAX_TOOL_LOG_BYTES = 256 * 1024
+
+
+def _locked(fn):
+    @wraps(fn)
+    def call(*args, **kwargs):
+        with S.LOCK:
+            return fn(*args, **kwargs)
+    return call
 
 
 # ------------------------------------------------------------------ 工具
@@ -78,21 +95,55 @@ def _run(cmd: list[str], log: list[str]) -> subprocess.CompletedProcess:
     """调用现有脚本。cmd 里的脚本路径与参数一律相对项目根，与手工执行完全一致。"""
     t0 = time.perf_counter()
     log.append(f"$ {' '.join(cmd)}")
-    proc = subprocess.run(cmd, cwd=str(ROOT), capture_output=True, text=True,
-                          encoding="utf-8", errors="replace")
+    # Conversion helpers may launch native children. Bound the whole stage and
+    # terminate its process tree on timeout; spool logs instead of buffering them.
+    options = ({"creationflags": subprocess.CREATE_NO_WINDOW}
+               if os.name == "nt" else {"start_new_session": True})
+    timed_out = False
+    with tempfile.TemporaryFile() as output:
+        process = subprocess.Popen(cmd, cwd=str(ROOT), stdout=output,
+                                   stderr=subprocess.STDOUT, **options)
+        try:
+            process.wait(timeout=CONVERSION_TIMEOUT_SECONDS)
+        except subprocess.TimeoutExpired:
+            timed_out = True
+            if os.name == "nt":
+                try:
+                    subprocess.run(["taskkill", "/PID", str(process.pid), "/T", "/F"],
+                                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                                   timeout=10, creationflags=subprocess.CREATE_NO_WINDOW)
+                except (OSError, subprocess.TimeoutExpired):
+                    pass
+            else:
+                try:
+                    os.killpg(process.pid, signal.SIGKILL)
+                except ProcessLookupError:
+                    pass
+            if process.poll() is None:
+                process.kill()
+            process.wait(timeout=10)
+        output.seek(0, os.SEEK_END)
+        size = output.tell()
+        output.seek(max(0, size - MAX_TOOL_LOG_BYTES))
+        tail = output.read().decode("utf-8", errors="replace")
+        if size > MAX_TOOL_LOG_BYTES:
+            tail = "[earlier output omitted]\n" + tail
+    proc = subprocess.CompletedProcess(cmd, process.returncode, tail, "")
     ms = int((time.perf_counter() - t0) * 1000)
     out = ((proc.stdout or "") + (proc.stderr or "")).strip()
     if out:
         log.append(out)
     log.append(f"  → exit={proc.returncode}  {ms} ms")
     log.append("")
+    if timed_out:
+        raise S.StoreError("conversion_timeout", "转换阶段超时，已停止转换进程；请检查源文件后重试", 408)
     return proc
 
 
 # ------------------------------------------------------------------ Job
 
 JOBS: dict[str, "Job"] = {}
-JOBS_LOCK = threading.RLock()
+JOBS_LOCK = S.LOCK
 
 
 class Job:
@@ -125,13 +176,16 @@ class Job:
         self.createdAt = S.now_iso()
         self.result: dict | None = None
         self._log: list[str] = []
+        self._uploads: set[str] = set()
 
     # ---- 序列化 ----
+    @_locked
     def to_dict(self) -> dict:
-        return {
+        return copy.deepcopy({
             "jobId": self.id, "status": self.status, "stage": self.stage,
             "stages": self.stages, "error": self.error, "uploaded": self.uploaded,
             "resume": self.resume, "createdAt": self.createdAt,
+            "uploading": sorted(self._uploads),
             "projectId": self.project_id, "modelId": self.model_id,
             "versionId": self.version_id, "versionName": self.version_name,
             "rvmFilename": self.rvm_filename, "txtFilename": self.txt_filename,
@@ -139,14 +193,16 @@ class Job:
             "result": self.result,
             "location": f"data/projects/{self.project_id}/models/{self.model_id}"
                         f"/versions/{self.version_id}",
-        }
+        })
 
+    @_locked
     def persist(self) -> None:
         S.write_json(self.dir / "job.json", self.to_dict())
 
     def log_text(self) -> str:
         return "\n".join(self._log)
 
+    @_locked
     def _flush_log(self, extra: str | None = None) -> None:
         """把当前日志落到目标版本的 reports/conversion.log（边跑边写，便于失败后查）。"""
         if extra is not None:
@@ -157,6 +213,7 @@ class Job:
         out.write_text(self.log_text(), encoding="utf-8")
 
     # ---- 阶段管理 ----
+    @_locked
     def _enter(self, stage: str) -> None:
         self.stage = stage
         for s in self.stages:
@@ -165,6 +222,7 @@ class Job:
                 s["at"] = S.now_iso()
         self.persist()
 
+    @_locked
     def _done(self, stage: str, ms: int) -> None:
         for s in self.stages:
             if s["name"] == stage:
@@ -172,8 +230,10 @@ class Job:
                 s["ms"] = ms
         self.persist()
 
+    @_locked
     def fail(self, stage: str, message: str, detail: str | None = None) -> None:
         self.status = "failed"
+        self.stage = "failed"
         for s in self.stages:
             if s["name"] == stage:
                 s["status"] = "failed"
@@ -202,6 +262,7 @@ class Job:
 
 # ------------------------------------------------------------------ 流水线
 
+@_locked
 def create_job(*, project_id: str | None, model_id: str | None, version_name: str,
                version_id: str | None = None, new_project_name: str | None = None,
                new_model_name: str | None = None, new_project_id: str | None = None,
@@ -233,6 +294,10 @@ def create_job(*, project_id: str | None, model_id: str | None, version_name: st
             new_model_id or S.suggest_id(new_model_name, "model"), "model")
 
     existing = S.version_dir(project_id, model_id, version_id)
+    if (project_id, model_id, version_id) in S.ACTIVE_IMPORTS:
+        raise S.StoreError("version_importing", "该版本已有待上传或运行中的导入任务", 409)
+    if len(S.ACTIVE_IMPORTS) >= MAX_PENDING_IMPORTS:
+        raise S.StoreError("import_capacity", "待处理导入任务已达上限，请先完成或清理已有任务", 429)
     if existing.is_dir():
         vj = existing / "version.json"
         if vj.exists():
@@ -242,41 +307,47 @@ def create_job(*, project_id: str | None, model_id: str | None, version_name: st
                     "version_exists",
                     f"版本 {version_name!r}（目录 {version_id}）已存在且已完成导入，"
                     f"不会覆盖。请换一个版本名，或先删除该版本。", 409)
-            if st == S.STATUS_IMPORTING:
-                # 有一个真的在跑的任务才算"正在导入"；否则是上次导入被中断（例如后端被杀）
-                # 留下的 importing 状态，允许直接在原目录重跑，不让用户卡在这个状态里。
-                live = any(j.status in ("queued", "running") and j.project_id == project_id
-                           and j.model_id == model_id and j.version_id == version_id
-                           for j in list(JOBS.values()))
-                if live:
-                    raise S.StoreError(
-                        "version_importing",
-                        f"版本 {version_id!r} 正在导入中，请等它结束或删除后重试。", 409)
-        # failed / 中断 → 允许在同一目录重跑（源文件保持不动，只清派生数据）
+            if not resume:
+                raise S.StoreError("retry_required", "该版本已存在，请使用重试功能或另建版本", 409)
+            if st not in (S.STATUS_FAILED, S.STATUS_IMPORTING):
+                raise S.StoreError("version_not_retryable", "该版本状态不支持重试", 409)
+        else:
+            raise S.StoreError("version_incomplete", "版本目录缺少清单，请先删除后重新导入", 409)
+    elif resume:
+        raise S.StoreError("version_not_found", "重试版本不存在", 404)
 
     job_id = time.strftime("%Y%m%d-%H%M%S") + "-" + os.urandom(3).hex()
     job = Job(job_id, project_id=project_id, model_id=model_id, version_id=version_id,
               version_name=version_name, new_project_name=new_project_name,
               new_model_name=new_model_name, rvm_filename=rvm_filename,
               txt_filename=txt_filename, resume=resume)
-    job.source_dir.mkdir(parents=True, exist_ok=True)
-    with JOBS_LOCK:
+    S.reserve_import(project_id, model_id, version_id, job_id)
+    try:
+        job.source_dir.mkdir(parents=True, exist_ok=True)
+        job.persist()
         JOBS[job_id] = job
-    job.persist()
+    except Exception:
+        S.release_import(project_id, model_id, version_id, job_id)
+        raise
     return job
 
 
+@_locked
 def retry_job(project_id: str, model_id: str, version_id: str) -> Job:
     """失败版本原地重跑：源文件已在 version/source/ 里，不重新上传。
 
     TXT 是否在场按**文件实际存在**判断，不看 version.json 里记的文件名 ——
     仅 RVM 版本本来就没有 TXT，重试必须能识别出来并继续走合成链路。
     """
+    if sum(j.status == "running" for j in JOBS.values()) >= MAX_RUNNING_IMPORTS:
+        raise S.StoreError("import_capacity", "同时运行的导入任务已达上限，请稍后重试", 429)
     vdir = S.require_version(project_id, model_id, version_id)
     doc = S.read_json(vdir / "version.json")
     src = vdir / "source"
     has_rvm = (src / S.SOURCE_RVM).is_file()
     has_txt = (src / S.SOURCE_TXT).is_file()
+    if not has_rvm:
+        raise S.StoreError("source_missing", "重试所需的 RVM 源文件不存在，请删除该版本后重新上传", 409)
     job = create_job(project_id=project_id, model_id=model_id,
                      version_name=doc.get("name") or version_id, version_id=version_id,
                      rvm_filename=doc.get("originalRvmFilename") or "",
@@ -285,7 +356,12 @@ def retry_job(project_id: str, model_id: str, version_id: str) -> Job:
     job.uploaded = {"rvm": has_rvm, "txt": has_txt}
     job.metadata_source = S.METADATA_SOURCE_TXT if has_txt else S.METADATA_SOURCE_RVM
     job.persist()
-    start_job(job)
+    try:
+        start_job(job)
+    except Exception:
+        if job.status == "queued":
+            delete_job(job.id)
+        raise
     return job
 
 
@@ -295,20 +371,91 @@ def get_job(job_id: str) -> Job | None:
 
 
 def staged_path(job: Job, which: str) -> Path:
+    if which not in ("rvm", "txt"):
+        raise S.StoreError("bad_source", "源文件槽只能是 rvm / txt", 404)
     return job.source_dir / ("staged.rvm" if which == "rvm" else "staged.txt")
 
 
 def save_upload(job: Job, which: str, data: bytes) -> int:
-    p = staged_path(job, which)
-    p.write_bytes(data)
-    job.uploaded[which] = True
-    job.persist()
-    return len(data)
+    return save_upload_stream(job, which, io.BytesIO(data), len(data))
 
 
-def start_job(job: Job) -> Job:
-    if job.status in ("copying", "geometry", "metadata", "mapping", "validating"):
-        raise S.StoreError("job_running", "该导入任务正在执行中", 409)
+def _require_queued(job: Job) -> None:
+    if JOBS.get(job.id) is not job:
+        raise S.StoreError("job_not_found", "导入任务不存在", 404)
+    if job.status != "queued":
+        raise S.StoreError("job_not_queued", "任务已启动或结束；失败版本请使用重试功能", 409)
+    if S.ACTIVE_IMPORTS.get((job.project_id, job.model_id, job.version_id)) != job.id:
+        raise S.StoreError("job_reservation_lost", "导入任务的版本预留已失效", 409)
+
+
+def save_upload_stream(job: Job, which: str, stream, length: int) -> int:
+    """Receive outside the store lock; publish only a complete, still-queued upload."""
+    target = staged_path(job, which)
+    if not isinstance(length, int) or isinstance(length, bool) or length <= 0:
+        raise S.StoreError("invalid_upload_length", "源文件必须非空并提供有效长度", 400)
+    with S.LOCK:
+        _require_queued(job)
+        if job.resume:
+            raise S.StoreError("retry_source_readonly", "重试任务使用已保存的源文件", 409)
+        if which in job._uploads:
+            raise S.StoreError("upload_in_progress", "该源文件正在上传，请等待上传完成", 409)
+        job._uploads.add(which)
+    temp_path = None
+    try:
+        with tempfile.NamedTemporaryFile(dir=job.source_dir, prefix=f".{which}-",
+                                         suffix=".part", delete=False) as output:
+            temp_path = Path(output.name)
+            remaining = length
+            while remaining:
+                chunk = stream.read(min(1024 * 1024, remaining))
+                if not chunk:
+                    raise S.StoreError("upload_truncated", "源文件上传中断，请重新上传", 400)
+                if len(chunk) > remaining:
+                    raise S.StoreError("upload_length_mismatch", "源文件长度与声明不一致", 400)
+                output.write(chunk)
+                remaining -= len(chunk)
+        with S.LOCK:
+            _require_queued(job)
+            os.replace(temp_path, target)
+            job.uploaded[which] = True
+            job.persist()
+        return length
+    finally:
+        try:
+            if temp_path is not None:
+                temp_path.unlink(missing_ok=True)
+        finally:
+            with S.LOCK:
+                job._uploads.discard(which)
+
+
+@_locked
+def delete_job(job_id: str) -> dict:
+    job = JOBS.get(job_id)
+    if job is None:
+        raise S.StoreError("job_not_found", "导入任务不存在", 404)
+    active = S.ACTIVE_IMPORTS.get((job.project_id, job.model_id, job.version_id)) == job.id
+    if job._uploads or job.status == "running" or (active and job.status != "queued"):
+        raise S.StoreError("job_running", "导入或上传正在进行，无法清理", 409)
+    # Validate the final deletion boundary even though job IDs are generated here.
+    directory = job.dir.resolve()
+    if directory.parent != S.JOBS.resolve():
+        raise S.StoreError("path_escape", "非法任务目录", 400)
+    if directory.exists():
+        shutil.rmtree(directory)
+    JOBS.pop(job_id, None)
+    S.release_import(job.project_id, job.model_id, job.version_id, job.id)
+    return {"removed": job_id}
+
+
+@_locked
+def _claim_start(job: Job) -> None:
+    _require_queued(job)
+    if job._uploads:
+        raise S.StoreError("upload_in_progress", "请等待源文件上传完成后再开始导入", 409)
+    if sum(j.status == "running" for j in JOBS.values()) >= MAX_RUNNING_IMPORTS:
+        raise S.StoreError("import_capacity", "同时运行的导入任务已达上限，请稍后再开始", 429)
     # RVM 是唯一必需项；TXT 可选（不给则元数据由 RVM 合成，只剩名字/层级/类型、无工程属性）
     if not job.resume and not job.uploaded["rvm"]:
         raise S.StoreError("source_missing", "还缺源文件：RVM")
@@ -319,18 +466,39 @@ def start_job(job: Job) -> Job:
         s["status"] = "pending"
         s["ms"] = None
     job.persist()
+
+
+@_locked
+def start_job(job: Job) -> Job:
+    _claim_start(job)
     t = threading.Thread(target=_guard, args=(job,), daemon=True)
-    t.start()
+    try:
+        t.start()
+    except Exception:
+        job.status = "queued"
+        job.persist()
+        raise
     return job
 
 
-def _guard(job: Job) -> None:
+def _guard(job: Job) -> dict:
     try:
-        run_job(job)
+        return _run_job(job)
     except S.StoreError as e:
         job.fail(job.stage, e.message)
     except Exception as e:  # noqa: BLE001
         job.fail(job.stage, f"未预期的错误：{e!r}")
+    finally:
+        # Keep the reservation until log/manifest writes are finished, even after
+        # ready/failed has become visible to readers.
+        S.release_import(job.project_id, job.model_id, job.version_id, job.id)
+    return {"failed": True, "error": job.error}
+
+
+def run_job(job: Job) -> dict:
+    """Synchronous CLI entrypoint with the same atomic start checks as HTTP."""
+    _claim_start(job)
+    return _guard(job)
 
 
 def _clean_derived(vdir: Path, job: "Job") -> int:
@@ -358,7 +526,7 @@ def _clean_derived(vdir: Path, job: "Job") -> int:
     return removed
 
 
-def run_job(job: Job) -> dict:
+def _run_job(job: Job) -> dict:
     stages: dict[str, int] = {}
     job._log = [f"# import job {job.id}  {S.now_iso()}",
                 f"# {_rel(S.PROJECTS / job.project_id)} → "
@@ -368,12 +536,13 @@ def run_job(job: Job) -> dict:
     # ---------------- copying ----------------
     job._enter("copying")
     t0 = time.perf_counter()
-    if job.project_id and not (S.PROJECTS / job.project_id).is_dir():
-        S.create_project(job.new_project_name, job.project_id)
-        job._log.append(f"[copying] 新建 Project {job.project_id}（{job.new_project_name}）")
-    if not (S.PROJECTS / job.project_id / "models" / job.model_id).is_dir():
-        S.create_model(job.project_id, job.new_model_name, job.model_id)
-        job._log.append(f"[copying] 新建 Model {job.model_id}（{job.new_model_name}）")
+    with S.LOCK:
+        if job.project_id and not (S.PROJECTS / job.project_id).is_dir():
+            S.create_project(job.new_project_name, job.project_id)
+            job._log.append(f"[copying] 新建 Project {job.project_id}（{job.new_project_name}）")
+        if not (S.PROJECTS / job.project_id / "models" / job.model_id).is_dir():
+            S.create_model(job.project_id, job.new_model_name, job.model_id)
+            job._log.append(f"[copying] 新建 Model {job.model_id}（{job.new_model_name}）")
 
     vdir = S.version_dir(job.project_id, job.model_id, job.version_id)
 
@@ -395,13 +564,14 @@ def run_job(job: Job) -> dict:
         S.write_json(vdir / "version.json", doc)
     else:
         # 重试：源文件已在位，只清理上一次的派生数据（源文件是只读的，任何情况下都不动）
-        doc = S.read_json(vdir / "version.json")
         n_removed = _clean_derived(vdir, job)
-        doc["status"] = S.STATUS_IMPORTING
-        doc["error"] = None
-        doc["importedAt"] = S.now_iso()
-        S.append_history(doc, S.STATUS_IMPORTING, "retry")
-        S.write_json(vdir / "version.json", doc)
+        with S.LOCK:
+            doc = S.read_json(vdir / "version.json")
+            doc["status"] = S.STATUS_IMPORTING
+            doc["error"] = None
+            doc["importedAt"] = S.now_iso()
+            S.append_history(doc, S.STATUS_IMPORTING, "retry")
+            S.write_json(vdir / "version.json", doc)
         job._log.append(f"[copying] 重试：保留 source/，清理了 {n_removed} 个上一次的派生文件")
 
     for which, fixed in (("rvm", S.SOURCE_RVM), ("txt", S.SOURCE_TXT)):
@@ -549,7 +719,7 @@ def run_job(job: Job) -> dict:
     p = _run([PY, "converter/verify_glb.py", glb_rel, "--json", _rel(glb_json)], job._log)
     glb_res = S.read_json(glb_json) if glb_json.exists() else {}
     # verify_glb 本身只输出结构报告、不含判定，闸门取自它的三个客观条件
-    g_ok = bool(glb_res) and glb_res.get("json_utf8_ok") is True \
+    g_ok = p.returncode == 0 and bool(glb_res) and glb_res.get("json_utf8_ok") is True \
         and (glb_res.get("counts", {}).get("nodes") or 0) > 0 \
         and (glb_res.get("geometry", {}).get("triangles") or 0) > 0
     checks.append({"name": "GLB 结构（UTF-8 JSON / 节点数 / 三角形数）", "ok": g_ok,
@@ -616,13 +786,7 @@ def run_job(job: Job) -> dict:
     mapping = S.read_json(vdir / "processed" / S.MAPPING)
     mst, gst = mapping.get("stats", {}), glb_res.get("geometry", {})
     rvm_groups = mst.get("rvmGroups") or 0
-    doc = S.read_json(vdir / "version.json")
-    doc["status"] = S.STATUS_READY
-    doc["error"] = None
-    doc["importedAt"] = S.now_iso()
-    doc["metadataSource"] = job.metadata_source
-    doc["sourceTxt"] = f"source/{S.SOURCE_TXT}" if has_txt else None
-    doc["stats"] = {
+    final_stats = {
         "metadataSource": job.metadata_source,
         "rvmBytes": (vdir / "source" / S.SOURCE_RVM).stat().st_size,
         # 仅 RVM 版本没有 TXT：如实置 null，不写 0（0 会被读成"有一份空文件"）
@@ -642,22 +806,29 @@ def run_job(job: Job) -> dict:
         "durationMs": int((time.perf_counter() - t_all) * 1000),
         "converterVersion": _tool_version(),
     }
-    S.append_history(doc, S.STATUS_READY)
-    S.write_json(vdir / "version.json", doc)
-    stages["ready"] = int((time.perf_counter() - t0) * 1000)
-    job._done("ready", stages["ready"])
-
-    job.status = "ready"
-    job.stage = "ready"
-    job.result = {**doc, "assets": {k: S.url_of(vdir / "processed" / v)
-                                    for k, v in [("glb", S.GLB), ("metadata", S.METADATA),
-                                                 ("metamodel", S.METAMODEL),
-                                                 ("rvmIndex", S.RVM_INDEX),
-                                                 ("mapping", S.MAPPING),
-                                                 ("floorplan", S.FLOORPLAN)]
-                                    if (vdir / "processed" / v).exists()}}
-    job._flush_log(f"[ready] 导入完成，总耗时 {doc['stats']['durationMs']} ms")
-    job.persist()
+    with S.LOCK:
+        # Read the current manifest inside the same lock as rename/update APIs.
+        # User fields may have changed while the converter was running.
+        doc = S.read_json(vdir / "version.json")
+        doc.update(status=S.STATUS_READY, error=None, importedAt=S.now_iso(),
+                   metadataSource=job.metadata_source,
+                   sourceTxt=f"source/{S.SOURCE_TXT}" if has_txt else None,
+                   stats=final_stats)
+        S.append_history(doc, S.STATUS_READY)
+        S.write_json(vdir / "version.json", doc)
+        stages["ready"] = int((time.perf_counter() - t0) * 1000)
+        job._done("ready", stages["ready"])
+        job.status = "ready"
+        job.stage = "ready"
+        job.result = {**doc, "assets": {k: S.url_of(vdir / "processed" / v)
+                                      for k, v in [("glb", S.GLB), ("metadata", S.METADATA),
+                                                   ("metamodel", S.METAMODEL),
+                                                   ("rvmIndex", S.RVM_INDEX),
+                                                   ("mapping", S.MAPPING),
+                                                   ("floorplan", S.FLOORPLAN)]
+                                      if (vdir / "processed" / v).exists()}}
+        job._flush_log(f"[ready] 导入完成，总耗时 {doc['stats']['durationMs']} ms")
+        job.persist()
     return job.result
 
 
@@ -701,9 +872,11 @@ def main() -> int:
     except S.StoreError as e:
         print(f"[拒绝] {e.message}")
         return 2
-    save_upload(job, "rvm", a.rvm.read_bytes())
+    with a.rvm.open("rb") as source:
+        save_upload_stream(job, "rvm", source, a.rvm.stat().st_size)
     if a.txt:
-        save_upload(job, "txt", a.txt.read_bytes())
+        with a.txt.open("rb") as source:
+            save_upload_stream(job, "txt", source, a.txt.stat().st_size)
     run_job(job)                       # CLI 模式同步执行，日志直接打到 stdout
     print(job.log_text())
     print(f"状态：{job.status}  阶段：{job.stage}")

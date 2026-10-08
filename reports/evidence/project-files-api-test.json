@@ -1,6 +1,6 @@
 {
   "suite": "Project Files isolated HTTP regression",
-  "startedAt": "2026-09-30T05:39:32.418022+00:00",
+  "startedAt": "2026-10-02T12:16:36.861162+00:00",
   "ok": true,
   "isolation": "All runtime data/config/access files are in tempfile.TemporaryDirectory",
   "coverage": "API and filesystem only; upload picker, search/type UI, confirmations, and layout require browser verification",
@@ -15,7 +15,7 @@
         ],
         "maxFileBytes": 104857600
       },
-      "durationMs": 21
+      "durationMs": 34
     },
     {
       "name": "Multiple uploads preserve names, bytes, size, timestamps, and optional relation fields",
@@ -31,7 +31,7 @@
         ],
         "count": 6
       },
-      "durationMs": 215
+      "durationMs": 206
     },
     {
       "name": "File types classify case-insensitive CAD/PDF/spreadsheet/document/image/other extensions",
@@ -55,7 +55,7 @@
         "plain": "Other",
         "unknown.custom": "Other"
       },
-      "durationMs": 468
+      "durationMs": 554
     },
     {
       "name": "Lists default to newest upload first",
@@ -64,16 +64,16 @@
         "first": "最新上传.txt",
         "count": 7,
         "uploadTimes": [
-          "2026-09-30T05:39:33.340706+00:00",
-          "2026-09-30T05:39:32.818322+00:00",
-          "2026-09-30T05:39:32.768566+00:00",
-          "2026-09-30T05:39:32.741306+00:00",
-          "2026-09-30T05:39:32.698088+00:00",
-          "2026-09-30T05:39:32.675627+00:00",
-          "2026-09-30T05:39:32.649313+00:00"
+          "2026-10-02T12:16:37.879851+00:00",
+          "2026-10-02T12:16:37.268038+00:00",
+          "2026-10-02T12:16:37.244157+00:00",
+          "2026-10-02T12:16:37.201011+00:00",
+          "2026-10-02T12:16:37.177300+00:00",
+          "2026-10-02T12:16:37.149484+00:00",
+          "2026-10-02T12:16:37.102975+00:00"
         ]
       },
-      "durationMs": 52
+      "durationMs": 63
     },
     {
       "name": "Project switching isolates lists and rejects foreign file IDs",
@@ -84,7 +84,7 @@
         "crossProjectDownload": 404,
         "crossProjectDelete": 404
       },
-      "durationMs": 93
+      "durationMs": 61
     },
     {
       "name": "Same-name uploads receive safe numbered names without overwriting, ignoring case",
@@ -96,7 +96,7 @@
           "设备表 (2).XLSX"
         ]
       },
-      "durationMs": 73
+      "durationMs": 68
     },
     {
       "name": "Concurrent same-name uploads commit unique records and exact bytes",
@@ -112,7 +112,7 @@
           "parallel.csv"
         ]
       },
-      "durationMs": 212
+      "durationMs": 226
     },
     {
       "name": "Unsafe paths, Windows reserved names, control characters, and long names are safe or rejected",
@@ -159,7 +159,7 @@
           "saved": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀.jpg"
         }
       ],
-      "durationMs": 274
+      "durationMs": 413
     },
     {
       "name": "Downloads return exact binary bytes, attachment disposition, Unicode name, and nosniff",
@@ -169,7 +169,7 @@
         "size": 12,
         "contentDisposition": "attachment; filename=\"download\"; filename*=UTF-8''%E8%AE%BE%E5%A4%87%E8%A1%A8.xlsx"
       },
-      "durationMs": 20
+      "durationMs": 18
     },
     {
       "name": "Delete retains existing password protection, removes record/download, and moves bytes to trash",
@@ -177,10 +177,10 @@
       "detail": {
         "passwordRequired": true,
         "wrongPasswordDenied": true,
-        "removed": "0f49b678bf9940ad8e1f9817fab7ab80",
+        "removed": "201ecfd2b76243ca9658f7c642545b4e",
         "bytesPreservedInTrash": true
       },
-      "durationMs": 74
+      "durationMs": 189
     },
     {
       "name": "Anonymous remote clients cannot list, download, upload, or delete files",
@@ -191,7 +191,7 @@
         "upload": 401,
         "delete": 401
       },
-      "durationMs": 16
+      "durationMs": 26
     },
     {
       "name": "Project-code customers may read only their project, cannot write, and keep sanitized project manifests",
@@ -203,7 +203,7 @@
         "upload": 403,
         "delete": 403
       },
-      "durationMs": 110
+      "durationMs": 137
     },
     {
       "name": "Daily internal code retains all-project remote read-only behavior with isolated access records",
@@ -216,7 +216,7 @@
         "delete": 403,
         "dailyCodeIsolated": true
       },
-      "durationMs": 75
+      "durationMs": 95
     },
     {
       "name": "Project file content/manifests/directories remain private through raw, encoded, slash, and traversal static requests",
@@ -224,12 +224,12 @@
       "detail": {
         "variants": [
           {
-            "path": "/data/projects/files-a/files/07ab7f7c5a2948dcada36add5add1802/content.bin",
+            "path": "/data/projects/files-a/files/a503a44b8c874364a976159613b2a47b/content.bin",
             "finalStatus": 403,
             "safePublicRedirects": 0
           },
           {
-            "path": "/data/projects/files-a/files/07ab7f7c5a2948dcada36add5add1802/",
+            "path": "/data/projects/files-a/files/a503a44b8c874364a976159613b2a47b/",
             "finalStatus": 403,
             "safePublicRedirects": 0
           },
@@ -244,52 +244,52 @@
             "safePublicRedirects": 0
           },
           {
-            "path": "/data/projects/files-a/files/07ab7f7c5a2948dcada36add5add1802/record.json",
+            "path": "/data/projects/files-a/files/a503a44b8c874364a976159613b2a47b/record.json",
             "finalStatus": 403,
             "safePublicRedirects": 0
           },
           {
-            "path": "/%64ata/projects/files-a/files/07ab7f7c5a2948dcada36add5add1802/content.bin",
+            "path": "/%64ata/projects/files-a/files/a503a44b8c874364a976159613b2a47b/content.bin",
             "finalStatus": 403,
             "safePublicRedirects": 0
           },
           {
-            "path": "/data/projects/files-a/%66iles/07ab7f7c5a2948dcada36add5add1802/content.bin",
+            "path": "/data/projects/files-a/%66iles/a503a44b8c874364a976159613b2a47b/content.bin",
             "finalStatus": 403,
             "safePublicRedirects": 0
           },
           {
-            "path": "/viewer/../data/projects/files-a/files/07ab7f7c5a2948dcada36add5add1802/content.bin",
+            "path": "/viewer/../data/projects/files-a/files/a503a44b8c874364a976159613b2a47b/content.bin",
             "finalStatus": 403,
             "safePublicRedirects": 0
           },
           {
-            "path": "/viewer/%2e%2e/data/projects/files-a/files/07ab7f7c5a2948dcada36add5add1802/content.bin",
+            "path": "/viewer/%2e%2e/data/projects/files-a/files/a503a44b8c874364a976159613b2a47b/content.bin",
             "finalStatus": 403,
             "safePublicRedirects": 0
           },
           {
-            "path": "/viewer/%2e%2e%2fdata/projects/files-a/files/07ab7f7c5a2948dcada36add5add1802/content.bin",
+            "path": "/viewer/%2e%2e%2fdata/projects/files-a/files/a503a44b8c874364a976159613b2a47b/content.bin",
             "finalStatus": 403,
             "safePublicRedirects": 0
           },
           {
-            "path": "/viewer/%2e%2e%5cdata%5cprojects%5cfiles-a%5cfiles%5c07ab7f7c5a2948dcada36add5add1802%5ccontent.bin",
+            "path": "/viewer/%2e%2e%5cdata%5cprojects%5cfiles-a%5cfiles%5ca503a44b8c874364a976159613b2a47b%5ccontent.bin",
             "finalStatus": 200,
             "safePublicRedirects": 1
           },
           {
-            "path": "//data/projects/files-a/files/07ab7f7c5a2948dcada36add5add1802/content.bin",
+            "path": "//data/projects/files-a/files/a503a44b8c874364a976159613b2a47b/content.bin",
             "finalStatus": 403,
             "safePublicRedirects": 0
           },
           {
-            "path": "/viewer/vendor/../../data/projects/files-a/files/07ab7f7c5a2948dcada36add5add1802/content.bin",
+            "path": "/viewer/vendor/../../data/projects/files-a/files/a503a44b8c874364a976159613b2a47b/content.bin",
             "finalStatus": 403,
             "safePublicRedirects": 0
           },
           {
-            "path": "/data/projects/files-b/../files-a/files/07ab7f7c5a2948dcada36add5add1802/content.bin",
+            "path": "/data/projects/files-b/../files-a/files/a503a44b8c874364a976159613b2a47b/content.bin",
             "finalStatus": 403,
             "safePublicRedirects": 0
           }
@@ -300,7 +300,7 @@
         ],
         "viewerStillAccessible": true
       },
-      "durationMs": 282
+      "durationMs": 267
     },
     {
       "name": "100 MB + 1-byte upload is rejected from headers without reading body or creating records",
@@ -309,9 +309,9 @@
         "contentLength": 104857601,
         "bodyBytesSent": 0,
         "status": 413,
-        "durationMs": 1
+        "durationMs": 9
       },
-      "durationMs": 31
+      "durationMs": 38
     },
     {
       "name": "Exactly 100 MB uploads and downloads successfully with streaming byte verification",
@@ -322,7 +322,7 @@
         "memoryUse": "1 MiB reusable block; streamed upload/download",
         "status": 200
       },
-      "durationMs": 877
+      "durationMs": 1397
     },
     {
       "name": "Malformed lengths, truncated uploads, and unsupported transfer encoding reject without partial records",
@@ -349,7 +349,7 @@
           "status": 400
         }
       ],
-      "durationMs": 55
+      "durationMs": 65
     },
     {
       "name": "Missing projects/names and invalid file IDs reject without orphan records",
@@ -372,7 +372,7 @@
           "status": 404
         }
       ],
-      "durationMs": 22
+      "durationMs": 38
     },
     {
       "name": "Project files survive model/version reads, renames, and model deletion unchanged",
@@ -383,7 +383,7 @@
         "modelDeletion": true,
         "projectFilesUnchanged": true
       },
-      "durationMs": 172
+      "durationMs": 217
     },
     {
       "name": "Existing import job create/raw source upload/read/delete remain functional without conversion",
@@ -406,11 +406,11 @@
         "deletedRecordStaysDeleted": true,
         "serverRestart": true
       },
-      "durationMs": 545
+      "durationMs": 555
     }
   ],
   "runtimeDataWasTemporary": true,
-  "finishedAt": "2026-09-30T05:39:36.940806+00:00",
+  "finishedAt": "2026-10-02T12:16:42.403030+00:00",
   "passed": 21,
   "failed": 0
 }

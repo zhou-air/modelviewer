@@ -1,0 +1,303 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "real model: third-person toolbar and visible avatar",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "mode": "thirdPerson"
+      }
+    },
+    {
+      "name": "real model: F8 third-person to Orbit",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "real model: F8 Orbit to Game",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "real model: F8 Game to third-person",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "dimensions, helmet and independent non-selectable layer",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "height": 1.700000000745058,
+        "helmetTop": 1.7800000059604644,
+        "meshes": 20
+      }
+    },
+    {
+      "name": "batched solid wall shortens camera, desired distance retained",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "state": {
+          "footPosition": [
+            0,
+            0,
+            0
+          ],
+          "headingRadians": 3.141592653589793,
+          "desiredDistance": 5,
+          "effectiveDistance": 2.7500000953674317,
+          "walkPhase": 0,
+          "motion": "idle",
+          "worldUp": [
+            0,
+            1,
+            0
+          ],
+          "horizontalForward": [
+            0,
+            0,
+            -1
+          ],
+          "pitchRadians": -0.0
+        }
+      }
+    },
+    {
+      "name": "idle obstacle query cached and no camera drift",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "queries": 0
+      }
+    },
+    {
+      "name": "ghost wall ignored and Show All restores obstruction",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "free": 5,
+        "blocked": 2.7500000953674317
+      }
+    },
+    {
+      "name": "W horizontal movement and walking animation",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "state": {
+          "footPosition": [
+            0,
+            0,
+            -0.25
+          ],
+          "headingRadians": 3.141592653589793,
+          "desiredDistance": 5,
+          "effectiveDistance": 3.0000000953674317,
+          "walkPhase": 1.1635528346628863,
+          "motion": "walking",
+          "worldUp": [
+            0,
+            1,
+            0
+          ],
+          "horizontalForward": [
+            0,
+            0,
+            -1
+          ],
+          "pitchRadians": -0.0
+        }
+      }
+    },
+    {
+      "name": "three-axis normalization, ascent and flying pose",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "distance": 0.25
+      }
+    },
+    {
+      "name": "double-tap sprint uses shared Game speed",
+      "ok": true,
+      "detail": {
+        "ok": true
+      }
+    },
+    {
+      "name": "release stops sprint and movement",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "real held-left drag rotates around avatar without turning body",
+      "ok": true,
+      "detail": {
+        "ok": true
+      }
+    },
+    {
+      "name": "releasing drag keeps W, movement follows new camera heading",
+      "ok": true,
+      "detail": {
+        "ok": true
+      }
+    },
+    {
+      "name": "mouse movement without held left leaves view unchanged",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "unheld move consumes no rotation",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "drag returning to start never triggers selection",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "real short clicks preserve Ctrl multi-selection",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "blank click clears selection",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "quick drag flushes final input on release",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "third-person right menu and measurement cancel after left drag",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "Esc pauses navigation and ignores movement until click",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "click resumes after Esc",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "blur clears keys and pauses",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "focus does not auto-resume",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "wheel changes follow distance and preserves FOV",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "distance": 7.620789513793628
+      }
+    },
+    {
+      "name": "zoom clamped to 1-20 metres",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "Fit, all compass directions and review restore retain third person",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "results": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      }
+    },
+    {
+      "name": "third-person to Game goes to avatar eye, Orbit hides avatar",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "different-obstruction split follows active side without feedback",
+      "ok": true,
+      "detail": {
+        "ok": true
+      }
+    },
+    {
+      "name": "split handover uses new active side obstruction",
+      "ok": true,
+      "detail": {
+        "ok": true
+      }
+    },
+    {
+      "name": "mode cycles preserve follower identity and active mode ownership",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "modes": [
+          true,
+          true,
+          true
+        ]
+      }
+    },
+    {
+      "name": "sync off allows independent obstruction distances",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "da": 5,
+        "db": 0
+      }
+    },
+    {
+      "name": "Game original movement, FOV zoom and pointer lock preserved",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "movement": 0.25000000000000006
+      }
+    },
+    {
+      "name": "Game real pointer capture and crosshair",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "Game real locked keyboard movement",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "unload removes avatar and dispose removes scene helper",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "no browser runtime errors",
+      "ok": true,
+      "detail": true
+    }
+  ],
+  "errors": []
+}

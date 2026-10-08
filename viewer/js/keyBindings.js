@@ -1,7 +1,7 @@
 const STORAGE_KEY = 'modelviewer.keyBindings';
 
 export const KEY_BINDING_DEFINITIONS = Object.freeze([
-  { id: 'navigation.toggle', group: 'Game Navigation', label: '切换 Game / Orbit', code: 'F8' },
+  { id: 'navigation.toggle', group: 'Game Navigation', label: '循环切换 Orbit / Game / 第三人称', code: 'F8' },
   { id: 'navigation.forward', group: 'Game Navigation', label: '前进', code: 'KeyW' },
   { id: 'navigation.backward', group: 'Game Navigation', label: '后退', code: 'KeyS' },
   { id: 'navigation.left', group: 'Game Navigation', label: '左移', code: 'KeyA' },

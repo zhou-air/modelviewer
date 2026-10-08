@@ -5,12 +5,16 @@ const STATES = ['solid', 'selected', 'hover', 'ghost'];
 
 /** Production batching layer built on top of the unchanged GLB hierarchy. */
 export class BatchRenderingManager {
-  constructor(model, { maxMeshesPerBatch = 64 } = {}) {
+  constructor(model, { maxMeshesPerBatch = 64, maxCachedGeometryBytes = 32 * 1024 * 1024 } = {}) {
     this.model = model;
     this.maxMeshesPerBatch = maxMeshesPerBatch;
     this.group = new THREE.Group();
     this.group.name = '__BATCH_RENDERING__';
     this.entries = [];
+    this.entriesByCanonical = new Map();
+    this.maxCachedGeometryBytes = maxCachedGeometryBytes;
+    this.cachedGeometryBytes = 0;
+    this.geometryCacheHits = 0;
     this.batches = [];
     this.enabled = false;
     this.lastSync = { changedEntries: 0, rebuiltBatches: 0, ms: 0 };
@@ -57,6 +61,17 @@ export class BatchRenderingManager {
       }
     }
     this.entries = candidates;
+    // Include named ancestors: selecting a branch must update all of its descendant meshes.
+    for (const entry of candidates) {
+      for (let node = entry.object; node; node = node.parent) {
+        const key = node.userData?.name;
+        if (key) {
+          if (!this.entriesByCanonical.has(key)) this.entriesByCanonical.set(key, new Set());
+          this.entriesByCanonical.get(key).add(entry);
+        }
+        if (node === root) break;
+      }
+    }
     this.model.scene.add(this.group);
     this.enabled = true;
     this.sync(true);
@@ -71,12 +86,20 @@ export class BatchRenderingManager {
     return 'solid';
   }
 
-  sync(force = false) {
+  _entriesFor(canonicals) {
+    if (canonicals == null) return this.entries;
+    const entries = new Set();
+    for (const key of canonicals) for (const entry of this.entriesByCanonical.get(key) || []) entries.add(entry);
+    return entries;
+  }
+
+  sync(force = false, canonicals = null) {
     if (!this.enabled) return this.lastSync;
     const started = performance.now();
     const affected = new Set();
-    let changedEntries = 0;
-    for (const entry of this.entries) {
+    let changedEntries = 0, scannedEntries = 0;
+    for (const entry of this._entriesFor(force ? null : canonicals)) {
+      scannedEntries++;
       const next = this._state(entry);
       if (force || next !== entry.state) {
         entry.state = next;
@@ -86,13 +109,15 @@ export class BatchRenderingManager {
       entry.object.visible = false;
     }
     for (const batch of affected) this._rebuildBatch(batch);
-    this.lastSync = { changedEntries, rebuiltBatches: affected.size,
+    this.lastSync = { changedEntries, scannedEntries, rebuiltBatches: affected.size,
       ms: performance.now() - started };
     return this.lastSync;
   }
 
   _worldGeometry(entry) {
     const geometry = entry.object.geometry.clone();
+    // Three.js clones share userData with the source; cache keys must belong to this entry.
+    geometry.userData = {};
     for (const name of Object.keys(geometry.attributes)) {
       if (name !== 'position' && name !== 'normal') geometry.deleteAttribute(name);
     }
@@ -108,24 +133,34 @@ export class BatchRenderingManager {
   }
 
   _worldGeometryForState(entry, state) {
-    const geometry = this._worldGeometry(entry);
-    if (state !== 'solid') return geometry;
-
-    // 所有 solid 几何都带相同的属性，避免 mergeGeometries 因属性集合不同而失败。
-    // mix=0 表示使用共享 meshMat 的全局色；mix=1 才使用 canonical 对象色。
-    const count = geometry.attributes.position.count;
-    const color = new Float32Array(count * 3);
-    const mix = new Float32Array(count);
-    const objectColor = this.model._objectColorForObject(entry.object);
-    if (objectColor) {
-      const r = objectColor.r, g = objectColor.g, b = objectColor.b;
-      for (let i = 0; i < count; i++) {
-        color[i * 3] = r; color[i * 3 + 1] = g; color[i * 3 + 2] = b;
-        mix[i] = 1;
+    let geometry = entry.cachedGeometry;
+    if (geometry) this.geometryCacheHits++;
+    else {
+      geometry = this._worldGeometry(entry);
+      const count = geometry.attributes.position.count;
+      geometry.setAttribute('objectColor', new THREE.BufferAttribute(new Float32Array(count * 3), 3));
+      geometry.setAttribute('objectColorMix', new THREE.BufferAttribute(new Float32Array(count), 1));
+      const bytes = geometry.index.array.byteLength
+        + Object.values(geometry.attributes).reduce((sum, attribute) => sum + attribute.array.byteLength, 0);
+      // Keep the cache bounded: large models must not retain a second unbounded geometry copy.
+      if (this.cachedGeometryBytes + bytes <= this.maxCachedGeometryBytes) {
+        entry.cachedGeometry = geometry;
+        this.cachedGeometryBytes += bytes;
       }
     }
-    geometry.setAttribute('objectColor', new THREE.BufferAttribute(color, 3));
-    geometry.setAttribute('objectColorMix', new THREE.BufferAttribute(mix, 1));
+    if (state === 'solid') {
+      const objectColor = this.model._objectColorForObject(entry.object);
+      const key = objectColor ? `${objectColor.r},${objectColor.g},${objectColor.b}` : '';
+      if (geometry.userData.objectColorKey !== key) {
+        const color = geometry.attributes.objectColor.array;
+        geometry.attributes.objectColorMix.array.fill(objectColor ? 1 : 0);
+        color.fill(0);
+        if (objectColor) for (let i = 0; i < color.length; i += 3) {
+          color[i] = objectColor.r; color[i + 1] = objectColor.g; color[i + 2] = objectColor.b;
+        }
+        geometry.userData.objectColorKey = key;
+      }
+    }
     return geometry;
   }
 
@@ -158,7 +193,7 @@ export class BatchRenderingManager {
         parts.push(geometry);
       }
       const geometry = mergeGeometries(parts, false);
-      for (const part of parts) part.dispose();
+      for (let i = 0; i < parts.length; i++) if (parts[i] !== entries[i].cachedGeometry) parts[i].dispose();
       if (!geometry) throw new Error(`Indexed geometry merge failed for batch ${batch.index}/${state}.`);
       geometry.computeBoundingBox();
       geometry.computeBoundingSphere();
@@ -196,17 +231,10 @@ export class BatchRenderingManager {
   /** 只重建包含受影响 canonical 子树的批次，保持现有合批边界。 */
   updateObjectColors(canonicals) {
     if (!this.enabled || !canonicals?.length) return this.lastSync;
-    const targets = new Set(canonicals);
     const affected = new Set();
-    for (const entry of this.entries) {
+    for (const entry of this._entriesFor(canonicals)) {
       if (entry.state !== 'solid') continue;
-      for (let node = entry.object; node; node = node.parent) {
-        if (targets.has(node.userData?.name)) {
-          affected.add(entry.batch);
-          break;
-        }
-        if (node === this.model.root) break;
-      }
+      affected.add(entry.batch);
     }
     const started = performance.now();
     for (const batch of affected) this._rebuildBatch(batch);
@@ -231,7 +259,9 @@ export class BatchRenderingManager {
       [...b.meshes.values()].every((m) => !!m.geometry.index)),
       maxMeshesPerBatch: this.maxMeshesPerBatch, sourceMeshes: this.entries.length,
       spatialBatches: this.batches.length, renderMeshes: Object.values(stateMeshes).reduce((a, b) => a + b, 0),
-      stateMeshes, recordedRanges: ranges, triangles, indices, lastSync: this.lastSync };
+      stateMeshes, recordedRanges: ranges, triangles, indices, lastSync: this.lastSync,
+      cachedGeometryBytes: this.cachedGeometryBytes, maxCachedGeometryBytes: this.maxCachedGeometryBytes,
+      geometryCacheHits: this.geometryCacheHits };
   }
 
   manifest() {
@@ -256,9 +286,15 @@ export class BatchRenderingManager {
     if (!this.enabled) return;
     this.model.scene.remove(this.group);
     for (const batch of this.batches) for (const mesh of batch.meshes.values()) mesh.geometry.dispose();
-    for (const entry of this.entries) entry.object.visible = true;
+    for (const entry of this.entries) {
+      entry.object.visible = true;
+      entry.cachedGeometry?.dispose();
+      entry.cachedGeometry = null;
+    }
     this.group.clear();
     this.entries.length = 0;
+    this.entriesByCanonical.clear();
+    this.cachedGeometryBytes = 0;
     this.batches.length = 0;
     this.enabled = false;
   }

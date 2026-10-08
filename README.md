@@ -1,6 +1,6 @@
 # PDMS Model Asset Manager — 本地工程模型查看与管理
 
-> 本仓库为公开开发仓库。发布副本保留 `示例模型/` 中的 RVM/TXT 示例，真实运行数据、访问密码、临时调试文件和缓存不纳入版本控制。
+> 本仓库为公开开发仓库。发布副本保留 `示例模型/` 中的 RVM/TXT 示例和便携运行时；访问密码、真实运行数据、临时调试文件和缓存不纳入版本控制。
 
 把 AVEVA PDMS 导出的 RVM 几何与 TXT 数据清单，转换成能在**本机浏览器**里流畅查看的工程模型，
 并且按 **Project / Model / Version** 三层管理起来（导入、自动转换、版本迭代、切换查看）。
@@ -10,13 +10,15 @@
 
 ## 怎么运行
 
+2026-10-02 的安全与可靠性修复、性能优化及逐项验证见 [修复记录](reports/security-reliability-fixes-2026-10-02.md)。
+
 ### 拿到安装包（解压即用，不需要改任何配置）
 
 | 想干什么 | 怎么做 |
 |---|---|
 | 自己在这台电脑上看 | 解压后双击 **`start.bat`** |
 | 让同一局域网 / 同一 Wi-Fi 的人一起看 | 双击 **`start-lan.bat`**，把它打印出来的局域网地址发给对方 —— **对方不需要任何访问码** |
-| 给不在同一网络的人看 | 双击 **`share.bat`** 开公网临时隧道。⚠ 开之前先把 `config/access.env` 里的 `TRUST_LOOPBACK` 改成 `0` 再启动，否则拿到隧道链接的人等于拥有内网完整权限。这种走公网的访问需要访问码（今日内部码 / 项目访问码） |
+| 给不在同一网络的人看 | 双击 **`share.bat`**；脚本核对当前工作目录和受保护入口后，只将 **8766** 端口接入公网隧道。来客需要访问码，本机和局域网仍可免登录 |
 
 内网判定默认 `auto`：任何**私有地址**（`192.168.x` / `10.x` / `172.16-31.x` / 链路本地）都算内网，
 所以换到任何局域网、任何路由器网段都不用改配置，装完直接用。
@@ -80,16 +82,24 @@ Viewer 会同时加载由现有 **PDMS 设备定位工具**从同一份 TXT 导�
 外网只有一个输入框，服务器自动区分两种码；验证失败统一返回"访问码无效或已失效"。
 权限判定集中在 `tools/access_control.py`（PermissionService），API 与静态模型文件都走同一套守卫。
 
+本机/局域网管理入口使用 **8765**；三个启动脚本另在同一进程中开启仅绑定
+`127.0.0.1:8766` 的公网回源入口。后者对所有 IP（包括本机和代理）都要求访问码，
+永不通过 IP 授予管理权限；两个入口共享任务、会话和仓库锁。
+更换或禁用项目访问码会立即撤销该项目的旧会话。项目清单、源文件和日志不再提供直接静态下载；
+查看器仍可读取经项目权限检查的模型产物，附件通过下载 API 获取。
+
 ### 配置（`config/access.env`，随包分发；可用同名环境变量覆盖）
 
 | 键 | 说明 | 默认 |
 |---|---|---|
 | `INTERNAL_NETWORK_RANGES` | 内网判定。`auto` = 任何私有地址（`10/8`、`172.16/12`、`192.168/16`、链路本地）都算内网，**换任何局域网都不用改配置**；也可以填显式 CIDR 列表只放本网段 / 固定公网出口 IP（逗号分隔） | `auto` |
-| `TRUST_LOOPBACK` | 是否把 localhost/127.0.0.1 当内网。**cloudflared 隧道 / 本机反代场景必须设 0**（隧道回源流量从 127.0.0.1 进来）；设 0 后本机请改用局域网地址访问，并用 `start-lan.bat` 启动 | 1 |
-| `TRUSTED_PROXIES` | 可信反向代理；只有来自它的 `X-Forwarded-For` 才被信任（保持为空可防伪造） | 空（忽略 XFF） |
+| `TRUST_LOOPBACK` | 仅控制管理入口是否允许本机免登录。公网入口始终忽略此项，不要将公网代理接到管理入口 | 1 |
+| `TRUSTED_PROXIES` | 可信代理网段；从右向左检查转发链，缺失或无效的客户地址不会授予管理权限。独立公网入口通常无需配置 | 空（忽略 XFF） |
 | `DELETE_PASSWORD` | 删除密码（随包分发，建议改成自己的口令）；留空则首次运行自动生成、写入本文件并在启动窗口打印 | `123456` |
 | `SESSION_TTL_HOURS` | Session 有效期（与每日码滚动无关） | 24 |
-| `SECURE_COOKIES` | HTTPS 部署时设 1 | 0 |
+| `SECURE_COOKIES` | 管理入口的 Cookie 设置；公网入口固定使用 Secure，必须通过 HTTPS 访问 | 0 |
+| `LOCAL_HOSTNAMES` | 自定义管理域名白名单，逗号分隔；默认允许 IP、localhost、本机名，防止 DNS 重绑定。仅支持环境变量 | 空 |
+| `MAX_SOURCE_UPLOAD_MB` | 单个 RVM/TXT 上传上限（MiB），流式写入临时文件；仅支持环境变量 | 1024 |
 
 ### 新增 API
 
@@ -100,7 +110,13 @@ Viewer 会同时加载由现有 **PDMS 设备定位工具**从同一份 TXT 导�
 | `POST /api/access/logout` | 退出当前 Session |
 | `GET /api/access/internal-code` | 今日内部码（仅内网） |
 | `GET/POST /api/projects/<pid>/access-code` | 项目客户访问码管理（仅内网） |
-| `DELETE /api/*` | 需请求头 `X-Delete-Password` |
+| `DELETE /api/*` | 删除项目/模型/版本/附件需要 `X-Delete-Password`；清理尚未运行或已结束的临时导入任务不需要删除密码 |
+
+所有写请求还需要 `X-Modelviewer-Request: 1`，浏览器客户端已自动添加。
+JSON 接口只接受 `application/json`，并校验跨站来源；非浏览器调用也应添加此请求头。
+JSON 请求上限 8 MiB、登录请求上限 4 KiB；请求读取有超时、连接有并发上限。
+导入同时运行不超过 2 个，未结束任务不超过 32 个；转换阶段默认超时 30 分钟。
+正在导入或上传的项目/模型/版本不能删除；失败版本通过“重试”继续，不能重复启动旧任务。
 
 ### 启动方式
 
@@ -108,13 +124,36 @@ Viewer 会同时加载由现有 **PDMS 设备定位工具**从同一份 TXT 导�
 |---|---|
 | 本机 | `start.bat`（127.0.0.1，直接进内网模式） |
 | 局域网 | `start-lan.bat`（0.0.0.0，手机/iPad 同 Wi-Fi 访问打印出来的局域网地址；`auto` 模式下局域网内任何设备按其 IP 都被判为内网，直接可用） |
-| 给别人用（不在同一网络） | `share.bat` 开公网临时隧道，**先设 `TRUST_LOOPBACK=0`**，来客凭今日内部码 / 项目访问码进入 |
-| 云服务器 | `python tools/server.py --port 8765 --host 0.0.0.0`，收紧 `INTERNAL_NETWORK_RANGES` 为公司出口 IP，配 `TRUSTED_PROXIES`，HTTPS 下开 `SECURE_COOKIES=1`；不要把密码写进仓库 |
+| 给别人用（不在同一网络） | `share.bat` 只分享经核验的 8766 入口；旧后台没有严格入口时拒绝分享，先关闭旧服务并运行新版 `start-lan.bat` |
+| 云服务器 | `python tools/server.py --port 8765 --host 127.0.0.1 --public-port 8766 --no-browser`；HTTPS 反代只连接 8766，管理入口仅本机/受控内网访问 |
+
+HTTPS 反向代理应保留原始 `Host`，例如 Nginx 的对应站点内：
+
+```nginx
+location / {
+    proxy_pass http://127.0.0.1:8766;
+    proxy_set_header Host $http_host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    client_max_body_size 8m;
+    proxy_read_timeout 120s;
+}
+```
+
+仅开放 HTTPS 端口；不要将管理端口 8765 直接对公网开放，也不要分别启动两个写入同一仓库的后台进程。
+TLS 证书和服务器防火墙需在实际部署环境配置，本地代码修复不会自动部署服务器。
 
 ### 权限测试
 
 ```bash
-python scratch/access-test.py             # 21 项：Case 1–12 全覆盖 + 防伪造 + 统一口径
+python -B -X utf8 scratch/security-hardening-regression.py  # 隔离双入口、权限撤销、请求边界
+python -B -X utf8 scratch/project-files-api-test.py         # 隔离附件权限与100MB流式边界
+python -B -X utf8 scratch/pipeline-safety-regression.py     # 隔离导入并发、删除/改名、流式上传
+python -B -X utf8 scratch/audit_mapping_regression.py       # exact/normalized/structure映射
+python -B -X utf8 scratch/audit_verify_glb_benchmark.py     # GLB校验等价性与局部性能
+python -B -X utf8 scratch/audit_real_import_regression.py  # 示例RVM+TXT/RVM-only真实转换到临时目录
+node scratch/frontend-audit-regression.js                 # 隔离WebGL交互、切换、XSS、合批
+node scratch/frontend-backend-integration.js               # 实际后端+浏览器，临时项目写入与公网只读
 python scratch/portable-runtime-check.py  #  6 项：随包运行时（目标机没装 Python 也能跑）
 ```
 

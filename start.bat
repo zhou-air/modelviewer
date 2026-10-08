@@ -33,11 +33,15 @@ echo   Only 127.0.0.1 is used. Model data never leaves this machine.
 echo   Close this window or press Ctrl+C to stop the server.
 echo.
 
-"%PY%" -u "tools\server.py" --port 8765
-echo.
-echo   Server stopped.
-pause
+"%PY%" -u "tools\server.py" --port 8765 --public-port 8766
+if errorlevel 1 goto startfailed
 exit /b 0
+
+:startfailed
+echo.
+echo   [ERROR] The server could not start. See the error above.
+pause
+exit /b 1
 
 :nopython
 echo   [ERROR] No Python interpreter found.

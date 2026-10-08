@@ -67,10 +67,10 @@ async function loadEnvironmentTextureOptions() {
 
 const ORBIT_HINT = '<b>左键</b>旋转 · <b>右键</b>平移 · <b>滚轮</b>缩放 · <b>单击</b>选中 · '
   + '<b>Ctrl+单击</b>多选 · <b>F</b> 复位<br>'
-  + '<b>F8</b> 或点工具条 <b>Game</b> 切换到工程导航 · 灰显节点 = TXT 中有但 RVM 未导出几何<br>'
+  + '<b>F8</b> 循环切换 Orbit / Game / 第三人称，也可点击工具条选择 · 灰显节点 = TXT 中有但 RVM 未导出几何<br>'
   + '工具条 <b>测量</b>：射线固定从屏幕中心发出（左键 Surface · <b>C</b> Center · '
   + '<b>右键</b>/<b>Esc</b> 取消未完成的点）';
-const GAME_HINT = '<b>F8</b> 开关工程导航 · 点击 3D 视图捕获鼠标（准星居中）· <b>W/S</b> 沿镜头水平投影前后 · '
+const GAME_HINT = '<b>F8</b> 循环切换 Orbit / Game / 第三人称 · 点击 3D 视图捕获鼠标（准星居中）· <b>W/S</b> 沿镜头水平投影前后 · '
   + '<b>A/D</b> 水平左右 · <b>Space</b> 升 / <b>Shift</b> 降 · <b>双击并按住 W</b> 加速 · '
   + '<b>滚轮</b> 缩放 · <b>左键</b> 选中准星对象 · <b>Ctrl+左键</b> 加入/移出多选 · '
   + '<b>左键点空处</b> 取消选中 · <b>右键</b> 打开已选模型的显隐/隔离菜单 · '
@@ -78,13 +78,24 @@ const GAME_HINT = '<b>F8</b> 开关工程导航 · 点击 3D 视图捕获鼠标�
   + '<b>F</b> 复位到选中部件 · <b>Esc</b> 释放鼠标（模式不变）· 导航方式仅 <b>F8</b>/工具条切换<br>'
   + '工具条 <b>测量</b>：准星取点（<b>左键</b> Surface · <b>C</b> Center · <b>V</b> 连续测量 · '
   + '<b>右键</b>/<b>Esc</b> 取消未完成的点 · <b>Ctrl+Z</b> 撤销上一步 · <b>Delete</b> 删上一条）';
+const THIRD_PERSON_HINT = '<b>按住左键拖动</b> 围绕人物旋转视角 · <b>W/S</b> 沿镜头水平前后移动 · '
+  + '<b>A/D</b> 水平左右 · <b>Space</b> 升 / <b>Shift</b> 降 · <b>双击并按住 W</b> 加速 · '
+  + '<b>滚轮</b> 调整跟随距离 · <b>单击</b> 选中 · <b>Ctrl+单击</b> 多选 · <b>右键</b> 已选模型菜单<br>'
+  + '<b>F</b> 复位到选中部件 · <b>Esc</b> 暂停导航，点击视口恢复 · <b>F8</b> 循环切换 Orbit / Game / 第三人称';
 
 function setStatus(text, isErr, detail) {
   statusEl.classList.toggle('hidden', !text);
   statusEl.classList.toggle('err', !!isErr);
-  if (text) statusEl.innerHTML = isErr
-    ? `<b>失败</b><br>${text}${detail ? `<br><br><code>${detail}</code>` : ''}`
-    : text;
+  if (!text) { statusEl.replaceChildren(); return; }
+  if (!isErr) { statusEl.innerHTML = text; return; } // only fixed loading markup
+  const heading = document.createElement('b');
+  heading.textContent = '失败';
+  statusEl.replaceChildren(heading, document.createElement('br'), document.createTextNode(String(text)));
+  if (detail) {
+    const code = document.createElement('code');
+    code.textContent = String(detail);
+    statusEl.append(document.createElement('br'), document.createElement('br'), code);
+  }
 }
 
 // ---------------------------------------------------------------- 启动层
@@ -95,7 +106,12 @@ await access.init();
 
 const am = new AssetManager({
   onOpen: openVersion,
-  onResume: () => { el('viewerRoot').classList.remove('hidden'); },
+  onResume: () => {
+    viewer.launcherOpen = false;
+    el('viewerRoot').classList.remove('hidden');
+    model?.setActive(true);
+    splitUI?.viewerB?.setActive(true);
+  },
 });
 bindImportModal(am);
 viewer.am = am;                                     // 自动化测试用
@@ -203,9 +219,15 @@ searchClear.onclick = () => { resetTreeSearch(); searchInput.focus(); };
 /** 回到选择器：**不卸载**当前模型（场景留在后台，直接从"返回 Viewer"继续看不用重载）。
  *  真正需要释放显存的是"打开另一个版本"，那一步在 Model3D.load() 里先 unload()。 */
 function backToLauncher() {
-  if (model && model.navigationMode === 'game') model.setNavigationMode('orbit');
+  if (model && model.navigationMode !== 'orbit') model.setNavigationMode('orbit');
+  if (splitUI?.viewerB && splitUI.viewerB.navigationMode !== 'orbit') splitUI.viewerB.setNavigationMode('orbit');
   viewer.launcherOpen = true;
   el('viewerRoot').classList.add('hidden');
+  model?.setActive(false);
+  splitUI?.viewerB?.setActive(false);
+  // A closed comparison dialog must not finish opening a second view in the background.
+  compareUI?.cancelPending();
+  splitUI?.cancelPending();
   am.refresh();
   am.show(!!model);
 }
@@ -304,7 +326,7 @@ function ensureViewer() {
           ? `${raw}（共 ${canonicals.length} 个对象 · Ctrl+点击增删）`
           : raw);
       } else {
-        props.clear();
+        props?.clear();
         el('selBadge').classList.remove('on');
       }
       compareUI?.setSelection(canonical);
@@ -342,7 +364,7 @@ function ensureViewer() {
   compareUI = new CompareController(model, {
     getCurrent: () => viewer.current,
     listVersions: () => versionsOfProject(am.data?.projects || [], viewer.current?.projectId),
-    openMain: (pid, mid, vid) => am.openVersion(pid, mid, vid),
+    openMain: (pid, mid, vid) => am.openVersion(pid, mid, vid, { comparisonOwner: compareUI }),
     toast: (text, kind) => am.toast(text, kind),
     exitSplit: () => splitUI?.exit({ silent: true }),     // 两种比对互斥（延迟求值，此处 splitUI 尚未建）
   });
@@ -352,9 +374,10 @@ function ensureViewer() {
   splitUI = new SplitCompareController(model, {
     getCurrent: () => viewer.current,
     listVersions: () => versionsOfProject(am.data?.projects || [], viewer.current?.projectId),
-    openMain: (pid, mid, vid) => am.openVersion(pid, mid, vid),
+    openMain: (pid, mid, vid) => am.openVersion(pid, mid, vid, { comparisonOwner: splitUI }),
     restoreMain: (pid, mid, vid) => am.openVersion(pid, mid, vid),
     getAppearance: () => appearanceSettings.current,
+    onNavigationState: (state) => applyNavigationState(state),
     toast: (text, kind) => am.toast(text, kind),
     exitCompare: () => compareUI?.exit({ silent: true }),
   });
@@ -407,8 +430,10 @@ function bindToolbar() {
     syncFloorPlanInputs();
   };
 
-  el('navOrbit').onclick = () => model.setNavigationMode('orbit');
-  el('navGame').onclick = () => model.setNavigationMode('game');
+  const navigationView = () => splitUI?.active && splitUI._activeSide === 'B' ? splitUI.viewerB : model;
+  el('navOrbit').onclick = () => navigationView().setNavigationMode('orbit');
+  el('navGame').onclick = () => navigationView().setNavigationMode('game');
+  el('navThirdPerson').onclick = () => navigationView().setNavigationMode('thirdPerson');
   el('btnNavSettings').onclick = () => {
     el('navSettings').classList.toggle('on');
     el('keyBindingsPanel').classList.remove('on');
@@ -741,25 +766,34 @@ function syncFloorPlanInputs() {
 
 let lastHintMode = null;
 let hintTimeout = null;
-function applyNavigationState(s) {
+function applyNavigationState(state) {
+  // 准星属于各自视口；共享工具条与提示始终反映当前活动侧。
+  const mainState = model?.navigationState() || state;
+  el('crosshair').classList.toggle('on', !!mainState.crosshair);
+  const activeView = splitUI?.active && splitUI._activeSide === 'B' ? splitUI.viewerB : model;
+  const s = activeView?.navigationState() || state;
   viewer.nav = s;
   el('navOrbit').classList.toggle('on', s.mode === 'orbit');
   el('navGame').classList.toggle('on', s.mode === 'game');
-  el('crosshair').classList.toggle('on', !!s.crosshair);
-  el('hint').innerHTML = s.mode === 'game' ? GAME_HINT : ORBIT_HINT;
+  el('navThirdPerson').classList.toggle('on', s.mode === 'thirdPerson');
+  el('hint').innerHTML = s.mode === 'thirdPerson' ? THIRD_PERSON_HINT : s.mode === 'game' ? GAME_HINT : ORBIT_HINT;
   if (lastHintMode !== null && lastHintMode !== s.mode) {
     clearTimeout(hintTimeout);
     el('hint').classList.add('on');
     hintTimeout = setTimeout(() => el('hint').classList.remove('on'), 5000);
   }
   lastHintMode = s.mode;
-  const prompt = !s.failure && s.mode === 'game' && !s.captured;
+  const prompt = !!s.failure || (s.mode === 'game' && !s.captured)
+    || (s.mode === 'thirdPerson' && s.paused);
   el('navPrompt').classList.toggle('on', prompt);
   el('navPrompt').innerHTML = s.failure
     ? `无法进入工程导航：${s.failure}`
-    : (s.paused
+    : (s.mode === 'thirdPerson'
+      ? (s.pauseReason === 'escape' ? '已暂停（Esc）' : '已暂停（窗口失去焦点）')
+        + '—— 点击 3D 视图继续第三人称导航'
+      : s.paused
       ? '已暂停（窗口失去焦点）—— 再次点击 3D 视图恢复鼠标捕获'
-      : '点击 3D 视图捕获鼠标 · <b>F8</b> 或工具条切换导航方式');
+      : '点击 3D 视图捕获鼠标 · <b>F8</b> 循环切换 Orbit / Game / 第三人称');
 }
 
 function syncNavSettingsInputs() {
@@ -790,52 +824,76 @@ function setTitle(ctx) {
     + ` · GLB ${(ctx.version.glbBytes / 1048576).toFixed(1)} MB`;
 }
 
-async function openVersion(ctx) {
+let versionLoadGeneration = 0;
+let versionLoadAbort = null;
+
+async function openVersion(ctx, { comparisonOwner = null } = {}) {
+  versionLoadAbort?.abort();
+  const controller = versionLoadAbort = new AbortController();
+  const generation = ++versionLoadGeneration;
+  const currentLoad = () => generation === versionLoadGeneration && !controller.signal.aborted;
   const { project, model: mdl, version } = ctx;
   viewer.starts += 1;
   if (viewer.starts > 1) viewer.switches += 1;
   viewer.__t0 = performance.now();
   viewer.ready = false;
-  viewer.current = {
+  viewer.error = null;
+  viewer.timings = {};
+  viewer.launcherOpen = false;
+  const context = viewer.current = {
     projectId: project.id, modelId: mdl.id, versionId: version.id,
     projectName: project.name, modelName: mdl.name, versionName: version.name,
     glb: version.assets.glb, base: version.assets.glb.replace(/\/[^/]+$/, ''),
   };
   el('viewerRoot').classList.remove('hidden');
   ensureViewer();
+  model.setActive(true);
+  model.cancelPendingLoads();
+  if (model.root) model.unload();
   // 换版本前先拆掉比对叠加层（静默）：A 侧几何与材质必须随上一版一起释放，否则显存泄漏，
   // 且 B 侧共享材质如果还停在"临时透明"态会被新模型继承。
-  if (compareUI?.active) compareUI.exit({ silent: true });
+  if (compareUI && comparisonOwner !== compareUI) {
+    compareUI.exit({ silent: true });
+    compareUI.close();
+  }
   // 分屏比对的右视口同样必须先销毁：它持有独立的 renderer / 场景，跟着旧版本换掉会一起泄漏
-  if (splitUI?.active) splitUI.exit({ silent: true, keepRestore: true });
+  if (splitUI && comparisonOwner !== splitUI) {
+    splitUI.exit({ silent: true, keepRestore: true });
+    splitUI.close();
+  }
   issues.clear();
   closeGameContextMenu();
   model.setNavigationMode('orbit');                  // 换模型前退出游戏导航
   setTitle(ctx);
 
-  const base = viewer.current.base;
+  const base = context.base;
   const tModelStart = performance.now();
   try {
     setStatus('正在加载元数据… <span id="pct">0%</span>');
     const tJson = performance.now();
-    data = await loadData({
+    const loadedData = await loadData({
       base,
+      signal: controller.signal,
       floorPlanUrl: version.assets.floorplan || null,
       onProgress: (got, total, key) => {
+        if (!currentLoad()) return;
         const pctEl = el('pct');
         if (pctEl && total) {
           pctEl.textContent = `${key || ''} ${Math.round(got / total * 100)}%`;
         }
       },
     });
+    if (!currentLoad()) return false;
+    data = loadedData;
     viewer.timings = { ...(data.timings || {}) };
     viewer.dataStats = data.stats;
     viewer.data = data;                              // 供实测脚本读取 mapping/objects/idOf
   } catch (e) {
+    if (!currentLoad() || e.name === 'AbortError') return false;
     viewer.error = '元数据加载失败：' + e.message;
     setStatus(viewer.error, true, `版本 ${version.name} 的 processed/ 产物缺失或不完整。`
       + '请用左下角「切换模型」返回，重新导入该版本。');
-    return;
+    return false;
   }
 
   // 树与属性面板：首次创建，之后只换数据源（避免在 host 上叠加监听）
@@ -878,24 +936,33 @@ async function openVersion(ctx) {
   setStatus('正在加载模型… <span id="pct">0%</span>');
   try {
     await model.load(version.assets.glb, (evt) => {
+      if (!currentLoad()) return;
       const pctEl = el('pct');
       if (pctEl && evt.lengthComputable) {
         pctEl.textContent = `${Math.round(evt.loaded / evt.total * 100)}%`;
       }
-    }, { floorplan: data.floorplan });
-    await issues.bind(viewer.current, data, tree);
+    }, { floorplan: data.floorplan, canonicalAliases: data.canonicalAliases, signal: controller.signal });
+    if (!currentLoad()) return false;
+    await issues.bind(context, data, tree);
+    if (!currentLoad()) return false;
     viewer.timings.modelLoadMs = Math.round(performance.now() - tModelStart);
     model.resize();
     await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+    if (!currentLoad()) return false;
     viewer.timings.firstFrameMs = Math.round(performance.now() - viewer.__t0);
     refreshButtons();
     syncAppearanceInputs();
     syncFloorPlanInputs();
+    return true;
   } catch (e) {
+    if (!currentLoad() || e.name === 'AbortError') return false;
     viewer.error = '模型加载失败：' + e.message;
+    viewer.ready = false;
+    model.unload();
     setStatus(viewer.error, true, `请确认 ${version.assets.glb} 存在（用「切换模型」返回后重新导入）。`);
     syncFloorPlanInputs();
     syncAppearanceInputs();
+    return false;
   }
 }
 

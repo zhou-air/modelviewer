@@ -26,6 +26,8 @@ export class CompareController {
     this.a = null;                 // { pid, mid, vid, label, glb }
     this.b = null;
     this._options = [];            // 弹窗里的版本清单（与 <option value> 的序号一一对应）
+    this._generation = 0;
+    this._pending = null;
     this._els();
     this._bind();
   }
@@ -98,7 +100,15 @@ export class CompareController {
     return true;
   }
 
-  close() { this.modal.classList.remove('on'); }
+  cancelPending() {
+    if (!this._pending) return;
+    this._pending.abort();
+    this._pending = null;
+    ++this._generation;
+    el('cmpStart').disabled = false;
+  }
+
+  close() { this.cancelPending(); this.modal.classList.remove('on'); }
 
   _renderOptions(versions, iA, iB) {
     fillVersionSelects(this.selA, this.selB, versions, iA, iB);
@@ -128,6 +138,10 @@ export class CompareController {
       this._setMsg('Model A 与 Model B 不能是同一个版本。', true);
       return null;
     }
+    this.exit({ silent: true });
+    const controller = this._pending = new AbortController();
+    const generation = ++this._generation;
+    const current = () => generation === this._generation && !controller.signal.aborted;
     el('cmpStart').disabled = true;
     try {
       const cur = this.deps.getCurrent();
@@ -135,11 +149,13 @@ export class CompareController {
         && cur.versionId === B.vid;
       if (!sameMain) {
         this._setMsg(`正在把 <b>${esc(B.label)}</b> 设为主模型（B）…`);
-        await this.deps.openMain?.(B.pid, B.mid, B.vid);
-        if (!this.model.ready) throw new Error('主模型（B）未能加载完成');
+        const loaded = await this.deps.openMain?.(B.pid, B.mid, B.vid);
+        if (!current()) return null;
+        if (loaded === false || !this.model.ready) throw new Error('主模型（B）未能加载完成');
       }
       this._setMsg(`正在加载 <b>${esc(A.label)}</b> 作为叠加层（A）… <span id="cmpPct">0%</span>`);
       await this.model.loadOverlay(A.glb, {
+        signal: controller.signal,
         label: A.label,
         meta: { pid: A.pid, mid: A.mid, vid: A.vid, versionName: A.versionName, modelName: A.modelName },
         onProgress: (evt) => {
@@ -147,9 +163,11 @@ export class CompareController {
           if (p && evt?.lengthComputable) p.textContent = `${Math.round(evt.loaded / evt.total * 100)}%`;
         },
       });
+      if (!current()) return null;
       this.a = A;
       this.b = B;
       this.active = true;
+      this._pending = null;
       this.close();
       this.model.setCompareSide('both');
       this.model.setCompareOpacity(Number(this.opacityInput.value) / 100);
@@ -162,18 +180,20 @@ export class CompareController {
         st.originAligned ? 'ok' : 'warn');
       return st;
     } catch (e) {
+      if (!current() || e.name === 'AbortError') return null;
       this._setMsg(`比对启动失败：${esc(e?.message || String(e))}`, true);
       if (this.model.compareActive()) this.model.exitCompare();
       this.active = false;
       this.syncChrome();
       return null;
     } finally {
-      el('cmpStart').disabled = false;
+      if (current()) { this._pending = null; el('cmpStart').disabled = false; }
     }
   }
 
   /** 退出比对：卸载叠加层、还原实体侧材质与显示状态（原有批注/测量/隐藏/改色全部照旧）。 */
   exit(opts = {}) {
+    this.cancelPending();
     const was = this.model.compareActive();
     if (was) this.model.exitCompare();
     // 界面状态无论如何都归零：换主模型时 3D 侧的 compare 已被 unload 拆掉，

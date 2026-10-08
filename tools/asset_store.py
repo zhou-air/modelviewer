@@ -56,6 +56,35 @@ METADATA_SOURCE_TXT = "pdms-datalisting"
 METADATA_SOURCE_RVM = "rvm"
 
 LOCK = threading.RLock()
+# Reservations live for the whole queued/running job, including its final writes.
+# All users share LOCK; no pipeline/store lock ordering is required.
+ACTIVE_IMPORTS: dict[tuple[str, str, str], str] = {}
+
+
+def reserve_import(pid: str, mid: str, vid: str, job_id: str) -> None:
+    with LOCK:
+        key = (pid, mid, vid)
+        if key in ACTIVE_IMPORTS:
+            raise StoreError("version_importing", "该版本已有待上传或运行中的导入任务", 409)
+        ACTIVE_IMPORTS[key] = job_id
+
+
+def release_import(pid: str, mid: str, vid: str, job_id: str) -> None:
+    with LOCK:
+        key = (pid, mid, vid)
+        if ACTIVE_IMPORTS.get(key) == job_id:
+            del ACTIVE_IMPORTS[key]
+
+
+def require_no_active_import(pid: str, mid: str | None = None,
+                             vid: str | None = None) -> None:
+    with LOCK:
+        pid = validate_id(pid, "project")
+        mid = validate_id(mid, "model") if mid is not None else None
+        vid = validate_id(vid, "version") if vid is not None else None
+        if any(p == pid and (mid is None or m == mid) and (vid is None or v == vid)
+               for p, m, v in ACTIVE_IMPORTS):
+            raise StoreError("import_active", "该项目、模型或版本有待上传或运行中的导入任务，请先完成或清理任务", 409)
 
 
 # ------------------------------------------------------------------ 基础工具
@@ -75,11 +104,12 @@ def read_json(p: Path):
 
 def write_json(p: Path, obj) -> None:
     """原子写：先写 .tmp 再替换，避免半截 JSON 把 manifest 写坏。"""
-    p = Path(p)
-    p.parent.mkdir(parents=True, exist_ok=True)
-    tmp = p.with_suffix(p.suffix + ".tmp")
-    tmp.write_text(json.dumps(obj, ensure_ascii=False, indent=2), encoding="utf-8")
-    os.replace(tmp, p)
+    with LOCK:
+        p = Path(p)
+        p.parent.mkdir(parents=True, exist_ok=True)
+        tmp = p.with_suffix(p.suffix + ".tmp")
+        tmp.write_text(json.dumps(obj, ensure_ascii=False, indent=2), encoding="utf-8")
+        os.replace(tmp, p)
 
 
 def slugify(text: str) -> str:
@@ -304,6 +334,7 @@ def count_models(pid: str) -> int:
 
 def delete_project(pid: str) -> dict:
     with LOCK:
+        require_no_active_import(pid)
         d = require_project(pid)
         info = {"id": pid, "models": count_models(pid), "versions": count_versions(pid)}
         info["trashedTo"] = _trash(d, "project", pid)
@@ -312,6 +343,7 @@ def delete_project(pid: str) -> dict:
 
 def delete_model(pid: str, mid: str) -> dict:
     with LOCK:
+        require_no_active_import(pid, mid)
         d = require_model(pid, mid)
         info = {"id": mid, "versions": count_versions(pid, mid)}
         info["trashedTo"] = _trash(d, "model", f"{pid}--{mid}")
@@ -321,6 +353,7 @@ def delete_model(pid: str, mid: str) -> dict:
 
 def delete_version(pid: str, mid: str, vid: str) -> dict:
     with LOCK:
+        require_no_active_import(pid, mid, vid)
         d = require_version(pid, mid, vid)
         info = {"id": vid}
         info["trashedTo"] = _trash(d, "version", f"{pid}--{mid}--{vid}")

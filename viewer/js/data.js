@@ -9,29 +9,31 @@
  * 因此同一份 Viewer 可以加载任意 Project / Model / Version。
  */
 
-async function getJSON(url, onProgress) {
-  const res = await fetch(url);
+async function getJSON(url, onProgress, signal) {
+  const res = await fetch(url, { signal });
   if (!res.ok) throw new Error(`${url} → HTTP ${res.status}`);
   const total = Number(res.headers.get("content-length")) || 0;
   if (!total || !res.body) return res.json();
 
   const reader = res.body.getReader();
   const chunks = [];
+  const decoder = new TextDecoder('utf-8');
   let got = 0;
   for (;;) {
     const { done, value } = await reader.read();
     if (done) break;
-    chunks.push(value);
+    chunks.push(decoder.decode(value, { stream: true }));
     got += value.length;
     onProgress?.(got, total);
   }
-  const buf = new Uint8Array(got);
-  let o = 0;
-  for (const c of chunks) { buf.set(c, o); o += c.length; }
-  return JSON.parse(new TextDecoder("utf-8").decode(buf));
+  chunks.push(decoder.decode());
+  // Decode incrementally: do not retain both byte chunks and a second full byte buffer.
+  const text = chunks.join('');
+  chunks.length = 0;
+  return JSON.parse(text);
 }
 
-export async function loadData({ base, floorPlanUrl = null, onProgress } = {}) {
+export async function loadData({ base, floorPlanUrl = null, onProgress, signal } = {}) {
   if (!base) throw new Error("loadData 需要 base（当前版本 processed/ 目录的 URL）");
   const url = (name) => `${base.replace(/\/?$/, "/")}${name}`;
   const T = {};
@@ -43,13 +45,12 @@ export async function loadData({ base, floorPlanUrl = null, onProgress } = {}) {
   if (floorPlanUrl) files.push(["floorplan", floorPlanUrl]);
 
   const out = {};
-  const loaded = { bytes: 0, total: 0 };
   const tJson = performance.now();
   await Promise.all(files.map(async ([key, u]) => {
     const t0 = performance.now();
     out[key] = await getJSON(u, (got, total) => {
       onProgress?.(got, total, key);
-    });
+    }, signal);
     T[key + "Ms"] = Math.round(performance.now() - t0);
   }));
   T.jsonAllMs = Math.round(performance.now() - tJson);
@@ -67,6 +68,14 @@ export async function loadData({ base, floorPlanUrl = null, onProgress } = {}) {
   const pairs = out.mapping.pairs;
   const geomOf = new Map();                       // canonical → 映射边
   for (const [canon, p] of Object.entries(pairs)) geomOf.set(canon, p);
+  const canonicalAliases = new Map();
+  for (const [canonical, pair] of geomOf) {
+    const sourceName = pair.sourceName || canonical;
+    if (canonicalAliases.has(sourceName) && canonicalAliases.get(sourceName) !== canonical) {
+      throw new Error(`几何名称映射不唯一：${sourceName}`);
+    }
+    canonicalAliases.set(sourceName, canonical);
+  }
 
   // rvmOffset → 几何构成 / 包围盒
   const rvmByOffset = new Map();
@@ -78,7 +87,7 @@ export async function loadData({ base, floorPlanUrl = null, onProgress } = {}) {
     base,
     timings: T,
     meta, mapping: out.mapping, rvmIndex: out.rvmIndex, floorplan: out.floorplan || null,
-    objects, byCanonical, geomOf, rvmByOffset,
+    objects, byCanonical, geomOf, rvmByOffset, canonicalAliases,
     stats: meta.stats,
     roots: meta.roots,
     objectOf: (id) => objects[id],

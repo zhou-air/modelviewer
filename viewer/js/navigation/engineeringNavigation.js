@@ -23,6 +23,7 @@ import {
   WORLD_UNITS_PER_METER,
 } from './navigationSettings.js';
 import { NavigationInputSource } from './inputState.js';
+import { ThirdPersonRig } from './thirdPersonRig.js';
 
 /** 原插件 `Core/CameraFrame.cs`：WorldUp / HorizontalForward / Pitch 三个状态量，
  *  Right 与 Forward 是每帧派生的（不是存下来的向量）。 */
@@ -118,17 +119,19 @@ export class EngineeringNavigation {
    * @param {THREE.Vector3} [options.worldUp]         宿主向上轴（原 viewpoint.WorldUpVector）
    * @param {object} options.settings                 NavigationSettingsStore
    */
-  constructor({ camera, canvas, worldUp, settings, onRequestModeToggle, onStateChange,
+  constructor({ camera, canvas, scene, obstacleDistance, worldUp, settings, onRequestModeToggle, onStateChange,
                 onRequestCenterPick, onRequestSelectionMenu }) {
     this.camera = camera;
     this.canvas = canvas;
     this.settings = settings;
+    this.thirdPersonRig = new ThirdPersonRig({ camera, scene: scene || new THREE.Group(), obstacleDistance });
     this.worldUp = (worldUp ? worldUp.clone() : new THREE.Vector3(0, 1, 0)).normalize();
     if (this.worldUp.lengthSq() <= CameraMath.EPSILON) this.worldUp.set(0, 1, 0);
 
     this.onStateChange = onStateChange;
 
     this.active = false;
+    this.mode = 'game';
     this.paused = false;
     this.frame = null;
     this.pendingZoomNotches = 0;
@@ -140,19 +143,26 @@ export class EngineeringNavigation {
     this.inputSource = new NavigationInputSource(canvas, {
       isActive: () => this.active,
       isPaused: () => this.paused,
+      getMode: () => this.mode,
+      isInputEnabled: () => !(this.mode === 'thirdPerson' && this.thirdPersonRig.poseFollower),
       onToggleNavigation: () => onRequestModeToggle?.(),
       // Esc 只释放鼠标捕获（模式粘滞）：导航模式只能由 F8 / 工具条按钮切换
-      onEscape: () => this.inputSource.releaseCapture(),
+      onEscape: () => {
+        if (this.mode === 'thirdPerson') this.pause('escape');
+        else this.inputSource.releaseCapture();
+      },
       onWheel: (notches) => { this.pendingZoomNotches += notches; },
       // 场景内的一次点击 = 原插件的 MouseDown：暂停中则恢复，否则开始捕获
       onCaptureRequested: () => { if (this.paused) this.resume(); },
+      // Flush the final held-left delta before release, including a quick one-frame drag.
+      onDragEnded: () => { if (this.active && this.mode === 'thirdPerson' && !this.paused) this.update(0); },
       // 已捕获时的左键 = 选中准星指向的对象（点空处会清空选中）；右键 = 选中对象菜单
       onCenterPick: (opts) => onRequestCenterPick?.(opts),
       onSelectionMenuRequested: (point) => onRequestSelectionMenu?.(point),
-      onCaptureChanged: ({ captured }) => {
+      onCaptureChanged: ({ captured } = {}) => {
         // 捕获丢失即清空按键与未消费的鼠标增量：否则重新捕获的瞬间
         // 残留输入会生效，表现为"自动移动 / 视角瞬移"
-        if (!captured) this.inputSource.input.reset();
+        if (this.mode === 'game' && !captured) this.inputSource.input.reset();
         // 捕获丢失（Esc / 失焦等）不退出游戏模式，只更新准星与提示
         this.onStateChange?.();
       },
@@ -167,14 +177,24 @@ export class EngineeringNavigation {
 
   get captured() { return this.inputSource.isCaptured; }
   get shouldShowCrosshair() {
+    if (this.mode !== 'game') return false;
     return CrosshairVisibility.shouldRender(
       this.active, this.paused, this.captured, this.inputSource.hasFocus);
   }
 
   /** 原 `Start()`：校验宿主 → 建帧 → 复位输入。宿主校验部分已由 viewer3d 落在 Web 等价条件上。 */
-  start() {
-    if (this.active) return null;
+  start(mode = 'game') {
+    if (mode !== 'game' && mode !== 'thirdPerson') return '不支持的导航模式。';
+    if (this.active && this.mode === mode) return null;
     if (!this.camera || !this.camera.isPerspectiveCamera) return '游戏导航仅支持透视相机。';
+
+    if (this.active) {
+      this.inputSource.releaseCapture();
+      if (this.mode === 'thirdPerson') this.thirdPersonRig.stop({ toGame: mode === 'game' });
+      this.active = false;
+    }
+    this.mode = mode;
+    this.camera.updateMatrixWorld();
 
     const forward = this.camera.getWorldDirection(new THREE.Vector3());
     const cameraRight = new THREE.Vector3().setFromMatrixColumn(this.camera.matrixWorld, 0);
@@ -182,7 +202,10 @@ export class EngineeringNavigation {
     try {
       this.frame = CameraMath.createFrame(
         forward, cameraRight, worldUp.lengthSq() > CameraMath.EPSILON ? worldUp : this.worldUp);
+      if (mode === 'thirdPerson') this.thirdPersonRig.start(this.frame);
     } catch (e) {
+      this.thirdPersonRig.stop();
+      this.frame = null;
       return '无法从当前视角建立导航基准：' + e.message;
     }
 
@@ -198,7 +221,12 @@ export class EngineeringNavigation {
 
   /** 原 `Stop(restorePreviousTool)`：复位状态、释放捕获，**保留当前相机位姿**。 */
   stop() {
-    if (!this.active) { this.inputSource.releaseCapture(); return; }
+    if (!this.active) {
+      this.inputSource.releaseCapture();
+      this.thirdPersonRig.stop();
+      return;
+    }
+    this.thirdPersonRig.stop();
     this.active = false;
     this.paused = false;
     this.pauseReason = null;
@@ -214,8 +242,10 @@ export class EngineeringNavigation {
     if (!this.active || this.paused) return;
     this.paused = true;
     this.pauseReason = reason;
+    this.pendingZoomNotches = 0;
     this.input.reset();
     this.inputSource.releaseCapture();
+    if (this.mode === 'thirdPerson') this.thirdPersonRig.resetPose();
     this.onStateChange?.();
   }
 
@@ -238,6 +268,7 @@ export class EngineeringNavigation {
     try {
       this.frame = CameraMath.createFrame(
         forward, cameraRight, worldUp.lengthSq() > CameraMath.EPSILON ? worldUp : this.worldUp);
+      if (this.mode === 'thirdPerson') this.thirdPersonRig.rebase(this.frame);
       this.input.reset();               // 顺手清残留输入，避免复位瞬间带着旧增量
     } catch { /* 极端视角下建帧失败：保持旧帧，不打断导航 */ }
   }
@@ -245,14 +276,20 @@ export class EngineeringNavigation {
   /** 每帧调用。返回是否消费了本帧（事件驱动的 DOM 输入，无返回值语义，仅供调试）。 */
   update(deltaSeconds) {
     this.interacting = false;
-    if (!this.active) return false;
+    if (!this.active) { this.input.reset(); return false; }
+
+    const elapsed = CameraMath.clamp(
+      Number.isFinite(deltaSeconds) ? deltaSeconds : 0, 0, NavigationDefaults.MaximumDeltaSeconds);
+    if (this.mode === 'thirdPerson' && this.thirdPersonRig.poseFollower) {
+      this.input.reset();
+      this.pendingZoomNotches = 0;
+      this.thirdPersonRig.update(this.frame, elapsed, { forward: 0, right: 0, up: 0 });
+      return true;
+    }
 
     // 原件在定时器里也会复核前台状态（IsNavisworksForeground），这里同样兜一层
     if (!this.inputSource.hasFocus) { this.pause('focus'); return false; }
     if (this.paused) return false;
-
-    const elapsed = CameraMath.clamp(
-      Number.isFinite(deltaSeconds) ? deltaSeconds : 0, 0, NavigationDefaults.MaximumDeltaSeconds);
 
     // ---- 视角：鼠标增量每帧只消费一次（对应 UpdateViewpoint 开头）
     const delta = this.input.consumeMouseDelta();
@@ -271,6 +308,14 @@ export class EngineeringNavigation {
     const zoomChanged = this.applyPendingZoom();
 
     this.interacting = orientationChanged || hasMovement || zoomChanged;
+    if (this.mode === 'thirdPerson') {
+      if (hasMovement) this._applyMovement(movementDirection, axes.forward, elapsed);
+      // 即使人物静止，也要重新检查实体显隐和镜头遮挡。
+      const cameraChanged = this.thirdPersonRig.update(this.frame, elapsed, axes,
+        this.input.isSprinting && this.settings.sprintMultiplier > 1);
+      this.interacting = this.interacting || !!cameraChanged;
+      return true;
+    }
     if (!orientationChanged && !hasMovement && !zoomChanged) return true;
 
     if (orientationChanged) this._applyOrientation();
@@ -293,7 +338,8 @@ export class EngineeringNavigation {
     let speed = this.settings.normalSpeedMetersPerSecond * WORLD_UNITS_PER_METER;
     // 原式：只有"向前"才吃加速倍率（S / 纯 A-D / 纯升降都不加速）
     if (this.input.isSprinting && forwardAxis > 0) speed *= this.settings.sprintMultiplier;
-    this.camera.position.addScaledVector(direction, speed * elapsed);
+    if (this.mode === 'thirdPerson') this.thirdPersonRig.move(direction, speed * elapsed);
+    else this.camera.position.addScaledVector(direction, speed * elapsed);
   }
 
   /** 对应 `ApplyPendingWheelFallback`：原插件优先让宿主原生 Zoom 生效，仅在原生未改变相机时
@@ -307,6 +353,11 @@ export class EngineeringNavigation {
     const notches = this.pendingZoomNotches;
     this.pendingZoomNotches = 0;
 
+    if (this.mode === 'thirdPerson') {
+      this.thirdPersonRig.zoom(notches);
+      return true;
+    }
+
     const nextFov = this.camera.fov * Math.pow(0.9, notches);
     this.camera.fov = CameraMath.clamp(
       nextFov,
@@ -316,9 +367,34 @@ export class EngineeringNavigation {
     return true;
   }
 
+  /** 分屏同步显式人物状态；不重置输入或释放正在使用的指针。 */
+  applyThirdPersonState(state) {
+    if (!this.active || this.mode !== 'thirdPerson' || !state) return false;
+    const validVector = (value) => Array.isArray(value) && value.length === 3 && value.every(Number.isFinite);
+    if (!validVector(state.worldUp) || !validVector(state.horizontalForward)
+      || !Number.isFinite(state.pitchRadians)) return false;
+    const up = new THREE.Vector3().fromArray(state.worldUp);
+    const horizontal = new THREE.Vector3().fromArray(state.horizontalForward);
+    if (up.lengthSq() <= CameraMath.EPSILON || horizontal.lengthSq() <= CameraMath.EPSILON) return false;
+    this.frame = new CameraFrame(up, horizontal,
+      CameraMath.clamp(state.pitchRadians, -MaxPitchRadians, MaxPitchRadians));
+    this.thirdPersonRig.applyState(state);
+    return true;
+  }
+
+  /** 非活动同步侧仍画人物，位姿完全跟随源侧。 */
+  setPoseFollower(value) {
+    const follower = !!value;
+    if (this.thirdPersonRig.poseFollower === follower) return;
+    this.input.reset();
+    this.pendingZoomNotches = 0;
+    this.thirdPersonRig.poseFollower = follower;
+  }
+
   dispose() {
     this.stop();
     this.inputSource.detach();
+    this.thirdPersonRig.dispose();
   }
 
   /** 供自动化实测读取（本项目的既有约定：`window.__viewer` 暴露运行状态） */
@@ -350,6 +426,7 @@ export class EngineeringNavigation {
       sprintMultiplier: this.settings.sprintMultiplier,
       pointerLockSupported: typeof this.canvas.requestPointerLock === 'function',
       captureFailure: this.failure || null,
+      thirdPerson: this.active && this.mode === 'thirdPerson' ? this.thirdPersonRig.state(frame) : null,
     };
   }
 }

@@ -383,7 +383,7 @@ export class AssetManager {
 
   // ------------------------------------------------------------- 打开模型
 
-  async openVersion(pid, mid, vid) {
+  async openVersion(pid, mid, vid, options = {}) {
     const v = this.getVersion(pid, mid, vid);
     if (!v) return this.toast('版本不存在', 'err');
     if (v.status !== 'ready') {
@@ -398,7 +398,7 @@ export class AssetManager {
     writeLS(LS_LAST, { projectId: pid, modelId: mid, versionId: vid, at: new Date().toISOString() });
     this.hide();
     try {
-      await this.onOpen(ctx);
+      return await this.onOpen(ctx, options);
     } catch (e) {
       this.show();
       this.toast(`打开失败：${e.message}`, 'err');
@@ -819,6 +819,10 @@ export class AssetManager {
       return;
     }
     const el = (id) => document.getElementById(id);
+    if (this._importAttempt || this._queuedCleanupJobId) {
+      el('importModal').classList.add('on');
+      return; // keep the current upload or cleanup action visible instead of orphaning it
+    }
     const p = this.getProject(prefill.projectId) || this.getProject(this.sel.projectId);
 
     el('impProject').innerHTML = '<option value="">（未选择）</option>'
@@ -940,10 +944,14 @@ export class AssetManager {
   }
 
   async startImport() {
+    if (this._importAttempt) return;
+    if (this._queuedCleanupJobId && !await this._cleanupQueuedImport(this._queuedCleanupJobId)) return;
     const el = (id) => document.getElementById(id);
     let form;
     try { form = this._impCollect(); }
     catch (e) { return this._impHint(`<b>还不能开始</b><br>${esc(e.message)}`, true); }
+    const attempt = this._importAttempt = { jobId: null, cancelled: false, startRequested: false, started: false };
+    const checkCancelled = () => { if (attempt.cancelled) throw new DOMException('已取消导入', 'AbortError'); };
 
     el('impStart').disabled = true;
     el('impStart').textContent = '导入中…';
@@ -962,23 +970,87 @@ export class AssetManager {
         rvmFilename: form.rvmFile.name, txtFilename: form.txtFile ? form.txtFile.name : '',
       });
       this.job = job;
+      attempt.jobId = job.jobId;
+      checkCancelled();
       await uploadSource(job.jobId, 'rvm', form.rvmFile, (l, t) =>
         this._renderImportStages(null, `上传 RVM ${fmtBytes(l)} / ${fmtBytes(t)}`, job));
+      checkCancelled();
       if (form.txtFile) {
         await uploadSource(job.jobId, 'txt', form.txtFile, (l, t) =>
           this._renderImportStages(null, `上传 TXT ${fmtBytes(l)} / ${fmtBytes(t)}`, job));
+        checkCancelled();
       } else {
         this._renderImportStages(null, '未选择 TXT —— 本次按「仅 RVM」导入，'
           + '元数据只有名称、层级、类型，没有工程属性与设备定位图', job);
       }
+      attempt.startRequested = true;
       await api.importStart(job.jobId);
+      attempt.started = true;
       await this._pollJob(job.jobId);
     } catch (e) {
-      el('impError').classList.add('on');
-      el('impError').innerHTML = `<b>导入未能开始</b><br>${esc(e.message)}`;
+      if (attempt.cancelled) this._impHint('已取消导入，正在清理未启动的上传任务。');
+      else {
+        el('impError').classList.add('on');
+        el('impError').innerHTML = `<b>导入请求未完成</b><br>${esc(e.message)}`;
+      }
+    } finally {
+      // A lost start response is ambiguous: check server state, never delete a running job.
+      if (attempt.jobId && !attempt.started) await this._cleanupQueuedImport(attempt.jobId);
+      if (this._importAttempt === attempt) this._importAttempt = null;
       el('impStart').disabled = false;
       el('impStart').textContent = 'Import';
     }
+  }
+
+  cancelImport() {
+    const attempt = this._importAttempt;
+    if (attempt && !attempt.startRequested) {
+      attempt.cancelled = true;
+      this.toast('已取消启动；当前上传结束后会自动清理未启动的任务。');
+    }
+    document.getElementById('importModal').classList.remove('on');
+  }
+
+  async _cleanupQueuedImport(jobId) {
+    let failure;
+    for (let retry = 0; retry < 3; retry++) {
+      try {
+        const job = await api.importState(jobId);
+        if (job.status === 'queued') await api.importCleanup(jobId);
+        // running/ready/failed belong to the conversion workflow and must be preserved.
+        if (this._queuedCleanupJobId === jobId) this._queuedCleanupJobId = null;
+        document.getElementById('impCleanupRetry')?.remove();
+        if (job.status === 'queued' && this.job?.jobId === jobId) this.job = null;
+        return true;
+      } catch (error) {
+        if (error.code === 'job_not_found') {
+          this._queuedCleanupJobId = null;
+          document.getElementById('impCleanupRetry')?.remove();
+          return true;
+        }
+        failure = error;
+        if (!['job_running', 'upload_in_progress'].includes(error.code) || retry === 2) break;
+        await new Promise(resolve => setTimeout(resolve, 500));
+      }
+    }
+    this._queuedCleanupJobId = jobId;
+    const host = document.getElementById('impError');
+    host.classList.add('on');
+    document.getElementById('impCleanupRetry')?.remove();
+    const retry = document.createElement('button');
+    retry.id = 'impCleanupRetry'; retry.type = 'button'; retry.textContent = '重试清理未启动任务';
+    retry.onclick = async () => {
+      retry.disabled = true;
+      if (await this._cleanupQueuedImport(jobId)) {
+        this._impHint('未启动任务已清理，或任务已开始并保留；可以重新选择文件。');
+        host.classList.remove('on');
+      } else retry.disabled = false;
+    };
+    const message = document.createElement('p');
+    message.textContent = `上传任务尚未清理：${failure?.message || '连接失败'}。请稍后重试。`;
+    host.append(message, retry);
+    this.toast('上传任务尚未清理，请打开 Import Model 后重试清理。', 'err');
+    return false;
   }
 
   async _pollJob(jobId) {
@@ -1200,8 +1272,8 @@ export function bindImportModal(am) {
     el('importModal').classList.remove('on');
     am.openVersion(d.pid, d.mid, d.vid);
   };
-  el('impClose').onclick = () => el('importModal').classList.remove('on');
-  el('impCancel').onclick = () => el('importModal').classList.remove('on');
+  el('impClose').onclick = () => am.cancelImport();
+  el('impCancel').onclick = () => am.cancelImport();
   el('modal').querySelector('.modal-x').onclick = () => am.closeModal();
   el('modal').addEventListener('click', (e) => {
     if (e.target.id === 'modal') am.closeModal();

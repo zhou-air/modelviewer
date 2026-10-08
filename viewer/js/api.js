@@ -6,6 +6,8 @@ async function call(method, path, body, headers) {
     res = await fetch("/api" + path, {
       method,
       headers: {
+        ...(['POST', 'PUT', 'PATCH', 'DELETE'].includes(method)
+          ? { 'X-Modelviewer-Request': '1' } : {}),
         ...(body === undefined ? undefined : { "Content-Type": "application/json" }),
         ...(headers || {}),
       },
@@ -88,6 +90,7 @@ export function uploadSource(jobId, which, file, onProgress) {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.open("PUT", `/api/import/jobs/${jobId}/source/${which}`);
+    xhr.setRequestHeader('X-Modelviewer-Request', '1');
     xhr.setRequestHeader("Content-Type", "application/octet-stream");
     xhr.upload.onprogress = (e) => {
       if (e.lengthComputable) onProgress?.(e.loaded, e.total);
@@ -109,6 +112,7 @@ export function uploadProjectFile(projectId, file, onProgress) {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', `/api/projects/${encodeURIComponent(projectId)}/files?name=${encodeURIComponent(file.name)}`);
+    xhr.setRequestHeader('X-Modelviewer-Request', '1');
     xhr.setRequestHeader('Content-Type', 'application/octet-stream');
     xhr.upload.onprogress = (e) => {
       if (e.lengthComputable) onProgress?.(e.loaded, e.total);

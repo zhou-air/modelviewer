@@ -16,7 +16,8 @@
  *
  *  ---- 相机同步（本功能的核心，性能与稳定性都在这里）----
  *  1. **每帧变化检测，而不是事件广播**：两侧在各自渲染循环的 `onBeforeRender` 里调
- *     `_syncTick()`；谁相对"上一帧的位姿指纹"变了，谁就是源，把它写到另一侧。
+ *     `_syncTick()`；Orbit / Game 中谁相对上一帧的位姿指纹变了，谁就是源。
+ *     第三人称只从活动侧同步，跟随侧不自行重算相机遮挡。
  *     没变化的一帧只做几次数组/数字比较，不触发任何模型、材质或渲染器操作 ——
  *     这正是需求里"不要每次变化都重新加载模型或重建渲染器"的落点。
  *  2. **防循环**：写入方写完立刻重算两侧指纹，于是"被同步的那一侧"不会被误判成新的源；
@@ -25,7 +26,8 @@
  *  3. **防抖动**：`applyCameraPose` 会临时关掉 OrbitControls 的阻尼惯性、放宽轨道距离上下限，
  *     并在写完后重建 Game 导航的基准帧（`navigation.rebase()`）——缺任何一条都会出现
  *     "一侧松手后还在滑，另一侧被反复拉回"的拉锯。
- *  4. 同步的内容 = position / quaternion / up / target / fov / near / far。
+ *  4. 同步的内容 = position / quaternion / up / target / fov / near / far，
+ *     加上第三人称的人物状态和实际跟随距离。
  */
 
 import { Model3D } from './viewer3d.js';
@@ -62,6 +64,8 @@ export class SplitCompareController {
     this._selA = null;
     this._selB = null;
     this._lastSelSide = null;
+    this._generation = 0;
+    this._pending = null;
     this._els();
     this._bind();
   }
@@ -101,6 +105,12 @@ export class SplitCompareController {
       pane.addEventListener('pointerdown', () => {
         if (this.active) this._setActiveSide(side);
       }, true);
+      // 先接管再处理滚轮：第三人称的非活动侧不能一边跟随、一边改变自己的距离。
+      pane.addEventListener('wheel', (event) => {
+        if (this.active && event.target === (side === 'A' ? this.model.canvas : this.viewerB?.canvas)) {
+          this._setActiveSide(side);
+        }
+      }, { capture: true, passive: true });
     }
   }
 
@@ -146,7 +156,7 @@ export class SplitCompareController {
       this.deps.toast?.('请先打开一个模型版本', 'err');
       return false;
     }
-    if (this.model.compareActive()) this.deps.exitCompare?.();   // 两种比对互斥
+    this.deps.exitCompare?.();   // also cancel an overlay that is still loading
     const versions = (this.deps.listVersions?.() || []).filter((v) => v.glb);
     this._options = versions;
     if (versions.length < 2) {
@@ -173,7 +183,19 @@ export class SplitCompareController {
     return true;
   }
 
-  close() { this.modal.classList.remove('on'); }
+  cancelPending() {
+    if (!this._pending) return;
+    this._pending.abort();
+    this._pending = null;
+    ++this._generation;
+    if (!this.active) this._destroyViewerB();
+    el('splitStart').disabled = false;
+  }
+
+  close() {
+    if (this._pending) this.exit({ silent: true });
+    this.modal.classList.remove('on');
+  }
 
   _setMsg(text, isErr = false) {
     if (!text) {
@@ -198,6 +220,10 @@ export class SplitCompareController {
       this._setMsg('Model A 与 Model B 不能是同一个版本。', true);
       return null;
     }
+    this.exit({ silent: true, keepRestore: true });
+    const controller = this._pending = new AbortController();
+    const generation = ++this._generation;
+    const current = () => generation === this._generation && !controller.signal.aborted;
     el('splitStart').disabled = true;
     try {
       const cur = this.deps.getCurrent();
@@ -212,13 +238,15 @@ export class SplitCompareController {
         && cur.versionId === A.vid;
       if (!sameMain) {
         this._setMsg(`正在把 <b>${esc(A.label)}</b> 载入左视口…`);
-        await this.deps.openMain?.(A.pid, A.mid, A.vid);
-        if (!this.model.ready) throw new Error('左视口模型（A）未能加载完成');
+        const loaded = await this.deps.openMain?.(A.pid, A.mid, A.vid);
+        if (!current()) return null;
+        if (loaded === false || !this.model.ready) throw new Error('左视口模型（A）未能加载完成');
       }
 
       // ② 右视口：现场创建第二个 Model3D 并载入 B
       this._setMsg(`正在载入右视口 <b>${esc(B.label)}</b>… <span id="splitPct">0%</span>`);
-      await this._createViewerB(B);
+      await this._createViewerB(B, controller.signal);
+      if (!current()) return null;
 
       // ③ 打开分屏布局（先建布局再对齐视角：pane 有了真实尺寸，resize 才有意义）
       this.active = true;
@@ -234,29 +262,32 @@ export class SplitCompareController {
       this._activeSide = null;
       this._setActiveSide('A');
       this.model.resize();
-      this.viewerB.resize();
+      this.viewerB.setActive(true);
 
       // ④ 以主 Viewer 当前视角为基准对齐两侧，然后开始逐帧同步
       this.syncEnabled = true;
+      this._updatePoseFollowers();
       this._alignFrom(this.model);
       this.model.onBeforeRender = () => this._syncTick();
       this._applySideChrome();
+      this._pending = null;
       this.close();
       this.deps.toast?.(`分屏比对已开启：左 = ${A.versionName}，右 = ${B.versionName}（视角同步 ON）`, 'ok');
       return this.state();
     } catch (e) {
+      if (!current() || e.name === 'AbortError') return null;
       this._setMsg(`分屏比对启动失败：${esc(e?.message || String(e))}`, true);
       await this.exit({ silent: true });
       return null;
     } finally {
-      el('splitStart').disabled = false;
+      if (current()) { this._pending = null; el('splitStart').disabled = false; }
     }
   }
 
   /** 创建右视口的第二个 Model3D。
    *  ⚠️ canvas 必须**每次新建**：`dispose()` 会主动丢弃 WebGL 上下文，而同一张 canvas
    *     再 getContext 拿到的是已丢失的上下文，没法复活。 */
-  async _createViewerB(B) {
+  async _createViewerB(B, signal) {
     const pane = this.paneB;
     const canvas = document.createElement('canvas');
     canvas.id = 'cvB';
@@ -271,33 +302,41 @@ export class SplitCompareController {
         if (key) { this._lastSelSide = 'B'; this._setActiveSide('B'); }
         this._syncSelectionInfo();
       },
-      onNavigationState: (s) => el('crosshairB').classList.toggle('on', !!s.crosshair),
+      onNavigationState: (s) => {
+        el('crosshairB').classList.toggle('on', !!s.crosshair);
+        this.deps.onNavigationState?.(s);
+      },
     });
     v.onBeforeRender = () => this._syncTick();
     this.viewerB = v;
+    v.setActive(false);
     // 两个罗盘语义完全重复，只留左视口那一个
     if (v.orientationGizmo?.canvas) v.orientationGizmo.canvas.style.display = 'none';
 
     await v.load(B.glb, (evt) => {
       const p = el('splitPct');
       if (p && evt?.lengthComputable) p.textContent = `${Math.round(evt.loaded / evt.total * 100)}%`;
-    });
+    }, { signal });
     // 右视口默认不加载设备定位图：它是"只读底图"，两版各画一份反而干扰对比
     return v;
   }
 
   /** 退出分屏：销毁右视口与相关监听，还原主 Viewer 到进入分屏前的版本。 */
   async exit(opts = {}) {
-    if (!this.active && !this.viewerB) return false;
+    const pending = !!this._pending;
+    this.cancelPending();
+    if (!this.active && !this.viewerB && !pending && !this._origMain) return false;
     const was = this.active;
     this.active = false;
     this.syncEnabled = false;
+    this._updatePoseFollowers();
     this._syncing = false;
     this._modeTry = null;
     this.model.onBeforeRender = null;
     this.model.inputSuppressed = false;
     // 活动侧可能是右视口 → 主 Viewer 的全局监听那时被摘掉了，退出时必须装回来
     this.model.navigation.inputSource.attachGlobal();
+    this.deps.onNavigationState?.(this.model.navigationState());
     this.center.classList.remove('splitMode', 'swapped');
     this.ctl.classList.remove('on');
     el('btnSplit').classList.remove('on');
@@ -323,7 +362,7 @@ export class SplitCompareController {
       const cur = this.deps.getCurrent?.();
       const same = cur && cur.projectId === restore.pid && cur.modelId === restore.mid
         && cur.versionId === restore.vid;
-      if (!same) this.deps.restoreMain?.(restore.pid, restore.mid, restore.vid);
+      if (!same) await this.deps.restoreMain?.(restore.pid, restore.mid, restore.vid);
     }
     this.model.resize();
     return was;
@@ -345,15 +384,16 @@ export class SplitCompareController {
     const A = this.model, B = this.viewerB;
     if (!A.ready || !B || !B.ready) return;
 
-    // ① 导航模式：F8 / 工具条只会改"活动侧"，把结果镜像到另一侧。
-    //    B 的全局输入被抑制 → 组合不一致时唯一可能的发起方就是 A，因此一律以 A 为准；
-    //    用组合值做一次性尝试，避免某侧切不过去（未 ready / 建帧失败）时每帧来回拉锯。
+    // ① 导航模式：F8 / 工具条只会改活动侧，把结果镜像到另一侧。
+    //    组合值包含活动侧，接管后可以重新尝试同步，避免失败时每帧来回拉锯。
+    const active = this._activeSide === 'B' ? B : A;
+    const other = active === A ? B : A;
     const mA = A.navigationMode, mB = B.navigationMode;
     if (mA !== mB) {
-      const combo = `${mA}|${mB}`;
+      const combo = `${this._activeSide}|${mA}|${mB}`;
       if (combo !== this._modeTry) {
         this._modeTry = combo;
-        B.setNavigationMode(mA);
+        other.setNavigationMode(active.navigationMode);
       }
     } else if (this._modeTry) {
       this._modeTry = null;
@@ -370,7 +410,11 @@ export class SplitCompareController {
     if (!this.syncEnabled) return;
 
     let src, dst;
-    if (chA && !chB) { src = A; dst = B; }
+    if (active.navigationMode === 'thirdPerson') {
+      // 人物状态、实际相机距离和位置都由活动侧裁决；两版本的遮挡可能不同，
+      // 跟随侧若自己重算再反写，相机会在两种距离之间反复跳动。
+      src = active; dst = other;
+    } else if (chA && !chB) { src = A; dst = B; }
     else if (chB && !chA) { src = B; dst = A; }
     else {
       // 两侧同一帧都变了（例如一侧阻尼滑行、另一侧刚好被同步）：
@@ -393,6 +437,8 @@ export class SplitCompareController {
   _alignFrom(src) {
     const dst = src === this.model ? this.viewerB : this.model;
     if (!src?.ready || !dst?.ready) return false;
+    // 初次分屏时右侧 load 默认进入 Game；先同步模式，才能接收完整人物状态。
+    if (dst.navigationMode !== src.navigationMode) dst.setNavigationMode(src.navigationMode);
     dst.applyCameraPose(src.cameraPose());
     this._sigA = this.model.cameraPoseSignature();
     this._sigB = this.viewerB.cameraPoseSignature();
@@ -402,6 +448,7 @@ export class SplitCompareController {
   setSync(on) {
     if (!this.active) return false;
     this.syncEnabled = !!on;
+    this._updatePoseFollowers();
     // 重新打开时以"活动侧"当前视角为准对齐一次，避免把关闭期间的差异当成跳变
     if (this.syncEnabled) {
       this._alignFrom(this._activeSide === 'B' ? this.viewerB : this.model);
@@ -435,9 +482,13 @@ export class SplitCompareController {
       // 右视口没有元数据、也没有树，用户多半是在左视口选中的
       const fallback = act === this.model ? this.viewerB : this.model;
       if (fallback?.ready && fallback.selectedCanonicals.length) {
+        if (act.navigationMode === 'thirdPerson') {
+          this._setActiveSide(fallback === this.model ? 'A' : 'B');
+        }
         fallback.fit(fallback.selectedCanonicals);
         target = fallback.selectedCanonicals;
       } else {
+        if (act.navigationMode === 'thirdPerson') this._setActiveSide('A');
         this.model.fit(null);
       }
     }
@@ -451,6 +502,12 @@ export class SplitCompareController {
     this._selA = canonical;
     if (canonical) this._setActiveSide('A');
     this._syncSelectionInfo();
+  }
+
+  _updatePoseFollowers() {
+    const following = this.active && this.syncEnabled;
+    this.model.navigation.setPoseFollower(following && this._activeSide !== 'A');
+    this.viewerB?.navigation.setPoseFollower(following && this._activeSide !== 'B');
   }
 
   _setActiveSide(side) {
@@ -473,7 +530,10 @@ export class SplitCompareController {
       this.model.navigation.inputSource.detachGlobal();
       this.viewerB?.navigation.inputSource.attachGlobal();
     }
+    this._updatePoseFollowers();
     this._applySideChrome();
+    const active = isA ? this.model : this.viewerB;
+    this.deps.onNavigationState?.(active?.navigationState());
   }
 
   // ------------------------------------------------------------ 界面

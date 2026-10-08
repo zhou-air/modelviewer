@@ -1,0 +1,104 @@
+{
+  "suite": "Actual Python backend and viewer browser integration",
+  "checks": [
+    {
+      "name": "local entry opens without login",
+      "ok": true,
+      "detail": {
+        "role": "INTERNAL_NETWORK",
+        "gateVisible": false
+      }
+    },
+    {
+      "name": "actual api.js creates, renames and deletes only a temporary project",
+      "ok": true,
+      "detail": {
+        "id": "browser-created",
+        "renamed": "Renamed by browser",
+        "stillListed": false
+      }
+    },
+    {
+      "name": "actual XHR uploads, downloads and deletes a temporary attachment",
+      "ok": true,
+      "detail": {
+        "listed": true,
+        "equal": true,
+        "downloadStatus": 200,
+        "countAfterDelete": 0
+      }
+    },
+    {
+      "name": "real backend serves copied existing metadata and GLB to the current viewer",
+      "ok": true,
+      "detail": {
+        "ready": true,
+        "objects": 7921,
+        "meshes": 4119,
+        "indexed": true,
+        "error": null
+      }
+    },
+    {
+      "name": "actual issue controller creates and updates a temporary review",
+      "ok": true,
+      "detail": {
+        "created": true,
+        "status": "closed",
+        "count": 1,
+        "version": "v1"
+      }
+    },
+    {
+      "name": "strict entry requires login even from localhost",
+      "ok": true,
+      "detail": {
+        "role": "ANONYMOUS",
+        "projectsStatus": 401
+      }
+    },
+    {
+      "name": "project-code login gives only its permitted project and read-only controls",
+      "ok": true,
+      "detail": {
+        "role": "CLIENT_PROJECT",
+        "projects": [
+          "audit-live"
+        ],
+        "managed": false
+      }
+    },
+    {
+      "name": "read-only client loads its GLB but cannot write, read another project or fetch manifests",
+      "ok": true,
+      "detail": {
+        "ready": true,
+        "metadata": 403,
+        "glb": 403,
+        "project": 403,
+        "manifest": 403,
+        "writeCode": "forbidden"
+      }
+    },
+    {
+      "name": "disabling the project code immediately revokes its existing browser session",
+      "ok": true,
+      "detail": {
+        "projects": 401,
+        "model": 401,
+        "role": "ANONYMOUS"
+      }
+    },
+    {
+      "name": "real requests pass the new CSRF header contract without browser exceptions",
+      "ok": true,
+      "detail": {
+        "writeRequests": 10
+      }
+    }
+  ],
+  "ok": true,
+  "coverage": "Temporary projects; copied existing processed model. Not a full model-performance benchmark.",
+  "copiedGlbBytes": 12876440,
+  "tempRootRemoved": true
+}

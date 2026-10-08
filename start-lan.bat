@@ -27,7 +27,7 @@ echo.
 echo   LAN URL is printed below ("LAN"). Close this window or Ctrl+C to stop.
 echo.
 
-"%PY%" -u "tools\server.py" --port 8765 --host 0.0.0.0
+"%PY%" -u "tools\server.py" --port 8765 --host 0.0.0.0 --public-port 8766
 echo.
 echo   Server stopped.
 pause

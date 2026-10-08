@@ -15,15 +15,20 @@ import functools
 import http.server
 import json
 import mimetypes
+import os
 import re
+import secrets
 import shutil
 import socket
 import socketserver
 import sys
 import threading
+import time
 import traceback
 import webbrowser
+from urllib.request import ProxyHandler, build_opener
 from pathlib import Path
+from collections import OrderedDict, deque
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
@@ -34,6 +39,29 @@ import access_control as AC        # noqa: E402  访问权限层（内网识别 
 import project_file_store as F    # noqa: E402
 
 ROOT = S.ROOT
+INSTANCE_ID = secrets.token_hex(16)
+MAX_JSON_BYTES = 8 * 1024 * 1024
+MAX_SOURCE_BYTES = int(os.environ.get("MAX_SOURCE_UPLOAD_MB", "1024")) * 1024 * 1024
+REQUEST_TIMEOUT = 15
+BODY_TIMEOUT = 120
+MAX_CONNECTIONS = 64
+_LOGIN_ATTEMPTS = OrderedDict()
+_LOGIN_LOCK = threading.Lock()
+
+
+def limit_login_attempts(ip):
+    now = time.monotonic()
+    with _LOGIN_LOCK:
+        key = ip or "unknown"
+        attempts = _LOGIN_ATTEMPTS.setdefault(key, deque())
+        _LOGIN_ATTEMPTS.move_to_end(key)
+        while attempts and attempts[0] <= now - 60:
+            attempts.popleft()
+        if len(attempts) >= 30:
+            raise ApiError(429, "login_rate_limit", "尝试过于频繁，请一分钟后重试")
+        attempts.append(now)
+        while len(_LOGIN_ATTEMPTS) > 4096:
+            _LOGIN_ATTEMPTS.popitem(last=False)
 
 mimetypes.add_type("model/gltf-binary", ".glb")
 mimetypes.add_type("model/gltf+json", ".gltf")
@@ -54,8 +82,12 @@ class ApiError(Exception):
 # ------------------------------------------------------------------ 路由
 
 def api_health(req) -> dict:
+    if req.access["role"] != "INTERNAL_NETWORK":
+        return {"pipeline": S.PIPELINE_VERSION, "status": "ok"}
     return {"pipeline": S.PIPELINE_VERSION, "root": str(ROOT),
-            "projects": len(S.scan_projects()), "port": req.server.server_address[1]}
+            "projects": len(S.scan_projects()), "port": req.server.server_address[1],
+            "instanceId": INSTANCE_ID,
+            "publicPort": getattr(req.server, "public_port", None)}
 
 
 def _sanitize_project(doc: dict, ctx: dict) -> dict:
@@ -113,7 +145,7 @@ def api_project_file_upload(req, pid: str) -> dict:
     previous_timeout = req.connection.gettimeout()
     req.connection.settimeout(30)  # Bound stalled/truncated upload connections.
     try:
-        return F.upload(pid, req.query.get("name", ""), req.rfile, length)
+        return F.upload(pid, req.query.get("name", ""), req.body_stream(), length)
     finally:
         req.connection.settimeout(previous_timeout)
 
@@ -239,7 +271,7 @@ def api_import_upload(req, job_id: str, which: str) -> dict:
     job = P.get_job(job_id)
     if job is None:
         raise ApiError(404, "job_not_found", "导入任务不存在（后端可能已重启）")
-    n = P.save_upload(job, which, req.body_raw())
+    n = P.save_upload_stream(job, which, req.body_stream(), req._body_length)
     return {"jobId": job_id, "which": which, "bytes": n, "uploaded": job.uploaded}
 
 
@@ -266,28 +298,25 @@ def api_import_log(req, job_id: str) -> dict:
 
 
 def api_import_delete(req, job_id: str) -> dict:
-    job = P.get_job(job_id)
-    if job is None:
-        raise ApiError(404, "job_not_found", "导入任务不存在")
-    if job.stage not in ("queued", "ready", "failed"):
-        raise ApiError(409, "job_running", "导入正在进行，无法清理")
-    shutil.rmtree(job.dir, ignore_errors=True)
-    with P.JOBS_LOCK:
-        P.JOBS.pop(job_id, None)
-    return {"removed": job_id}
+    return P.delete_job(job_id)
 
 
 # ------------------------------------------------------------------ 访问权限 API
 
 def api_access_status(req) -> dict:
-    return AC.status_payload(req.access)
+    return {**AC.status_payload(req.access),
+            "publicEntry": bool(getattr(req.server, "public_entry", False)),
+            "instanceId": INSTANCE_ID}
 
 
 def api_access_login(req) -> dict:
     """一个输入框两种码：先试今日内部码，再试项目访问码；失败统一口径。"""
-    code = (req.body_json().get("code") or "").strip()
+    value = req.body_json().get("code")
+    code = value.strip() if isinstance(value, str) else ""
     if not code:
         raise ApiError(400, "code_required", "请输入访问码")
+    if len(code) > 64:
+        raise ApiError(401, "invalid_code", "访问码无效或已失效")
     if AC.verify_internal_code(code):
         role, pid = "INTERNAL_REMOTE", None
     else:
@@ -370,14 +399,89 @@ ROUTES: list[tuple[str, re.Pattern, object, tuple[str, ...]]] = [
 ]
 
 
+class RequestReader:
+    """Buffered reads with an absolute header deadline, including slow trickles."""
+    def __init__(self, reader, connection):
+        self.reader, self.connection = reader, connection
+        self.buffer = bytearray()
+        self.deadline = None
+
+    def _chunk(self, size):
+        if self.deadline is not None:
+            remaining = self.deadline - time.monotonic()
+            if remaining <= 0:
+                raise TimeoutError("HTTP headers timed out")
+            self.connection.settimeout(min(REQUEST_TIMEOUT, remaining))
+        return self.reader.read1(size)
+
+    def readline(self, limit=-1):
+        limit = 65537 if limit < 0 else limit
+        while True:
+            index = self.buffer.find(b"\n", 0, limit)
+            end = index + 1 if index >= 0 else limit if len(self.buffer) >= limit else None
+            if end is not None:
+                value = bytes(self.buffer[:end])
+                del self.buffer[:end]
+                return value
+            chunk = self._chunk(min(8192, limit - len(self.buffer)))
+            if not chunk:
+                value = bytes(self.buffer)
+                self.buffer.clear()
+                return value
+            self.buffer.extend(chunk)
+
+    def read1(self, size=-1):
+        if size == 0:
+            return b""
+        size = 8192 if size < 0 else size
+        if self.buffer:
+            value = bytes(self.buffer[:size])
+            del self.buffer[:size]
+            return value
+        return self._chunk(size)
+
+    def read(self, size=-1):
+        if size < 0:
+            chunks = []
+            while chunk := self.read1():
+                chunks.append(chunk)
+            return b"".join(chunks)
+        result = bytearray()
+        while len(result) < size:
+            chunk = self.read1(size - len(result))
+            if not chunk:
+                break
+            result.extend(chunk)
+        return bytes(result)
+
+    def close(self):
+        self.reader.close()
+
+    @property
+    def closed(self):
+        return self.reader.closed
+
+
 class Handler(http.server.SimpleHTTPRequestHandler):
     server_version = "PDMSModelAssetServer/1.0"
     protocol_version = "HTTP/1.1"
+
+    def setup(self):
+        self.request.settimeout(REQUEST_TIMEOUT)
+        super().setup()
+        self.rfile = RequestReader(self.rfile, self.connection)
+
+    def handle_one_request(self):
+        self.rfile.deadline = time.monotonic() + REQUEST_TIMEOUT
+        return super().handle_one_request()
 
     # ---- 基础设施 ----
     def end_headers(self):
         # 导入会就地覆盖产物，切换模型要立刻看到新文件，所以一律禁用缓存
         self.send_header("Cache-Control", "no-store, must-revalidate")
+        self.send_header("X-Content-Type-Options", "nosniff")
+        self.send_header("X-Frame-Options", "SAMEORIGIN")
+        self.send_header("Referrer-Policy", "same-origin")
         super().end_headers()
 
     def log_message(self, fmt, *args):
@@ -390,15 +494,43 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         sys.stderr.write("  %s\n" % line)
 
     # ---- 读请求体（在拿全局锁之前读完，避免慢客户端拖住整个 API）----
+    def content_length(self, maximum: int, *, required: bool = False) -> int:
+        if self.headers.get("Transfer-Encoding"):
+            raise ApiError(400, "unsupported_transfer_encoding", "请求必须使用 Content-Length")
+        values = self.headers.get_all("Content-Length", [])
+        if not values:
+            if required:
+                raise ApiError(411, "content_length_required", "请求必须提供 Content-Length")
+            return 0
+        if len(values) != 1 or not re.fullmatch(r"[0-9]+", values[0].strip()):
+            raise ApiError(400, "invalid_content_length", "请求长度无效")
+        value = values[0].strip()
+        if len(value) > 12 or int(value) > maximum:
+            raise ApiError(413, "body_too_large", "请求超过允许大小")
+        return int(value)
+
+    def body_stream(self):
+        handler = self
+        class BodyReader:
+            def read(self, size=-1):
+                remaining = handler._body_deadline - time.monotonic()
+                if remaining <= 0:
+                    raise ApiError(408, "body_timeout", "请求上传超时")
+                handler.connection.settimeout(min(REQUEST_TIMEOUT, remaining))
+                try:
+                    return handler.rfile.read1(min(size if size >= 0 else 1 << 20, 1 << 20))
+                except (TimeoutError, socket.timeout):
+                    raise ApiError(408, "body_timeout", "请求上传超时")
+        return BodyReader()
+
     def _read_body(self) -> bytes:
-        n = int(self.headers.get("Content-Length") or 0)
-        if n <= 0:
-            return b""
+        n = self._body_length
         buf = bytearray()
+        stream = self.body_stream()
         while len(buf) < n:
-            chunk = self.rfile.read(min(1 << 20, n - len(buf)))
+            chunk = stream.read(n - len(buf))
             if not chunk:
-                break
+                raise ApiError(400, "body_incomplete", "请求内容不完整")
             buf += chunk
         return bytes(buf)
 
@@ -406,25 +538,17 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         return getattr(self, "_raw", b"")
 
     def project_file_upload_length(self) -> int:
-        if self.headers.get("Transfer-Encoding"):
-            raise ApiError(400, "unsupported_transfer_encoding", "文件上传必须提供 Content-Length")
-        values = self.headers.get_all("Content-Length", [])
-        if not values:
-            raise ApiError(411, "content_length_required", "文件上传必须提供 Content-Length")
-        if len(values) != 1 or not re.fullmatch(r"[0-9]+", values[0].strip()):
-            raise ApiError(400, "invalid_content_length", "上传长度无效")
-        value = values[0].strip()
-        # Avoid parsing an unbounded integer from a malformed request.
-        if len(value) > 12 or int(value) > F.MAX_FILE_BYTES:
-            raise ApiError(413, "file_too_large", "单个文件不能超过 100 MB")
-        return int(value)
+        return self.content_length(F.MAX_FILE_BYTES, required=True)
 
     def body_json(self) -> dict:
         raw = self.body_raw()
         if not raw:
             return {}
         try:
-            return json.loads(raw.decode("utf-8"))
+            value = json.loads(raw.decode("utf-8"))
+            if not isinstance(value, dict):
+                raise ValueError("JSON object required")
+            return value
         except Exception:
             raise ApiError(400, "bad_json", "请求体不是合法 JSON")
 
@@ -446,11 +570,12 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     def _resolve_access(self) -> dict:
         return AC.resolve_access(self.client_address[0],
                                  self.headers.get("X-Forwarded-For"),
-                                 self._cookie(AC.SESSION_COOKIE))
+                                 self._cookie(AC.SESSION_COOKIE),
+                                 public_entry=getattr(self.server, "public_entry", False))
 
     def set_session_cookie(self, token: str, ttl: int) -> None:
         c = f"{AC.SESSION_COOKIE}={token}; Path=/; HttpOnly; SameSite=Lax; Max-Age={ttl}"
-        if AC.CONFIG.secure_cookies:
+        if AC.CONFIG.secure_cookies or getattr(self.server, "public_entry", False):
             c += "; Secure"
         self._out_cookie = c
 
@@ -459,6 +584,48 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                             " Max-Age=0")
 
     # ---- 权限守卫（集中判定，Backend 是最终权限来源） ----
+    def _guard_write_origin(self):
+        from urllib.parse import urlsplit
+        if self.headers.get("X-Modelviewer-Request") != "1":
+            raise ApiError(403, "csrf_required", "请通过模型管理页面执行此操作")
+        if self.headers.get("Sec-Fetch-Site") == "cross-site":
+            raise ApiError(403, "origin_forbidden", "不允许跨站写入")
+        origin = self.headers.get("Origin")
+        if origin:
+            try:
+                parsed = urlsplit(origin)
+                valid = (parsed.scheme in ("http", "https") and not parsed.username
+                         and not parsed.password and not parsed.query and not parsed.fragment
+                         and parsed.path in ("", "/")
+                         and parsed.netloc.casefold() == (self.headers.get("Host") or "").casefold())
+            except ValueError:
+                valid = False
+            if not valid:
+                raise ApiError(403, "origin_forbidden", "不允许跨站写入")
+
+    def _guard_management_host(self):
+        """A DNS-rebound attacker hostname must not inherit local IP privileges."""
+        import ipaddress
+        from urllib.parse import urlsplit
+        if self.access["role"] != "INTERNAL_NETWORK":
+            return
+        try:
+            value = urlsplit("//" + (self.headers.get("Host") or ""))
+            host = (value.hostname or "").rstrip(".").lower()
+            if value.username or value.password or value.path or value.query or value.fragment:
+                raise ValueError("Invalid Host")
+            try:
+                ipaddress.ip_address(host)
+                return
+            except ValueError:
+                allowed = {"localhost", socket.gethostname().lower(), socket.getfqdn().lower()}
+                allowed.update(h.strip().lower() for h in os.environ.get("LOCAL_HOSTNAMES", "").split(",") if h.strip())
+                if host in allowed:
+                    return
+        except ValueError:
+            pass
+        raise ApiError(403, "host_forbidden", "请使用本机或局域网地址访问管理入口")
+
     def _authorize(self, method: str, rest: str, ctx: dict) -> None:
         if rest.startswith("/access/"):
             if (method, rest) in {("POST", "/access/login"), ("GET", "/access/status"),
@@ -473,7 +640,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             raise AC.AccessError(401, "auth_required", "请先输入访问码")
         if method in ("POST", "PUT", "PATCH", "DELETE"):
             AC.require_internal(ctx, "修改数据")
-            if method == "DELETE":
+            if method == "DELETE" and not re.fullmatch(r"/import/jobs/[^/]+", rest):
                 AC.require_delete_password(ctx, self.headers.get("X-Delete-Password"))
             return
         # ---- GET 只读请求 ----
@@ -509,7 +676,12 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 if ctx["role"] == "ANONYMOUS":
                     raise AC.AccessError(401, "auth_required", "请先输入访问码")
                 AC.require_view_project(ctx, parts[2])
-            return
+            # Manifests contain access codes. Expose only the viewer's inputs.
+            allowed = {S.GLB, S.METADATA, S.METAMODEL, S.RVM_INDEX, S.MAPPING, S.FLOORPLAN}
+            if (len(parts) == 9 and parts[3] == "models" and parts[5] == "versions"
+                    and parts[7] == "processed" and parts[8] in allowed):
+                return
+            raise AC.AccessError(403, "static_forbidden", "该文件不提供静态访问")
         # 其余一切（/data/trash、/data/access、/config（含删除密码）、/tools、
         # /converter、/reports、/scratch…）一律不通过 HTTP 暴露
         raise AC.AccessError(403, "static_forbidden", "该路径不提供静态访问")
@@ -517,15 +689,28 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     # ---- 分发 ----
     def _dispatch(self, method: str) -> None:
         from urllib.parse import urlparse
+        self.rfile.deadline = None
+        self.connection.settimeout(REQUEST_TIMEOUT)
         path = urlparse(self.path).path
         project_file_upload = (method == "POST"
                                and re.fullmatch(r"/api/projects/[^/]+/files", path) is not None)
-        if method in ("POST", "PUT", "PATCH") and not project_file_upload:
-            self._raw = self._read_body()
-        else:
-            self._raw = b""
+        source_upload = (method == "PUT" and re.fullmatch(
+            r"/api/import/jobs/[^/]+/source/(rvm|txt)", path) is not None)
+        streaming_upload = project_file_upload or source_upload
+        unsafe = method in ("POST", "PUT", "PATCH", "DELETE")
+        self._raw = b""
+        self._body_length = 0
+        self._body_deadline = time.monotonic() + BODY_TIMEOUT
         self._out_cookie = None
         self.access = self._resolve_access()
+        try:
+            self._guard_management_host()
+            if not unsafe and self.content_length(0):
+                raise ApiError(400, "unexpected_body", "只读请求不能带请求体")
+        except ApiError as e:
+            self.close_connection = True
+            self._json(e.http, {"ok": False, "error": {"code": e.code, "message": e.message}})
+            return
         if not path.startswith("/api/"):
             if method in ("GET", "HEAD"):
                 if path in ("/", "/index.html"):
@@ -542,7 +727,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                     return
                 return super().do_GET() if method == "GET" else super().do_HEAD()
             self._json(405, {"ok": False, "error": {"code": "method_not_allowed",
-                                                    "message": f"{method} {path}"}})
+                                                     "message": f"{method} {path}"}})
+            self.close_connection = True
             return
         rest = path[len("/api"):]
         for m, rx, fn, names in ROUTES:
@@ -553,45 +739,71 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 kwargs = {n: mo.group(n) for n in names}
                 try:
                     self._authorize(method, rest, self.access)   # 集中权限守卫
+                    if unsafe:
+                        self._guard_write_origin()
+                        if rest == "/access/login":
+                            limit_login_attempts(self.access.get("ip"))
+                        maximum = (F.MAX_FILE_BYTES if project_file_upload else
+                                   MAX_SOURCE_BYTES if source_upload else
+                                   4096 if rest == "/access/login" else MAX_JSON_BYTES)
+                        self._body_length = self.content_length(maximum, required=streaming_upload)
+                        if streaming_upload and source_upload and self._body_length == 0:
+                            raise ApiError(400, "source_empty", "源文件不能为空")
+                        if not streaming_upload and self._body_length:
+                            content_type = (self.headers.get("Content-Type") or "").split(";", 1)[0].lower()
+                            if content_type != "application/json":
+                                raise ApiError(415, "json_required", "此接口需要 application/json")
+                            self._raw = self._read_body()
+                        if method == "DELETE" and self._body_length:
+                            raise ApiError(400, "unexpected_body", "删除请求不能带请求体")
                     if fn is api_project_file_download:
                         fn(self, **kwargs)           # Stream outside the global lock.
                         return
-                    if fn is api_project_file_upload:
+                    if fn in (api_project_file_upload, api_import_upload):
                         data = fn(self, **kwargs)    # Validate/receive before store lock.
                     else:
                         with S.LOCK:                 # 请求级串行：扫描与增删不会互相踩
                             data = fn(self, **kwargs)
                     self._json(200, {"ok": True, "data": data})
                 except (S.StoreError, ApiError, AC.AccessError) as e:
-                    if project_file_upload:
+                    if unsafe:
                         self.close_connection = True  # Do not reinterpret unread body as another request.
                     self._json(e.http, {"ok": False, "error": {"code": e.code,
                                                                "message": e.message}})
                 except FileNotFoundError as e:
-                    if project_file_upload:
+                    if unsafe:
                         self.close_connection = True
                     self._json(404, {"ok": False, "error": {"code": "not_found",
                                                             "message": str(e)}})
+                except (BrokenPipeError, ConnectionResetError, ConnectionAbortedError):
+                    self.close_connection = True
                 except Exception as e:  # noqa: BLE001
-                    if project_file_upload:
+                    if unsafe:
                         self.close_connection = True
                     traceback.print_exc()
                     self._json(500, {"ok": False, "error": {"code": "internal",
-                                                            "message": repr(e)}})
+                                                            "message": "服务器处理失败，请查看本机日志"}})
+                finally:
+                    self.connection.settimeout(REQUEST_TIMEOUT)
                 return
+        if unsafe:
+            self.close_connection = True
         self._json(404, {"ok": False, "error": {"code": "no_route",
                                                 "message": f"{method} {path}"}})
 
     def _json(self, code: int, obj) -> None:
         body = json.dumps(obj, ensure_ascii=False).encode("utf-8")
-        self.send_response(code)
-        self.send_header("Content-Type", "application/json; charset=utf-8")
-        self.send_header("Content-Length", str(len(body)))
-        if getattr(self, "_out_cookie", None):
-            self.send_header("Set-Cookie", self._out_cookie)
-        self.end_headers()
-        if self.command != "HEAD":
-            self.wfile.write(body)
+        try:
+            self.send_response(code)
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.send_header("Content-Length", str(len(body)))
+            if getattr(self, "_out_cookie", None):
+                self.send_header("Set-Cookie", self._out_cookie)
+            self.end_headers()
+            if self.command != "HEAD":
+                self.wfile.write(body)
+        except (BrokenPipeError, ConnectionResetError, ConnectionAbortedError):
+            self.close_connection = True
 
     def do_GET(self):
         self._dispatch("GET")
@@ -620,6 +832,33 @@ class Server(socketserver.ThreadingTCPServer):
 
     daemon_threads = True
     allow_reuse_address = False
+
+    def __init__(self, *args, public_entry=False, **kwargs):
+        self.public_entry = public_entry
+        self.public_port = None
+        self._slots = threading.BoundedSemaphore(MAX_CONNECTIONS)
+        super().__init__(*args, **kwargs)
+
+    def process_request(self, request, client_address):
+        if not self._slots.acquire(blocking=False):
+            try:
+                request.settimeout(1)
+                request.sendall(b"HTTP/1.1 503 Service Unavailable\r\nConnection: close\r\nContent-Length: 0\r\n\r\n")
+            except OSError:
+                pass
+            self.shutdown_request(request)
+            return
+        try:
+            super().process_request(request, client_address)
+        except BaseException:
+            self._slots.release()
+            raise
+
+    def process_request_thread(self, request, client_address):
+        try:
+            super().process_request_thread(request, client_address)
+        finally:
+            self._slots.release()
 
     def server_bind(self):
         if hasattr(socket, "SO_EXCLUSIVEADDRUSE"):
@@ -657,6 +896,42 @@ def pick_port(preferred: int) -> int:
     raise SystemExit("找不到可用端口（%d 起试 20 个）" % preferred)
 
 
+def existing_local_url(preferred: int, public_port: int = 0) -> str | None:
+    """Reuse only this workspace and, when requested, its paired strict listener."""
+    opener = build_opener(ProxyHandler({}))
+
+    def read(port, path):
+        with opener.open(f"http://127.0.0.1:{port}{path}", timeout=0.75) as response:
+            result = json.loads(response.read(65536))
+        if (not isinstance(result, dict) or not result.get("ok")
+                or not isinstance(result.get("data"), dict)):
+            raise ValueError("Backend rejected startup probe")
+        return result["data"]
+
+    for port in range(preferred, min(preferred + 20, 65536)):
+        if port == public_port or not port_in_use(port):
+            continue
+        try:
+            health = read(port, "/api/health")
+            if (health.get("pipeline") != S.PIPELINE_VERSION
+                    or Path(health.get("root", "")).resolve() != ROOT.resolve()
+                    or health.get("port") != port):
+                continue
+            if public_port:
+                if health.get("publicPort") != public_port:
+                    continue
+                public = read(public_port, "/api/access/status")
+                if (public.get("publicEntry") is not True
+                        or public.get("role") != "ANONYMOUS"
+                        or not health.get("instanceId")
+                        or public.get("instanceId") != health["instanceId"]):
+                    continue
+            return f"http://127.0.0.1:{port}/viewer/index.html"
+        except (OSError, ValueError, TypeError, KeyError):
+            continue
+    return None
+
+
 def get_lan_ip() -> str:
     """取本机局域网 IP（UDP connect 不会真的发包）。"""
     try:
@@ -674,10 +949,30 @@ def main() -> int:
     ap.add_argument("--port", type=int, default=8765)
     ap.add_argument("--host", default="127.0.0.1",
                     help="监听地址：默认 127.0.0.1（仅本机）；0.0.0.0 = 局域网可访问")
+    ap.add_argument("--public-port", type=int, default=0,
+                    help="另开一个仅凭访问码的公网回源入口（绑定127.0.0.1，0表示不开启）")
+    ap.add_argument("--public-only", action="store_true",
+                    help="主入口也只允许访问码登录，关闭按IP授予管理权限")
     ap.add_argument("--no-browser", action="store_true")
     a = ap.parse_args()
+    if a.public_only and a.public_port:
+        ap.error("--public-only 与 --public-port 不能同时使用")
+    if a.public_port and not 1 <= a.public_port <= 65535:
+        ap.error("--public-port 必须在 1..65535")
+
+    # Double-clicking the local launcher must not compete for the fixed public port.
+    # A LAN launch still needs its requested network listener and is never reused here.
+    if a.host == "127.0.0.1" and not a.public_only:
+        existing = existing_local_url(a.port, a.public_port)
+        if existing:
+            print(f"项目已经运行，打开现有查看器：{existing}")
+            if not a.no_browser:
+                webbrowser.open(existing)
+            return 0
 
     port = pick_port(a.port)
+    if port == a.public_port:
+        raise SystemExit("本地入口与公网入口端口冲突，请先关闭旧服务或指定不同端口")
     lan_ip = get_lan_ip()
     url = f"http://127.0.0.1:{port}/viewer/index.html"
     lan_url = f"http://{lan_ip}:{port}/viewer/index.html" if a.host != "127.0.0.1" else None
@@ -693,6 +988,10 @@ def main() -> int:
     print(f"  地址   : {url}")
     if lan_url:
         print(f"  局域网 : {lan_url}")
+    if a.public_port:
+        print(f"  公网回源 : http://127.0.0.1:{a.public_port}（始终要求访问码，仅供HTTPS代理/隧道）")
+    if a.public_only:
+        print("  公网模式：所有来源均需访问码，本入口不授予管理权限")
     print(f"  资产   : data/projects/  ·  {len(projects)} 个项目 / {n_models} 个模型 / {n_vers} 个版本")
     if not projects:
         print("  [空] data/projects 下还没有项目 —— 在页面里选择 Import Model 即可开始")
@@ -708,7 +1007,7 @@ def main() -> int:
           f"Session {AC.CONFIG.session_ttl_hours:g} h · "
           f"删除密码 {'已配置' if AC.CONFIG.delete_password else '未配置'}")
     if not AC.CONFIG.trust_loopback:
-        print("  [提示] TRUST_LOOPBACK=0：本机 127.0.0.1 访问也会要求访问码（隧道隔离所需）。")
+        print("  [提示] TRUST_LOOPBACK=0：管理入口的本机访问也要求访问码；保留本机免登录请设为1。")
         print("         本机请用局域网地址访问；用 start-lan.bat（0.0.0.0）启动才能让局域网设备直连。")
     if a.host == "127.0.0.1" and not AC.CONFIG.trust_loopback:
         print("  [警告] 当前只监听 127.0.0.1 且不信任 loopback —— 局域网设备将无法访问。")
@@ -718,14 +1017,26 @@ def main() -> int:
         print("         要只看本网段，请在 config/access.env 里把 INTERNAL_NETWORK_RANGES")
         print("         改成具体网段（如 192.168.5.0/24）后重启。")
     elif a.host != "127.0.0.1" and not AC.CONFIG.trusted_proxies:
-        print("  [提示] 对外部署时请在 config/access.env 里收紧 INTERNAL_NETWORK_RANGES，"
-              "并在反向代理场景配置 TRUSTED_PROXIES。")
+        print("  [提示] 公网代理只能连接独立 --public-port 入口；请勿直接公开管理端口。")
     print()
     print("  按 Ctrl+C 停止服务")
     print("=" * 70)
 
     handler = functools.partial(Handler, directory=str(ROOT))
-    with Server((a.host, port), handler) as httpd:
+    from contextlib import ExitStack
+    with ExitStack() as stack:
+        httpd = stack.enter_context(Server((a.host, port), handler, public_entry=a.public_only))
+        public_server = None
+        public_thread = None
+        if a.public_port:
+            try:
+                public_server = stack.enter_context(Server(("127.0.0.1", a.public_port), handler,
+                                                          public_entry=True))
+            except OSError as exc:
+                raise SystemExit(f"公网回源端口 {a.public_port} 不可用；未启动服务：{exc}")
+            httpd.public_port = a.public_port
+            public_thread = threading.Thread(target=public_server.serve_forever, daemon=True)
+            public_thread.start()
         if not a.no_browser:
             # TRUST_LOOPBACK=0 时 127.0.0.1 会被要求访问码，自动打开改用局域网地址
             open_url = lan_url or url
@@ -734,6 +1045,10 @@ def main() -> int:
             httpd.serve_forever()
         except KeyboardInterrupt:
             print("\n已停止。")
+        finally:
+            if public_server:
+                public_server.shutdown()
+                public_thread.join(timeout=3)
     return 0
 
 

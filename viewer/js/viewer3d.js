@@ -24,7 +24,7 @@
  *       或对象材质，否则关掉选项后会留下没还原的 ghost 材质。
  */
 import * as THREE from 'three';
-import { GLTFLoader } from '../vendor/jsm/loaders/GLTFLoader.js';
+import { loadGLTF, disposeGLTF, loadCancelled } from './loadLifecycle.js';
 import { OrbitControls } from '../vendor/jsm/controls/OrbitControls.js';
 import { EffectComposer } from '../vendor/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from '../vendor/jsm/postprocessing/RenderPass.js';
@@ -36,6 +36,7 @@ import { AOOverlayPass } from './aoOverlayPass.js';
 import { AmbientOcclusionPass } from './ambientOcclusionPass.js';
 import { EdgeLinesPass } from './edgeLinesPass.js';
 import { EngineeringNavigation } from './navigation/engineeringNavigation.js';
+import { CameraObstacleProbe } from './navigation/cameraObstacles.js';
 import { NavigationSettingsStore } from './navigation/navigationSettings.js';
 import { PerformanceDiagnostics } from './performanceDiagnostics.js';
 import { BatchRenderingManager } from './batchRendering.js';
@@ -96,6 +97,7 @@ const HOVER_MESH_DIM = new THREE.Color(0xa4bacd); // 暗态：比模型灰略偏
 const HOVER_MESH_PEAK = new THREE.Color(0xd6e7f5); // 亮态：压在"柔和的浅蓝"，不再冲到近白
 const HOVER_LINE_DIM = new THREE.Color(0x6b7f90);
 const HOVER_LINE_PEAK = new THREE.Color(0xbcd9ee);
+const HOVER_DELAY_MS = 200;                       // 同一目标停留 0.2 秒后才显示预选中
 const HOVER_POLL_MS = 60;                         // 准星射线节流（≈16 Hz，足够跟手且不占帧预算）
 
 // ---- 模型重叠比对（Overlay Compare）
@@ -141,12 +143,19 @@ export class Model3D {
     this.hiddenCanonicals = new Set();
     this.selection = new Set();           // 多选集合（canonical，保持加入顺序）
     this.selected = null;                 // 主选中 = 最近一次加入的那个（单值语义仍被树/属性面板使用）
-    this.hover = null;                    // 预选中（准星指到的实体），未指到为 null
+    this.hover = null;
+    this._hoverCandidate = null;
+    this._hoverCandidateSince = 0;                    // 预选中（准星指到的实体），未指到为 null
     this._hoverPolledAt = 0;
     this._hoverCamSig = null;             // 上次预选中射线时的相机位姿签名（静止时省掉重复射线）
     this._hoverDirty = true;              // 场景/选择变化后强制重算一次预选中
     this.ready = false;
     this._disposed = false;               // dispose() 之后渲染循环自停（rAF 递归没有外部句柄）
+    this._loadGeneration = 0;
+    this._overlayGeneration = 0;
+    this._active = true;
+    this._frameHandle = null;
+    this.renderedFrames = 0;
     this.inputSuppressed = false;         // 分屏比对：非活动侧不响应 F / F8 这类**全局**快捷键
     this.compare = null;                  // 叠加比对层（A 侧）；非比对模式下恒为 null
     this._bMaterialSnapshot = null;       // 交换 A/B 时 B 侧共享材质的快照（用于逐项还原）
@@ -271,14 +280,17 @@ export class Model3D {
     // 本文件只负责"创建 / 启用 / 停用 Navigation Controller"，相机运动算法全在 navigation/ 里。
     this.navigationMode = 'orbit';
     this.navigationSettings = new NavigationSettingsStore();
+    this.cameraObstacles = new CameraObstacleProbe(this);
     this.navigation = new EngineeringNavigation({
       camera: this.camera,
+      scene: this.scene,
+      obstacleDistance: (pivot, position) => this.cameraObstacles.distance(pivot, position),
       canvas,
       worldUp: this.camera.up,                 // 宿主向上轴：本模型 PDMS Z-up 已转为 glTF Y-up
       settings: this.navigationSettings,
       // F8（模式切换的唯一键盘入口）。分屏比对下两套导航层都在监听 window：
       // 谁在"活动侧"由 inputSuppressed 裁决，避免一次 F8 把两侧一起切换。
-      onRequestModeToggle: () => { if (!this.inputSuppressed) this.toggleNavigationMode(); },
+      onRequestModeToggle: () => { if (this._active && !this.inputSuppressed) this.toggleNavigationMode(); },
       // 准星拾取：已捕获时左键选中屏幕中心的对象，点空处清空选中。
       onRequestCenterPick: (opts) => { if (this.ready && this.root) this._pickAtCenter(opts); },
       onRequestSelectionMenu: (point) => {
@@ -323,7 +335,9 @@ export class Model3D {
     });
     el.addEventListener('pointerup', (e) => {
       const moved = Math.hypot(e.clientX - downX, e.clientY - downY);
-      const isClick = moved <= 4 && performance.now() - downT <= 700;   // 拖拽/长按不算点击
+      const isClick = moved <= 4 && performance.now() - downT <= 700
+        && !(e.button === 0 && this.navigationMode === 'thirdPerson'
+          && this.navigation.inputSource.isClickSuppressed(e.pointerId));
       // 右键 = 取消"未完成的测量点"（只取了 A、还没取 B 时反悔）。
       // 放在 game 的早退之前 —— 两种导航模式下都要能用；同样只在"没拖动"时算数，
       // 因为 Orbit 模式下右键拖动是平移，不能顺手把测量点取消掉。
@@ -348,7 +362,7 @@ export class Model3D {
     this._resizeObserver = new ResizeObserver(() => this.resize());
     this._resizeObserver.observe(el.parentElement);
     this._onWindowKeyDown = (e) => {
-      if (this.inputSuppressed) return;      // 分屏非活动侧：F 不成对执行（另一侧已同步过去）
+      if (!this._active || this.inputSuppressed) return; // hidden/inactive views ignore shortcuts
       // 输入框里打字不触发复位（树搜索 / 导航设置数字框）
       if (e.target && e.target.closest && e.target.closest('input, textarea, select')) return;
       if (keyBindings.has('navigation.fit', e.code)) this.fit(this.selectedCanonicals);
@@ -356,21 +370,21 @@ export class Model3D {
     addEventListener('keydown', this._onWindowKeyDown);
   }
 
-  // ------------------------------------------------ 导航模式（Orbit | Game）
+  // ------------------------------------------------ 导航模式（Orbit | Game | 第三人称）
   /** 原插件 `Start()` 的宿主校验在 Web 的等价物：模型必须已就绪 */
   setNavigationMode(mode) {
-    if (mode !== 'game' && mode !== 'orbit') return;
+    if (!['orbit', 'game', 'thirdPerson'].includes(mode)) return;
     if (mode === this.navigationMode) { this._emitNavigationState(); return; }
 
-    if (mode === 'game') {
+    if (mode !== 'orbit') {
       if (!this.ready) { this.navigationFailure = '模型尚未加载完成。'; this._emitNavigationState(); return; }
-      this._orbitDistance = this.camera.position.distanceTo(this.controls.target);
+      if (this.navigationMode === 'orbit') this._orbitDistance = this.camera.position.distanceTo(this.controls.target);
       this.controls.enabled = false;             // 两个 Controller 不同时响应输入
       // A top/bottom compass view uses a horizontal camera-up for readable plan
       // orientation. Restore the engineering U axis before Game builds its frame.
       this.camera.up.copy(ENGINEERING_AXES.U);
-      this.navigationMode = 'game';
-      const failure = this.navigation.start();
+      this.navigationMode = mode;
+      const failure = this.navigation.start(mode);
       if (failure) {                             // 建帧失败：回滚，保持 Orbit 可用
         this.navigationMode = 'orbit';
         this.controls.enabled = true;
@@ -388,7 +402,8 @@ export class Model3D {
   }
 
   toggleNavigationMode() {
-    this.setNavigationMode(this.navigationMode === 'game' ? 'orbit' : 'game');
+    const modes = ['orbit', 'game', 'thirdPerson'];
+    this.setNavigationMode(modes[(modes.indexOf(this.navigationMode) + 1) % modes.length]);
   }
 
   /** 退出游戏导航时把 Orbit 的旋转中心放到视线正前方：
@@ -436,7 +451,14 @@ export class Model3D {
    *
    *  没有这一步就没法安全地"切换模型"——旧的 BufferGeometry 与显存缓冲不会自己消失，
    *  连续切换几十次就会把显存吃满。渲染器 / 后期处理 / 导航控制器保持常驻，不重建。 */
+  cancelPendingLoads() {
+    ++this._loadGeneration;
+    ++this._overlayGeneration;
+  }
+
   unload() {
+    this.cameraObstacles?.invalidate();
+    this.cancelPendingLoads();
     // 叠加比对层先拆：它已把 B 侧共享材质改成"透明态"（交换时），必须在 B 被释放前还原，
     // 否则下一次 load() 复用旧属性的假设就不成立（材质本来就是每次 load 新建，但显示状态要干净）。
     this._disposeOverlay();
@@ -453,7 +475,7 @@ export class Model3D {
     this.floorPlanError = null;
     // 换模型前先退出工程导航：导航控制器常驻，但模型卸掉后 ready=false，
     // 留在 Game 模式会出现"导航开着但没有模型"的空档状态（Phase 7A）。
-    if (this.navigationMode === 'game') this.setNavigationMode('orbit');
+    if (this.navigationMode !== 'orbit') this.setNavigationMode('orbit');
     if (this.root) {
       this.scene.remove(this.root);
       const geos = new Set();
@@ -493,6 +515,8 @@ export class Model3D {
     this.selection.clear();
     this.selected = null;                 // 不把上一模型的 object id 带到下一模型
     this.hover = null;
+    this._hoverCandidate = null;
+    this._hoverCandidateSince = 0;
     this._hoverCamSig = null;
     this._hoverDirty = true;
     this.outline.selectedObjects = [];
@@ -531,12 +555,15 @@ export class Model3D {
    *  材质策略：A 侧**自带一套材质实例**（透明网格 / 透明线 / 选中 / 预选中），
    *  绝不把 `this.meshMat` 之类的主模型共享材质改成 transparent —— 那会永久污染单模型查看。
    *  B 侧只有在"交换 A/B"时才会被临时改成透明，且有明确的快照-还原（见 `_setComparePrimary`）。 */
-  async loadOverlay(url, { label = 'Model A', meta = null, onProgress = null } = {}) {
+  async loadOverlay(url, { label = 'Model A', meta = null, onProgress = null, signal } = {}) {
     if (!this.root) throw new Error('主模型尚未加载，无法加载比对模型');
     this._disposeOverlay();
-    const loader = new GLTFLoader();
-    const gltf = await new Promise((res, rej) =>
-      loader.load(url, res, onProgress, (e) => rej(new Error(e?.message || '比对模型 GLB 加载失败'))));
+    const generation = this._overlayGeneration;
+    const gltf = await loadGLTF(url, { onProgress, signal,
+      isCurrent: () => !this._disposed && generation === this._overlayGeneration });
+    if (signal?.aborted || this._disposed || generation !== this._overlayGeneration) {
+      disposeGLTF(gltf); throw loadCancelled();
+    }
 
     const root = gltf.scene;
     const origin = gltf.parser?.json?.asset?.extras?.['rvmparser-origin'];
@@ -633,6 +660,7 @@ export class Model3D {
 
   /** 拆掉叠加层并把两侧显示状态完整还原（退出比对 / 换模型都走这里）。 */
   _disposeOverlay() {
+    ++this._overlayGeneration;
     const c = this.compare;
     this.compare = null;
     // A 侧的选择键必须先出选择集，否则会留下一批指向已释放节点的键
@@ -813,13 +841,24 @@ export class Model3D {
     };
   }
 
-  async load(url, onProgress, { floorplan = null } = {}) {
+  async load(url, onProgress, { floorplan = null, canonicalAliases = null, signal } = {}) {
     this.unload();                        // 防御性：重复 load 不会叠加
-    const loader = new GLTFLoader();
-    const gltf = await new Promise((res, rej) =>
-      loader.load(url, res, onProgress, (e) => rej(new Error(e?.message || 'GLB 加载失败'))));
+    const generation = this._loadGeneration;
+    const gltf = await loadGLTF(url, { onProgress, signal,
+      isCurrent: () => !this._disposed && generation === this._loadGeneration });
+    if (signal?.aborted || this._disposed || generation !== this._loadGeneration) {
+      disposeGLTF(gltf); throw loadCancelled();
+    }
 
     this.root = gltf.scene;
+    // Mapping owns the interaction identity; retain the GLB source name as provenance.
+    this.root.traverse((object) => {
+      const sourceName = object.userData?.name;
+      if (sourceName && canonicalAliases?.has(sourceName)) {
+        object.userData.sourceName = sourceName;
+        object.userData.name = canonicalAliases.get(sourceName);
+      }
+    });
     // RVM→GLB 换算的原点（米）。测距把世界坐标还原成 PDMS 世界坐标（mm）要用它，
     // 设备定位图用的是同一个值 —— 只读一次，两处共用，避免口径分叉。
     const origin = gltf.parser?.json?.asset?.extras?.['rvmparser-origin'];
@@ -1173,7 +1212,9 @@ export class Model3D {
    */
   cameraPose() {
     const c = this.camera;
-    const target = this.navigationMode === 'game'
+    const target = this.navigationMode === 'thirdPerson'
+      ? this.navigation.thirdPersonRig.pivot()
+      : this.navigationMode === 'game'
       ? c.position.clone().addScaledVector(c.getWorldDirection(new THREE.Vector3()), this._orbitDistance || 10)
       : this.controls.target.clone();
     return {
@@ -1181,6 +1222,8 @@ export class Model3D {
       quaternion: c.quaternion.toArray(), up: c.up.toArray(),
       fov: c.fov, near: c.near, far: c.far,
       mode: this.navigationMode,
+      ...(this.navigationMode === 'thirdPerson'
+        ? { thirdPerson: this.navigation.thirdPersonRig.state(this.navigation.frame) } : {}),
     };
   }
 
@@ -1189,7 +1232,12 @@ export class Model3D {
   cameraPoseSignature() {
     const p = this.cameraPose();
     const f = (n) => (Math.abs(n) < 5e-5 ? 0 : n).toFixed(4);
-    return [...p.position, ...p.quaternion, p.fov, p.near, p.far, ...p.target].map(f).join(',');
+    const t = p.thirdPerson;
+    const character = t ? [...t.footPosition, t.headingRadians, t.desiredDistance,
+      t.effectiveDistance, t.walkPhase, ...t.horizontalForward, t.pitchRadians,
+      t.flightElevationRadians || 0] : [];
+    return [...p.position, ...p.quaternion, p.fov, p.near, p.far, ...p.target,
+      ...character].map(f).join(',') + (t ? `:${t.motion}` : '');
   }
 
   /** 把另一侧的位姿原样落到本相机上（同步比对的核心写入点）。
@@ -1221,14 +1269,18 @@ export class Model3D {
     c.quaternion.fromArray(pose.quaternion);
     this.controls.enableDamping = damping;
     this._orbitDistance = dist;
-    if (this.navigationMode === 'game') this.navigation.rebase();
+    if (this.navigationMode === 'thirdPerson' && pose.thirdPerson) {
+      this.navigation.applyThirdPersonState(pose.thirdPerson);
+    } else if (this.navigationMode !== 'orbit') this.navigation.rebase();
     this._hoverDirty = true;                   // 相机被外部改过 → 准星预选中要重算
     return this.cameraPose();
   }
 
   captureReviewCamera() {
     const c = this.camera;
-    const target = this.navigationMode === 'game'
+    const target = this.navigationMode === 'thirdPerson'
+      ? this.navigation.thirdPersonRig.pivot()
+      : this.navigationMode === 'game'
       ? c.position.clone().addScaledVector(c.getWorldDirection(new THREE.Vector3()), this._orbitDistance || 10)
       : this.controls.target;
     return { position: c.position.toArray(), target: target.toArray(), quaternion: c.quaternion.toArray(),
@@ -1250,7 +1302,7 @@ export class Model3D {
     c.quaternion.fromArray(pose.quaternion);
     this.controls.enableDamping = damping;
     this._orbitDistance = c.position.distanceTo(this.controls.target);
-    if (this.navigationMode === 'game') this.navigation.rebase();
+    if (this.navigationMode !== 'orbit') this.navigation.rebase();
     this._hoverDirty = true;
   }
 
@@ -1289,6 +1341,7 @@ export class Model3D {
   /** @param {object} [opts] { additive } —— additive=true 时把该对象加入/移出选择集（Ctrl 多选），
    *  否则重置为单选；其余字段原样传给 onSelect（如树 Ctrl 多选）。 */
   select(canonical, opts = {}) {
+    const previous = new Set(this.selection);
     const additive = !!opts.additive;
     if (!canonical) {
       if (additive) return;                  // Ctrl 点空：保持现状
@@ -1308,8 +1361,10 @@ export class Model3D {
       this.selected = canonical;
     }
     this._applyHighlight();
-    this.batchRendering?.sync();
-    this.compare?.batch?.sync();
+    const changed = [...previous].filter((key) => !this.selection.has(key));
+    for (const key of this.selection) if (!previous.has(key)) changed.push(key);
+    if (this.hover) changed.push(this.hover);
+    this._syncBatchKeys(changed);
     this._syncOutline();
     this._hoverDirty = true;                 // 选中会改材质，预选中需要重算一遍
     this.canvas.style.cursor = this.selected ? 'pointer' : 'default';
@@ -1343,17 +1398,23 @@ export class Model3D {
     // 测距开启时准星射线由测量层统一发射（它本来就要每帧算命中点），
     // 预选中直接沿用同一结果，省掉一整趟全场景射线。
     if (this.measurement?.enabled) {
-      this._setHover(this.measurement.aimCanonicalId);
+      this._updateHoverTarget(this.measurement.aimCanonicalId, now);
       this._hoverCamSig = null;      // 让"关闭测距"后的下一次更新一定重算
       return;
     }
-    if (now - this._hoverPolledAt < HOVER_POLL_MS) return;
+    if (now - this._hoverPolledAt < HOVER_POLL_MS) {
+      this._updateHoverTarget(this._hoverCandidate, now);
+      return;
+    }
     const sig = this._cameraSignature();
-    if (!this._hoverDirty && sig === this._hoverCamSig) return;
+    if (!this._hoverDirty && sig === this._hoverCamSig) {
+      this._updateHoverTarget(this._hoverCandidate, now);
+      return;
+    }
     this._hoverPolledAt = now;
     this._hoverCamSig = sig;
     this._hoverDirty = false;
-    this._setHover(this._resolveAtNdc(0, 0));
+    this._updateHoverTarget(this._resolveAtNdc(0, 0), now);
   }
 
   _cameraSignature() {
@@ -1362,13 +1423,40 @@ export class Model3D {
       + `${q.x.toFixed(4)},${q.y.toFixed(4)},${q.z.toFixed(4)},${q.w.toFixed(4)},${this.camera.fov}`;
   }
 
+  /** 切换目标立即撤掉旧高亮；同一目标持续停留后再显示。 */
+  _updateHoverTarget(canonical, now) {
+    canonical = canonical || null;
+    if (canonical !== this._hoverCandidate) {
+      this._setHover(null);
+      this._hoverCandidate = canonical;
+      this._hoverCandidateSince = now;
+    }
+    if (canonical && now - this._hoverCandidateSince >= HOVER_DELAY_MS) {
+      this._setHover(canonical);
+    }
+  }
+
   _setHover(canonical) {
+    if (!canonical) {
+      this._hoverCandidate = null;
+      this._hoverCandidateSince = 0;
+    }
     if (this.hover === canonical) return;
+    const previous = this.hover;
     this.hover = canonical;
     this._applyHighlight();
-    this.batchRendering?.sync();
-    this.compare?.batch?.sync();
+    this._syncBatchKeys([previous, canonical]);
     this.onHover?.(canonical);
+  }
+
+  _syncBatchKeys(keys) {
+    const a = [], b = [];
+    for (const key of keys) {
+      if (!key) continue;
+      (this.sideOfKey(key) === 'A' ? a : b).push(this.rawCanonical(key));
+    }
+    this.batchRendering?.sync(false, b);
+    this.compare?.batch?.sync(false, a);
   }
 
   /** 闪烁：只改共享材质的 uniform（颜色 / 自发光强度），不重建材质、不重编译着色器 */
@@ -1444,7 +1532,7 @@ export class Model3D {
     this._orbitDistance = this.camera.position.distanceTo(this.controls.target);
     // 游戏导航中复位：相机被外部移动后必须重建导航基准帧，
     // 否则 frame 与实际朝向脱节，下一次视角转动会瞬移回旧方向
-    if (this.navigationMode === 'game') this.navigation.rebase();
+    if (this.navigationMode !== 'orbit') this.navigation.rebase();
   }
 
   /**
@@ -1472,13 +1560,13 @@ export class Model3D {
     this.camera.near = Math.max(0.02, distance / 5000);
     this.camera.far = distance * 12 + 500;
     this.camera.updateProjectionMatrix();
-    if (this.navigationMode === 'game') {
+    if (this.navigationMode !== 'orbit') {
       this.camera.up.copy(ENGINEERING_AXES.U);
     } else {
       this.controls.update();
     }
     this._orbitDistance = this.camera.position.distanceTo(this.controls.target);
-    if (this.navigationMode === 'game') this.navigation.rebase();
+    if (this.navigationMode !== 'orbit') this.navigation.rebase();
     return true;
   }
 
@@ -1500,6 +1588,7 @@ export class Model3D {
    *  ⚠️ 隐藏件半透明打开时**不能**简单地把被隐藏的节点设成 visible=false ——
    *     那样它们根本不会进渲染，ghost 也就无从谈起。所以这里按 xray 分两种落地方式。 */
   _applyVisibility() {
+    this.cameraObstacles?.invalidate();
     const xray = this.xray;
     for (const [name, node] of this._namedNodes()) {
       node.visible = xray ? true : !this.hiddenCanonicals.has(name);
@@ -1795,6 +1884,9 @@ export class Model3D {
   dispose() {
     if (this._disposed) return;
     this._disposed = true;
+    cancelAnimationFrame(this._frameHandle);
+    this._frameHandle = null;
+    document.removeEventListener('visibilitychange', this._onVisibilityChange);
     this.unload();
     this._resizeObserver?.disconnect();
     this._resizeObserver = null;
@@ -1806,27 +1898,46 @@ export class Model3D {
     this.onReviewFrame = null;
     this.onBeforeRender = null;
     this.navigation?.dispose();
+    this.cameraObstacles?.dispose();
+    this.controls?.dispose();
     this.measurement?.dispose();
     this.orientationGizmo?.dispose();
     this.lighting?.dispose();
     this.sceneAppearance?.dispose();
+    for (const pass of this.composer?.passes || []) pass.dispose?.();
     this.composer?.dispose();
     this.renderer?.dispose();
     try { this.renderer?.forceContextLoss(); } catch { /* 上下文已丢失：忽略 */ }
   }
 
   // ------------------------------------------------ 渲染循环
+  setActive(active) {
+    this._active = !!active;
+    this._resetFrameClock = true;
+    if (!this._active) {
+      cancelAnimationFrame(this._frameHandle);
+      this._frameHandle = null;
+      this.navigation?.pause('inactive');
+      this.navigation?.inputSource.releaseCapture();
+    } else {
+      this.resize();
+      this._wakeFrame?.();
+    }
+  }
+
   _loop() {
     let frames = 0, last = performance.now(), lastFrame = performance.now();
     const tick = () => {
-      if (this._disposed) return;          // dispose 之后自停（rAF 递归没有外部句柄可取消）
-      requestAnimationFrame(tick);
+      this._frameHandle = null;
+      if (this._disposed || !this._active || document.hidden) return;
+      this._frameHandle = requestAnimationFrame(tick);
       const now = performance.now();
+      if (this._resetFrameClock) { last = lastFrame = now; frames = 0; this._resetFrameClock = false; }
       this.performance.beginFrame(now);
       const deltaSeconds = (now - lastFrame) / 1000;
       lastFrame = now;
       this.sceneAppearance.update(deltaSeconds);
-      if (this.navigationMode === 'game') {
+      if (this.navigationMode !== 'orbit') {
         // 二选一：OrbitControls.update() 每帧都会无条件 lookAt(target)，与游戏导航写朝向互相打架
         this.navigation.update(deltaSeconds);
         // 沿用既有的"交互期间暂停描边"优化：导航中同样视为持续交互
@@ -1853,6 +1964,7 @@ export class Model3D {
       this.normalDepthPass.enabled = this.contours || this.aoPass.enabled;
       this.renderer.info.reset();
       this.composer.render();
+      this.renderedFrames++;
       // 独立透明画布：只同步主相机旋转，不进入主场景、后处理、树或 raycast。
       this.orientationGizmo.update();
       this.onReviewFrame?.();
@@ -1883,6 +1995,17 @@ export class Model3D {
         }));
       }
     };
-    tick();
+    this._wakeFrame = () => {
+      if (!this._disposed && this._active && !document.hidden && this._frameHandle === null) {
+        this._resetFrameClock = true;
+        this._frameHandle = requestAnimationFrame(tick);
+      }
+    };
+    this._onVisibilityChange = () => {
+      if (document.hidden) { cancelAnimationFrame(this._frameHandle); this._frameHandle = null; }
+      else this._wakeFrame();
+    };
+    document.addEventListener('visibilitychange', this._onVisibilityChange);
+    this._wakeFrame();
   }
 }
